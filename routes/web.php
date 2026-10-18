@@ -22,6 +22,34 @@ Route::get('/lang/{locale}', function (string $locale) {
     return back();
 })->name('lang.switch');
 
+// Web-based migration & cache clear route for cPanel without Terminal
+Route::get('/deploy-update', function () {
+    if (!auth()->check() && request('key') !== 'mnctsc2026') {
+        abort(403, 'Unauthorized access. Provide correct key or login as admin.');
+    }
+    \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    $mig = \Illuminate\Support\Facades\Artisan::output();
+    \Illuminate\Support\Facades\Artisan::call('view:clear');
+    $vOut = \Illuminate\Support\Facades\Artisan::output();
+    \Illuminate\Support\Facades\Artisan::call('config:clear');
+    \Illuminate\Support\Facades\Artisan::call('cache:clear');
+    $opt = trim($vOut . "\n" . \Illuminate\Support\Facades\Artisan::output());
+    
+    return response("<div style='max-width:700px;margin:50px auto;background:#1e293b;color:#f8fafc;padding:32px;border-radius:12px;font-family:system-ui,monospace;box-shadow:0 10px 25px rgba(0,0,0,0.3);'>
+        <h2 style='color:#34d399;margin-top:0;'>✓ Live Server Updated Successfully!</h2>
+        <p style='color:#94a3b8;font-size:14px;'>Database migrations and application caches were refreshed.</p>
+        <hr style='border:none;border-top:1px solid #334155;margin:20px 0;'>
+        <h4 style='color:#38bdf8;margin-bottom:6px;'>Database Migrations:</h4>
+        <pre style='background:#0f172a;padding:14px;border-radius:6px;color:#a7f3d0;font-size:13px;white-space:pre-wrap;'>" . e(trim($mig) ?: 'Nothing to migrate. All tables are up to date.') . "</pre>
+        <h4 style='color:#38bdf8;margin:18px 0 6px;'>Cache Clear:</h4>
+        <pre style='background:#0f172a;padding:14px;border-radius:6px;color:#cbd5e1;font-size:13px;white-space:pre-wrap;'>" . e(trim($opt)) . "</pre>
+        <div style='margin-top:25px;display:flex;gap:12px;'>
+            <a href='" . url('/') . "' style='background:#10b981;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;font-weight:700;'>Visit Homepage &rarr;</a>
+            <a href='" . route('admin.dashboard') . "' style='background:#475569;color:#fff;padding:10px 20px;border-radius:6px;text-decoration:none;'>Admin Dashboard</a>
+        </div>
+    </div>");
+})->name('deploy.update');
+
 // Subfolder route support for local XAMPP environment (/MNCTSC/...)
 Route::prefix('MNCTSC')->group(function () {
     Route::get('/', HomeController::class);
@@ -34,6 +62,16 @@ Route::prefix('MNCTSC')->group(function () {
             session(['locale' => $locale]);
         }
         return back();
+    });
+    Route::get('/deploy-update', function () {
+        if (!auth()->check() && request('key') !== 'mnctsc2026') {
+            abort(403);
+        }
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        $mig = \Illuminate\Support\Facades\Artisan::output();
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        $opt = \Illuminate\Support\Facades\Artisan::output();
+        return response("<div style='max-width:700px;margin:50px auto;background:#1e293b;color:#f8fafc;padding:32px;border-radius:12px;font-family:system-ui,monospace;'><h2>✓ Updated!</h2><pre>" . e($mig) . "\n" . e($opt) . "</pre></div>");
     });
 });
 
