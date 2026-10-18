@@ -1,0 +1,7 @@
+@extends('admin.layout')
+@section('title','Institution Settings')@section('crumb','Settings')
+@section('content')<div class="page-head"><div><h1>Institution Settings</h1><p>Update the public identity and contact information.</p></div></div><section class="panel form-panel"><form method="post" action="{{ route('admin.settings.update') }}">@csrf @method('PUT')
+<div class="field-grid"><label>Institution name<input name="institution_name" value="{{ old('institution_name',$settings->get('institution_name')) }}"></label><label>Tagline<input name="tagline" value="{{ old('tagline',$settings->get('tagline')) }}"></label></div>
+<div class="field-grid"><label>Phone<input name="phone" value="{{ old('phone',$settings->get('phone')) }}"></label><label>Email<input name="email" type="email" value="{{ old('email',$settings->get('email')) }}"></label></div>
+<label>Address<textarea name="address" rows="2">{{ old('address',$settings->get('address')) }}</textarea></label><label>About institution<textarea name="about" rows="6">{{ old('about',$settings->get('about')) }}</textarea></label>
+<div class="field-grid"><label>Hero heading<input name="hero_title" value="{{ old('hero_title',$settings->get('hero_title')) }}"></label><label>Hero subtitle<input name="hero_subtitle" value="{{ old('hero_subtitle',$settings->get('hero_subtitle')) }}"></label></div><button class="btn gold" type="submit">Save institution information</button></form></section>@endsection
