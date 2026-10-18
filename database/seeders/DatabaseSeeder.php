@@ -22,9 +22,10 @@ class DatabaseSeeder extends Seeder
         $settings = [
             'institution_name' => 'Mahmudunnabi Chowdhury Technical School and College',
             'tagline' => 'Practical Skills · Better Opportunities',
-            'address' => 'Chattogram, Bangladesh',
-            'phone' => '+880 1XXX-XXXXXX',
-            'email' => 'info@mctsc.edu.bd',
+            'address' => '273/A/520, Chodu Chowdhury Road, Sagorika, Pahartali, Chattogram',
+            'phone' => '+8801880919275',
+            'email' => 'mnctsc@gmail.com',
+            'social_facebook' => 'https://www.facebook.com/mnctsc',
             'about' => 'Mahmudunnabi Chowdhury Technical School and College provides quality technical and vocational education to equip learners with practical skills for a brighter future. Through hands-on learning, supportive guidance and industry-relevant training, we help people build confidence, enter the workforce and create better opportunities for themselves.',
             'hero_title' => 'Practical Skills. Better Opportunities.',
             'hero_subtitle' => 'Skills-focused technical training for a confident future.',

@@ -46,31 +46,174 @@
       </div>
     </div>
 
-    <!-- 2. CONTACT & SOCIAL -->
+    <!-- 2. THEME COLORS & PALETTES -->
+    <div id="theme-section" style="border-bottom: 2px solid #e2ebe6; padding-bottom: 20px; margin-bottom: 22px; scroll-margin-top: 20px;">
+      <h2 style="font-size: 18px; color: var(--green); margin: 0 0 6px;">2. সাইটের থিম কালার সেটিংস (Site Theme & Color Customization)</h2>
+      <p style="color: var(--muted); margin: 0 0 15px; font-size: 13px;">
+        কালার পিকার বা হেক্স কোড লিখে ইচ্ছামত সাইটের কালার পরিবর্তন করুন অথবা নিচের প্রস্তুতকৃত প্যালেটগুলো থেকে এক ক্লিকে পছন্দ করুন।
+      </p>
+
+      <!-- PRESET PALETTES -->
+      <div style="background: #f8faf9; border: 1px solid #d8e6df; border-radius: 8px; padding: 14px 16px; margin-bottom: 16px;">
+        <span style="font-size: 13px; font-weight: 700; color: #1e293b; display: block; margin-bottom: 10px;">
+          🎨 এক ক্লিকে কালার প্যালেট বাছাই করুন (Preset Color Palettes):
+        </span>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+          <button type="button" onclick="setPalette('#0f5132', '#093722', '#c59b27', '#a37d18')"
+            style="display: flex; align-items: center; gap: 8px; padding: 7px 13px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; font-size: 12px; font-weight: 600;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #0f5132; display: inline-block;"></span>
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #c59b27; display: inline-block;"></span>
+            Academic Green (ডিফল্ট)
+          </button>
+
+          <button type="button" onclick="setPalette('#1e3a8a', '#172554', '#f59e0b', '#d97706')"
+            style="display: flex; align-items: center; gap: 8px; padding: 7px 13px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; font-size: 12px; font-weight: 600;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #1e3a8a; display: inline-block;"></span>
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+            Royal Navy Blue
+          </button>
+
+          <button type="button" onclick="setPalette('#881337', '#4c0519', '#d97706', '#b45309')"
+            style="display: flex; align-items: center; gap: 8px; padding: 7px 13px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; font-size: 12px; font-weight: 600;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #881337; display: inline-block;"></span>
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #d97706; display: inline-block;"></span>
+            Crimson Maroon
+          </button>
+
+          <button type="button" onclick="setPalette('#0f766e', '#115e59', '#f59e0b', '#d97706')"
+            style="display: flex; align-items: center; gap: 8px; padding: 7px 13px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; font-size: 12px; font-weight: 600;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #0f766e; display: inline-block;"></span>
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #f59e0b; display: inline-block;"></span>
+            Modern Teal
+          </button>
+
+          <button type="button" onclick="setPalette('#1f2937', '#111827', '#eab308', '#ca8a04')"
+            style="display: flex; align-items: center; gap: 8px; padding: 7px 13px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; font-size: 12px; font-weight: 600;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #1f2937; display: inline-block;"></span>
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #eab308; display: inline-block;"></span>
+            Dark Charcoal
+          </button>
+
+          <button type="button" onclick="setPalette('#581c87', '#3b0764', '#fbbf24', '#f59e0b')"
+            style="display: flex; align-items: center; gap: 8px; padding: 7px 13px; border-radius: 6px; border: 1px solid #cbd5e1; background: #fff; cursor: pointer; font-size: 12px; font-weight: 600;">
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #581c87; display: inline-block;"></span>
+            <span style="width: 14px; height: 14px; border-radius: 50%; background: #fbbf24; display: inline-block;"></span>
+            Royal Purple
+          </button>
+        </div>
+      </div>
+
+      <!-- CUSTOM COLOR PICKERS -->
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px;">
+        <!-- Primary Color -->
+        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+          <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">
+            প্রাথমিক ব্র‍্যান্ড কালার (Primary):
+          </label>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="color" id="primaryColorPicker" value="{{ old('primary_color', $settings->get('primary_color', '#0f5132')) }}"
+              oninput="syncColor('primaryColorPicker', 'primaryColorInput')"
+              style="width: 44px; height: 38px; border: none; cursor: pointer; border-radius: 6px; padding: 0; background: none;">
+            <input type="text" name="primary_color" id="primaryColorInput" value="{{ old('primary_color', $settings->get('primary_color', '#0f5132')) }}"
+              oninput="syncInput('primaryColorInput', 'primaryColorPicker')"
+              style="flex: 1; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: 600;">
+          </div>
+          <small style="color: #64748b; font-size: 11px; display: block; margin-top: 4px;">হেডার, বাটন ও প্রধান টাইটেল কালার</small>
+        </div>
+
+        <!-- Primary Hover Color -->
+        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+          <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">
+            ডিপ / হোভার কালার (Primary Deep):
+          </label>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="color" id="primaryHoverPicker" value="{{ old('primary_hover', $settings->get('primary_hover', '#093722')) }}"
+              oninput="syncColor('primaryHoverPicker', 'primaryHoverInput')"
+              style="width: 44px; height: 38px; border: none; cursor: pointer; border-radius: 6px; padding: 0; background: none;">
+            <input type="text" name="primary_hover" id="primaryHoverInput" value="{{ old('primary_hover', $settings->get('primary_hover', '#093722')) }}"
+              oninput="syncInput('primaryHoverInput', 'primaryHoverPicker')"
+              style="flex: 1; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: 600;">
+          </div>
+          <small style="color: #64748b; font-size: 11px; display: block; margin-top: 4px;">বাটন ও কার্ডের হোভার এবং ফুটার কালার</small>
+        </div>
+
+        <!-- Secondary Accent Color -->
+        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+          <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">
+            অ্যাকসেন্ট / গোল্ড কালার (Accent):
+          </label>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="color" id="secondaryColorPicker" value="{{ old('secondary_color', $settings->get('secondary_color', '#c59b27')) }}"
+              oninput="syncColor('secondaryColorPicker', 'secondaryColorInput')"
+              style="width: 44px; height: 38px; border: none; cursor: pointer; border-radius: 6px; padding: 0; background: none;">
+            <input type="text" name="secondary_color" id="secondaryColorInput" value="{{ old('secondary_color', $settings->get('secondary_color', '#c59b27')) }}"
+              oninput="syncInput('secondaryColorInput', 'secondaryColorPicker')"
+              style="flex: 1; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: 600;">
+          </div>
+          <small style="color: #64748b; font-size: 11px; display: block; margin-top: 4px;">গোল্ড লাইন, হাইলাইট ও সেকেন্ডারি বাটন</small>
+        </div>
+
+        <!-- Secondary Hover Color -->
+        <div style="background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px;">
+          <label style="font-size: 13px; font-weight: 700; color: #1e293b; display: block; margin-bottom: 6px;">
+            অ্যাকসেন্ট হোভার (Accent Deep):
+          </label>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input type="color" id="secondaryHoverPicker" value="{{ old('secondary_hover', $settings->get('secondary_hover', '#a37d18')) }}"
+              oninput="syncColor('secondaryHoverPicker', 'secondaryHoverInput')"
+              style="width: 44px; height: 38px; border: none; cursor: pointer; border-radius: 6px; padding: 0; background: none;">
+            <input type="text" name="secondary_hover" id="secondaryHoverInput" value="{{ old('secondary_hover', $settings->get('secondary_hover', '#a37d18')) }}"
+              oninput="syncInput('secondaryHoverInput', 'secondaryHoverPicker')"
+              style="flex: 1; padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: monospace; font-size: 14px; font-weight: 600;">
+          </div>
+          <small style="color: #64748b; font-size: 11px; display: block; margin-top: 4px;">সেকেন্ডারি বাটনের হোভার কালার</small>
+        </div>
+      </div>
+
+      <!-- LIVE PREVIEW BOX -->
+      <div style="margin-top: 14px; background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px;">
+          <span style="font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px;">লাইভ কালার প্রিভিউ (Live Color Preview):</span>
+          <span style="font-size: 12px; color: #047857; font-weight: 600;">💡 কালার পছন্দ করে "Apply Now" এ ক্লিক করলেই সাথে সাথে সেভ ও কার্যকর হবে</span>
+        </div>
+        <div id="themePreviewBanner" style="background: {{ $settings->get('primary_color', '#0f5132') }}; padding: 16px 20px; border-radius: 6px; border-bottom: 4px solid {{ $settings->get('secondary_color', '#c59b27') }}; display: flex; align-items: center; justify-content: space-between; color: #fff; gap: 16px;">
+          <div style="font-weight: 700; font-size: 15px;">
+            {{ $settings->get('institution_name', 'MCTSC') }}
+            <small style="display: block; font-weight: 400; font-size: 12px; opacity: 0.92; margin-top: 2px;">কালার পরিবর্তন করলেই সাথে সাথে এই প্রিভিউ আপডেট হবে</small>
+          </div>
+          <button type="submit" name="action" value="apply_color" id="themePreviewBtn" title="এই কালারটি এখনই সাইটে সেভ ও কার্যকর করতে ক্লিক করুন"
+            style="background: {{ $settings->get('secondary_color', '#c59b27') }}; color: #000; padding: 9px 22px; border-radius: 4px; font-weight: 700; font-size: 13px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(0,0,0,0.25); white-space: nowrap; transition: transform 0.15s, box-shadow 0.15s;">
+            <span>Apply Now</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. CONTACT & SOCIAL -->
     <div style="border-bottom: 2px solid #e2ebe6; padding-bottom: 16px; margin-bottom: 20px;">
-      <h2 style="font-size: 18px; color: var(--green); margin: 0 0 6px;">2. যোগাযোগ ও ঠিকানা (Contact & Social Info)</h2>
+      <h2 style="font-size: 18px; color: var(--green); margin: 0 0 6px;">3. যোগাযোগ ও ঠিকানা (Contact & Social Info)</h2>
       <p style="color: var(--muted); margin: 0 0 15px; font-size: 13px;">ওয়েবসাইটের ফুটার এবং Contact সেকশনে এই তথ্যগুলো থাকবে।</p>
       
       <div class="field-grid">
         <label>
           ফোন নম্বর (Phone Number)
-          <input name="phone" value="{{ old('phone', $settings->get('phone', '+880 1XXX-XXXXXX')) }}">
+          <input name="phone" value="{{ old('phone', $settings->get('phone', '+8801880919275')) }}">
         </label>
         <label>
           অফিশিয়াল ইমেইল (Email Address)
-          <input name="email" type="email" value="{{ old('email', $settings->get('email', 'info@mctsc.edu.bd')) }}">
+          <input name="email" type="email" value="{{ old('email', $settings->get('email', 'mnctsc@gmail.com')) }}">
         </label>
       </div>
 
       <label style="margin-top: 12px;">
         ক্যাম্পাসের ঠিকানা (Address)
-        <textarea name="address" rows="2">{{ old('address', $settings->get('address', 'Chattogram, Bangladesh')) }}</textarea>
+        <textarea name="address" rows="2">{{ old('address', $settings->get('address', '273/A/520, Chodu Chowdhury Road, Sagorika, Pahartali, Chattogram')) }}</textarea>
       </label>
 
       <div class="field-grid" style="margin-top: 12px;">
         <label>
           ফেসবুক পেজ লিঙ্ক (Facebook URL)
-          <input name="social_facebook" value="{{ old('social_facebook', $settings->get('social_facebook')) }}" placeholder="https://facebook.com/yourpage">
+          <input name="social_facebook" value="{{ old('social_facebook', $settings->get('social_facebook', 'https://www.facebook.com/mnctsc')) }}" placeholder="https://www.facebook.com/mnctsc">
         </label>
         <label>
           ইউটিউব লিঙ্ক (YouTube URL)
@@ -277,4 +420,50 @@
     </div>
   </form>
 </section>
+
+<script>
+function setPalette(primary, deep, accent, accentDeep) {
+  document.getElementById('primaryColorPicker').value = primary;
+  document.getElementById('primaryColorInput').value = primary;
+  document.getElementById('primaryHoverPicker').value = deep;
+  document.getElementById('primaryHoverInput').value = deep;
+  document.getElementById('secondaryColorPicker').value = accent;
+  document.getElementById('secondaryColorInput').value = accent;
+  document.getElementById('secondaryHoverPicker').value = accentDeep;
+  document.getElementById('secondaryHoverInput').value = accentDeep;
+  updateLivePreview();
+}
+
+function syncColor(pickerId, inputId) {
+  document.getElementById(inputId).value = document.getElementById(pickerId).value;
+  updateLivePreview();
+}
+
+function syncInput(inputId, pickerId) {
+  let val = document.getElementById(inputId).value.trim();
+  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+    document.getElementById(pickerId).value = val;
+    updateLivePreview();
+  }
+}
+
+function updateLivePreview() {
+  const p = document.getElementById('primaryColorInput').value;
+  const s = document.getElementById('secondaryColorInput').value;
+  const banner = document.getElementById('themePreviewBanner');
+  const btn = document.getElementById('themePreviewBtn');
+  if (banner) {
+    banner.style.background = p;
+    banner.style.borderBottomColor = s;
+  }
+  if (btn) {
+    btn.style.background = s;
+  }
+}
+
+document.getElementById('themePreviewBtn')?.addEventListener('click', function() {
+  this.innerHTML = '<span>Applying & Saving... ⏳</span>';
+  this.style.opacity = '0.85';
+});
+</script>
 @endsection

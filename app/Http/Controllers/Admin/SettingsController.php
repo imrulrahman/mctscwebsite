@@ -15,6 +15,8 @@ class SettingsController extends Controller
         // Institution
         'institution_name', 'tagline', 'phone', 'email', 'address',
         'social_facebook', 'social_youtube', 'social_linkedin',
+        // Theme Colors
+        'primary_color', 'primary_hover', 'secondary_color', 'secondary_hover',
         // Hero
         'hero_eyebrow', 'hero_title', 'hero_subtitle', 'hero_btn_text',
         // About
@@ -92,6 +94,11 @@ class SettingsController extends Controller
             }
         }
 
-        return back()->with('success', 'প্রতিষ্ঠানের তথ্য এবং ছবি সফলভাবে সংরক্ষিত হয়েছে।');
+        if ($request->input('action') === 'apply_color') {
+            return redirect()->to(route('admin.settings') . '#theme-section')
+                ->with('success', 'নতুন কালার থিম সফলভাবে ওয়েবসাইটে অ্যাপ্লাই ও সেভ করা হয়েছে!');
+        }
+
+        return back()->with('success', 'প্রতিষ্ঠানের তথ্য এবং ওয়েবসাইট সেটিংস সফলভাবে সংরক্ষিত হয়েছে।');
     }
 }

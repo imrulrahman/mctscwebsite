@@ -55,6 +55,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         View::composer('*', function ($view) {
+            if (request()->has('lang') && in_array(request('lang'), ['en', 'bn'])) {
+                session(['locale' => request('lang')]);
+            }
+            $locale = session('locale', 'en');
+            app()->setLocale($locale);
+            $view->with('currentLocale', $locale);
+
             try {
                 $settings = SiteSetting::query()->pluck('value', 'key');
                 $view->with('settings', $settings);

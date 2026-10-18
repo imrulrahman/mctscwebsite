@@ -10,8 +10,32 @@ use App\Http\Controllers\SiteFormsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
-Route::post('/apply', [SiteFormsController::class, 'apply'])->middleware('throttle:8,1')->name('apply.store');
+Route::get('/apply', [SiteFormsController::class, 'showApplyForm'])->name('apply');
+Route::post('/apply', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1')->name('apply.store');
+Route::get('/apply/confirmation/{tracking_no}', [SiteFormsController::class, 'applyConfirmation'])->name('apply.confirmation');
 Route::post('/contact', [SiteFormsController::class, 'contact'])->middleware('throttle:8,1')->name('contact.store');
+
+Route::get('/lang/{locale}', function (string $locale) {
+    if (in_array($locale, ['en', 'bn'])) {
+        session(['locale' => $locale]);
+    }
+    return back();
+})->name('lang.switch');
+
+// Subfolder route support for local XAMPP environment (/MNCTSC/...)
+Route::prefix('MNCTSC')->group(function () {
+    Route::get('/', HomeController::class);
+    Route::get('/apply', [SiteFormsController::class, 'showApplyForm']);
+    Route::post('/apply', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1');
+    Route::get('/apply/confirmation/{tracking_no}', [SiteFormsController::class, 'applyConfirmation']);
+    Route::post('/contact', [SiteFormsController::class, 'contact'])->middleware('throttle:8,1');
+    Route::get('/lang/{locale}', function (string $locale) {
+        if (in_array($locale, ['en', 'bn'])) {
+            session(['locale' => $locale]);
+        }
+        return back();
+    });
+});
 
 // Storage route fallback for environments where symlinks are not permitted
 Route::get('/storage/{path}', function (string $path) {
@@ -43,6 +67,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('/content/{section}/{content}', [ContentController::class, 'update'])->where('section', 'courses|projects|notices|events|gallery')->name('content.update');
         Route::delete('/content/{section}/{content}', [ContentController::class, 'destroy'])->where('section', 'courses|projects|notices|events|gallery')->name('content.destroy');
         Route::get('/applications', [InboxController::class, 'applications'])->name('applications');
+        Route::get('/applications/{application}', [InboxController::class, 'showApplication'])->name('applications.show');
+        Route::get('/applications/{application}/print', [InboxController::class, 'printApplication'])->name('applications.print');
         Route::patch('/applications/{application}', [InboxController::class, 'updateApplication'])->name('applications.update');
         Route::get('/messages', [InboxController::class, 'messages'])->name('messages');
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings');

@@ -5,7 +5,23 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>@yield('title','Dashboard') · MCTSC Admin</title>
   <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
+  @php
+    $admPrimary = \App\Models\SiteSetting::get('primary_color', '#0f5132');
+    $admHover = \App\Models\SiteSetting::get('primary_hover', '#093722');
+    $admAccent = \App\Models\SiteSetting::get('secondary_color', '#c59b27');
+    $admAccentHover = \App\Models\SiteSetting::get('secondary_hover', '#a37d18');
+  @endphp
   <style>
+    :root {
+      --green: {{ $admPrimary }};
+      --green-deep: {{ $admHover }};
+      --gold: {{ $admAccent }};
+      --gold-deep: {{ $admAccentHover }};
+    }
+    .sidebar { background: {{ $admHover }}; }
+    .btn.gold { background: {{ $admAccent }}; }
+    .btn.gold:hover { background: {{ $admAccentHover }}; }
+    .sidebar nav a:hover, .sidebar nav a.active { border-left-color: {{ $admAccent }}; }
     .sidebar nav a {
       display: flex;
       align-items: center;
