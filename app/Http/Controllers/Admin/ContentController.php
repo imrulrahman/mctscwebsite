@@ -37,7 +37,10 @@ class ContentController extends Controller
     {
         $this->check($section);
         $data = $this->validated($request, $section);
-        if ($request->hasFile('image')) $data['image'] = $request->file('image')->store('site-content', 'public');
+        if ($request->hasFile('image')) {
+            $data['image'] = $request->file('image')->store('site-content', 'public');
+            $this->mirrorToPublic($data['image']);
+        }
         $data['section'] = $section;
         $data['slug'] = $this->uniqueSlug($data['title']);
         SiteContent::create($data);
@@ -57,8 +60,13 @@ class ContentController extends Controller
         abort_unless($content->section === $section, 404);
         $data = $this->validated($request, $section);
         if ($request->hasFile('image')) {
-            if ($content->image) Storage::disk('public')->delete($content->image);
+            if ($content->image) {
+                Storage::disk('public')->delete($content->image);
+                $oldPub = public_path('storage/' . $content->image);
+                if (file_exists($oldPub)) @unlink($oldPub);
+            }
             $data['image'] = $request->file('image')->store('site-content', 'public');
+            $this->mirrorToPublic($data['image']);
         }
         $data['slug'] = $this->uniqueSlug($data['title'], $content->id);
         $content->update($data);
@@ -69,9 +77,34 @@ class ContentController extends Controller
     {
         $this->check($section);
         abort_unless($content->section === $section, 404);
-        if ($content->image) Storage::disk('public')->delete($content->image);
+        if ($content->image) {
+            Storage::disk('public')->delete($content->image);
+            $oldPub = public_path('storage/' . $content->image);
+            if (file_exists($oldPub)) @unlink($oldPub);
+        }
         $content->delete();
         return back()->with('success', 'কনটেন্ট মুছে ফেলা হয়েছে।');
+    }
+
+    private function mirrorToPublic(string $path): void
+    {
+        $source = storage_path('app/public/' . $path);
+        if (!file_exists($source)) {
+            return;
+        }
+        $targets = [
+            public_path('storage/' . $path),
+            '/home/mctscedu/public_html/storage/' . $path,
+        ];
+        foreach ($targets as $target) {
+            $dir = dirname($target);
+            if (!is_dir($dir) && is_dir(dirname($dir))) {
+                @mkdir($dir, 0775, true);
+            }
+            if (is_dir($dir) && !is_link(dirname($dir))) {
+                @copy($source, $target);
+            }
+        }
     }
 
     private function validated(Request $request, string $section): array

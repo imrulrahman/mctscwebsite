@@ -8,20 +8,14 @@
   <link rel="stylesheet" href="{{ asset('css/site.css') }}">
   <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
   @php
-    $siteLogo = $settings->get('site_logo') 
-      ? (str_starts_with($settings->get('site_logo'), 'assets/') ? asset($settings->get('site_logo')) : \Illuminate\Support\Facades\Storage::url($settings->get('site_logo'))) 
-      : asset('assets/MC Logo.png');
-    $heroBanner = $settings->get('hero_banner') 
-      ? (str_starts_with($settings->get('hero_banner'), 'assets/') ? asset($settings->get('hero_banner')) : \Illuminate\Support\Facades\Storage::url($settings->get('hero_banner'))) 
-      : asset('assets/mc Banner.jpg');
-    $aboutImg = $settings->get('about_image') 
-      ? (str_starts_with($settings->get('about_image'), 'assets/') ? asset($settings->get('about_image')) : \Illuminate\Support\Facades\Storage::url($settings->get('about_image'))) 
-      : asset('assets/MC Building Photo.jpg');
+    $siteLogo = storage_asset($settings->get('site_logo'), 'assets/MC Logo.png');
+    $heroBanner = storage_asset($settings->get('hero_banner'), 'assets/mc Banner.jpg');
+    $aboutImg = storage_asset($settings->get('about_image'), 'assets/MC Building Photo.jpg');
     
-    $f1_img = $settings->get('facility_1_image') ? (str_starts_with($settings->get('facility_1_image'), 'assets/') ? asset($settings->get('facility_1_image')) : \Illuminate\Support\Facades\Storage::url($settings->get('facility_1_image'))) : asset('assets/Computer Lab r.jpg');
-    $f2_img = $settings->get('facility_2_image') ? (str_starts_with($settings->get('facility_2_image'), 'assets/') ? asset($settings->get('facility_2_image')) : \Illuminate\Support\Facades\Storage::url($settings->get('facility_2_image'))) : asset('assets/RAC Lab.jpg');
-    $f3_img = $settings->get('facility_3_image') ? (str_starts_with($settings->get('facility_3_image'), 'assets/') ? asset($settings->get('facility_3_image')) : \Illuminate\Support\Facades\Storage::url($settings->get('facility_3_image'))) : asset('assets/Plumbing Class.jpg');
-    $f4_img = $settings->get('facility_4_image') ? (str_starts_with($settings->get('facility_4_image'), 'assets/') ? asset($settings->get('facility_4_image')) : \Illuminate\Support\Facades\Storage::url($settings->get('facility_4_image'))) : asset('assets/SMO Lab.jpg');
+    $f1_img = storage_asset($settings->get('facility_1_image'), 'assets/Computer Lab r.jpg');
+    $f2_img = storage_asset($settings->get('facility_2_image'), 'assets/RAC Lab.jpg');
+    $f3_img = storage_asset($settings->get('facility_3_image'), 'assets/Plumbing Class.jpg');
+    $f4_img = storage_asset($settings->get('facility_4_image'), 'assets/SMO Lab.jpg');
   @endphp
 </head>
 <body>
@@ -109,7 +103,7 @@
         @forelse($courses as $course)
           <a class="course-card" href="#apply-form">
             @php
-              $cImg = $course->image ? (str_starts_with($course->image, 'assets/') ? asset($course->image) : \Illuminate\Support\Facades\Storage::url($course->image)) : $aboutImg;
+              $cImg = storage_asset($course->image, 'assets/MC Building Photo.jpg');
             @endphp
             <img src="{{ $cImg }}" alt="{{ $course->title }}">
             <b>{{ $course->title }}</b>
@@ -135,7 +129,7 @@
           <div class="project-card">
             @if($project->image)
               @php
-                $pImg = str_starts_with($project->image, 'assets/') ? asset($project->image) : \Illuminate\Support\Facades\Storage::url($project->image);
+                $pImg = storage_asset($project->image);
               @endphp
               <img src="{{ $pImg }}" alt="{{ $project->title }}" style="width:48px;height:48px;object-fit:contain;border-radius:6px;background:#fff;padding:2px;box-shadow:0 1px 3px rgba(0,0,0,0.1);flex-shrink:0;">
             @else
@@ -232,7 +226,7 @@
         @forelse($gallery as $photo)
           <button class="gallery-item" type="button">
             @php
-              $gImg = $photo->image ? (str_starts_with($photo->image, 'assets/') ? asset($photo->image) : \Illuminate\Support\Facades\Storage::url($photo->image)) : $aboutImg;
+              $gImg = storage_asset($photo->image, 'assets/MC Building Photo.jpg');
             @endphp
             <img src="{{ $gImg }}" alt="{{ $photo->title }}">
           </button>

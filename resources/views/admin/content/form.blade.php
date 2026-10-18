@@ -50,7 +50,7 @@
           @if($item->image)
             <div style="margin-top:10px;display:flex;align-items:center;gap:12px;">
               @php
-                $imgSrc = str_starts_with($item->image, 'assets/') ? asset($item->image) : \Illuminate\Support\Facades\Storage::url($item->image);
+                $imgSrc = storage_asset($item->image);
               @endphp
               <img src="{{ $imgSrc }}" alt="Current" style="height:55px;max-width:120px;object-fit:contain;border:1px solid #ccd;background:#fff;padding:3px;border-radius:4px;">
               <small class="subline" style="color:#555;">Current image: {{ basename($item->image) }}</small>

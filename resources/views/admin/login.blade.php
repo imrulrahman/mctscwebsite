@@ -11,7 +11,7 @@
     @csrf
     @php
       $adminLogo = !empty($settings) && $settings->get('site_logo') 
-        ? (str_starts_with($settings->get('site_logo'), 'assets/') ? asset($settings->get('site_logo')) : \Illuminate\Support\Facades\Storage::url($settings->get('site_logo'))) 
+        ? storage_asset($settings->get('site_logo'), 'assets/MC Logo.png')
         : asset('assets/MC Logo.png');
     @endphp
     <img src="{{ $adminLogo }}" alt="Logo">

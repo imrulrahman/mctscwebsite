@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class SiteSetting extends Model
 {
@@ -17,9 +16,6 @@ class SiteSetting extends Model
     public static function url(string $key, ?string $defaultAsset = null): string
     {
         $val = static::where('key', $key)->value('value');
-        if ($val) {
-            return str_starts_with($val, 'assets/') ? asset($val) : Storage::url($val);
-        }
-        return $defaultAsset ? asset($defaultAsset) : '';
+        return function_exists('storage_asset') ? storage_asset($val, $defaultAsset) : asset($defaultAsset ?? '');
     }
 }

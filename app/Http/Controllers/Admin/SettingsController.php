@@ -66,9 +66,29 @@ class SettingsController extends Controller
                 $old = SiteSetting::where('key', $field)->value('value');
                 if ($old && !str_starts_with($old, 'assets/')) {
                     Storage::disk('public')->delete($old);
+                    $oldPub = public_path('storage/' . $old);
+                    if (file_exists($oldPub)) @unlink($oldPub);
                 }
                 $path = $request->file($field)->store('settings', 'public');
                 SiteSetting::updateOrCreate(['key' => $field], ['value' => $path]);
+
+                // Mirror to physical public folder
+                $source = storage_path('app/public/' . $path);
+                if (file_exists($source)) {
+                    $targets = [
+                        public_path('storage/' . $path),
+                        '/home/mctscedu/public_html/storage/' . $path,
+                    ];
+                    foreach ($targets as $target) {
+                        $dir = dirname($target);
+                        if (!is_dir($dir) && is_dir(dirname($dir))) {
+                            @mkdir($dir, 0775, true);
+                        }
+                        if (is_dir($dir) && !is_link(dirname($dir))) {
+                            @copy($source, $target);
+                        }
+                    }
+                }
             }
         }
 

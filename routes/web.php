@@ -13,6 +13,22 @@ Route::get('/', HomeController::class)->name('home');
 Route::post('/apply', [SiteFormsController::class, 'apply'])->middleware('throttle:8,1')->name('apply.store');
 Route::post('/contact', [SiteFormsController::class, 'contact'])->middleware('throttle:8,1')->name('contact.store');
 
+// Storage route fallback for environments where symlinks are not permitted
+Route::get('/storage/{path}', function (string $path) {
+    $cleanPath = ltrim(preg_replace('#^storage/#', '', $path), '/');
+    $candidates = [
+        storage_path('app/public/' . $cleanPath),
+        public_path('storage/' . $cleanPath),
+        '/home/mctscedu/public_html/storage/' . $cleanPath,
+    ];
+    foreach ($candidates as $filePath) {
+        if (file_exists($filePath) && !is_dir($filePath)) {
+            return response()->file($filePath);
+        }
+    }
+    abort(404);
+})->where('path', '.*')->name('storage.file');
+
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'create'])->name('login');
     Route::post('/login', [AuthController::class, 'store'])->middleware('throttle:5,1')->name('login.store');

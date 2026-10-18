@@ -36,9 +36,7 @@
           <strong>প্রতিষ্ঠানের অফিশিয়াল লোগো (Institution Logo)</strong> — (PNG, JPG, SVG, WEBP; সর্বোচ্চ 5 MB)
           <input type="file" name="site_logo" accept="image/*">
           @php
-            $currentLogo = $settings->get('site_logo') 
-              ? (str_starts_with($settings->get('site_logo'), 'assets/') ? asset($settings->get('site_logo')) : \Illuminate\Support\Facades\Storage::url($settings->get('site_logo'))) 
-              : asset('assets/MC Logo.png');
+            $currentLogo = storage_asset($settings->get('site_logo'), 'assets/MC Logo.png');
           @endphp
           <div style="margin-top: 10px; display: flex; align-items: center; gap: 14px;">
             <img src="{{ $currentLogo }}" alt="Current Logo" style="height: 60px; max-width: 150px; object-fit: contain; background: #fff; padding: 4px; border: 1px solid #ccc; border-radius: 4px;">
@@ -113,9 +111,7 @@
           <strong>হিরো ব্যাকগ্রাউন্ড ব্যানার ছবি (Hero Banner Image)</strong>
           <input type="file" name="hero_banner" accept="image/*">
           @php
-            $currentHero = $settings->get('hero_banner') 
-              ? (str_starts_with($settings->get('hero_banner'), 'assets/') ? asset($settings->get('hero_banner')) : \Illuminate\Support\Facades\Storage::url($settings->get('hero_banner'))) 
-              : asset('assets/mc Banner.jpg');
+            $currentHero = storage_asset($settings->get('hero_banner'), 'assets/mc Banner.jpg');
           @endphp
           <div style="margin-top: 10px; display: flex; align-items: center; gap: 14px;">
             <img src="{{ $currentHero }}" alt="Hero Banner" style="height: 70px; max-width: 180px; object-fit: cover; border: 1px solid #ccc; border-radius: 4px;">
@@ -150,9 +146,7 @@
           <strong>ক্যাম্পাস ভবন / ক্যাম্পাসের ছবি (Campus Photo)</strong>
           <input type="file" name="about_image" accept="image/*">
           @php
-            $currentAbout = $settings->get('about_image') 
-              ? (str_starts_with($settings->get('about_image'), 'assets/') ? asset($settings->get('about_image')) : \Illuminate\Support\Facades\Storage::url($settings->get('about_image'))) 
-              : asset('assets/MC Building Photo.jpg');
+            $currentAbout = storage_asset($settings->get('about_image'), 'assets/MC Building Photo.jpg');
           @endphp
           <div style="margin-top: 10px; display: flex; align-items: center; gap: 14px;">
             <img src="{{ $currentAbout }}" alt="Campus" style="height: 70px; max-width: 180px; object-fit: cover; border: 1px solid #ccc; border-radius: 4px;">
@@ -180,7 +174,7 @@
           </label>
         </div>
         @php
-          $f1 = $settings->get('facility_1_image') ? (str_starts_with($settings->get('facility_1_image'), 'assets/') ? asset($settings->get('facility_1_image')) : \Illuminate\Support\Facades\Storage::url($settings->get('facility_1_image'))) : asset('assets/Computer Lab r.jpg');
+          $f1 = storage_asset($settings->get('facility_1_image'), 'assets/Computer Lab r.jpg');
         @endphp
         <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
           <img src="{{ $f1 }}" style="height:45px;width:75px;object-fit:cover;border-radius:4px;border:1px solid #ccc;">
@@ -201,7 +195,7 @@
           </label>
         </div>
         @php
-          $f2 = $settings->get('facility_2_image') ? (str_starts_with($settings->get('facility_2_image'), 'assets/') ? asset($settings->get('facility_2_image')) : \Illuminate\Support\Facades\Storage::url($settings->get('facility_2_image'))) : asset('assets/RAC Lab.jpg');
+          $f2 = storage_asset($settings->get('facility_2_image'), 'assets/RAC Lab.jpg');
         @endphp
         <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
           <img src="{{ $f2 }}" style="height:45px;width:75px;object-fit:cover;border-radius:4px;border:1px solid #ccc;">
@@ -222,7 +216,7 @@
           </label>
         </div>
         @php
-          $f3 = $settings->get('facility_3_image') ? (str_starts_with($settings->get('facility_3_image'), 'assets/') ? asset($settings->get('facility_3_image')) : \Illuminate\Support\Facades\Storage::url($settings->get('facility_3_image'))) : asset('assets/Plumbing Class.jpg');
+          $f3 = storage_asset($settings->get('facility_3_image'), 'assets/Plumbing Class.jpg');
         @endphp
         <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
           <img src="{{ $f3 }}" style="height:45px;width:75px;object-fit:cover;border-radius:4px;border:1px solid #ccc;">
@@ -243,7 +237,7 @@
           </label>
         </div>
         @php
-          $f4 = $settings->get('facility_4_image') ? (str_starts_with($settings->get('facility_4_image'), 'assets/') ? asset($settings->get('facility_4_image')) : \Illuminate\Support\Facades\Storage::url($settings->get('facility_4_image'))) : asset('assets/SMO Lab.jpg');
+          $f4 = storage_asset($settings->get('facility_4_image'), 'assets/SMO Lab.jpg');
         @endphp
         <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
           <img src="{{ $f4 }}" style="height:45px;width:75px;object-fit:cover;border-radius:4px;border:1px solid #ccc;">

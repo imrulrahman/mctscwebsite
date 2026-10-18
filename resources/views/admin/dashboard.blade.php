@@ -169,7 +169,7 @@
       <div class="project-row">
         @if($project->image)
           @php
-            $pThumb = str_starts_with($project->image, 'assets/') ? asset($project->image) : \Illuminate\Support\Facades\Storage::url($project->image);
+            $pThumb = storage_asset($project->image);
           @endphp
           <img src="{{ $pThumb }}" alt="" style="width:42px;height:42px;object-fit:contain;border-radius:4px;border:1px solid #ddd;padding:2px;background:#fff;flex-shrink:0;">
         @else
