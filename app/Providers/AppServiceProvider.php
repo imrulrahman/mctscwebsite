@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Models\SiteSetting;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('*', function ($view) {
+            try {
+                $settings = SiteSetting::query()->pluck('value', 'key');
+                $view->with('settings', $settings);
+            } catch (\Throwable $e) {
+                $view->with('settings', collect([]));
+            }
+        });
     }
 }
