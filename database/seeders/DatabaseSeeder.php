@@ -2,9 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Role;
 use App\Models\SiteContent;
 use App\Models\SiteSetting;
 use App\Models\User;
+use App\Services\PermissionManager;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -13,10 +15,54 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // 1. Seed Roles
+        $rolesData = [
+            [
+                'name' => 'System Admin',
+                'slug' => 'system-admin',
+                'description' => 'Full control over system, settings, roles, users and all features.',
+                'is_system' => true,
+                'permissions' => PermissionManager::defaultRolePermissions('system-admin'),
+            ],
+            [
+                'name' => 'Admin',
+                'slug' => 'admin',
+                'description' => 'Standard administrator with full access to site content, admissions and users.',
+                'is_system' => false,
+                'permissions' => PermissionManager::defaultRolePermissions('admin'),
+            ],
+            [
+                'name' => 'Admission Officer',
+                'slug' => 'admission-officer',
+                'description' => 'Handles trainee admissions, registrations, verification and prints.',
+                'is_system' => false,
+                'permissions' => PermissionManager::defaultRolePermissions('admission-officer'),
+            ],
+            [
+                'name' => 'Content Editor',
+                'slug' => 'content-editor',
+                'description' => 'Manages website courses, projects, notices, events and gallery.',
+                'is_system' => false,
+                'permissions' => PermissionManager::defaultRolePermissions('content-editor'),
+            ],
+        ];
+
+        $systemAdminRole = null;
+        foreach ($rolesData as $role) {
+            $created = Role::updateOrCreate(['slug' => $role['slug']], $role);
+            if ($role['slug'] === 'system-admin') {
+                $systemAdminRole = $created;
+            }
+        }
+
+        // 2. Seed Default System Admin User
         User::updateOrCreate(['email' => env('ADMIN_EMAIL', 'admin@mctsc.edu.bd')], [
             'name' => 'MCTSC Administrator',
             'password' => Hash::make(env('ADMIN_PASSWORD', 'ChangeMe123!')),
             'is_admin' => true,
+            'role_id' => $systemAdminRole?->id,
+            'status' => 'active',
+            'phone' => '+8801880919275',
         ]);
 
         $settings = [

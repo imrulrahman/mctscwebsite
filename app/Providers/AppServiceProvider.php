@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\SiteSetting;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -54,6 +55,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::before(function ($user, string $ability) {
+            if (method_exists($user, 'isSystemAdmin') && $user->isSystemAdmin()) {
+                return true;
+            }
+
+            if (method_exists($user, 'hasPermission')) {
+                return $user->hasPermission($ability);
+            }
+
+            return null;
+        });
+
         View::composer('*', function ($view) {
             if (request()->has('lang') && in_array(request('lang'), ['en', 'bn'])) {
                 session(['locale' => request('lang')]);

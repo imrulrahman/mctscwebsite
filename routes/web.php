@@ -4,7 +4,10 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InboxController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SiteFormsController;
 use Illuminate\Support\Facades\Route;
@@ -104,12 +107,45 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/content/{section}/{content}/edit', [ContentController::class, 'edit'])->where('section', 'courses|projects|notices|events|gallery')->name('content.edit');
         Route::put('/content/{section}/{content}', [ContentController::class, 'update'])->where('section', 'courses|projects|notices|events|gallery')->name('content.update');
         Route::delete('/content/{section}/{content}', [ContentController::class, 'destroy'])->where('section', 'courses|projects|notices|events|gallery')->name('content.destroy');
+        // Trainee Admissions Management
         Route::get('/applications', [InboxController::class, 'applications'])->name('applications');
+        Route::get('/applications/create', [InboxController::class, 'createApplication'])->name('applications.create');
+        Route::post('/applications', [InboxController::class, 'storeApplication'])->name('applications.store');
         Route::get('/applications/{application}', [InboxController::class, 'showApplication'])->name('applications.show');
         Route::get('/applications/{application}/print', [InboxController::class, 'printApplication'])->name('applications.print');
         Route::patch('/applications/{application}', [InboxController::class, 'updateApplication'])->name('applications.update');
+        Route::delete('/applications/{application}', [InboxController::class, 'destroyApplication'])->name('applications.destroy');
+
+        // Messages Management
         Route::get('/messages', [InboxController::class, 'messages'])->name('messages');
+        Route::delete('/messages/{message}', [InboxController::class, 'destroyMessage'])->name('messages.destroy');
+
+        // Site Settings
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings');
         Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+
+        // User Management
+        Route::get('/users', [UserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+        Route::post('/users', [UserController::class, 'store'])->name('users.store');
+        Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+        Route::get('/users/{user}/permissions', [UserController::class, 'permissions'])->name('users.permissions');
+        Route::put('/users/{user}/permissions', [UserController::class, 'updatePermissions'])->name('users.permissions.update');
+        Route::post('/users/{user}/permissions/reset', [UserController::class, 'resetPermissions'])->name('users.permissions.reset');
+
+        // Role Management (System Admin)
+        Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+        Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+        Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+        Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+        Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+        // User Self-Profile & Password
+        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [ProfileController::class, 'updateProfile'])->name('profile.update');
+        Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     });
 });

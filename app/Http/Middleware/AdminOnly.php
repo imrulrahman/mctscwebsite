@@ -10,8 +10,12 @@ class AdminOnly
 {
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->user() || ! $request->user()->is_admin) {
-            return redirect()->route('admin.login')->with('error', 'অ্যাডমিন অ্যাকাউন্ট দিয়ে লগইন করুন।');
+        $user = $request->user();
+        if (! $user || ! $user->canAccessAdmin()) {
+            if ($user) {
+                auth()->logout();
+            }
+            return redirect()->route('admin.login')->with('error', 'অ্যাডমিন প্যানেলে এক্সেস করার অনুমতি নেই অথবা আপনার অ্যাকাউন্টটি নিষ্ক্রিয়।');
         }
 
         return $next($request);

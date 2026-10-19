@@ -40,11 +40,13 @@ class SettingsController extends Controller
 
     public function edit(): View
     {
+        abort_unless(auth()->user()?->can('settings.manage'), 403, 'সাইট সেটিংস পরিবর্তনের অনুমতি আপনার অ্যাকাউন্টে নেই।');
         return view('admin.settings', ['settings' => SiteSetting::query()->pluck('value', 'key')]);
     }
 
     public function update(Request $request): RedirectResponse
     {
+        abort_unless(auth()->user()?->can('settings.manage'), 403, 'সাইট সেটিংস পরিবর্তনের অনুমতি আপনার অ্যাকাউন্টে নেই।');
         $rules = [];
         foreach (self::TEXT_FIELDS as $field) {
             $rules[$field] = ['nullable', 'string', 'max:5000'];

@@ -19,6 +19,19 @@ class ContentController extends Controller
     private function check(string $section): void
     {
         abort_unless(in_array($section, self::SECTIONS, true), 404);
+
+        $permission = match ($section) {
+            'courses' => 'courses.manage',
+            'projects' => 'projects.manage',
+            'notices' => 'notices.manage',
+            'events' => 'events.manage',
+            'gallery' => 'gallery.manage',
+            default => null,
+        };
+
+        if ($permission) {
+            abort_unless(auth()->user()?->can($permission), 403, 'এই সেকশনে এক্সেস করার অনুমতি আপনার অ্যাকাউন্টে নেই।');
+        }
     }
 
     public function index(string $section): View

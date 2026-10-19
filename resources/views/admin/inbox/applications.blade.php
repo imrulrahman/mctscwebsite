@@ -8,6 +8,11 @@
     <h1>Trainee Admission Applications</h1>
     <p>Manage, review, search, and print trainee admission applications.</p>
   </div>
+  @can('admissions.create')
+    <div>
+      <a class="btn gold" href="{{ route('admin.applications.create') }}">+ Add New Student</a>
+    </div>
+  @endcan
 </div>
 
 <section class="panel" style="margin-bottom: 20px; padding: 18px 24px;">
@@ -97,9 +102,18 @@
               <small class="subline">{{ $item->created_at->format('h:i A') }}</small>
             </td>
             <td>
-              <div style="display: flex; gap: 6px;">
+              <div style="display: flex; gap: 6px; align-items: center;">
                 <a href="{{ route('admin.applications.show', $item) }}" style="background: #0f5132; color: #fff; padding: 5px 10px; border-radius: 4px; font-size: 12px; text-decoration: none; font-weight: 600;">Details</a>
-                <a href="{{ route('admin.applications.print', $item) }}" target="_blank" style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; padding: 5px 8px; border-radius: 4px; font-size: 12px; text-decoration: none;">🖨️</a>
+                @can('admissions.print')
+                  <a href="{{ route('admin.applications.print', $item) }}" target="_blank" style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; padding: 5px 8px; border-radius: 4px; font-size: 12px; text-decoration: none;" title="Print Application">🖨️</a>
+                @endcan
+                @can('admissions.delete')
+                  <form method="post" action="{{ route('admin.applications.destroy', $item) }}" onsubmit="return confirm('Are you sure you want to delete this application?');" style="display:inline;margin:0;">
+                    @csrf
+                    @method('delete')
+                    <button type="submit" style="background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; padding: 5px 8px; border-radius: 4px; font-size: 12px; cursor: pointer;" title="Delete Application">🗑️</button>
+                  </form>
+                @endcan
               </div>
             </td>
           </tr>
