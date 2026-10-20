@@ -32,6 +32,18 @@
       </label>
     </div>
 
+    @if($section === 'projects')
+      <div style="background:#eef7f2;border:1px solid #b8dfd7;padding:12px 16px;border-radius:6px;margin:10px 0 14px;">
+        <label style="margin:0;">
+          <strong style="color:#0f5132;font-size:13.5px;">Student Admission Fee / শিক্ষার্থী ভর্তি ফি (৳ BDT)</strong>
+          <span style="font-size:12px;color:#475569;display:block;margin-top:2px;">
+            এই প্রজেক্টের শিক্ষার্থীদের জন্য ভর্তির সময় কত টাকা ফি নির্ধারণ হবে? (যেমন: ECHO এর জন্য ৫০০, NHRDF/ASSET এর জন্য ০ টাকা)
+          </span>
+          <input type="number" step="1" min="0" name="admission_fee" value="{{ old('admission_fee', $item->admission_fee ?? 0) }}" style="font-size:15px;font-weight:bold;color:#0f5132;margin-top:6px;max-width:260px;" placeholder="0">
+        </label>
+      </div>
+    @endif
+
     <label>
       Short Description / Excerpt
       <textarea name="excerpt" rows="3" maxlength="1000" placeholder="Brief summary for cards...">{{ old('excerpt', $item->excerpt) }}</textarea>

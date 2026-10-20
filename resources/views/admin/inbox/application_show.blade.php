@@ -20,18 +20,45 @@
 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px; align-items: start;">
   <!-- MAIN DETAILS -->
   <div>
-    <!-- SECTION 1: COURSE -->
+    <!-- SECTION 1: COURSE & PROJECT -->
     <section class="panel" style="margin-bottom: 20px;">
-      <h2 style="font-size: 16px; color: var(--green); margin: 0 0 12px; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px;">
-        ১. ট্রেড / কোর্স সংক্রান্ত তথ্য (Applied Course / Trade)
-      </h2>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 14px;">
-        <div><strong>Applied Course:</strong> <span style="font-weight: 600; color: #0f5132;">{{ $application->course }}</span></div>
-        @if($application->preferred_shift)
-          <div><strong>Preferred Shift:</strong> {{ $application->preferred_shift }}</div>
+      <div style="display:flex;justify-content:space-between;align-items:center;border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 12px;">
+        <h2 style="font-size: 16px; color: var(--green); margin: 0;">
+          ১. প্রজেক্ট, কোর্স ও ফি সংক্রান্ত তথ্য (Project, Course & Fee)
+        </h2>
+        @if($application->status !== 'accepted')
+          <form method="POST" action="{{ route('admin.applications.approve', $application) }}" style="margin:0;">
+            @csrf
+            <button type="submit" style="background:#0f5132;color:#fff;border:none;padding:7px 16px;border-radius:5px;font-weight:700;font-size:12.5px;cursor:pointer;">
+              ✔ আবেদন অনুমোদন করুন (Approve)
+            </button>
+          </form>
         @else
-          <div><strong>Applied On:</strong> {{ $application->created_at->format('d M, Y (h:i A)') }}</div>
+          <span style="background:#d1fae5;color:#065f46;padding:4px 12px;border-radius:4px;font-weight:700;font-size:12px;">
+            ✔ অনুমোদিত (Approved)
+          </span>
         @endif
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 13.5px;">
+        <div><strong>Project / Batch:</strong> <span style="font-weight: 700; color: #0f5132; background:#eef7f2; padding:2px 8px; border-radius:4px;">{{ $application->project_name ?: 'Paid Batch' }}</span></div>
+        <div><strong>Applied Course:</strong> <span style="font-weight: 600; color: #0f172a;">{{ $application->course }}</span></div>
+        <div><strong>Preferred Shift:</strong> {{ $application->preferred_shift ?: 'Any' }}</div>
+        <div><strong>Payment Status:</strong> 
+          @if($application->isPaid())
+            <span style="color:#059669;font-weight:700;">● Paid / Free</span>
+          @else
+            <span style="color:#dc2626;font-weight:700;">○ Unpaid (বকেয়া)</span>
+          @endif
+        </div>
+        <div><strong>Course Fee:</strong> ৳ {{ number_format($application->course_fee, 0) }}</div>
+        <div><strong>Discount / ছাড়:</strong> ৳ {{ number_format($application->discount, 0) }}</div>
+        <div><strong>Net Payable (প্রদেয়):</strong> <strong style="color: #b91c1c; font-size:15px;">৳ {{ number_format($application->payable_amount, 0) }}</strong></div>
+        <div><strong>Paid Amount (পরিশোধিত):</strong> <strong style="color: #0f5132; font-size:15px;">৳ {{ number_format($application->paid_amount, 0) }}</strong></div>
+        @if($application->payment_trx_id)
+          <div><strong>TrxID / Receipt:</strong> <code style="font-size:13px;">{{ $application->payment_trx_id }}</code> ({{ $application->payment_method }})</div>
+        @endif
+        <div><strong>Voucher No:</strong> <code style="font-size:13px;">{{ $application->voucher_no ?: $application->tracking_no }}</code></div>
       </div>
     </section>
 
@@ -122,6 +149,42 @@
         </div>
         <button type="submit" style="width: 100%; background: var(--green); color: #fff; padding: 9px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer;">
           Update Status
+        </button>
+      </form>
+    </section>
+
+    <!-- PAYMENT & DISCOUNT CARD -->
+    <section class="panel" style="margin-bottom: 20px;">
+      <h3 style="font-size: 15px; margin: 0 0 12px; color: #1e293b;">Fee & Payment Details</h3>
+      <form method="POST" action="{{ route('admin.applications.payment', $application) }}">
+        @csrf
+        <div style="margin-bottom: 10px;">
+          <label style="font-size:12px;display:block;margin-bottom:4px;color:#475569;">Course Fee: <strong>৳ {{ number_format($application->course_fee, 0) }}</strong></label>
+        </div>
+        <div style="margin-bottom: 10px;">
+          <label style="font-size:12px;display:block;margin-bottom:4px;color:#475569;">Discount (ছাড় ৳):</label>
+          <input type="number" name="discount" min="0" value="{{ old('discount', $application->discount) }}" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 600;">
+        </div>
+        <div style="margin-bottom: 10px;">
+          <label style="font-size:12px;display:block;margin-bottom:4px;color:#475569;">Paid Amount (পরিশোধিত ৳):</label>
+          <input type="number" name="paid_amount" min="0" value="{{ old('paid_amount', $application->paid_amount) }}" required style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: 700; color: #0f5132;">
+        </div>
+        <div style="margin-bottom: 10px;">
+          <label style="font-size:12px;display:block;margin-bottom:4px;color:#475569;">Payment Method:</label>
+          <select name="payment_method" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px;">
+            <option value="Cash" @selected($application->payment_method === 'Cash')>Cash (নগদ)</option>
+            <option value="bKash" @selected($application->payment_method === 'bKash')>bKash</option>
+            <option value="Nagad" @selected($application->payment_method === 'Nagad')>Nagad</option>
+            <option value="Rocket" @selected($application->payment_method === 'Rocket')>Rocket</option>
+            <option value="Bank" @selected($application->payment_method === 'Bank')>Bank Deposit</option>
+          </select>
+        </div>
+        <div style="margin-bottom: 12px;">
+          <label style="font-size:12px;display:block;margin-bottom:4px;color:#475569;">TrxID / Receipt No:</label>
+          <input type="text" name="payment_trx_id" value="{{ old('payment_trx_id', $application->payment_trx_id) }}" placeholder="e.g. 9X29A... বা রশিদ নং" style="width: 100%; padding: 6px 10px; border: 1px solid #cbd5e1; border-radius: 4px;">
+        </div>
+        <button type="submit" style="width: 100%; background: #0f5132; color: #fff; padding: 8px; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; font-size: 13px;">
+          Save Payment & Discount
         </button>
       </form>
     </section>

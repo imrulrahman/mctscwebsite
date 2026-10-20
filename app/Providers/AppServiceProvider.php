@@ -78,8 +78,11 @@ class AppServiceProvider extends ServiceProvider
             try {
                 $settings = SiteSetting::query()->pluck('value', 'key');
                 $view->with('settings', $settings);
+                $pendingAdmissionsCount = AdmissionApplication::where('status', 'new')->count();
+                $view->with('pendingAdmissionsCount', $pendingAdmissionsCount);
             } catch (\Throwable $e) {
                 $view->with('settings', collect([]));
+                $view->with('pendingAdmissionsCount', 0);
             }
         });
     }

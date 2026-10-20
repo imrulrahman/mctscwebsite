@@ -21,7 +21,10 @@ class DashboardController extends Controller
             'counts' => $counts,
             'recent' => SiteContent::query()->latest('updated_at')->limit(8)->get(),
             'projects' => SiteContent::query()->published()->where('section', 'projects')->orderBy('sort_order')->limit(5)->get(),
-            'applicationCount' => AdmissionApplication::query()->where('status', 'new')->count(),
+            'totalApplicationCount' => AdmissionApplication::count(),
+            'pendingApplicationCount' => AdmissionApplication::where('status', 'new')->count(),
+            'applicationCount' => AdmissionApplication::count(),
+            'recentApplications' => AdmissionApplication::latest()->limit(8)->get(),
             'messageCount' => ContactMessage::query()->where('is_read', false)->count(),
         ]);
     }

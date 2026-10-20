@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ভর্তি আবেদন ফরম · {{ $application->tracking_no }}</title>
+  <title>ভর্তি আবেদন · {{ $application->tracking_no }}</title>
   <style>
     * {
       box-sizing: border-box;
@@ -69,6 +69,34 @@
       background: #00443f;
     }
 
+    /* Pending Approval & Payment Alert Cards */
+    .status-alert-box {
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1.5px solid #cbd5e1;
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    }
+    .alert-badge {
+      display: inline-block;
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+    .alert-pending {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+    }
+    .alert-approved {
+      background: #d1fae5;
+      color: #065f46;
+      border: 1px solid #a7f3d0;
+    }
+
     /* Official Form Container */
     .admission-form {
       background: #ffffff;
@@ -76,6 +104,7 @@
       padding: 12px 16px 14px;
       box-shadow: 0 3px 12px rgba(0,0,0,0.06);
       position: relative;
+      margin-bottom: 20px;
     }
 
     /* Header */
@@ -329,7 +358,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
       gap: 20px;
-      margin-top: 18px;
+      margin-top: 16px;
       text-align: center;
     }
     .sig-col {
@@ -359,6 +388,43 @@
       color: #0f172a;
     }
 
+    /* Money Receipt Voucher */
+    .voucher-card {
+      background: #ffffff;
+      border: 1.5px dashed #005953;
+      padding: 14px 18px;
+      margin-top: 16px;
+      position: relative;
+    }
+    .voucher-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 6px;
+      margin-bottom: 8px;
+    }
+    .voucher-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #005953;
+    }
+    .voucher-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 11px;
+    }
+    .voucher-table th, .voucher-table td {
+      border: 1px solid #cbd5e1;
+      padding: 5px 8px;
+      text-align: left;
+    }
+    .voucher-table th {
+      background: #f1f5f9;
+      color: #334155;
+    }
+
     /* Print Optimization */
     @media print {
       .no-print, .no-print * {
@@ -383,10 +449,16 @@
         box-shadow: none !important;
         padding: 8px 12px 10px !important;
         width: 100% !important;
+        margin-bottom: 12px !important;
+      }
+      .voucher-card {
+        border: 1px dashed #005953 !important;
+        padding: 10px 14px !important;
+        page-break-inside: avoid !important;
       }
       @page {
         size: A4 portrait;
-        margin: 7mm 7mm 7mm 7mm;
+        margin: 6mm 7mm 6mm 7mm;
       }
     }
   </style>
@@ -409,10 +481,15 @@
   // Identity checks
   $identType = trim($application->ident_type ?? '');
   $isBirthCert = str_contains(strtolower($identType), 'birth') || empty($identType);
+
+  $isApproved = $application->isApproved();
+  $isFree = $application->isFreeProject();
+  $isPaid = $application->isPaid();
 @endphp
 
 <div class="page-wrap">
-  {{-- Screen Action Bar (Hidden Completely During Print) --}}
+
+  {{-- Screen Action Bar --}}
   <div class="no-print no-print-bar">
     <a href="{{ route('home') }}" class="btn-home">
       ← হোম পেজে ফিরে যান (Back to Home)
@@ -420,348 +497,522 @@
     <div style="font-size:12.5px;color:#334155;">
       আবেদন ট্র্যাকিং নং: <strong style="color:#005953;">{{ $application->tracking_no }}</strong>
     </div>
-    <button onclick="window.print()" class="btn-print">
-      🖨️ প্রিন্ট করুন (Print Application)
-    </button>
+    @if($isApproved && ($isFree || $isPaid))
+      <button onclick="window.print()" class="btn-print">
+        🖨️ ভর্তি ফরম ও ভাউচার প্রিন্ট করুন
+      </button>
+    @else
+      <button onclick="window.location.reload()" class="btn-home" style="cursor:pointer;">
+        🔄 স্ট্যাটাস রিফ্রেশ করুন
+      </button>
+    @endif
   </div>
 
-  {{-- Official Form Container --}}
-  <div class="admission-form">
+  @if(session('success'))
+    <div class="no-print" style="background:#d1fae5;border:1px solid #10b981;color:#065f46;padding:12px 18px;border-radius:6px;margin-bottom:14px;font-weight:600;font-size:13px;">
+      ✓ {{ session('success') }}
+    </div>
+  @endif
 
-    {{-- Header Section --}}
-    <div class="header-grid">
-      {{-- Header Left: Official MC Logo --}}
-      <div class="header-logo">
-        <img src="{{ asset('assets/MC Logo.png') }}" alt="MC Logo">
+  {{-- CASE 1: NOT YET APPROVED (PENDING APPROVAL) --}}
+  @if(!$isApproved)
+    <div class="status-alert-box">
+      <div style="text-align:center;margin-bottom:16px;">
+        <span class="alert-badge alert-pending">⏳ আবেদন দাখিল সম্পন্ন — ভেরিফিকেশন ও অনুমোদন অপেক্ষমাণ</span>
+        <h2 style="margin:4px 0 6px;color:#0f5132;font-size:20px;">আপনার আবেদনটি সফলভাবে জমা হয়েছে!</h2>
+        <p style="color:#475569;font-size:13px;max-width:620px;margin:0 auto;line-height:1.5;">
+          ইনস্টিটিউট কর্তৃপক্ষ আপনার প্রদত্ত তথ্য যাচাই-বাছাই করে <strong>অনুমোদন (Approve)</strong> করার পর চূড়ান্ত <strong>অফিসিয়াল ভর্তি আবেদন ফরম</strong> ও <strong>মানি রিসিট ভাউচার</strong> জেনারেট হবে।
+        </p>
       </div>
 
-      {{-- Header Center: Institutional Titles & Slogan --}}
-      <div class="header-center">
-        <h1 class="inst-name-bn">{{ $settings->get('institution_name', 'এম সি টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</h1>
-        <div class="inst-name-en">MC Technical School & College</div>
-        <div class="inst-slogan">দক্ষতা &nbsp;|&nbsp; কর্মসংস্থান &nbsp;|&nbsp; উন্নত আগামী</div>
-      </div>
-
-      {{-- Header Right: QR Code on TOP, Passport Photo DIRECTLY UNDERNEATH --}}
-      <div class="header-right">
-        {{-- TOP: Auto-generated QR Code --}}
-        <div class="qr-frame">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data={{ urlencode(url('/?tracking=' . $application->tracking_no)) }}" alt="QR Code">
-          <span class="qr-label">{{ $application->tracking_no }}</span>
+      <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:16px;max-width:600px;margin:0 auto 16px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12.5px;">
+          <div><span style="color:#64748b;">আবেদন ট্র্যাকিং নং:</span> <strong style="color:#005953;font-family:monospace;font-size:14px;">{{ $application->tracking_no }}</strong></div>
+          <div><span style="color:#64748b;">আবেদনকারীর নাম:</span> <strong>{{ $application->trainee_name_bn ?: $application->name }}</strong></div>
+          <div><span style="color:#64748b;">পছন্দের কোর্স:</span> <strong>{{ $application->course }}</strong></div>
+          <div><span style="color:#64748b;">প্রজেক্ট / ব্যাচ:</span> <strong style="color:#005953;">{{ $application->project_name ?: 'Paid Batch' }}</strong></div>
+          <div><span style="color:#64748b;">নির্ধারিত কোর্স ফি:</span> <strong>৳ {{ number_format($application->course_fee, 0) }}</strong></div>
+          <div><span style="color:#64748b;">ছাড় / ডিস্কাউন্ট:</span> <strong>৳ {{ number_format($application->discount, 0) }}</strong></div>
+          <div style="grid-column:1 / -1;border-top:1px dashed #cbd5e1;padding-top:8px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="color:#334155;font-weight:700;">পরিশোধযোগ্য মোট ফি:</span>
+            <strong style="color:#b91c1c;font-size:16px;">
+              {{ $isFree ? '৳ ০ (সম্পূর্ণ ফ্রি প্রজেক্ট)' : ('৳ ' . number_format($application->payable_amount, 0)) }}
+            </strong>
+          </div>
         </div>
+      </div>
 
-        {{-- BOTTOM: Student Passport Photo Frame --}}
-        <div class="photo-frame">
-          @if($application->photo)
-            <img src="{{ storage_asset($application->photo) }}" alt="Trainee Photo">
-          @else
-            <div class="photo-placeholder">
-              শিক্ষার্থীর ছবি<br>(পাসপোর্ট সাইজ)
+      <div style="text-align:center;color:#64748b;font-size:12px;line-height:1.6;">
+        <p>💡 এই ট্র্যাকিং লিংকটি বুকমার্ক করে রাখুন। অনুমোদন হওয়ার সাথে সাথে আপনি এই পেজ থেকেই ফরম ও ভাউচার প্রিন্ট করতে পারবেন।</p>
+        <button onclick="window.location.reload()" style="background:#0f5132;color:#fff;border:none;padding:9px 22px;border-radius:5px;font-weight:700;font-size:13px;cursor:pointer;">
+          🔄 স্ট্যাটাস পুনরায় চেক করুন (Refresh Status)
+        </button>
+      </div>
+    </div>
+
+  {{-- CASE 2: APPROVED, BUT REQUIRES PAYMENT CONFIRMATION (FOR PAID/ECHO) --}}
+  @elseif($isApproved && !$isFree && !$isPaid)
+    <div class="status-alert-box">
+      <div style="text-align:center;margin-bottom:16px;">
+        <span class="alert-badge alert-approved">✔ আবেদন অনুমোদিত হয়েছে (Approved)</span>
+        <h2 style="margin:4px 0 6px;color:#0f5132;font-size:20px;">অভিনন্দন! আপনার আবেদনটি অনুমোদিত হয়েছে</h2>
+        <p style="color:#475569;font-size:13px;max-width:620px;margin:0 auto;line-height:1.5;">
+          চূড়ান্ত অফিসিয়াল ভর্তি ফরম ও পেমেন্ট ভাউচার জেনারেট করতে নির্ধারিত <strong>৳ {{ number_format($application->payable_amount, 0) }}</strong> টাকা পরিশোধ করে নিচের ফর্মে নিশ্চিত করুন।
+        </p>
+      </div>
+
+      <div style="max-width:540px;margin:0 auto;background:#f8fafc;border:1.5px solid #b8dfd7;border-radius:8px;padding:20px;">
+        <form method="POST" action="{{ route('apply.payment.confirm', $application->tracking_no) }}">
+          @csrf
+          <div style="margin-bottom:14px;background:#eef7f2;padding:12px 16px;border-radius:6px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <span style="font-size:12px;color:#475569;">প্রজেক্ট / ব্যাচ:</span>
+              <strong style="color:#005953;display:block;">{{ $application->project_name }}</strong>
             </div>
+            <div style="text-align:right;">
+              <span style="font-size:12px;color:#475569;">পরিশোধযোগ্য এমাউন্ট:</span>
+              <strong style="color:#b91c1c;font-size:17px;display:block;">৳ {{ number_format($application->payable_amount, 0) }}</strong>
+            </div>
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="font-size:12.5px;font-weight:700;color:#1e293b;display:block;margin-bottom:4px;">
+              পরিশোধের পরিমাণ (Amount to Pay ৳) <span style="color:#dc2626;">*</span>:
+            </label>
+            <input type="number" name="paid_amount" value="{{ old('paid_amount', $application->payable_amount) }}" required style="width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:5px;font-weight:bold;font-size:15px;color:#005953;">
+          </div>
+
+          <div style="margin-bottom:12px;">
+            <label style="font-size:12.5px;font-weight:700;color:#1e293b;display:block;margin-bottom:4px;">
+              পেমেন্ট মাধ্যম (Payment Method) <span style="color:#dc2626;">*</span>:
+            </label>
+            <select name="payment_method" required style="width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:5px;font-size:13px;">
+              <option value="bKash">bKash (বিকাশ)</option>
+              <option value="Nagad">Nagad (নগদ)</option>
+              <option value="Rocket">Rocket (রকেট)</option>
+              <option value="Cash">Cash (অফিস কাউন্টারে নগদ প্রদান)</option>
+              <option value="Bank">Bank Deposit</option>
+            </select>
+          </div>
+
+          <div style="margin-bottom:16px;">
+            <label style="font-size:12.5px;font-weight:700;color:#1e293b;display:block;margin-bottom:4px;">
+              ট্রানজেকশন আইডি / মানি রিসিট নম্বর (TrxID / Receipt No):
+            </label>
+            <input type="text" name="payment_trx_id" value="{{ old('payment_trx_id') }}" placeholder="যেমন: 9X38A94K... বা ক্যাশ রিসিট নং" style="width:100%;padding:9px 12px;border:1px solid #cbd5e1;border-radius:5px;font-size:13px;">
+          </div>
+
+          <button type="submit" style="width:100%;background:#005953;color:#ffffff;border:none;padding:11px;border-radius:5px;font-weight:bold;font-size:14px;cursor:pointer;">
+            পেমেন্ট নিশ্চিত করে ভর্তি ফরম ও ভাউচার জেনারেট করুন ➔
+          </button>
+        </form>
+      </div>
+    </div>
+
+  {{-- CASE 3: APPROVED AND (FREE OR PAID) -> FULL OFFICIAL ADMISSION FORM & PAYMENT VOUCHER GENERATED --}}
+  @else
+    {{-- Top Success Message on Screen --}}
+    <div class="no-print" style="background:#ecfdf5;border:1.5px solid #10b981;border-radius:6px;padding:12px 18px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+      <div>
+        <strong style="color:#065f46;font-size:13.5px;">✓ আপনার আবেদনটি অনুমোদিত হয়েছে এবং ভর্তি ফরম ও ভাউচার প্রস্তুত!</strong>
+        <p style="color:#047857;margin:0;font-size:12px;">ডানদিকের "ভর্তি ফরম ও ভাউচার প্রিন্ট করুন" বাটনে ক্লিক করে এক ক্লিকে A4 সাইজে প্রিন্ট করতে পারেন।</p>
+      </div>
+      <button onclick="window.print()" class="btn-print">
+        🖨️ প্রিন্ট করুন (Print Now)
+      </button>
+    </div>
+
+    {{-- 1. Official Admission Form Container --}}
+    <div class="admission-form">
+      {{-- Header Section --}}
+      <div class="header-grid">
+        <div class="header-logo">
+          <img src="{{ asset('assets/MC Logo.png') }}" alt="MC Logo">
+        </div>
+        <div class="header-center">
+          <h1 class="inst-name-bn">{{ $settings->get('institution_name', 'এম সি টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</h1>
+          <div class="inst-name-en">MC Technical School & College</div>
+          <div class="inst-slogan">দক্ষতা &nbsp;|&nbsp; কর্মসংস্থান &nbsp;|&nbsp; উন্নত আগামী</div>
+        </div>
+        <div class="header-right">
+          <div class="qr-frame">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=90x90&data={{ urlencode(url('/?tracking=' . $application->tracking_no)) }}" alt="QR Code">
+            <span class="qr-label">{{ $application->tracking_no }}</span>
+          </div>
+          <div class="photo-frame">
+            @if($application->photo)
+              <img src="{{ storage_asset($application->photo) }}" alt="Trainee Photo">
+            @else
+              <div class="photo-placeholder">শিক্ষার্থীর ছবি<br>(পাসপোর্ট সাইজ)</div>
+            @endif
+          </div>
+        </div>
+      </div>
+
+      <div class="title-bar-wrap">
+        <div class="form-title-pill">ভর্তি আবেদন ফরম</div>
+        <div class="app-no-box">
+          আবেদন নং : <strong>{{ $application->tracking_no }}</strong>
+        </div>
+      </div>
+
+      <div class="notice-strip">
+        অনুগ্রহ করে সকল তথ্য সঠিকভাবে ও স্পষ্টভাবে পূরণ করুন। তথ্য বিভ্রান্তিকর হলে ভর্তি বাতিল হতে পারে।
+      </div>
+
+      {{-- ক. ভর্তি ও শিক্ষার্থীর তথ্য --}}
+      <div class="sec-card">
+        <div class="sec-head">ক. ভর্তি ও শিক্ষার্থীর তথ্য</div>
+        <div class="sec-body">
+          <div class="form-row">
+            <span class="field-lbl">কোর্স / পর্ব :</span>
+            <span class="dotted-val">{{ $application->course }}</span>
+            <span class="field-lbl" style="margin-left:14px;">ট্রেড / প্রজেক্ট :</span>
+            <span class="dotted-val">{{ $application->project_name ?: 'Paid Batch' }} ({{ $application->preferred_shift ?: 'Day' }})</span>
+          </div>
+          <div class="form-row">
+            <span class="field-lbl">শিক্ষার্থীর পূর্ণ নাম (বাংলা) :</span>
+            <span class="dotted-val">{{ $application->trainee_name_bn ?: $application->name }}</span>
+          </div>
+          <div class="form-row">
+            <span class="field-lbl">শিক্ষার্থীর পূর্ণ নাম (ইংরেজি) :</span>
+            <span class="dotted-val" style="font-family:'Courier New',Courier,monospace;letter-spacing:0.5px;">{{ strtoupper($application->trainee_name_en ?: $application->name) }}</span>
+          </div>
+          <div class="form-row">
+            <span class="field-lbl">জন্ম তারিখ :</span>
+            <span class="dotted-val" style="flex:0 0 110px;">{{ $application->dob ? $application->dob->format('d / m / Y') : '___ / ___ / ______' }}</span>
+            <span style="font-size:10px;color:#64748b;margin-right:14px;">(দিন / মাস / বছর)</span>
+            <span class="field-lbl">লিঙ্গ :</span>
+            <span style="margin-left:8px;">
+              <span class="chk-inline"><span class="chk-square">{{ $isMale ? '✔' : '' }}</span> পুরুষ</span>
+              <span class="chk-inline"><span class="chk-square">{{ $isFemale ? '✔' : '' }}</span> নারী</span>
+              <span class="chk-inline"><span class="chk-square">{{ $isOther ? '✔' : '' }}</span> অন্যান্য</span>
+            </span>
+          </div>
+          <div class="form-row">
+            <span class="field-lbl">ধর্ম :</span>
+            <span class="dotted-val">{{ $application->religion ?: 'ইসলাম' }}</span>
+            <span class="field-lbl" style="margin-left:14px;">রক্তের গ্রুপ :</span>
+            <span class="dotted-val" style="flex:0 0 140px;">{{ $bloodVal ?: '—' }}</span>
+          </div>
+          <div class="form-row" style="margin-top:2px;">
+            <span class="field-badge-lbl">জন্মনিবন্ধন নম্বর</span>
+            <span style="margin:0 4px;">:</span>
+            <span class="dotted-val" style="font-family:monospace;letter-spacing:0.5px;">{{ $isBirthCert ? $application->ident_no : '—' }}</span>
+            <span class="field-badge-lbl" style="margin-left:12px;">জাতীয় পরিচয়পত্র (NID) নম্বর (যদি থাকে)</span>
+            <span style="margin:0 4px;">:</span>
+            <span class="dotted-val" style="font-family:monospace;letter-spacing:0.5px;">{{ !$isBirthCert ? $application->ident_no : '—' }}</span>
+          </div>
+        </div>
+      </div>
+
+      {{-- খ. পিতা ও মাতার পরিচিতি --}}
+      <div class="sec-card">
+        <div class="sec-head">খ. পিতা ও মাতার পরিচিতি</div>
+        <div class="sec-body">
+          <div class="grid-2col">
+            <div>
+              <div class="form-row">
+                <span class="field-lbl">পিতার পূর্ণ নাম :</span>
+                <span class="dotted-val">{{ $application->father_name_bn ?: ($application->father_name_en ?: '—') }}</span>
+              </div>
+              <div class="form-row">
+                <span class="field-lbl">পিতার পেশা :</span>
+                <span class="dotted-val">{{ $application->income_source ?: '—' }}</span>
+              </div>
+              <div class="form-row">
+                <span class="field-lbl">পিতার NID নম্বর (যদি থাকে) :</span>
+                <span class="dotted-val">—</span>
+              </div>
+              <div class="form-row">
+                <span class="field-lbl">পিতার জন্মনিবন্ধন নম্বর :</span>
+                <span class="dotted-val">—</span>
+              </div>
+            </div>
+            <div>
+              <div class="form-row">
+                <span class="field-lbl">মাতার পূর্ণ নাম :</span>
+                <span class="dotted-val">{{ $application->mother_name_bn ?: ($application->mother_name_en ?: '—') }}</span>
+              </div>
+              <div class="form-row">
+                <span class="field-lbl">মাতার পেশা :</span>
+                <span class="dotted-val">গৃহিণী</span>
+              </div>
+              <div class="form-row">
+                <span class="field-lbl">মাতার NID নম্বর (যদি থাকে) :</span>
+                <span class="dotted-val">—</span>
+              </div>
+              <div class="form-row">
+                <span class="field-lbl">মাতার জন্মনিবন্ধন নম্বর :</span>
+                <span class="dotted-val">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- গ. অভিভাবক ও যোগাযোগের তথ্য --}}
+      <div class="sec-card">
+        <div class="sec-head">গ. অভিভাবক ও যোগাযোগের তথ্য</div>
+        <div class="sec-body">
+          <div class="grid-2col">
+            <div class="form-row">
+              <span class="field-lbl">অভিভাবকের নাম :</span>
+              <span class="dotted-val">{{ $application->emergency_contact_name ?: ($application->father_name_bn ?: $application->father_name_en ?: '—') }}</span>
+            </div>
+            <div class="form-row">
+              <span class="field-lbl">শিক্ষার্থীর সাথে সম্পর্ক :</span>
+              <span class="dotted-val">পিতা / অভিভাবক</span>
+            </div>
+          </div>
+          <div class="grid-2col">
+            <div class="form-row">
+              <span class="field-lbl">অভিভাবকের মোবাইল নম্বর :</span>
+              <span class="dotted-val" style="font-family:monospace;letter-spacing:0.5px;">{{ $application->emergency_contact ?: '—' }}</span>
+            </div>
+            <div class="form-row">
+              <span class="field-lbl">শিক্ষার্থীর মোবাইল নম্বর :</span>
+              <span class="dotted-val" style="font-family:monospace;letter-spacing:0.5px;color:#005953;">{{ $application->contact_no ?: $application->phone }}</span>
+            </div>
+          </div>
+          <div style="font-weight:bold;margin-top:2px;font-size:10.5px;color:#005953;">বর্তমান ঠিকানা</div>
+          <div class="grid-2col">
+            <div class="form-row">
+              <span class="field-lbl">গ্রাম / মহল্লা / ওয়ার্ড :</span>
+              <span class="dotted-val">{{ $application->pres_address }}</span>
+            </div>
+            <div class="form-row">
+              <span class="field-lbl">ডাকঘর :</span>
+              <span class="dotted-val">—</span>
+            </div>
+          </div>
+          <div class="grid-2col">
+            <div class="form-row">
+              <span class="field-lbl">উপজেলা / থানা :</span>
+              <span class="dotted-val">{{ $application->pres_upazilla }}</span>
+            </div>
+            <div class="form-row">
+              <span class="field-lbl">জেলা :</span>
+              <span class="dotted-val">{{ $application->pres_district }}</span>
+            </div>
+          </div>
+          <div class="form-row" style="margin-top:2px;">
+            <span class="field-lbl">স্থায়ী ঠিকানা (যদি ভিন্ন হয়) :</span>
+            <span class="dotted-val">{{ $application->perm_address }}, থানা: {{ $application->perm_upazilla }}, জেলা: {{ $application->perm_district }}</span>
+          </div>
+        </div>
+      </div>
+
+      {{-- ঘ. পূর্ববর্তী শিক্ষাগত যোগ্যতা --}}
+      <div class="sec-card">
+        <div class="sec-head">ঘ. পূর্ববর্তী শিক্ষাগত যোগ্যতা</div>
+        <div class="sec-body" style="padding:2px 4px 4px;">
+          <table class="qual-table">
+            <thead>
+              <tr>
+                <th style="width:20%;">পরীক্ষার নাম</th>
+                <th style="width:30%;">প্রতিষ্ঠানের নাম</th>
+                <th style="width:14%;">বোর্ড</th>
+                <th style="width:12%;">পাশের সন</th>
+                <th style="width:12%;">বিভাগ / বিষয়</th>
+                <th style="width:12%;">ফলাফল / জিপিএ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:600;">এসএসসি / সমমান</td>
+                <td>{{ $application->education_level ?: '—' }}</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">এইচএসসি / সমমান</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">অন্যান্য (যদি থাকে)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {{-- ঙ. সংযুক্তি ও অঙ্গীকার --}}
+      <div class="sec-card">
+        <div class="sec-head">ঙ. সংযুক্তি ও অঙ্গীকার</div>
+        <div class="sec-body">
+          <div class="checklist-wrap">
+            <span class="chk-inline"><span class="chk-square">✔</span> জন্মনিবন্ধন সনদ / NID এর কপি</span>
+            <span class="chk-inline"><span class="chk-square">✔</span> পিতা-মাতার NID এর কপি</span>
+            <span class="chk-inline"><span class="chk-square">✔</span> শিক্ষাগত যোগ্যতার সনদপত্রের কপি</span>
+            <span class="chk-inline"><span class="chk-square">✔</span> পাসপোর্ট সাইজ ছবি</span>
+            <span class="chk-inline"><span class="chk-square"></span> অন্যান্য (উল্লেখ করুন) ______________</span>
+          </div>
+          <div class="declaration-text">
+            আমি ঘোষণা করছি যে, এই ফরমে প্রদত্ত সকল তথ্য আমার জ্ঞান অনুযায়ী সত্য ও সঠিক। কোনো তথ্য অসত্য প্রমাণিত হলে প্রতিষ্ঠানের নিয়ম অনুযায়ী আমার ভর্তি বাতিল হতে পারে।
+          </div>
+          <div class="sig-row">
+            <div class="sig-col">
+              <div class="sig-space">
+                @if($application->signature_photo)
+                  <img src="{{ storage_asset($application->signature_photo) }}" alt="Signature">
+                @endif
+              </div>
+              <div class="sig-line">শিক্ষার্থীর স্বাক্ষর ও তারিখ</div>
+            </div>
+            <div class="sig-col">
+              <div class="sig-space"></div>
+              <div class="sig-line">পিতা / মাতার স্বাক্ষর ও তারিখ</div>
+            </div>
+            <div class="sig-col">
+              <div class="sig-space"></div>
+              <div class="sig-line">অভিভাবকের স্বাক্ষর ও তারিখ</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{-- অফিস কর্তৃক পূরণীয় --}}
+      <div class="sec-card" style="margin-bottom:0;">
+        <div class="sec-head">অফিস কর্তৃক পূরণীয়</div>
+        <div class="sec-body">
+          <div class="form-row">
+            <span class="field-lbl">আবেদন গ্রহণের তারিখ :</span>
+            <span class="dotted-val" style="flex:0 0 110px;">{{ $application->created_at->format('d / m / Y') }}</span>
+            <span class="field-lbl" style="margin-left:14px;">কাগজপত্র :</span>
+            <span style="margin-left:8px;">
+              <span class="chk-inline"><span class="chk-square">✔</span> সম্পূর্ণ</span>
+              <span class="chk-inline"><span class="chk-square"></span> অসম্পূর্ণ</span>
+            </span>
+            <span class="field-lbl" style="margin-left:14px;">ভর্তি রোল :</span>
+            <span class="dotted-val"></span>
+          </div>
+          <div class="form-row">
+            <span class="field-lbl">ভর্তির সিদ্ধান্ত :</span>
+            <span style="margin-left:8px;">
+              <span class="chk-inline"><span class="chk-square">✔</span> নির্বাচিত</span>
+              <span class="chk-inline"><span class="chk-square"></span> অপেক্ষমাণ তালিকা</span>
+              <span class="chk-inline"><span class="chk-square"></span> অনির্বাচিত</span>
+            </span>
+            <span class="field-lbl" style="margin-left:14px;">মন্তব্য :</span>
+            <span class="dotted-val">{{ $application->project_name }}</span>
+          </div>
+          <div class="sig-row" style="margin-top:12px;">
+            <div class="sig-col">
+              <div class="sig-space"></div>
+              <div class="sig-line">ভর্তি কর্মকর্তা<br><span style="font-weight:normal;font-size:9px;">নাম ও স্বাক্ষর</span></div>
+            </div>
+            <div class="sig-col">
+              <div class="sig-space"></div>
+              <div class="sig-line">প্রোগ্রাম সমন্বয়কারী<br><span style="font-weight:normal;font-size:9px;">নাম ও স্বাক্ষর</span></div>
+            </div>
+            <div class="sig-col">
+              <div class="sig-space"></div>
+              <div class="sig-line">অধ্যক্ষ<br><span style="font-weight:normal;font-size:9px;">নাম ও স্বাক্ষর</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{-- 2. Official Student Payment Voucher / Money Receipt --}}
+    <div class="voucher-card">
+      <div class="voucher-head">
+        <div>
+          <div class="voucher-title">এম সি টেকনিক্যাল স্কুল অ্যান্ড কলেজ (MC Technical School & College)</div>
+          <div style="font-size:11.5px;font-weight:bold;color:#1e293b;margin-top:2px;">পেমেন্ট ভাউচার ও টাকা জমার রসিদ (FEE RECEIPT VOUCHER)</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px;color:#475569;">ভাউচার নং: <strong style="font-family:monospace;color:#005953;">{{ $application->voucher_no ?: ('VR-' . $application->tracking_no) }}</strong></div>
+          <div style="font-size:10.5px;color:#64748b;">তারিখ: {{ $application->created_at->format('d/m/Y') }}</div>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px;margin-bottom:6px;">
+        <div><strong>শিক্ষার্থীর নাম:</strong> {{ $application->trainee_name_bn ?: $application->name }} ({{ strtoupper($application->trainee_name_en ?: $application->name) }})</div>
+        <div><strong>আবেদন ট্র্যাকিং নং:</strong> <span style="font-family:monospace;font-weight:bold;color:#005953;">{{ $application->tracking_no }}</span></div>
+        <div><strong>কোর্স / ট্রেড:</strong> {{ $application->course }}</div>
+        <div><strong>প্রজেক্ট / ব্যাচ:</strong> <strong style="color:#005953;">{{ $application->project_name ?: 'Paid Batch' }}</strong></div>
+      </div>
+
+      <table class="voucher-table">
+        <thead>
+          <tr>
+            <th>বিবরণ (Fee Description)</th>
+            <th>নির্ধারিত ফি</th>
+            <th>ছাড় / ডিস্কাউন্ট</th>
+            <th>পরিশোধযোগ্য মোট</th>
+            <th>পরিশোধিত অর্থ (Paid)</th>
+            <th>বকেয়া (Due)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <strong>{{ $application->course }}</strong>
+              <small style="display:block;color:#64748b;">প্রজেক্ট: {{ $application->project_name ?: 'Paid Batch' }}</small>
+            </td>
+            <td>৳ {{ number_format($application->course_fee, 0) }}</td>
+            <td>৳ {{ number_format($application->discount, 0) }}</td>
+            <td><strong>৳ {{ number_format($application->payable_amount, 0) }}</strong></td>
+            <td>
+              <strong style="color:#0f5132;">
+                {{ $isFree ? '৳ ০ (ফ্রি)' : ('৳ ' . number_format($application->paid_amount, 0)) }}
+              </strong>
+            </td>
+            <td>
+              <strong style="color:{{ max(0, $application->payable_amount - $application->paid_amount) > 0 && !$isFree ? '#b91c1c' : '#059669' }};">
+                ৳ {{ number_format($isFree ? 0 : max(0, $application->payable_amount - $application->paid_amount), 0) }}
+              </strong>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;margin-top:6px;">
+        <div>
+          <span>পেমেন্ট স্ট্যাটাস:</span>
+          @if($isFree)
+            <strong style="color:#059669;background:#eef7f2;padding:2px 8px;border-radius:3px;">EXEMPT / FREE PROJECT (সম্পূর্ণ ফ্রি প্রজেক্ট)</strong>
+          @elseif($isPaid)
+            <strong style="color:#059669;background:#eef7f2;padding:2px 8px;border-radius:3px;">PAID (পরিশোধিত)</strong>
+            @if($application->payment_trx_id)
+              <span style="color:#475569;margin-left:6px;">(TrxID: {{ $application->payment_trx_id }} | {{ $application->payment_method }})</span>
+            @endif
+          @else
+            <strong style="color:#b91c1c;background:#fee2e2;padding:2px 8px;border-radius:3px;">DUE (বকেয়া)</strong>
           @endif
         </div>
       </div>
-    </div>
 
-    {{-- Title & Application Number Bar --}}
-    <div class="title-bar-wrap">
-      <div class="form-title-pill">ভর্তি আবেদন ফরম</div>
-      <div class="app-no-box">
-        আবেদন নং : <strong>{{ $application->tracking_no }}</strong>
-      </div>
-    </div>
-
-    {{-- Instruction Strip --}}
-    <div class="notice-strip">
-      অনুগ্রহ করে সকল তথ্য সঠিকভাবে ও স্পষ্টভাবে পূরণ করুন। তথ্য বিভ্রান্তিকর হলে ভর্তি বাতিল হতে পারে।
-    </div>
-
-    {{-- SECTION ক: ভর্তি ও শিক্ষার্থীর তথ্য --}}
-    <div class="sec-card">
-      <div class="sec-head">ক. ভর্তি ও শিক্ষার্থীর তথ্য</div>
-      <div class="sec-body">
-        <div class="form-row">
-          <span class="field-lbl">কোর্স / পর্ব :</span>
-          <span class="dotted-val">{{ $application->course }}</span>
-          <span class="field-lbl" style="margin-left:14px;">ট্রেড / বিভাগ :</span>
-          <span class="dotted-val">{{ $application->preferred_shift ?: 'কারিগরি প্রশিক্ষণ' }}</span>
+      <div class="sig-row" style="margin-top:18px;">
+        <div class="sig-col">
+          <div class="sig-space"></div>
+          <div class="sig-line">শিক্ষার্থীর স্বাক্ষর</div>
         </div>
-
-        <div class="form-row">
-          <span class="field-lbl">শিক্ষার্থীর পূর্ণ নাম (বাংলা) :</span>
-          <span class="dotted-val">{{ $application->trainee_name_bn ?: $application->name }}</span>
+        <div class="sig-col">
+          <div class="sig-space"></div>
+          <div class="sig-line">হিসাবরক্ষক / ক্যাশিয়ার</div>
         </div>
-
-        <div class="form-row">
-          <span class="field-lbl">শিক্ষার্থীর পূর্ণ নাম (ইংরেজি) :</span>
-          <span class="dotted-val" style="font-family:'Courier New',Courier,monospace;letter-spacing:0.5px;">{{ strtoupper($application->trainee_name_en ?: $application->name) }}</span>
-        </div>
-
-        <div class="form-row">
-          <span class="field-lbl">জন্ম তারিখ :</span>
-          <span class="dotted-val" style="flex:0 0 110px;">{{ $application->dob ? $application->dob->format('d / m / Y') : '___ / ___ / ______' }}</span>
-          <span style="font-size:10px;color:#64748b;margin-right:14px;">(দিন / মাস / বছর)</span>
-
-          <span class="field-lbl">লিঙ্গ :</span>
-          <span style="margin-left:8px;">
-            <span class="chk-inline"><span class="chk-square">{{ $isMale ? '✔' : '' }}</span> পুরুষ</span>
-            <span class="chk-inline"><span class="chk-square">{{ $isFemale ? '✔' : '' }}</span> নারী</span>
-            <span class="chk-inline"><span class="chk-square">{{ $isOther ? '✔' : '' }}</span> অন্যান্য</span>
-          </span>
-        </div>
-
-        <div class="form-row">
-          <span class="field-lbl">ধর্ম :</span>
-          <span class="dotted-val">{{ $application->religion ?: 'ইসলাম' }}</span>
-          <span class="field-lbl" style="margin-left:14px;">রক্তের গ্রুপ :</span>
-          <span class="dotted-val" style="flex:0 0 140px;">{{ $bloodVal ?: '—' }}</span>
-        </div>
-
-        <div class="form-row" style="margin-top:2px;">
-          <span class="field-badge-lbl">জন্মনিবন্ধন নম্বর</span>
-          <span style="margin:0 4px;">:</span>
-          <span class="dotted-val" style="font-family:monospace;letter-spacing:0.5px;">{{ $isBirthCert ? $application->ident_no : '—' }}</span>
-
-          <span class="field-badge-lbl" style="margin-left:12px;">জাতীয় পরিচয়পত্র (NID) নম্বর (যদি থাকে)</span>
-          <span style="margin:0 4px;">:</span>
-          <span class="dotted-val" style="font-family:monospace;letter-spacing:0.5px;">{{ !$isBirthCert ? $application->ident_no : '—' }}</span>
+        <div class="sig-col">
+          <div class="sig-space"></div>
+          <div class="sig-line">অনুমোদনকারী কর্মকর্তা ও সীলমোহর</div>
         </div>
       </div>
     </div>
+  @endif
 
-    {{-- SECTION খ: পিতা ও মাতার পরিচিতি --}}
-    <div class="sec-card">
-      <div class="sec-head">খ. পিতা ও মাতার পরিচিতি</div>
-      <div class="sec-body">
-        <div class="grid-2col">
-          {{-- Left Column: Father Info --}}
-          <div>
-            <div class="form-row">
-              <span class="field-lbl">পিতার পূর্ণ নাম :</span>
-              <span class="dotted-val">{{ $application->father_name_bn ?: ($application->father_name_en ?: '—') }}</span>
-            </div>
-            <div class="form-row">
-              <span class="field-lbl">পিতার পেশা :</span>
-              <span class="dotted-val">{{ $application->income_source ?: '—' }}</span>
-            </div>
-            <div class="form-row">
-              <span class="field-lbl">পিতার NID নম্বর (যদি থাকে) :</span>
-              <span class="dotted-val">—</span>
-            </div>
-            <div class="form-row">
-              <span class="field-lbl">পিতার জন্মনিবন্ধন নম্বর :</span>
-              <span class="dotted-val">—</span>
-            </div>
-          </div>
-
-          {{-- Right Column: Mother Info --}}
-          <div>
-            <div class="form-row">
-              <span class="field-lbl">মাতার পূর্ণ নাম :</span>
-              <span class="dotted-val">{{ $application->mother_name_bn ?: ($application->mother_name_en ?: '—') }}</span>
-            </div>
-            <div class="form-row">
-              <span class="field-lbl">মাতার পেশা :</span>
-              <span class="dotted-val">গৃহিণী</span>
-            </div>
-            <div class="form-row">
-              <span class="field-lbl">মাতার NID নম্বর (যদি থাকে) :</span>
-              <span class="dotted-val">—</span>
-            </div>
-            <div class="form-row">
-              <span class="field-lbl">মাতার জন্মনিবন্ধন নম্বর :</span>
-              <span class="dotted-val">—</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {{-- SECTION গ: অভিভাবক ও যোগাযোগের তথ্য --}}
-    <div class="sec-card">
-      <div class="sec-head">গ. অভিভাবক ও যোগাযোগের তথ্য</div>
-      <div class="sec-body">
-        <div class="grid-2col">
-          <div class="form-row">
-            <span class="field-lbl">অভিভাবকের নাম :</span>
-            <span class="dotted-val">{{ $application->emergency_contact_name ?: ($application->father_name_bn ?: $application->father_name_en ?: '—') }}</span>
-          </div>
-          <div class="form-row">
-            <span class="field-lbl">শিক্ষার্থীর সাথে সম্পর্ক :</span>
-            <span class="dotted-val">পিতা / অভিভাবক</span>
-          </div>
-        </div>
-
-        <div class="grid-2col">
-          <div class="form-row">
-            <span class="field-lbl">অভিভাবকের মোবাইল নম্বর :</span>
-            <span class="dotted-val" style="font-family:monospace;letter-spacing:0.5px;">{{ $application->emergency_contact ?: '—' }}</span>
-          </div>
-          <div class="form-row">
-            <span class="field-lbl">শিক্ষার্থীর মোবাইল নম্বর :</span>
-            <span class="dotted-val" style="font-family:monospace;letter-spacing:0.5px;color:#005953;">{{ $application->contact_no ?: $application->phone }}</span>
-          </div>
-        </div>
-
-        <div style="font-weight:bold;margin-top:2px;font-size:10.5px;color:#005953;">বর্তমান ঠিকানা</div>
-        <div class="grid-2col">
-          <div class="form-row">
-            <span class="field-lbl">গ্রাম / মহল্লা / ওয়ার্ড :</span>
-            <span class="dotted-val">{{ $application->pres_address }}</span>
-          </div>
-          <div class="form-row">
-            <span class="field-lbl">ডাকঘর :</span>
-            <span class="dotted-val">—</span>
-          </div>
-        </div>
-        <div class="grid-2col">
-          <div class="form-row">
-            <span class="field-lbl">উপজেলা / থানা :</span>
-            <span class="dotted-val">{{ $application->pres_upazilla }}</span>
-          </div>
-          <div class="form-row">
-            <span class="field-lbl">জেলা :</span>
-            <span class="dotted-val">{{ $application->pres_district }}</span>
-          </div>
-        </div>
-
-        <div class="form-row" style="margin-top:2px;">
-          <span class="field-lbl">স্থায়ী ঠিকানা (যদি ভিন্ন হয়) :</span>
-          <span class="dotted-val">{{ $application->perm_address }}, থানা: {{ $application->perm_upazilla }}, জেলা: {{ $application->perm_district }}</span>
-        </div>
-      </div>
-    </div>
-
-    {{-- SECTION ঘ: পূর্ববর্তী শিক্ষাগত যোগ্যতা --}}
-    <div class="sec-card">
-      <div class="sec-head">ঘ. পূর্ববর্তী শিক্ষাগত যোগ্যতা</div>
-      <div class="sec-body" style="padding:2px 4px 4px;">
-        <table class="qual-table">
-          <thead>
-            <tr>
-              <th style="width:20%;">পরীক্ষার নাম</th>
-              <th style="width:30%;">প্রতিষ্ঠানের নাম</th>
-              <th style="width:14%;">বোর্ড</th>
-              <th style="width:12%;">পাশের সন</th>
-              <th style="width:12%;">বিভাগ / বিষয়</th>
-              <th style="width:12%;">ফলাফল / জিপিএ</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style="font-weight:600;">এসএসসি / সমমান</td>
-              <td>{{ $application->education_level ?: '—' }}</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-            </tr>
-            <tr>
-              <td style="font-weight:600;">এইচএসসি / সমমান</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td style="font-weight:600;">অন্যান্য (যদি থাকে)</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    {{-- SECTION ঙ: সংযুক্তি ও অঙ্গীকার --}}
-    <div class="sec-card">
-      <div class="sec-head">ঙ. সংযুক্তি ও অঙ্গীকার</div>
-      <div class="sec-body">
-        <div class="checklist-wrap">
-          <span class="chk-inline"><span class="chk-square">✔</span> জন্মনিবন্ধন সনদ / NID এর কপি</span>
-          <span class="chk-inline"><span class="chk-square">✔</span> পিতা-মাতার NID এর কপি</span>
-          <span class="chk-inline"><span class="chk-square">✔</span> শিক্ষাগত যোগ্যতার সনদপত্রের কপি</span>
-          <span class="chk-inline"><span class="chk-square">✔</span> পাসপোর্ট সাইজ ছবি</span>
-          <span class="chk-inline"><span class="chk-square"></span> অন্যান্য (উল্লেখ করুন) ______________</span>
-        </div>
-
-        <div class="declaration-text">
-          আমি ঘোষণা করছি যে, এই ফরমে প্রদত্ত সকল তথ্য আমার জ্ঞান অনুযায়ী সত্য ও সঠিক। কোনো তথ্য অসত্য প্রমাণিত হলে প্রতিষ্ঠানের নিয়ম অনুযায়ী আমার ভর্তি বাতিল হতে পারে।
-        </div>
-
-        <div class="sig-row">
-          <div class="sig-col">
-            <div class="sig-space">
-              @if($application->signature_photo)
-                <img src="{{ storage_asset($application->signature_photo) }}" alt="Signature">
-              @endif
-            </div>
-            <div class="sig-line">শিক্ষার্থীর স্বাক্ষর ও তারিখ</div>
-          </div>
-          <div class="sig-col">
-            <div class="sig-space"></div>
-            <div class="sig-line">পিতা / মাতার স্বাক্ষর ও তারিখ</div>
-          </div>
-          <div class="sig-col">
-            <div class="sig-space"></div>
-            <div class="sig-line">অভিভাবকের স্বাক্ষর ও তারিখ</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    {{-- SECTION: অফিস কর্তৃক পূরণীয় (Office Use Only) --}}
-    <div class="sec-card" style="margin-bottom:0;">
-      <div class="sec-head">অফিস কর্তৃক পূরণীয়</div>
-      <div class="sec-body">
-        <div class="form-row">
-          <span class="field-lbl">আবেদন গ্রহণের তারিখ :</span>
-          <span class="dotted-val" style="flex:0 0 110px;">{{ $application->created_at->format('d / m / Y') }}</span>
-
-          <span class="field-lbl" style="margin-left:14px;">কাগজপত্র :</span>
-          <span style="margin-left:8px;">
-            <span class="chk-inline"><span class="chk-square">✔</span> সম্পূর্ণ</span>
-            <span class="chk-inline"><span class="chk-square"></span> অসম্পূর্ণ</span>
-          </span>
-
-          <span class="field-lbl" style="margin-left:14px;">ভর্তি রোল :</span>
-          <span class="dotted-val"></span>
-        </div>
-
-        <div class="form-row">
-          <span class="field-lbl">ভর্তির সিদ্ধান্ত :</span>
-          <span style="margin-left:8px;">
-            <span class="chk-inline"><span class="chk-square">✔</span> নির্বাচিত</span>
-            <span class="chk-inline"><span class="chk-square"></span> অপেক্ষমাণ তালিকা</span>
-            <span class="chk-inline"><span class="chk-square"></span> অনির্বাচিত</span>
-          </span>
-
-          <span class="field-lbl" style="margin-left:14px;">মন্তব্য :</span>
-          <span class="dotted-val"></span>
-        </div>
-
-        <div class="sig-row" style="margin-top:14px;">
-          <div class="sig-col">
-            <div class="sig-space"></div>
-            <div class="sig-line">ভর্তি কর্মকর্তা<br><span style="font-weight:normal;font-size:9px;">নাম ও স্বাক্ষর</span></div>
-          </div>
-          <div class="sig-col">
-            <div class="sig-space"></div>
-            <div class="sig-line">প্রোগ্রাম সমন্বয়কারী<br><span style="font-weight:normal;font-size:9px;">নাম ও স্বাক্ষর</span></div>
-          </div>
-          <div class="sig-col">
-            <div class="sig-space"></div>
-            <div class="sig-line">অধ্যক্ষ<br><span style="font-weight:normal;font-size:9px;">নাম ও স্বাক্ষর</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
 </div>
 
 </body>

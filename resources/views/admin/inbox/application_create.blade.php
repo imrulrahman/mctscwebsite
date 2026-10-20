@@ -18,7 +18,61 @@
     @csrf
 
     <div style="background:#f9fbf9;border:1px solid #e2ebe6;border-radius:6px;padding:16px;margin-bottom:18px;">
-      <h3 style="margin:0 0 12px;font-size:15px;color:#18362b;">1. Course & Admission Details</h3>
+      <h3 style="margin:0 0 12px;font-size:15px;color:#18362b;">1. Project & Batch Selection</h3>
+      
+      <div style="margin-bottom:14px;">
+        <label style="font-weight:700;color:#0f172a;display:block;margin-bottom:6px;">Select Project / Batch: <span>*</span></label>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;">
+          <label style="display:inline-flex;align-items:center;gap:8px;background:#eef7f2;border:1.5px solid #0f5132;padding:8px 14px;border-radius:6px;cursor:pointer;">
+            <input type="radio" name="project_name" value="Paid Batch" data-fee="6000" @checked(old('project_name', 'Paid Batch') === 'Paid Batch') onchange="calcAdminFee()" style="accent-color:#0f5132;transform:scale(1.2);">
+            <div>
+              <strong style="color:#0f5132;">Paid Batch</strong>
+              <small style="display:block;color:#64748b;font-size:11px;">কোর্স ফি: ৳ ৬,০০০</small>
+            </div>
+          </label>
+
+          @foreach($projects as $p)
+            @php
+              $pFee = (float)($p->admission_fee ?? 0);
+              if (strtoupper(trim($p->title)) === 'ECHO' && $pFee == 0) $pFee = 500;
+            @endphp
+            <label style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #cbd5e1;padding:8px 14px;border-radius:6px;cursor:pointer;">
+              <input type="radio" name="project_name" value="{{ $p->title }}" data-fee="{{ $pFee }}" @checked(old('project_name') === $p->title) onchange="calcAdminFee()" style="accent-color:#0f5132;transform:scale(1.2);">
+              <div>
+                <strong>{{ $p->title }}</strong>
+                <small style="display:block;color:#64748b;font-size:11px;">
+                  @if($pFee > 0)
+                    ফি: ৳ {{ number_format($pFee, 0) }}
+                  @else
+                    ফি: ৳ ০ (ফ্রি)
+                  @endif
+                </small>
+              </div>
+            </label>
+          @endforeach
+        </div>
+      </div>
+
+      <div class="field-grid" style="background:#fff;border:1px solid #d1d5db;border-radius:6px;padding:12px;margin-bottom:14px;">
+        <label>
+          Course Fee (নির্ধারিত ফি ৳)
+          <input type="number" name="course_fee" id="adminCourseFee" value="{{ old('course_fee', 6000) }}" oninput="calcAdminFee()" required style="font-weight:bold;color:#0f5132;">
+        </label>
+        <label>
+          Discount / ছাড় (৳)
+          <input type="number" name="discount" id="adminDiscount" value="{{ old('discount', 0) }}" oninput="calcAdminFee()" placeholder="0">
+        </label>
+        <label>
+          Net Payable (প্রদেয় ফি ৳)
+          <input type="text" id="adminPayable" readonly style="font-weight:bold;color:#b91c1c;background:#f8fafc;" value="৳ 6,000">
+        </label>
+        <label>
+          Initial Paid Amount (পরিশোধিত ৳)
+          <input type="number" name="paid_amount" value="{{ old('paid_amount', 0) }}" placeholder="0">
+        </label>
+      </div>
+
+      <h3 style="margin:16px 0 10px;font-size:15px;color:#18362b;">2. Course & Admission Details</h3>
       <div class="field-grid">
         <label>
           Course / Trade <span>*</span>
@@ -160,4 +214,19 @@
     </div>
   </form>
 </div>
+
+<script>
+function calcAdminFee() {
+  const selectedRadio = document.querySelector('input[name="project_name"]:checked');
+  const feeInput = document.getElementById('adminCourseFee');
+  if (selectedRadio && event && event.type === 'change') {
+    feeInput.value = selectedRadio.dataset.fee || 6000;
+  }
+  const fee = parseFloat(feeInput.value || 0);
+  const discount = Math.max(0, parseFloat(document.getElementById('adminDiscount').value || 0));
+  const payable = Math.max(0, fee - discount);
+  document.getElementById('adminPayable').value = '৳ ' + payable.toLocaleString();
+}
+document.addEventListener('DOMContentLoaded', calcAdminFee);
+</script>
 @endsection

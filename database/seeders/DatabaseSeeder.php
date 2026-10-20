@@ -104,7 +104,14 @@ class DatabaseSeeder extends Seeder
 
         foreach ($rows as $index => [$section, $title, $category, $copy, $image]) {
             $slug = Str::slug($section.'-'.$title);
-            SiteContent::firstOrCreate(['section' => $section, 'title' => $title], [
+            $fee = 0.00;
+            if ($section === 'projects') {
+                if (strtoupper($title) === 'ECHO') {
+                    $fee = 500.00;
+                }
+            }
+
+            $content = SiteContent::firstOrCreate(['section' => $section, 'title' => $title], [
                 'slug' => $slug,
                 'category' => $category,
                 'excerpt' => $copy,
@@ -112,7 +119,12 @@ class DatabaseSeeder extends Seeder
                 'image' => $image ? 'assets/'.$image : null,
                 'status' => 'published',
                 'sort_order' => $index,
+                'admission_fee' => $fee,
             ]);
+
+            if ($section === 'projects' && strtoupper($title) === 'ECHO') {
+                $content->update(['admission_fee' => 500.00]);
+            }
         }
     }
 }

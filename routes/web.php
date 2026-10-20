@@ -16,6 +16,7 @@ Route::get('/', HomeController::class)->name('home');
 Route::get('/apply', [SiteFormsController::class, 'showApplyForm'])->name('apply');
 Route::post('/apply', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1')->name('apply.store');
 Route::get('/apply/confirmation/{tracking_no}', [SiteFormsController::class, 'applyConfirmation'])->name('apply.confirmation');
+Route::post('/apply/confirm-payment/{tracking_no}', [SiteFormsController::class, 'confirmPayment'])->name('apply.payment.confirm');
 Route::post('/contact', [SiteFormsController::class, 'contact'])->middleware('throttle:8,1')->name('contact.store');
 
 Route::get('/lang/{locale}', function (string $locale) {
@@ -112,6 +113,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/applications/create', [InboxController::class, 'createApplication'])->name('applications.create');
         Route::post('/applications', [InboxController::class, 'storeApplication'])->name('applications.store');
         Route::get('/applications/{application}', [InboxController::class, 'showApplication'])->name('applications.show');
+        Route::post('/applications/{application}/approve', [InboxController::class, 'approveApplication'])->name('applications.approve');
+        Route::post('/applications/{application}/payment', [InboxController::class, 'recordPayment'])->name('applications.payment');
         Route::get('/applications/{application}/print', [InboxController::class, 'printApplication'])->name('applications.print');
         Route::patch('/applications/{application}', [InboxController::class, 'updateApplication'])->name('applications.update');
         Route::delete('/applications/{application}', [InboxController::class, 'destroyApplication'])->name('applications.destroy');

@@ -125,6 +125,7 @@ class ContentController extends Controller
         return $request->validate([
             'title' => ['required', 'string', 'max:180'],
             'category' => ['nullable', 'string', 'max:120'],
+            'admission_fee' => ['nullable', 'numeric', 'min:0'],
             'excerpt' => ['nullable', 'string', 'max:1000'],
             'body' => ['nullable', 'string', 'max:20000'],
             'status' => ['required', Rule::in(['published', 'draft'])],

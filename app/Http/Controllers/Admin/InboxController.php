@@ -43,8 +43,14 @@ class InboxController extends Controller
         if ($request->filled('status')) {
             $query->where('status', $request->input('status'));
         }
+        if ($request->filled('project')) {
+            $query->where('project_name', $request->input('project'));
+        }
         if ($request->filled('course')) {
             $query->where('course', $request->input('course'));
+        }
+        if ($request->filled('payment_status')) {
+            $query->where('payment_status', $request->input('payment_status'));
         }
         if ($request->filled('q')) {
             $q = $request->input('q');
@@ -53,14 +59,16 @@ class InboxController extends Controller
                     ->orWhere('trainee_name_en', 'like', "%{$q}%")
                     ->orWhere('trainee_name_bn', 'like', "%{$q}%")
                     ->orWhere('contact_no', 'like', "%{$q}%")
-                    ->orWhere('ident_no', 'like', "%{$q}%");
+                    ->orWhere('ident_no', 'like', "%{$q}%")
+                    ->orWhere('project_name', 'like', "%{$q}%");
             });
         }
 
         $items = $query->paginate(20)->withQueryString();
         $courses = AdmissionApplication::select('course')->distinct()->pluck('course');
+        $projects = SiteContent::where('section', 'projects')->where('status', 'published')->orderBy('sort_order')->get();
 
-        return view('admin.inbox.applications', compact('items', 'courses'));
+        return view('admin.inbox.applications', compact('items', 'courses', 'projects'));
     }
 
     public function createApplication(): View
@@ -68,9 +76,10 @@ class InboxController extends Controller
         abort_unless(auth()->user()?->can('admissions.create'), 403, 'Unauthorized. Permission to add student applications required.');
 
         $courses = SiteContent::where('section', 'courses')->where('status', 'published')->orderBy('sort_order')->get();
+        $projects = SiteContent::where('section', 'projects')->where('status', 'published')->orderBy('sort_order')->get();
         $application = new AdmissionApplication();
 
-        return view('admin.inbox.application_create', compact('courses', 'application'));
+        return view('admin.inbox.application_create', compact('courses', 'projects', 'application'));
     }
 
     public function storeApplication(Request $request): RedirectResponse
@@ -78,6 +87,12 @@ class InboxController extends Controller
         abort_unless(auth()->user()?->can('admissions.create'), 403, 'Unauthorized. Permission to add student applications required.');
 
         $validated = $request->validate([
+            'project_name' => ['nullable', 'string', 'max:150'],
+            'course_fee' => ['nullable', 'numeric', 'min:0'],
+            'discount' => ['nullable', 'numeric', 'min:0'],
+            'paid_amount' => ['nullable', 'numeric', 'min:0'],
+            'payment_method' => ['nullable', 'string', 'max:50'],
+            'payment_trx_id' => ['nullable', 'string', 'max:100'],
             'course' => ['required', 'string', 'max:150'],
             'preferred_shift' => ['nullable', 'string', 'max:30'],
             'trainee_name_en' => ['required', 'string', 'max:150'],
@@ -105,9 +120,84 @@ class InboxController extends Controller
         $validated['name'] = $validated['trainee_name_en'];
         $validated['phone'] = $validated['contact_no'];
 
+        $projectName = trim($request->input('project_name') ?: 'Paid Batch');
+        $baseFee = (float)($request->input('course_fee') ?? 6000.00);
+        $discount = max(0, (float)($request->input('discount') ?? 0));
+        $payable = max(0, $baseFee - $discount);
+        $paid = (float)($request->input('paid_amount') ?? 0);
+
+        $validated['project_name'] = $projectName;
+        $validated['course_fee'] = $baseFee;
+        $validated['discount'] = $discount;
+        $validated['payable_amount'] = $payable;
+        $validated['paid_amount'] = $paid;
+
+        if ($payable <= 0) {
+            $validated['payment_status'] = 'free';
+        } elseif ($paid >= $payable) {
+            $validated['payment_status'] = 'paid';
+        } else {
+            $validated['payment_status'] = 'unpaid';
+        }
+
+        if ($validated['status'] === 'accepted') {
+            $validated['approved_at'] = now();
+            $validated['approved_by'] = auth()->id();
+        }
+
         $app = AdmissionApplication::create($validated);
 
         return redirect()->route('admin.applications.show', $app)->with('success', 'Student application saved successfully. Tracking ID: ' . $app->tracking_no);
+    }
+
+    public function approveApplication(AdmissionApplication $application): RedirectResponse
+    {
+        abort_unless(auth()->user()?->can('admissions.edit'), 403, 'Unauthorized. Permission to edit application required.');
+
+        $application->status = 'accepted';
+        $application->approved_at = now();
+        $application->approved_by = auth()->id();
+        if ($application->isFreeProject()) {
+            $application->payment_status = 'free';
+        }
+        $application->save();
+
+        return back()->with('success', 'আবেদনটি সফলভাবে অনুমোদিত (Approved) হয়েছে! এখন অফিসিয়াল ভর্তি ফরম ও ভাউচার প্রিন্ট করা যাবে।');
+    }
+
+    public function recordPayment(Request $request, AdmissionApplication $application): RedirectResponse
+    {
+        abort_unless(auth()->user()?->can('admissions.edit'), 403, 'Unauthorized. Permission to edit application required.');
+
+        $validated = $request->validate([
+            'paid_amount' => ['required', 'numeric', 'min:0'],
+            'discount' => ['nullable', 'numeric', 'min:0'],
+            'payment_method' => ['nullable', 'string', 'max:50'],
+            'payment_trx_id' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        if ($request->has('discount')) {
+            $discount = max(0, (float)$request->input('discount'));
+            $application->discount = $discount;
+            $application->payable_amount = max(0, (float)$application->course_fee - $discount);
+        }
+
+        $paid = (float)$validated['paid_amount'];
+        $application->paid_amount = $paid;
+        $application->payment_method = $validated['payment_method'] ?? $application->payment_method;
+        $application->payment_trx_id = $validated['payment_trx_id'] ?? $application->payment_trx_id;
+
+        if ($application->isFreeProject()) {
+            $application->payment_status = 'free';
+        } elseif ($paid >= $application->payable_amount) {
+            $application->payment_status = 'paid';
+        } else {
+            $application->payment_status = 'unpaid';
+        }
+
+        $application->save();
+
+        return back()->with('success', 'পেমেন্ট ও ডিস্কাউন্ট তথ্য সফলভাবে আপডেট হয়েছে!');
     }
 
     public function showApplication(AdmissionApplication $application): View

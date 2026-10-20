@@ -18,15 +18,23 @@ class SiteFormsController extends Controller
             ->orderBy('sort_order')
             ->get();
 
+        $projects = SiteContent::where('section', 'projects')
+            ->where('status', 'published')
+            ->orderBy('sort_order')
+            ->get();
+
         $selectedCourse = $request->query('course', '');
 
-        return view('apply', compact('courses', 'selectedCourse'));
+        return view('apply', compact('courses', 'projects', 'selectedCourse'));
     }
 
     public function apply(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            // Course selection
+            // Project & Course selection
+            'project_name' => ['nullable', 'string', 'max:150'],
+            'course_fee' => ['nullable', 'numeric', 'min:0'],
+            'discount' => ['nullable', 'numeric', 'min:0'],
             'course' => ['required', 'string', 'max:150'],
             'preferred_shift' => ['nullable', 'string', 'max:30'],
 
@@ -111,12 +119,58 @@ class SiteFormsController extends Controller
         if (isset($validated['monthly_income']) && is_numeric($validated['monthly_income'])) {
             $validated['yearly_income'] = $validated['yearly_income'] ?? round(((float)$validated['monthly_income']) * 12, 2);
         }
-        $validated['status'] = 'new';
+
+        // Project and fee calculation
+        $projectName = trim($request->input('project_name') ?: 'Paid Batch');
+        $baseFee = 6000.00;
+        if ($projectName !== 'Paid Batch') {
+            $prj = SiteContent::where('section', 'projects')->where('title', $projectName)->first();
+            if ($prj) {
+                $baseFee = (float)($prj->admission_fee ?? 0);
+            } elseif (in_array(strtoupper($projectName), ['NHRDF', 'ASSET'])) {
+                $baseFee = 0.00;
+            } elseif (strtoupper($projectName) === 'ECHO') {
+                $baseFee = 500.00;
+            }
+        }
+        $discount = max(0, (float)($request->input('discount') ?? 0));
+        $payable = max(0, $baseFee - $discount);
+
+        $validated['project_name'] = $projectName;
+        $validated['course_fee'] = $baseFee;
+        $validated['discount'] = $discount;
+        $validated['payable_amount'] = $payable;
+        $validated['paid_amount'] = 0.00;
+        $validated['payment_status'] = ($payable <= 0) ? 'free' : 'unpaid';
+        $validated['status'] = 'new'; // Pending admin approval
 
         $application = AdmissionApplication::create($validated);
 
         return redirect()->route('apply.confirmation', $application->tracking_no)
             ->with('success', 'আপনার আবেদন সফলভাবে দাখিল হয়েছে!');
+    }
+
+    public function confirmPayment(Request $request, string $tracking_no): RedirectResponse
+    {
+        $application = AdmissionApplication::where('tracking_no', $tracking_no)->firstOrFail();
+
+        $validated = $request->validate([
+            'paid_amount' => ['required', 'numeric', 'min:0'],
+            'payment_method' => ['required', 'string', 'max:50'],
+            'payment_trx_id' => ['nullable', 'string', 'max:100'],
+        ]);
+
+        $paid = (float)$validated['paid_amount'];
+        $application->paid_amount = $paid;
+        $application->payment_method = $validated['payment_method'];
+        $application->payment_trx_id = $validated['payment_trx_id'] ?? null;
+        if ($paid >= $application->payable_amount || $application->isFreeProject()) {
+            $application->payment_status = 'paid';
+        }
+        $application->save();
+
+        return redirect()->route('apply.confirmation', $application->tracking_no)
+            ->with('success', 'পেমেন্ট সফলভাবে সম্পন্ন হয়েছে! আপনার চূড়ান্ত ভর্তি ফরম ও ভাউচার প্রস্তুত।');
     }
 
     public function applyConfirmation(string $tracking_no): View
