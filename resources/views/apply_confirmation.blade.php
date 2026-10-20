@@ -530,14 +530,12 @@
           <div><span style="color:#64748b;">আবেদন ট্র্যাকিং নং:</span> <strong style="color:#005953;font-family:monospace;font-size:14px;">{{ $application->tracking_no }}</strong></div>
           <div><span style="color:#64748b;">আবেদনকারীর নাম:</span> <strong>{{ $application->trainee_name_bn ?: $application->name }}</strong></div>
           <div><span style="color:#64748b;">পছন্দের কোর্স:</span> <strong>{{ $application->course }}</strong></div>
-          <div><span style="color:#64748b;">প্রজেক্ট / ব্যাচ:</span> <strong style="color:#005953;">{{ $application->project_name ?: 'Paid Batch' }}</strong></div>
-          <div><span style="color:#64748b;">নির্ধারিত কোর্স ফি:</span> <strong>৳ {{ number_format($application->course_fee, 0) }}</strong></div>
-          <div><span style="color:#64748b;">ছাড় / ডিস্কাউন্ট:</span> <strong>৳ {{ number_format($application->discount, 0) }}</strong></div>
+          <div><span style="color:#64748b;">পছন্দের শিফট:</span> <strong>{{ $application->preferred_shift ?: 'যেকোনো শিফট' }}</strong></div>
           <div style="grid-column:1 / -1;border-top:1px dashed #cbd5e1;padding-top:8px;display:flex;justify-content:space-between;align-items:center;">
-            <span style="color:#334155;font-weight:700;">পরিশোধযোগ্য মোট ফি:</span>
-            <strong style="color:#b91c1c;font-size:16px;">
-              {{ $isFree ? '৳ ০ (সম্পূর্ণ ফ্রি প্রজেক্ট)' : ('৳ ' . number_format($application->payable_amount, 0)) }}
-            </strong>
+            <span style="color:#334155;font-weight:700;">বর্তমান অবস্থা:</span>
+            <span style="background:#fef3c7;color:#92400e;padding:3px 10px;border-radius:4px;font-weight:700;font-size:12px;">
+              ⏳ কর্তৃপক্ষের অনুমোদন ও প্রজেক্ট নির্ধারণ অপেক্ষমাণ
+            </span>
           </div>
         </div>
       </div>

@@ -120,28 +120,13 @@ class SiteFormsController extends Controller
             $validated['yearly_income'] = $validated['yearly_income'] ?? round(((float)$validated['monthly_income']) * 12, 2);
         }
 
-        // Project and fee calculation
-        $projectName = trim($request->input('project_name') ?: 'Paid Batch');
-        $baseFee = 6000.00;
-        if ($projectName !== 'Paid Batch') {
-            $prj = SiteContent::where('section', 'projects')->where('title', $projectName)->first();
-            if ($prj) {
-                $baseFee = (float)($prj->admission_fee ?? 0);
-            } elseif (in_array(strtoupper($projectName), ['NHRDF', 'ASSET'])) {
-                $baseFee = 0.00;
-            } elseif (strtoupper($projectName) === 'ECHO') {
-                $baseFee = 500.00;
-            }
-        }
-        $discount = max(0, (float)($request->input('discount') ?? 0));
-        $payable = max(0, $baseFee - $discount);
-
-        $validated['project_name'] = $projectName;
-        $validated['course_fee'] = $baseFee;
-        $validated['discount'] = $discount;
-        $validated['payable_amount'] = $payable;
+        // Project & fee are decided by institute admin during approval
+        $validated['project_name'] = null;
+        $validated['course_fee'] = 0.00;
+        $validated['discount'] = 0.00;
+        $validated['payable_amount'] = 0.00;
         $validated['paid_amount'] = 0.00;
-        $validated['payment_status'] = ($payable <= 0) ? 'free' : 'unpaid';
+        $validated['payment_status'] = 'unpaid';
         $validated['status'] = 'new'; // Pending admin approval
 
         $application = AdmissionApplication::create($validated);

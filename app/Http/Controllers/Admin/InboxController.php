@@ -150,19 +150,40 @@ class InboxController extends Controller
         return redirect()->route('admin.applications.show', $app)->with('success', 'Student application saved successfully. Tracking ID: ' . $app->tracking_no);
     }
 
-    public function approveApplication(AdmissionApplication $application): RedirectResponse
+    public function approveApplication(Request $request, AdmissionApplication $application): RedirectResponse
     {
         abort_unless(auth()->user()?->can('admissions.edit'), 403, 'Unauthorized. Permission to edit application required.');
+
+        $projectName = trim($request->input('project_name') ?: ($application->project_name ?: 'Paid Batch'));
+        $baseFee = $request->filled('course_fee') ? (float)$request->input('course_fee') : (float)($application->course_fee ?: 6000);
+        $discount = max(0, (float)($request->input('discount') ?? $application->discount ?? 0));
+        $payable = max(0, $baseFee - $discount);
+        $paid = max(0, (float)($request->input('paid_amount') ?? $application->paid_amount ?? 0));
+
+        $isFree = in_array(strtoupper($projectName), ['NHRDF', 'ASSET']) || $payable <= 0;
+
+        $application->project_name = $projectName;
+        $application->course_fee = $baseFee;
+        $application->discount = $discount;
+        $application->payable_amount = $payable;
+        $application->paid_amount = $isFree ? 0 : $paid;
+        $application->payment_method = $request->input('payment_method') ?: ($application->payment_method ?: 'Cash');
+        $application->payment_trx_id = $request->input('payment_trx_id') ?: $application->payment_trx_id;
+
+        if ($isFree) {
+            $application->payment_status = 'free';
+        } elseif ($paid >= $payable && $payable > 0) {
+            $application->payment_status = 'paid';
+        } else {
+            $application->payment_status = ($paid > 0) ? 'partial' : 'unpaid';
+        }
 
         $application->status = 'accepted';
         $application->approved_at = now();
         $application->approved_by = auth()->id();
-        if ($application->isFreeProject()) {
-            $application->payment_status = 'free';
-        }
         $application->save();
 
-        return back()->with('success', 'আবেদনটি সফলভাবে অনুমোদিত (Approved) হয়েছে! এখন অফিসিয়াল ভর্তি ফরম ও ভাউচার প্রিন্ট করা যাবে।');
+        return back()->with('success', 'আবেদনটি সফলভাবে অনুমোদিত (Approved) হয়েছে এবং প্রজেক্ট ও ফি নির্ধারিত হয়েছে! এখন অফিসিয়াল ভর্তি ফরম ও ভাউচার প্রিন্ট করা যাবে।');
     }
 
     public function recordPayment(Request $request, AdmissionApplication $application): RedirectResponse
@@ -170,11 +191,20 @@ class InboxController extends Controller
         abort_unless(auth()->user()?->can('admissions.edit'), 403, 'Unauthorized. Permission to edit application required.');
 
         $validated = $request->validate([
+            'project_name' => ['nullable', 'string', 'max:150'],
+            'course_fee' => ['nullable', 'numeric', 'min:0'],
             'paid_amount' => ['required', 'numeric', 'min:0'],
             'discount' => ['nullable', 'numeric', 'min:0'],
             'payment_method' => ['nullable', 'string', 'max:50'],
             'payment_trx_id' => ['nullable', 'string', 'max:100'],
         ]);
+
+        if ($request->filled('project_name')) {
+            $application->project_name = trim($request->input('project_name'));
+        }
+        if ($request->filled('course_fee')) {
+            $application->course_fee = (float)$request->input('course_fee');
+        }
 
         if ($request->has('discount')) {
             $discount = max(0, (float)$request->input('discount'));
@@ -197,14 +227,16 @@ class InboxController extends Controller
 
         $application->save();
 
-        return back()->with('success', 'পেমেন্ট ও ডিস্কাউন্ট তথ্য সফলভাবে আপডেট হয়েছে!');
+        return back()->with('success', 'প্রজেক্ট, পেমেন্ট ও ফি তথ্য সফলভাবে আপডেট হয়েছে!');
     }
 
     public function showApplication(AdmissionApplication $application): View
     {
         abort_unless(auth()->user()?->can('admissions.view'), 403, 'Unauthorized access to admission applications.');
 
-        return view('admin.inbox.application_show', compact('application'));
+        $projects = SiteContent::where('section', 'projects')->where('status', 'published')->orderBy('sort_order')->get();
+
+        return view('admin.inbox.application_show', compact('application', 'projects'));
     }
 
     public function printApplication(AdmissionApplication $application): View

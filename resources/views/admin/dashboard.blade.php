@@ -117,7 +117,7 @@
               </td>
               <td>
                 <span style="display:inline-block;background:#f1f5f9;border:1px solid #cbd5e1;padding:2px 8px;border-radius:4px;font-weight:600;font-size:12px;color:#0f172a;">
-                  {{ $app->project_name ?: 'Paid Batch' }}
+                  {{ $app->project_name ?: '— (অনির্ধারিত)' }}
                 </span>
               </td>
               <td>
@@ -147,12 +147,9 @@
               <td>
                 <div style="display:flex;gap:6px;align-items:center;">
                   @if($app->status !== 'accepted')
-                    <form method="POST" action="{{ route('admin.applications.approve', $app) }}" style="margin:0;">
-                      @csrf
-                      <button type="submit" style="background:#0f5132;color:#fff;border:none;padding:5px 10px;border-radius:4px;font-size:11.5px;font-weight:700;cursor:pointer;">
-                        ✔ Approve
-                      </button>
-                    </form>
+                    <a href="{{ route('admin.applications.show', $app) }}#approval-section" style="background:#0f5132;color:#fff;padding:5px 10px;border-radius:4px;font-size:11.5px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
+                      ✔ Approve
+                    </a>
                   @endif
                   <a href="{{ route('admin.applications.show', $app) }}" style="background:#e2e8f0;color:#0f172a;padding:5px 8px;border-radius:4px;font-size:11.5px;text-decoration:none;font-weight:600;">Details</a>
                   <a href="{{ route('admin.applications.print', $app) }}" target="_blank" style="background:#f8fafc;color:#0f172a;border:1px solid #cbd5e1;padding:4px 7px;border-radius:4px;font-size:11.5px;text-decoration:none;" title="Print Form & Voucher">🖨️</a>

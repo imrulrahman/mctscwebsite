@@ -479,90 +479,38 @@
     <form method="POST" action="{{ route('apply.store') }}" enctype="multipart/form-data" id="traineeApplicationForm">
       @csrf
 
-      <!-- 1. PROJECT & COURSE SELECTION -->
+      <!-- 1. COURSE & SHIFT SELECTION -->
       <div class="section-title">
-        <span>১. প্রজেক্ট ও কোর্স নির্বাচন (Project & Course Selection)</span>
+        <span>১. কোর্স ও শিফট নির্বাচন (Course & Shift Selection)</span>
       </div>
 
-      <!-- Project Selection Radio Group -->
-      <div class="form-group" style="background: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px;">
-        <label style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 8px; display: block;">
-          <span class="req">*</span> প্রজেক্ট / ব্যাচ নির্বাচন করুন (Select Project / Batch):
-        </label>
-        
-        <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 6px;" id="projectRadioGroup">
-          {{-- Paid Batch (Default) --}}
-          <label class="project-radio-card" style="display: inline-flex; align-items: center; gap: 8px; background: #eef7f2; border: 1.5px solid #0f5132; padding: 10px 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
-            <input type="radio" name="project_name" value="Paid Batch" data-fee="6000" @checked(old('project_name', 'Paid Batch') === 'Paid Batch') onchange="updateFees()" style="accent-color: #0f5132; transform: scale(1.2);">
-            <div>
-              <strong style="color: #0f5132; font-size: 13.5px;">Paid Batch (পেইড ব্যাচ)</strong>
-              <small style="display: block; color: #64748b; font-size: 11px;">কোর্স ফি: ৳ ৬,০০০</small>
-            </div>
-          </label>
-
-          @foreach($projects as $p)
-            @php
-              $pFee = (float)($p->admission_fee ?? 0);
-              $isEcho = strtoupper(trim($p->title)) === 'ECHO';
-              if ($isEcho && $pFee == 0) $pFee = 500;
-              $isFree = in_array(strtoupper(trim($p->title)), ['NHRDF', 'ASSET']) || $pFee <= 0;
-            @endphp
-            <label class="project-radio-card" style="display: inline-flex; align-items: center; gap: 8px; background: #fff; border: 1px solid #cbd5e1; padding: 10px 16px; border-radius: 6px; cursor: pointer; transition: all 0.2s;">
-              <input type="radio" name="project_name" value="{{ $p->title }}" data-fee="{{ $pFee }}" @checked(old('project_name') === $p->title) onchange="updateFees()" style="accent-color: #0f5132; transform: scale(1.2);">
-              <div>
-                <strong style="font-size: 13.5px;">{{ $p->title }}</strong>
-                <small style="display: block; color: #64748b; font-size: 11px;">
-                  @if($pFee > 0)
-                    কোর্স ফি: ৳ {{ number_format($pFee, 0) }}
-                  @else
-                    কোর্স ফি: ৳ ০ (সম্পূর্ণ ফ্রি)
-                  @endif
-                </small>
-              </div>
-            </label>
-          @endforeach
+      <div class="grid-2" style="margin-bottom: 20px;">
+        <div class="form-group">
+          <label><span class="req">*</span> পছন্দের ট্রেড / কোর্স (Desired Course/Trade):</label>
+          <select name="course" required id="courseSelect" style="font-size: 15px; padding: 11px 14px; font-weight: 500;">
+            <option value="">-- কোর্স সিলেক্ট করুন (Select Course) --</option>
+            @foreach($courses as $c)
+              <option value="{{ $c->title }}" @selected(old('course', $selectedCourse) == $c->title)>{{ $c->title }}</option>
+            @endforeach
+            @if($courses->isEmpty())
+              <option value="Computer Operation & IT Support" @selected(old('course', $selectedCourse) == 'Computer Operation & IT Support')>Computer Operation & IT Support</option>
+              <option value="Electrical Installation & Maintenance (EIM)" @selected(old('course', $selectedCourse) == 'Electrical Installation & Maintenance (EIM)')>Electrical Installation & Maintenance (EIM)</option>
+              <option value="Refrigeration & Air Conditioning (RAC)" @selected(old('course', $selectedCourse) == 'Refrigeration & Air Conditioning (RAC)')>Refrigeration & Air Conditioning (RAC)</option>
+              <option value="Plumbing & Pipe Fitting" @selected(old('course', $selectedCourse) == 'Plumbing & Pipe Fitting')>Plumbing & Pipe Fitting</option>
+              <option value="Sewing Machine Operation (SMO)" @selected(old('course', $selectedCourse) == 'Sewing Machine Operation (SMO)')>Sewing Machine Operation (SMO)</option>
+              <option value="Driving & Auto Mechanics" @selected(old('course', $selectedCourse) == 'Driving & Auto Mechanics')>Driving & Auto Mechanics</option>
+            @endif
+          </select>
         </div>
 
-        {{-- Dynamic Fee Summary Box --}}
-        <div style="margin-top: 14px; background: #ffffff; border: 1px solid #b8dfd7; border-radius: 6px; padding: 12px 18px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 14px;">
-          <div>
-            <span style="font-size: 12.5px; color: #475569;">নির্ধারিত কোর্স ফি:</span>
-            <strong id="displayCourseFee" style="font-size: 16px; color: #0f5132; margin-left: 6px;">৳ ৬,০০০</strong>
-            <input type="hidden" name="course_fee" id="inputCourseFee" value="{{ old('course_fee', 6000) }}">
-          </div>
-
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <label for="inputDiscount" style="font-size: 12.5px; color: #475569; margin: 0;">বিশেষ ছাড় / ডিস্কাউন্ট (ঐচ্ছিক):</label>
-            <div style="position: relative;">
-              <span style="position: absolute; left: 8px; top: 7px; color: #64748b; font-weight: bold;">৳</span>
-              <input type="number" name="discount" id="inputDiscount" min="0" value="{{ old('discount', 0) }}" oninput="updateFees()" style="width: 110px; padding: 6px 8px 6px 22px; border: 1px solid #cbd5e1; border-radius: 4px; font-weight: bold; font-size: 13px;" placeholder="0">
-            </div>
-          </div>
-
-          <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 6px 14px; border-radius: 4px;">
-            <span style="font-size: 12.5px; color: #991b1b;">পরিশোধযোগ্য মোট ফি:</span>
-            <strong id="displayPayableFee" style="font-size: 17px; color: #b91c1c; margin-left: 6px;">৳ ৬,০০০</strong>
-            <input type="hidden" name="payable_amount" id="inputPayableAmount" value="{{ old('payable_amount', 6000) }}">
+        <div class="form-group">
+          <label>পছন্দের শিফট (Preferred Shift):</label>
+          <div class="shift-radios" style="margin-top: 10px;">
+            <label><input type="radio" name="preferred_shift" value="Morning" @checked(old('preferred_shift', 'Morning') === 'Morning')> সকাল (Morning)</label>
+            <label><input type="radio" name="preferred_shift" value="Afternoon" @checked(old('preferred_shift') === 'Afternoon')> দুপুর (Afternoon)</label>
+            <label><input type="radio" name="preferred_shift" value="Evening" @checked(old('preferred_shift') === 'Evening')> সন্ধ্যা (Evening)</label>
           </div>
         </div>
-      </div>
-
-      <div class="form-group" style="max-width: 650px;">
-        <label><span class="req">*</span> পছন্দের ট্রেড / কোর্স (Desired Course/Trade):</label>
-        <select name="course" required id="courseSelect" style="font-size: 15px; padding: 11px 14px; font-weight: 500;">
-          <option value="">-- কোর্স সিলেক্ট করুন (Select Course) --</option>
-          @foreach($courses as $c)
-            <option value="{{ $c->title }}" @selected(old('course', $selectedCourse) == $c->title)>{{ $c->title }}</option>
-          @endforeach
-          @if($courses->isEmpty())
-            <option value="Computer Operation & IT Support" @selected(old('course', $selectedCourse) == 'Computer Operation & IT Support')>Computer Operation & IT Support</option>
-            <option value="Electrical Installation & Maintenance (EIM)" @selected(old('course', $selectedCourse) == 'Electrical Installation & Maintenance (EIM)')>Electrical Installation & Maintenance (EIM)</option>
-            <option value="Refrigeration & Air Conditioning (RAC)" @selected(old('course', $selectedCourse) == 'Refrigeration & Air Conditioning (RAC)')>Refrigeration & Air Conditioning (RAC)</option>
-            <option value="Plumbing & Pipe Fitting" @selected(old('course', $selectedCourse) == 'Plumbing & Pipe Fitting')>Plumbing & Pipe Fitting</option>
-            <option value="Sewing Machine Operation (SMO)" @selected(old('course', $selectedCourse) == 'Sewing Machine Operation (SMO)')>Sewing Machine Operation (SMO)</option>
-            <option value="Driving & Auto Mechanics" @selected(old('course', $selectedCourse) == 'Driving & Auto Mechanics')>Driving & Auto Mechanics</option>
-          @endif
-        </select>
       </div>
 
       <!-- 2. PERSONAL DATA -->
@@ -1028,32 +976,6 @@
       }
     });
   }
-  // Dynamic Fee & Project Update Function
-  function updateFees() {
-    const selectedRadio = document.querySelector('input[name="project_name"]:checked');
-    const fee = selectedRadio ? parseFloat(selectedRadio.dataset.fee || 6000) : 6000;
-    const discountInput = document.getElementById('inputDiscount');
-    const discount = Math.max(0, parseFloat(discountInput.value || 0));
-    const payable = Math.max(0, fee - discount);
-
-    document.getElementById('inputCourseFee').value = fee;
-    document.getElementById('displayCourseFee').textContent = fee > 0 ? ('৳ ' + fee.toLocaleString()) : '৳ ০ (ফ্রি)';
-    document.getElementById('inputPayableAmount').value = payable;
-    document.getElementById('displayPayableFee').textContent = payable > 0 ? ('৳ ' + payable.toLocaleString()) : '৳ ০ (ফ্রি)';
-
-    // Visual card highlight
-    document.querySelectorAll('.project-radio-card').forEach(card => {
-      const radio = card.querySelector('input[type="radio"]');
-      if (radio && radio.checked) {
-        card.style.borderColor = '#0f5132';
-        card.style.background = '#eef7f2';
-      } else {
-        card.style.borderColor = '#cbd5e1';
-        card.style.background = '#ffffff';
-      }
-    });
-  }
-  document.addEventListener('DOMContentLoaded', updateFees);
 </script>
 
 </body>

@@ -23,12 +23,9 @@
       <div style="margin-bottom:14px;">
         <label style="font-weight:700;color:#0f172a;display:block;margin-bottom:6px;">Select Project / Batch: <span>*</span></label>
         <div style="display:flex;flex-wrap:wrap;gap:10px;">
-          <label style="display:inline-flex;align-items:center;gap:8px;background:#eef7f2;border:1.5px solid #0f5132;padding:8px 14px;border-radius:6px;cursor:pointer;">
+          <label class="admin-project-radio" style="display:inline-flex;align-items:center;gap:8px;background:#eef7f2;border:1.5px solid #0f5132;padding:9px 18px;border-radius:6px;cursor:pointer;">
             <input type="radio" name="project_name" value="Paid Batch" data-fee="6000" @checked(old('project_name', 'Paid Batch') === 'Paid Batch') onchange="calcAdminFee()" style="accent-color:#0f5132;transform:scale(1.2);">
-            <div>
-              <strong style="color:#0f5132;">Paid Batch</strong>
-              <small style="display:block;color:#64748b;font-size:11px;">কোর্স ফি: ৳ ৬,০০০</small>
-            </div>
+            <span style="font-weight:700;font-size:14px;color:#0f5132;">Paid Batch</span>
           </label>
 
           @foreach($projects as $p)
@@ -36,18 +33,9 @@
               $pFee = (float)($p->admission_fee ?? 0);
               if (strtoupper(trim($p->title)) === 'ECHO' && $pFee == 0) $pFee = 500;
             @endphp
-            <label style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #cbd5e1;padding:8px 14px;border-radius:6px;cursor:pointer;">
+            <label class="admin-project-radio" style="display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid #cbd5e1;padding:9px 18px;border-radius:6px;cursor:pointer;">
               <input type="radio" name="project_name" value="{{ $p->title }}" data-fee="{{ $pFee }}" @checked(old('project_name') === $p->title) onchange="calcAdminFee()" style="accent-color:#0f5132;transform:scale(1.2);">
-              <div>
-                <strong>{{ $p->title }}</strong>
-                <small style="display:block;color:#64748b;font-size:11px;">
-                  @if($pFee > 0)
-                    ফি: ৳ {{ number_format($pFee, 0) }}
-                  @else
-                    ফি: ৳ ০ (ফ্রি)
-                  @endif
-                </small>
-              </div>
+              <span style="font-weight:700;font-size:14px;color:#1e293b;">{{ $p->title }}</span>
             </label>
           @endforeach
         </div>
@@ -219,13 +207,28 @@
 function calcAdminFee() {
   const selectedRadio = document.querySelector('input[name="project_name"]:checked');
   const feeInput = document.getElementById('adminCourseFee');
-  if (selectedRadio && event && event.type === 'change') {
+  if (selectedRadio && window.event && window.event.type === 'change') {
     feeInput.value = selectedRadio.dataset.fee || 6000;
   }
   const fee = parseFloat(feeInput.value || 0);
   const discount = Math.max(0, parseFloat(document.getElementById('adminDiscount').value || 0));
   const payable = Math.max(0, fee - discount);
   document.getElementById('adminPayable').value = '৳ ' + payable.toLocaleString();
+
+  document.querySelectorAll('.admin-project-radio').forEach(card => {
+    const r = card.querySelector('input[type="radio"]');
+    if (r && r.checked) {
+      card.style.borderColor = '#0f5132';
+      card.style.background = '#eef7f2';
+      const sp = card.querySelector('span');
+      if (sp) sp.style.color = '#0f5132';
+    } else {
+      card.style.borderColor = '#cbd5e1';
+      card.style.background = '#ffffff';
+      const sp = card.querySelector('span');
+      if (sp) sp.style.color = '#1e293b';
+    }
+  });
 }
 document.addEventListener('DOMContentLoaded', calcAdminFee);
 </script>

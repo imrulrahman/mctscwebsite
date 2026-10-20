@@ -97,7 +97,7 @@
             </td>
             <td>
               <span style="display:inline-block;background:#f8fafc;border:1px solid #cbd5e1;padding:2px 8px;border-radius:4px;font-weight:600;font-size:12px;color:#0f172a;">
-                {{ $item->project_name ?: 'Paid Batch' }}
+                {{ $item->project_name ?: '— (অনির্ধারিত)' }}
               </span>
             </td>
             <td>
@@ -132,12 +132,9 @@
                     ⏳ Pending
                   </span>
                   @can('admissions.edit')
-                    <form method="POST" action="{{ route('admin.applications.approve', $item) }}" style="margin:0;">
-                      @csrf
-                      <button type="submit" style="width:100%;background:#0f5132;color:#fff;border:none;padding:3px 6px;border-radius:3px;font-size:10.5px;font-weight:700;cursor:pointer;">
-                        Approve
-                      </button>
-                    </form>
+                    <a href="{{ route('admin.applications.show', $item) }}#approval-section" style="width:100%;background:#0f5132;color:#fff;padding:3px 6px;border-radius:3px;font-size:10.5px;font-weight:700;text-decoration:none;display:inline-block;text-align:center;">
+                      ✔ Approve
+                    </a>
                   @endcan
                 @endif
               </div>
