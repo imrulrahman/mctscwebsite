@@ -785,6 +785,20 @@
       <a href="{{ route('admin.applications.print', $application) }}" target="_blank" class="btn-action-print">
         🖨️ Print Admission Form
       </a>
+      @if($isApproved || $isPaid)
+        <a href="{{ route('admin.applications.voucher', $application) }}" target="_blank" class="btn-action-print" style="background:#047857;">
+          🧾 Print Payment Voucher
+        </a>
+        <a href="{{ route('admin.applications.voucher', [$application, 'duplicate' => 1]) }}" target="_blank" class="btn-action-print" style="background:#b91c1c;">
+          🔁 Print Duplicate Voucher
+        </a>
+        <form method="POST" action="{{ route('admin.applications.undo-payment', $application) }}" style="display:inline;" onsubmit="return confirm('আপনি কি নিশ্চিত যে এই আবেদনটির পেমেন্ট এবং অনুমোদন বাতিল (Undo) করতে চান? এটি আবেদনটিকে পুনরায় বিবেচনাধীন/বকেয়া অবস্থায় ফিরিয়ে নেবে।');">
+          @csrf
+          <button type="submit" style="background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;padding:8px 14px;border-radius:6px;font-weight:700;font-size:12.5px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;">
+            ↩ Undo Payment
+          </button>
+        </form>
+      @endif
     </div>
   </div>
 
@@ -1307,10 +1321,16 @@
 
           <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
             <a href="{{ route('admin.applications.print', $application) }}" target="_blank" class="btn-action-print" style="background:#475569;">
-              🖨️ Print Form & Voucher
+              🖨️ Print Admission Form
             </a>
 
-            @if($isApproved)
+            @if($isApproved || $isPaid)
+              <a href="{{ route('admin.applications.voucher', $application) }}" target="_blank" class="btn-action-print" style="background:#047857;">
+                🧾 Print Payment Voucher
+              </a>
+              <a href="{{ route('admin.applications.voucher', [$application, 'duplicate' => 1]) }}" target="_blank" class="btn-action-print" style="background:#b91c1c;">
+                🔁 Duplicate Voucher
+              </a>
               <button type="submit" class="btn-submit-approve">
                 💾 Save Payment Voucher Changes
               </button>
@@ -1345,6 +1365,16 @@
         <div class="bill-sig-col">
           <div style="height:35px;"></div>
           <div class="bill-sig-line">অনুমোদনকারী কর্মকর্তা ও সীলমোহর</div>
+        </div>
+      </div>
+
+      {{-- Voucher Auto User Audit Strip --}}
+      <div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid #cbd5e1;padding-top:6px;margin-top:14px;font-size:11px;color:#64748b;">
+        <div>
+          Received By / নগদ গ্রহণকারী: <strong style="color:#005953;">{{ $application->approver?->name ?: auth()->user()->name }}</strong>
+        </div>
+        <div>
+          Current User / Printed By: <strong>{{ auth()->user()->name }}</strong> ({{ now()->format('d/m/Y h:i A') }})
         </div>
       </div>
 

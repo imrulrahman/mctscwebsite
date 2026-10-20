@@ -123,7 +123,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/applications/{application}/file/{type}', [InboxController::class, 'serveFile'])->name('applications.file');
         Route::post('/applications/{application}/approve', [InboxController::class, 'approveApplication'])->name('applications.approve');
         Route::post('/applications/{application}/payment', [InboxController::class, 'recordPayment'])->name('applications.payment');
+        Route::post('/applications/{application}/undo-payment', [InboxController::class, 'undoPayment'])->name('applications.undo-payment');
         Route::get('/applications/{application}/print', [InboxController::class, 'printApplication'])->name('applications.print');
+        Route::get('/applications/{application}/voucher', [InboxController::class, 'printVoucher'])->name('applications.voucher');
         Route::patch('/applications/{application}', [InboxController::class, 'updateApplication'])->name('applications.update');
         Route::delete('/applications/{application}', [InboxController::class, 'destroyApplication'])->name('applications.destroy');
 

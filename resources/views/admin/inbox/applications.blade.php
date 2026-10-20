@@ -18,7 +18,7 @@
 <section class="panel" style="margin-bottom: 20px; padding: 18px 24px;">
   <form method="GET" action="{{ route('admin.applications') }}" style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center;">
     <div style="flex: 1; min-width: 220px;">
-      <input type="text" name="q" value="{{ request('q') }}" placeholder="Search by Tracking ID, Name, Phone, or NID..." style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
+      <input type="text" name="q" value="{{ request('q') }}" placeholder="Search by Mobile Phone, Tracking ID, Name, or Voucher..." style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
     </div>
     <div style="min-width: 180px;">
       <select name="course" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
@@ -144,10 +144,14 @@
               <small class="subline">{{ $item->created_at->format('h:i A') }}</small>
             </td>
             <td>
-              <div style="display: flex; gap: 5px; align-items: center;">
+              <div style="display: flex; gap: 5px; align-items: center; flex-wrap: wrap;">
                 <a href="{{ route('admin.applications.show', $item) }}" style="background: #0f5132; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 11.5px; text-decoration: none; font-weight: 600;">Details</a>
                 @can('admissions.print')
-                  <a href="{{ route('admin.applications.print', $item) }}" target="_blank" style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; padding: 4px 7px; border-radius: 4px; font-size: 11.5px; text-decoration: none;" title="Print Form & Voucher">🖨️</a>
+                  <a href="{{ route('admin.applications.print', $item) }}" target="_blank" style="background: #f1f5f9; color: #1e293b; border: 1px solid #cbd5e1; padding: 4px 7px; border-radius: 4px; font-size: 11px; text-decoration: none; font-weight: 600;" title="Print Admission Form Copy">🖨️ Form</a>
+                  @if($item->isApproved() || $item->isPaid())
+                    <a href="{{ route('admin.applications.voucher', $item) }}" target="_blank" style="background: #e6f4f1; color: #005953; border: 1px solid #7cb5a9; padding: 4px 7px; border-radius: 4px; font-size: 11px; text-decoration: none; font-weight: 700;" title="Print 2-Part A4 Official Payment Voucher">🧾 Voucher</a>
+                    <a href="{{ route('admin.applications.voucher', [$item, 'duplicate' => 1]) }}" target="_blank" style="background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; padding: 4px 7px; border-radius: 4px; font-size: 10.5px; text-decoration: none; font-weight: 700;" title="Print Duplicate Payment Voucher Copy">🔁 Duplicate</a>
+                  @endif
                 @endcan
                 @can('admissions.delete')
                   <form method="post" action="{{ route('admin.applications.destroy', $item) }}" onsubmit="return confirm('Are you sure you want to delete this application?');" style="display:inline;margin:0;">

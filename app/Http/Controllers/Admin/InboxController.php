@@ -53,12 +53,15 @@ class InboxController extends Controller
             $query->where('payment_status', $request->input('payment_status'));
         }
         if ($request->filled('q')) {
-            $q = $request->input('q');
+            $q = trim($request->input('q'));
             $query->where(function ($sub) use ($q) {
                 $sub->where('tracking_no', 'like', "%{$q}%")
                     ->orWhere('trainee_name_en', 'like', "%{$q}%")
                     ->orWhere('trainee_name_bn', 'like', "%{$q}%")
                     ->orWhere('contact_no', 'like', "%{$q}%")
+                    ->orWhere('phone', 'like', "%{$q}%")
+                    ->orWhere('emergency_contact', 'like', "%{$q}%")
+                    ->orWhere('voucher_no', 'like', "%{$q}%")
                     ->orWhere('ident_no', 'like', "%{$q}%")
                     ->orWhere('project_name', 'like', "%{$q}%");
             });
@@ -282,6 +285,39 @@ class InboxController extends Controller
         abort_unless(auth()->user()?->can('admissions.print'), 403, 'Unauthorized. Permission to print application required.');
 
         return view('admin.inbox.application_print', compact('application'));
+    }
+
+    public function printVoucher(Request $request, AdmissionApplication $application): View
+    {
+        abort_unless(auth()->user()?->can('admissions.print'), 403, 'Unauthorized. Permission to print voucher required.');
+
+        $isDuplicate = $request->boolean('duplicate') || $request->has('duplicate');
+        $receivedBy = $application->approver?->name ?: (auth()->user()?->name ?? 'Accounts Officer');
+        $printedBy = auth()->user()?->name ?? 'Administrator';
+
+        // Auto-assign official voucher number if empty
+        if (empty($application->voucher_no)) {
+            $year = date('Y');
+            $application->voucher_no = 'MC-' . $year . '-' . str_pad($application->id, 6, '0', STR_PAD_LEFT);
+            $application->save();
+        }
+
+        return view('admin.inbox.application_voucher', compact('application', 'isDuplicate', 'receivedBy', 'printedBy'));
+    }
+
+    public function undoPayment(AdmissionApplication $application): RedirectResponse
+    {
+        abort_unless(auth()->user()?->can('admissions.edit'), 403, 'Unauthorized. Permission to edit application required.');
+
+        $application->paid_amount = 0;
+        $application->payment_status = $application->isFreeProject() ? 'free' : 'unpaid';
+        $application->payment_trx_id = null;
+        $application->status = 'reviewing';
+        $application->approved_at = null;
+        $application->approved_by = null;
+        $application->save();
+
+        return back()->with('success', 'পেমেন্ট ও অনুমোদন সফলভাবে আনডু (Undo) করা হয়েছে। আবেদনটি পুনরায় বকেয়া অবস্থায় ফিরে এসেছে।');
     }
 
     public function updateApplication(Request $request, AdmissionApplication $application): RedirectResponse

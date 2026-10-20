@@ -154,5 +154,32 @@ class WebsiteCmsTest extends TestCase
         $showResponse->assertSee('ECHO');
         $showResponse->assertSee('NHRDF');
         $showResponse->assertSee('ASSET');
+
+        // 4. Verify 2-Part Official Payment Voucher print
+        $voucherResponse = $this->actingAs($admin)->get(route('admin.applications.voucher', $app));
+        $voucherResponse->assertOk();
+        $voucherResponse->assertSee('STUDENT COPY / শিক্ষার্থী কপি');
+        $voucherResponse->assertSee('OFFICE COPY / অফিস কপি');
+        $voucherResponse->assertSee('OFFICIAL PAYMENT RECEIPT');
+        $voucherResponse->assertSee($admin->name);
+
+        // 5. Verify Duplicate Voucher print
+        $dupResponse = $this->actingAs($admin)->get(route('admin.applications.voucher', [$app, 'duplicate' => 1]));
+        $dupResponse->assertOk();
+        $dupResponse->assertSee('DUPLICATE');
+
+        // 6. Verify Search by Mobile Number
+        $searchResponse = $this->actingAs($admin)->get(route('admin.applications', ['q' => $app->contact_no]));
+        $searchResponse->assertOk();
+        $searchResponse->assertSee($app->tracking_no);
+
+        // 7. Verify Undo Payment
+        $undoResponse = $this->actingAs($admin)->post(route('admin.applications.undo-payment', $app));
+        $undoResponse->assertRedirect();
+        $app->refresh();
+        $this->assertEquals(0, (float)$app->paid_amount);
+        $this->assertEquals('unpaid', $app->payment_status);
+        $this->assertEquals('reviewing', $app->status);
+        $this->assertNull($app->approved_at);
     }
 }
