@@ -464,22 +464,41 @@
     background: #fee2e2;
   }
 
-  .afm-grid {
+  .afm-grid-cols {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 16px;
+    align-items: start;
   }
 
-  @media (max-width: 1200px) {
-    .afm-grid {
+  .afm-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  @media (max-width: 1024px) {
+    .afm-grid-cols {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 720px) {
-    .afm-grid {
-      grid-template-columns: 1fr;
+  @media (max-width: 768px) {
+    .afm-grid-cols {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
     }
+    .afm-col {
+      display: contents;
+    }
+    .afm-card-1 { order: 1; }
+    .afm-card-2 { order: 2; }
+    .afm-card-3 { order: 3; }
+    .afm-card-4 { order: 4; }
+    .afm-card-5 { order: 5; }
+    .afm-card-6 { order: 6; }
+    .afm-card-7 { order: 7; }
     .afm-search-input {
       width: 100% !important;
     }
@@ -493,6 +512,7 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
     display: flex;
     flex-direction: column;
+    height: auto !important;
   }
 
   .afm-card-header {
@@ -1217,614 +1237,623 @@
               </div>
             </div>
 
-            {{-- Categories Grid --}}
-            <div class="afm-grid" id="afmGrid">
-              {{-- Card 1: Trainee Personal Details --}}
-              <div class="afm-card">
-                <div class="afm-card-header">
-                  <span class="afm-card-title">1. Trainee Personal Details</span>
-                  <div style="display:flex;align-items:center;gap:5px;">
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
-                    <span class="afm-card-badge">0/0</span>
+            {{-- Categories Grid with 3 Compact Masonry Columns --}}
+            <div class="afm-grid-cols" id="afmGrid">
+              {{-- COLUMN 1: Card 1 & Card 4 --}}
+              <div class="afm-col afm-col-1">
+                {{-- Card 1: Trainee Personal Details --}}
+                <div class="afm-card afm-card-1">
+                  <div class="afm-card-header">
+                    <span class="afm-card-title">1. Trainee Personal Details</span>
+                    <div style="display:flex;align-items:center;gap:5px;">
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
+                      <span class="afm-card-badge">0/0</span>
+                    </div>
+                  </div>
+                  <div class="afm-card-body">
+                    <label class="afm-row @if(in_array('trainee_name_bn', $reqFields)) is-active @endif" for="afm_trainee_name_bn">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_trainee_name_bn" name="admission_required_fields[]" value="trainee_name_bn" class="admission-field-chk" @checked(in_array('trainee_name_bn', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Trainee Name (Bengali)</span>
+                          <span class="afm-text-sub">নাম বাংলায়</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('dob', $reqFields)) is-active @endif" for="afm_dob">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_dob" name="admission_required_fields[]" value="dob" class="admission-field-chk" @checked(in_array('dob', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Date of Birth</span>
+                          <span class="afm-text-sub">DOB as per certificate</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('ident_type', $reqFields)) is-active @endif" for="afm_ident_type">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_ident_type" name="admission_required_fields[]" value="ident_type" class="admission-field-chk" @checked(in_array('ident_type', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Identity Document Type</span>
+                          <span class="afm-text-sub">NID or Birth Registration</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('ident_no', $reqFields)) is-active @endif" for="afm_ident_no">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_ident_no" name="admission_required_fields[]" value="ident_no" class="admission-field-chk" @checked(in_array('ident_no', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">NID / Birth Certificate No.</span>
+                          <span class="afm-text-sub">Identification document number</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('sex', $reqFields)) is-active @endif" for="afm_sex">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_sex" name="admission_required_fields[]" value="sex" class="admission-field-chk" @checked(in_array('sex', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Sex / Gender</span>
+                          <span class="afm-text-sub">Male, Female, or Other</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('pwd', $reqFields)) is-active @endif" for="afm_pwd">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_pwd" name="admission_required_fields[]" value="pwd" class="admission-field-chk" @checked(in_array('pwd', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Disability Status (PWD)</span>
+                          <span class="afm-text-sub">Physical disability status</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('contact_no', $reqFields)) is-active @endif" for="afm_contact_no">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_contact_no" name="admission_required_fields[]" value="contact_no" class="admission-field-chk" @checked(in_array('contact_no', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Mobile / Contact Number</span>
+                          <span class="afm-text-sub">Primary student phone</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('email', $reqFields)) is-active @endif" for="afm_email">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_email" name="admission_required_fields[]" value="email" class="admission-field-chk" @checked(in_array('email', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Email Address</span>
+                          <span class="afm-text-sub">Personal email account</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('marital_status', $reqFields)) is-active @endif" for="afm_marital_status">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_marital_status" name="admission_required_fields[]" value="marital_status" class="admission-field-chk" @checked(in_array('marital_status', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Marital Status</span>
+                          <span class="afm-text-sub">Single, Married, etc.</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
                   </div>
                 </div>
-                <div class="afm-card-body">
-                  <label class="afm-row @if(in_array('trainee_name_bn', $reqFields)) is-active @endif" for="afm_trainee_name_bn">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_trainee_name_bn" name="admission_required_fields[]" value="trainee_name_bn" class="admission-field-chk" @checked(in_array('trainee_name_bn', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Trainee Name (Bengali)</span>
-                        <span class="afm-text-sub">নাম বাংলায়</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
 
-                  <label class="afm-row @if(in_array('dob', $reqFields)) is-active @endif" for="afm_dob">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_dob" name="admission_required_fields[]" value="dob" class="admission-field-chk" @checked(in_array('dob', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Date of Birth</span>
-                        <span class="afm-text-sub">DOB as per certificate</span>
+                {{-- Card 4: Permanent Address Details --}}
+                <div class="afm-card afm-card-4">
+                  <div class="afm-card-header">
+                    <span class="afm-card-title">4. Permanent Address Details</span>
+                    <div style="display:flex;align-items:center;gap:5px;">
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
+                      <span class="afm-card-badge">0/0</span>
+                    </div>
+                  </div>
+                  <div class="afm-card-body">
+                    <label class="afm-row @if(in_array('perm_division', $reqFields)) is-active @endif" for="afm_perm_division">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_perm_division" name="admission_required_fields[]" value="perm_division" class="admission-field-chk" @checked(in_array('perm_division', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Permanent Division</span>
+                          <span class="afm-text-sub">Permanent home division</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
 
-                  <label class="afm-row @if(in_array('ident_type', $reqFields)) is-active @endif" for="afm_ident_type">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_ident_type" name="admission_required_fields[]" value="ident_type" class="admission-field-chk" @checked(in_array('ident_type', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Identity Document Type</span>
-                        <span class="afm-text-sub">NID or Birth Registration</span>
+                    <label class="afm-row @if(in_array('perm_district', $reqFields)) is-active @endif" for="afm_perm_district">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_perm_district" name="admission_required_fields[]" value="perm_district" class="admission-field-chk" @checked(in_array('perm_district', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Permanent District</span>
+                          <span class="afm-text-sub">Permanent home district</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
 
-                  <label class="afm-row @if(in_array('ident_no', $reqFields)) is-active @endif" for="afm_ident_no">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_ident_no" name="admission_required_fields[]" value="ident_no" class="admission-field-chk" @checked(in_array('ident_no', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">NID / Birth Certificate No.</span>
-                        <span class="afm-text-sub">Identification document number</span>
+                    <label class="afm-row @if(in_array('perm_upazilla', $reqFields)) is-active @endif" for="afm_perm_upazilla">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_perm_upazilla" name="admission_required_fields[]" value="perm_upazilla" class="admission-field-chk" @checked(in_array('perm_upazilla', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Permanent Upazilla / Thana</span>
+                          <span class="afm-text-sub">Permanent sub-district</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
 
-                  <label class="afm-row @if(in_array('sex', $reqFields)) is-active @endif" for="afm_sex">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_sex" name="admission_required_fields[]" value="sex" class="admission-field-chk" @checked(in_array('sex', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Sex / Gender</span>
-                        <span class="afm-text-sub">Male, Female, or Other</span>
+                    <label class="afm-row @if(in_array('perm_address', $reqFields)) is-active @endif" for="afm_perm_address">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_perm_address" name="admission_required_fields[]" value="perm_address" class="admission-field-chk" @checked(in_array('perm_address', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Permanent Full Address</span>
+                          <span class="afm-text-sub">Permanent village/road/area</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
 
-                  <label class="afm-row @if(in_array('pwd', $reqFields)) is-active @endif" for="afm_pwd">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_pwd" name="admission_required_fields[]" value="pwd" class="admission-field-chk" @checked(in_array('pwd', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Disability Status (PWD)</span>
-                        <span class="afm-text-sub">Physical disability status</span>
+                    <label class="afm-row @if(in_array('perm_area_type', $reqFields)) is-active @endif" for="afm_perm_area_type">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_perm_area_type" name="admission_required_fields[]" value="perm_area_type" class="admission-field-chk" @checked(in_array('perm_area_type', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Locality Area Type</span>
+                          <span class="afm-text-sub">Rural / Urban classification</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('contact_no', $reqFields)) is-active @endif" for="afm_contact_no">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_contact_no" name="admission_required_fields[]" value="contact_no" class="admission-field-chk" @checked(in_array('contact_no', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Mobile / Contact Number</span>
-                        <span class="afm-text-sub">Primary student phone</span>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('email', $reqFields)) is-active @endif" for="afm_email">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_email" name="admission_required_fields[]" value="email" class="admission-field-chk" @checked(in_array('email', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Email Address</span>
-                        <span class="afm-text-sub">Personal email account</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('marital_status', $reqFields)) is-active @endif" for="afm_marital_status">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_marital_status" name="admission_required_fields[]" value="marital_status" class="admission-field-chk" @checked(in_array('marital_status', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Marital Status</span>
-                        <span class="afm-text-sub">Single, Married, etc.</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
+                    </label>
+                  </div>
                 </div>
               </div>
 
-              {{-- Card 2: Photos & Document Uploads --}}
-              <div class="afm-card">
-                <div class="afm-card-header">
-                  <span class="afm-card-title">2. Photos & Document Uploads</span>
-                  <div style="display:flex;align-items:center;gap:5px;">
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
-                    <span class="afm-card-badge">0/0</span>
+              {{-- COLUMN 2: Card 2, Card 5 & Card 7 --}}
+              <div class="afm-col afm-col-2">
+                {{-- Card 2: Photos & Document Uploads --}}
+                <div class="afm-card afm-card-2">
+                  <div class="afm-card-header">
+                    <span class="afm-card-title">2. Photos & Document Uploads</span>
+                    <div style="display:flex;align-items:center;gap:5px;">
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
+                      <span class="afm-card-badge">0/0</span>
+                    </div>
+                  </div>
+                  <div class="afm-card-body">
+                    <label class="afm-row @if(in_array('photo', $reqFields)) is-active @endif" for="afm_photo">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_photo" name="admission_required_fields[]" value="photo" class="admission-field-chk" @checked(in_array('photo', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Passport Photo Upload</span>
+                          <span class="afm-text-sub">Recent passport size photo</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('signature_photo', $reqFields)) is-active @endif" for="afm_signature_photo">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_signature_photo" name="admission_required_fields[]" value="signature_photo" class="admission-field-chk" @checked(in_array('signature_photo', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Digital Signature Upload</span>
+                          <span class="afm-text-sub">Applicant scanned signature</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('ident_doc', $reqFields)) is-active @endif" for="afm_ident_doc">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_ident_doc" name="admission_required_fields[]" value="ident_doc" class="admission-field-chk" @checked(in_array('ident_doc', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">NID / Birth Certificate File</span>
+                          <span class="afm-text-sub">Document scan or PDF</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
                   </div>
                 </div>
-                <div class="afm-card-body">
-                  <label class="afm-row @if(in_array('photo', $reqFields)) is-active @endif" for="afm_photo">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_photo" name="admission_required_fields[]" value="photo" class="admission-field-chk" @checked(in_array('photo', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Passport Photo Upload</span>
-                        <span class="afm-text-sub">Recent passport size photo</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
 
-                  <label class="afm-row @if(in_array('signature_photo', $reqFields)) is-active @endif" for="afm_signature_photo">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_signature_photo" name="admission_required_fields[]" value="signature_photo" class="admission-field-chk" @checked(in_array('signature_photo', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Digital Signature Upload</span>
-                        <span class="afm-text-sub">Applicant scanned signature</span>
+                {{-- Card 5: Education & Demographics --}}
+                <div class="afm-card afm-card-5">
+                  <div class="afm-card-header">
+                    <span class="afm-card-title">5. Education & Demographics</span>
+                    <div style="display:flex;align-items:center;gap:5px;">
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
+                      <span class="afm-card-badge">0/0</span>
+                    </div>
+                  </div>
+                  <div class="afm-card-body">
+                    <label class="afm-row @if(in_array('education_level', $reqFields)) is-active @endif" for="afm_education_level">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_education_level" name="admission_required_fields[]" value="education_level" class="admission-field-chk" @checked(in_array('education_level', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Educational Qualification</span>
+                          <span class="afm-text-sub">Highest degree/exam level</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
 
-                  <label class="afm-row @if(in_array('ident_doc', $reqFields)) is-active @endif" for="afm_ident_doc">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_ident_doc" name="admission_required_fields[]" value="ident_doc" class="admission-field-chk" @checked(in_array('ident_doc', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">NID / Birth Certificate File</span>
-                        <span class="afm-text-sub">Document scan or PDF</span>
+                    <label class="afm-row @if(in_array('religion', $reqFields)) is-active @endif" for="afm_religion">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_religion" name="admission_required_fields[]" value="religion" class="admission-field-chk" @checked(in_array('religion', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Religion</span>
+                          <span class="afm-text-sub">Religious faith</span>
+                        </div>
                       </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('ethnicity', $reqFields)) is-active @endif" for="afm_ethnicity">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_ethnicity" name="admission_required_fields[]" value="ethnicity" class="admission-field-chk" @checked(in_array('ethnicity', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Ethnicity / Community</span>
+                          <span class="afm-text-sub">Ethnic identity</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                {{-- Card 7: Employment & Background --}}
+                <div class="afm-card afm-card-7">
+                  <div class="afm-card-header">
+                    <span class="afm-card-title">7. Employment & Background</span>
+                    <div style="display:flex;align-items:center;gap:5px;">
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
+                      <span class="afm-card-badge">0/0</span>
                     </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
+                  </div>
+                  <div class="afm-card-body">
+                    <label class="afm-row @if(in_array('has_bank_account', $reqFields)) is-active @endif" for="afm_has_bank_account">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_has_bank_account" name="admission_required_fields[]" value="has_bank_account" class="admission-field-chk" @checked(in_array('has_bank_account', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Has Active Bank Account</span>
+                          <span class="afm-text-sub">Bank account (Yes / No)</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('past_training', $reqFields)) is-active @endif" for="afm_past_training">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_past_training" name="admission_required_fields[]" value="past_training" class="admission-field-chk" @checked(in_array('past_training', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Prior Technical Training</span>
+                          <span class="afm-text-sub">Previous course experience</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('employment_status', $reqFields)) is-active @endif" for="afm_employment_status">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_employment_status" name="admission_required_fields[]" value="employment_status" class="admission-field-chk" @checked(in_array('employment_status', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Current Employment Status</span>
+                          <span class="afm-text-sub">Unemployed, student, job</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('monthly_cash_income', $reqFields)) is-active @endif" for="afm_monthly_cash_income">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_monthly_cash_income" name="admission_required_fields[]" value="monthly_cash_income" class="admission-field-chk" @checked(in_array('monthly_cash_income', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Applicant Monthly Cash Income</span>
+                          <span class="afm-text-sub">Personal monthly earnings</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('training_media_source', $reqFields)) is-active @endif" for="afm_training_media_source">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_training_media_source" name="admission_required_fields[]" value="training_media_source" class="admission-field-chk" @checked(in_array('training_media_source', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Information / Media Source</span>
+                          <span class="afm-text-sub">How applicant learned about course</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+                  </div>
                 </div>
               </div>
 
-              {{-- Card 3: Present Address --}}
-              <div class="afm-card">
-                <div class="afm-card-header">
-                  <span class="afm-card-title">3. Present Address Details</span>
-                  <div style="display:flex;align-items:center;gap:5px;">
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
-                    <span class="afm-card-badge">0/0</span>
+              {{-- COLUMN 3: Card 3 & Card 6 --}}
+              <div class="afm-col afm-col-3">
+                {{-- Card 3: Present Address Details --}}
+                <div class="afm-card afm-card-3">
+                  <div class="afm-card-header">
+                    <span class="afm-card-title">3. Present Address Details</span>
+                    <div style="display:flex;align-items:center;gap:5px;">
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
+                      <span class="afm-card-badge">0/0</span>
+                    </div>
+                  </div>
+                  <div class="afm-card-body">
+                    <label class="afm-row @if(in_array('pres_division', $reqFields)) is-active @endif" for="afm_pres_division">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_pres_division" name="admission_required_fields[]" value="pres_division" class="admission-field-chk" @checked(in_array('pres_division', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Present Division</span>
+                          <span class="afm-text-sub">Current administrative division</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('pres_district', $reqFields)) is-active @endif" for="afm_pres_district">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_pres_district" name="admission_required_fields[]" value="pres_district" class="admission-field-chk" @checked(in_array('pres_district', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Present District</span>
+                          <span class="afm-text-sub">Current residential district</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('pres_upazilla', $reqFields)) is-active @endif" for="afm_pres_upazilla">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_pres_upazilla" name="admission_required_fields[]" value="pres_upazilla" class="admission-field-chk" @checked(in_array('pres_upazilla', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Present Upazilla / Thana</span>
+                          <span class="afm-text-sub">Current sub-district/police station</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('pres_address', $reqFields)) is-active @endif" for="afm_pres_address">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_pres_address" name="admission_required_fields[]" value="pres_address" class="admission-field-chk" @checked(in_array('pres_address', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Present Full Address Line</span>
+                          <span class="afm-text-sub">Street, building, area</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
                   </div>
                 </div>
-                <div class="afm-card-body">
-                  <label class="afm-row @if(in_array('pres_division', $reqFields)) is-active @endif" for="afm_pres_division">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_pres_division" name="admission_required_fields[]" value="pres_division" class="admission-field-chk" @checked(in_array('pres_division', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Present Division</span>
-                        <span class="afm-text-sub">Current administrative division</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
 
-                  <label class="afm-row @if(in_array('pres_district', $reqFields)) is-active @endif" for="afm_pres_district">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_pres_district" name="admission_required_fields[]" value="pres_district" class="admission-field-chk" @checked(in_array('pres_district', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Present District</span>
-                        <span class="afm-text-sub">Current residential district</span>
-                      </div>
+                {{-- Card 6: Family & Guardian Details --}}
+                <div class="afm-card afm-card-6">
+                  <div class="afm-card-header">
+                    <span class="afm-card-title">6. Family & Guardian Details</span>
+                    <div style="display:flex;align-items:center;gap:5px;">
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
+                      <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
+                      <span class="afm-card-badge">0/0</span>
                     </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('pres_upazilla', $reqFields)) is-active @endif" for="afm_pres_upazilla">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_pres_upazilla" name="admission_required_fields[]" value="pres_upazilla" class="admission-field-chk" @checked(in_array('pres_upazilla', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Present Upazilla / Thana</span>
-                        <span class="afm-text-sub">Current sub-district/police station</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('pres_address', $reqFields)) is-active @endif" for="afm_pres_address">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_pres_address" name="admission_required_fields[]" value="pres_address" class="admission-field-chk" @checked(in_array('pres_address', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Present Full Address Line</span>
-                        <span class="afm-text-sub">Street, building, area</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              {{-- Card 4: Permanent Address --}}
-              <div class="afm-card">
-                <div class="afm-card-header">
-                  <span class="afm-card-title">4. Permanent Address Details</span>
-                  <div style="display:flex;align-items:center;gap:5px;">
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
-                    <span class="afm-card-badge">0/0</span>
                   </div>
-                </div>
-                <div class="afm-card-body">
-                  <label class="afm-row @if(in_array('perm_division', $reqFields)) is-active @endif" for="afm_perm_division">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_perm_division" name="admission_required_fields[]" value="perm_division" class="admission-field-chk" @checked(in_array('perm_division', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Permanent Division</span>
-                        <span class="afm-text-sub">Permanent home division</span>
+                  <div class="afm-card-body">
+                    <label class="afm-row @if(in_array('father_name_en', $reqFields)) is-active @endif" for="afm_father_name_en">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_father_name_en" name="admission_required_fields[]" value="father_name_en" class="admission-field-chk" @checked(in_array('father_name_en', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Father's Name (English)</span>
+                          <span class="afm-text-sub">Father name in English</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('perm_district', $reqFields)) is-active @endif" for="afm_perm_district">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_perm_district" name="admission_required_fields[]" value="perm_district" class="admission-field-chk" @checked(in_array('perm_district', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Permanent District</span>
-                        <span class="afm-text-sub">Permanent home district</span>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
+                    </label>
 
-                  <label class="afm-row @if(in_array('perm_upazilla', $reqFields)) is-active @endif" for="afm_perm_upazilla">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_perm_upazilla" name="admission_required_fields[]" value="perm_upazilla" class="admission-field-chk" @checked(in_array('perm_upazilla', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Permanent Upazilla / Thana</span>
-                        <span class="afm-text-sub">Permanent sub-district</span>
+                    <label class="afm-row @if(in_array('father_name_bn', $reqFields)) is-active @endif" for="afm_father_name_bn">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_father_name_bn" name="admission_required_fields[]" value="father_name_bn" class="admission-field-chk" @checked(in_array('father_name_bn', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Father's Name (Bengali)</span>
+                          <span class="afm-text-sub">পিতার নাম বাংলায়</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('perm_address', $reqFields)) is-active @endif" for="afm_perm_address">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_perm_address" name="admission_required_fields[]" value="perm_address" class="admission-field-chk" @checked(in_array('perm_address', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Permanent Full Address</span>
-                        <span class="afm-text-sub">Permanent village/road/area</span>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
+                    </label>
 
-                  <label class="afm-row @if(in_array('perm_area_type', $reqFields)) is-active @endif" for="afm_perm_area_type">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_perm_area_type" name="admission_required_fields[]" value="perm_area_type" class="admission-field-chk" @checked(in_array('perm_area_type', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Locality Area Type</span>
-                        <span class="afm-text-sub">Rural / Urban classification</span>
+                    <label class="afm-row @if(in_array('mother_name_en', $reqFields)) is-active @endif" for="afm_mother_name_en">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_mother_name_en" name="admission_required_fields[]" value="mother_name_en" class="admission-field-chk" @checked(in_array('mother_name_en', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Mother's Name (English)</span>
+                          <span class="afm-text-sub">Mother name in English</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-                </div>
-              </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
 
-              {{-- Card 5: Education & Demographics --}}
-              <div class="afm-card">
-                <div class="afm-card-header">
-                  <span class="afm-card-title">5. Education & Demographics</span>
-                  <div style="display:flex;align-items:center;gap:5px;">
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
-                    <span class="afm-card-badge">0/0</span>
+                    <label class="afm-row @if(in_array('mother_name_bn', $reqFields)) is-active @endif" for="afm_mother_name_bn">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_mother_name_bn" name="admission_required_fields[]" value="mother_name_bn" class="admission-field-chk" @checked(in_array('mother_name_bn', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Mother's Name (Bengali)</span>
+                          <span class="afm-text-sub">মাতার নাম বাংলায়</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('emergency_contact', $reqFields)) is-active @endif" for="afm_emergency_contact">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_emergency_contact" name="admission_required_fields[]" value="emergency_contact" class="admission-field-chk" @checked(in_array('emergency_contact', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Emergency / Guardian Contact</span>
+                          <span class="afm-text-sub">Alternative phone number</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('household_members', $reqFields)) is-active @endif" for="afm_household_members">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_household_members" name="admission_required_fields[]" value="household_members" class="admission-field-chk" @checked(in_array('household_members', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Household Members Count</span>
+                          <span class="afm-text-sub">Total family members</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('income_source', $reqFields)) is-active @endif" for="afm_income_source">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_income_source" name="admission_required_fields[]" value="income_source" class="admission-field-chk" @checked(in_array('income_source', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Primary Family Income Source</span>
+                          <span class="afm-text-sub">Occupation / earning head</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
+
+                    <label class="afm-row @if(in_array('monthly_income', $reqFields)) is-active @endif" for="afm_monthly_income">
+                      <div class="afm-row-left">
+                        <input type="checkbox" id="afm_monthly_income" name="admission_required_fields[]" value="monthly_income" class="admission-field-chk" @checked(in_array('monthly_income', $reqFields))>
+                        <div class="afm-row-text">
+                          <span class="afm-text-primary">Monthly Household Income</span>
+                          <span class="afm-text-sub">Total monthly income (BDT)</span>
+                        </div>
+                      </div>
+                      <div class="afm-row-right">
+                        <span class="afm-badge-req">Required *</span>
+                        <span class="afm-badge-opt">Optional</span>
+                      </div>
+                    </label>
                   </div>
-                </div>
-                <div class="afm-card-body">
-                  <label class="afm-row @if(in_array('education_level', $reqFields)) is-active @endif" for="afm_education_level">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_education_level" name="admission_required_fields[]" value="education_level" class="admission-field-chk" @checked(in_array('education_level', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Educational Qualification</span>
-                        <span class="afm-text-sub">Highest degree/exam level</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('religion', $reqFields)) is-active @endif" for="afm_religion">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_religion" name="admission_required_fields[]" value="religion" class="admission-field-chk" @checked(in_array('religion', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Religion</span>
-                        <span class="afm-text-sub">Religious faith</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('ethnicity', $reqFields)) is-active @endif" for="afm_ethnicity">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_ethnicity" name="admission_required_fields[]" value="ethnicity" class="admission-field-chk" @checked(in_array('ethnicity', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Ethnicity / Community</span>
-                        <span class="afm-text-sub">Ethnic identity</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              {{-- Card 6: Family & Guardian --}}
-              <div class="afm-card">
-                <div class="afm-card-header">
-                  <span class="afm-card-title">6. Family & Guardian Details</span>
-                  <div style="display:flex;align-items:center;gap:5px;">
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
-                    <span class="afm-card-badge">0/0</span>
-                  </div>
-                </div>
-                <div class="afm-card-body">
-                  <label class="afm-row @if(in_array('father_name_en', $reqFields)) is-active @endif" for="afm_father_name_en">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_father_name_en" name="admission_required_fields[]" value="father_name_en" class="admission-field-chk" @checked(in_array('father_name_en', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Father's Name (English)</span>
-                        <span class="afm-text-sub">Father name in English</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('father_name_bn', $reqFields)) is-active @endif" for="afm_father_name_bn">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_father_name_bn" name="admission_required_fields[]" value="father_name_bn" class="admission-field-chk" @checked(in_array('father_name_bn', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Father's Name (Bengali)</span>
-                        <span class="afm-text-sub">পিতার নাম বাংলায়</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('mother_name_en', $reqFields)) is-active @endif" for="afm_mother_name_en">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_mother_name_en" name="admission_required_fields[]" value="mother_name_en" class="admission-field-chk" @checked(in_array('mother_name_en', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Mother's Name (English)</span>
-                        <span class="afm-text-sub">Mother name in English</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('mother_name_bn', $reqFields)) is-active @endif" for="afm_mother_name_bn">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_mother_name_bn" name="admission_required_fields[]" value="mother_name_bn" class="admission-field-chk" @checked(in_array('mother_name_bn', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Mother's Name (Bengali)</span>
-                        <span class="afm-text-sub">মাতার নাম বাংলায়</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('emergency_contact', $reqFields)) is-active @endif" for="afm_emergency_contact">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_emergency_contact" name="admission_required_fields[]" value="emergency_contact" class="admission-field-chk" @checked(in_array('emergency_contact', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Emergency / Guardian Contact</span>
-                        <span class="afm-text-sub">Alternative phone number</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('household_members', $reqFields)) is-active @endif" for="afm_household_members">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_household_members" name="admission_required_fields[]" value="household_members" class="admission-field-chk" @checked(in_array('household_members', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Household Members Count</span>
-                        <span class="afm-text-sub">Total family members</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('income_source', $reqFields)) is-active @endif" for="afm_income_source">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_income_source" name="admission_required_fields[]" value="income_source" class="admission-field-chk" @checked(in_array('income_source', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Primary Family Income Source</span>
-                        <span class="afm-text-sub">Occupation / earning head</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('monthly_income', $reqFields)) is-active @endif" for="afm_monthly_income">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_monthly_income" name="admission_required_fields[]" value="monthly_income" class="admission-field-chk" @checked(in_array('monthly_income', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Monthly Household Income</span>
-                        <span class="afm-text-sub">Total monthly income (BDT)</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-                </div>
-              </div>
-
-              {{-- Card 7: Employment & Background --}}
-              <div class="afm-card">
-                <div class="afm-card-header">
-                  <span class="afm-card-title">7. Employment & Background</span>
-                  <div style="display:flex;align-items:center;gap:5px;">
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">All</button>
-                    <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">Clear</button>
-                    <span class="afm-card-badge">0/0</span>
-                  </div>
-                </div>
-                <div class="afm-card-body">
-                  <label class="afm-row @if(in_array('has_bank_account', $reqFields)) is-active @endif" for="afm_has_bank_account">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_has_bank_account" name="admission_required_fields[]" value="has_bank_account" class="admission-field-chk" @checked(in_array('has_bank_account', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Has Active Bank Account</span>
-                        <span class="afm-text-sub">Bank account (Yes / No)</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('past_training', $reqFields)) is-active @endif" for="afm_past_training">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_past_training" name="admission_required_fields[]" value="past_training" class="admission-field-chk" @checked(in_array('past_training', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Prior Technical Training</span>
-                        <span class="afm-text-sub">Previous course experience</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('employment_status', $reqFields)) is-active @endif" for="afm_employment_status">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_employment_status" name="admission_required_fields[]" value="employment_status" class="admission-field-chk" @checked(in_array('employment_status', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Current Employment Status</span>
-                        <span class="afm-text-sub">Unemployed, student, job</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('monthly_cash_income', $reqFields)) is-active @endif" for="afm_monthly_cash_income">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_monthly_cash_income" name="admission_required_fields[]" value="monthly_cash_income" class="admission-field-chk" @checked(in_array('monthly_cash_income', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Applicant Monthly Cash Income</span>
-                        <span class="afm-text-sub">Personal monthly earnings</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
-
-                  <label class="afm-row @if(in_array('training_media_source', $reqFields)) is-active @endif" for="afm_training_media_source">
-                    <div class="afm-row-left">
-                      <input type="checkbox" id="afm_training_media_source" name="admission_required_fields[]" value="training_media_source" class="admission-field-chk" @checked(in_array('training_media_source', $reqFields))>
-                      <div class="afm-row-text">
-                        <span class="afm-text-primary">Information / Media Source</span>
-                        <span class="afm-text-sub">How applicant learned about course</span>
-                      </div>
-                    </div>
-                    <div class="afm-row-right">
-                      <span class="afm-badge-req">Required *</span>
-                      <span class="afm-badge-opt">Optional</span>
-                    </div>
-                  </label>
                 </div>
               </div>
             </div>
