@@ -419,220 +419,952 @@
     @php
       $reqFields = \App\Models\SiteSetting::getRequiredAdmissionFields();
     @endphp
+    <style>
+      /* Admission Fields Manager (AFM) - Scoped Styles & Resets */
+      .afm-container {
+        background: #ffffff;
+        border: 1px solid #d8e4dc;
+        border-radius: 10px;
+        padding: 18px 20px 22px;
+        margin-top: 10px;
+        box-shadow: 0 1px 4px rgba(15, 81, 50, 0.04);
+      }
+
+      /* Force override all high-specificity .form-panel overrides */
+      .form-panel .afm-container label.afm-row {
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 9px 12px !important;
+        background: #ffffff !important;
+        border: none !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+        cursor: pointer !important;
+        transition: all 0.15s ease !important;
+        box-sizing: border-box !important;
+        font-weight: normal !important;
+        user-select: none !important;
+      }
+
+      .form-panel .afm-container label.afm-row:last-child {
+        border-bottom: none !important;
+      }
+
+      .form-panel .afm-container label.afm-row:hover {
+        background: #f8fafc !important;
+      }
+
+      .form-panel .afm-container label.afm-row.is-active {
+        background: #f0fdf4 !important;
+      }
+
+      .form-panel .afm-container label.afm-row span {
+        color: inherit !important;
+      }
+
+      .form-panel .afm-container input[type="checkbox"].admission-field-chk {
+        display: inline-block !important;
+        width: 18px !important;
+        min-width: 18px !important;
+        max-width: 18px !important;
+        height: 18px !important;
+        margin: 0 10px 0 0 !important;
+        padding: 0 !important;
+        border: 1.5px solid #94a3b8 !important;
+        border-radius: 4px !important;
+        accent-color: var(--green, #0f5132) !important;
+        cursor: pointer !important;
+        flex-shrink: 0 !important;
+        box-shadow: none !important;
+      }
+
+      .afm-top-panel {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 12px;
+        background: #f8faf9;
+        border: 1px solid #e2ebe6;
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin-bottom: 16px;
+      }
+
+      .afm-lock-notice {
+        font-size: 12px;
+        color: #0f5132;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .afm-counter-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 10px;
+        border-radius: 20px;
+        background: #e7f3ed;
+        color: #0b5948;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .afm-actions-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .afm-search-input {
+        width: 220px !important;
+        padding: 6px 12px !important;
+        font-size: 12.5px !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 6px !important;
+        background: #ffffff !important;
+        outline: none !important;
+        box-sizing: border-box !important;
+      }
+      .afm-search-input:focus {
+        border-color: #0f5132 !important;
+        box-shadow: 0 0 0 2px rgba(15, 81, 50, 0.15) !important;
+      }
+
+      .afm-btn {
+        padding: 6px 11px;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        transition: all 0.15s ease;
+        border: 1px solid transparent;
+      }
+
+      .afm-btn-select {
+        background: #eef7f2;
+        color: #0f5132;
+        border-color: #a7d3c0;
+      }
+      .afm-btn-select:hover {
+        background: #dcf2e6;
+      }
+
+      .afm-btn-default {
+        background: #f1f5f9;
+        color: #334155;
+        border-color: #cbd5e1;
+      }
+      .afm-btn-default:hover {
+        background: #e2e8f0;
+      }
+
+      .afm-btn-clear {
+        background: #ffffff;
+        color: #dc2626;
+        border-color: #fca5a5;
+      }
+      .afm-btn-clear:hover {
+        background: #fee2e2;
+      }
+
+      .afm-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      @media (max-width: 1200px) {
+        .afm-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 720px) {
+        .afm-grid {
+          grid-template-columns: 1fr;
+        }
+        .afm-search-input {
+          width: 100% !important;
+        }
+      }
+
+      .afm-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .afm-card-header {
+        background: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        padding: 9px 12px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .afm-card-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #0f5132;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .afm-cat-btn {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        color: #475569;
+        border-radius: 4px;
+        padding: 2px 7px;
+        font-size: 11px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.12s ease;
+      }
+      .afm-cat-btn:hover {
+        background: #f1f5f9;
+        color: #0f5132;
+        border-color: #94a3b8;
+      }
+
+      .afm-card-badge {
+        font-size: 11px;
+        font-weight: 700;
+        padding: 2px 7px;
+        border-radius: 12px;
+        background: #e2e8f0;
+        color: #475569;
+        display: inline-block;
+        min-width: 28px;
+        text-align: center;
+      }
+
+      .afm-card-body {
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .afm-row-left {
+        display: flex !important;
+        align-items: center !important;
+        gap: 10px !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+      }
+
+      .afm-row-text {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 1px !important;
+        line-height: 1.22 !important;
+        min-width: 0 !important;
+      }
+
+      .afm-text-bn {
+        font-size: 12.5px !important;
+        font-weight: 600 !important;
+        color: #1e293b !important;
+        white-space: normal !important;
+      }
+
+      .afm-text-en {
+        font-size: 11px !important;
+        font-weight: 400 !important;
+        color: #64748b !important;
+        white-space: normal !important;
+      }
+
+      .afm-row-right {
+        flex-shrink: 0 !important;
+        margin-left: 8px !important;
+      }
+
+      .afm-badge-req {
+        display: inline-block !important;
+        font-size: 10.5px !important;
+        font-weight: 700 !important;
+        padding: 2px 7px !important;
+        border-radius: 9999px !important;
+        background: #fef2f2 !important;
+        color: #b91c1c !important;
+        border: 1px solid #fecaca !important;
+        white-space: nowrap !important;
+        letter-spacing: 0.2px;
+      }
+
+      .afm-badge-opt {
+        display: inline-block !important;
+        font-size: 10.5px !important;
+        font-weight: 500 !important;
+        padding: 2px 7px !important;
+        border-radius: 9999px !important;
+        background: #f1f5f9 !important;
+        color: #64748b !important;
+        border: 1px solid #e2e8f0 !important;
+        white-space: nowrap !important;
+      }
+    </style>
+
     <div style="margin-bottom: 25px;">
       <input type="hidden" name="admission_fields_config_submitted" value="1">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
-        <div>
-          <h2 style="font-size: 18px; color: var(--green); margin: 0 0 6px;">7. ভর্তি আবেদন ফরমের ফিল্ড রিকোয়ারমেন্ট (Admission Form Mandatory Fields)</h2>
-          <p style="color: var(--muted); margin: 0; font-size: 13px;">
-            অনলাইন আবেদন ফরমে যে ফিল্ডগুলোতে টিক দেওয়া থাকবে সেগুলো শিক্ষার্থীকে পূরণ করা <strong>বাধ্যতামূলক (Mandatory — লাল তারাচিহ্ন <span style="color:#dc2626;font-weight:bold;">*</span>)</strong> থাকবে। আনটিক করলে তা ঐচ্ছিক (Optional) হয়ে যাবে।
-          </p>
-        </div>
-        <div style="display:flex;gap:8px;">
-          <button type="button" onclick="setAllAdmissionFields(true)" style="background:#eef7f2;color:#0f5132;border:1px solid #7cb5a9;padding:6px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">
-            Select All (সব আবশ্যক)
-          </button>
-          <button type="button" onclick="setDefaultAdmissionFields()" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;padding:6px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">
-            Recommended Defaults
-          </button>
-          <button type="button" onclick="setAllAdmissionFields(false)" style="background:#fff;color:#dc2626;border:1px solid #fca5a5;padding:6px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">
-            Clear All (সব ঐচ্ছিক)
-          </button>
-        </div>
+      <div style="margin-bottom: 12px;">
+        <h2 style="font-size: 18px; color: var(--green); margin: 0 0 6px;">7. ভর্তি আবেদন ফরমের ফিল্ড রিকোয়ারমেন্ট (Admission Form Mandatory Fields)</h2>
+        <p style="color: var(--muted); margin: 0; font-size: 13px;">
+          অনলাইন আবেদন ফরমে যে ফিল্ডগুলোতে টিক দেওয়া থাকবে সেগুলো শিক্ষার্থীকে পূরণ করা <strong>বাধ্যতামূলক (Mandatory — লাল তারাচিহ্ন <span style="color:#dc2626;font-weight:bold;">*</span>)</strong> থাকবে। আনটিক করলে তা ঐচ্ছিক (Optional) হয়ে যাবে।
+        </p>
       </div>
 
-      <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:16px;">
-        <div style="margin-bottom:8px;font-size:12px;color:#0f5132;font-weight:700;">
-          📌 দ্রষ্টব্য: শিক্ষার্থীর নাম (Trainee Name in English) এবং কোর্সের নাম (Course) সিস্টেমের জন্য সর্বদা আবশ্যিক থাকবে।
+      <div class="afm-container afm-wrap">
+        {{-- Top Toolbar --}}
+        <div class="afm-top-panel">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <span class="afm-lock-notice">
+              🔒 <strong>সিস্টেম আবশ্যিক:</strong> প্রার্থীর ইংরেজি নাম ও কোর্স কোড সর্বদা আবশ্যিক
+            </span>
+            <span id="afmTotalCounter" class="afm-counter-pill">
+              📊 লোড হচ্ছে...
+            </span>
+          </div>
+
+          <div class="afm-actions-wrap">
+            <input type="text" id="afmSearchInput" class="afm-search-input" placeholder="🔍 ফিল্ড খুঁজুন..." oninput="filterAfmFields(this.value)">
+            <button type="button" class="afm-btn afm-btn-select" onclick="setAllAdmissionFields(true)" title="সকল ফিল্ডকে আবশ্যক করুন">
+              ✓ সব আবশ্যক
+            </button>
+            <button type="button" class="afm-btn afm-btn-default" onclick="setDefaultAdmissionFields()" title="স্ট্যান্ডার্ড ফিল্ডগুলো নির্বাচন করুন">
+              ⚡ প্রস্তাবিত ডিফল্ট
+            </button>
+            <button type="button" class="afm-btn afm-btn-clear" onclick="setAllAdmissionFields(false)" title="সব ফিল্ডকে ঐচ্ছিক করুন">
+              ✕ সব ঐচ্ছিক
+            </button>
+          </div>
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;margin-top:12px;">
-          {{-- Group 1: Personal Profile --}}
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;">
-            <strong style="color:#0f5132;font-size:13.5px;display:block;margin-bottom:10px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">
-              ১. প্রার্থীর ব্যক্তিগত তথ্য
-            </strong>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="trainee_name_bn" class="admission-field-chk" @checked(in_array('trainee_name_bn', $reqFields)) style="accent-color:#0f5132;">
-                <span>নাম বাংলায় (Trainee Name Bangla)</span>
+        {{-- Categories Grid --}}
+        <div class="afm-grid" id="afmGrid">
+          {{-- Card 1: Personal Profile --}}
+          <div class="afm-card">
+            <div class="afm-card-header">
+              <span class="afm-card-title">১. প্রার্থীর ব্যক্তিগত তথ্য</span>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">সব</button>
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">বাদ</button>
+                <span class="afm-card-badge">0/0</span>
+              </div>
+            </div>
+            <div class="afm-card-body">
+              <label class="afm-row @if(in_array('trainee_name_bn', $reqFields)) is-active @endif" for="afm_trainee_name_bn">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_trainee_name_bn" name="admission_required_fields[]" value="trainee_name_bn" class="admission-field-chk" @checked(in_array('trainee_name_bn', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">নাম বাংলায়</span>
+                    <span class="afm-text-en">Trainee Name (Bengali)</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="dob" class="admission-field-chk" @checked(in_array('dob', $reqFields)) style="accent-color:#0f5132;">
-                <span>জন্ম তারিখ (Date of Birth)</span>
+
+              <label class="afm-row @if(in_array('dob', $reqFields)) is-active @endif" for="afm_dob">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_dob" name="admission_required_fields[]" value="dob" class="admission-field-chk" @checked(in_array('dob', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">জন্ম তারিখ</span>
+                    <span class="afm-text-en">Date of Birth</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="ident_type" class="admission-field-chk" @checked(in_array('ident_type', $reqFields)) style="accent-color:#0f5132;">
-                <span>আইডি টাইপ (NID / Birth Cert)</span>
+
+              <label class="afm-row @if(in_array('ident_type', $reqFields)) is-active @endif" for="afm_ident_type">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_ident_type" name="admission_required_fields[]" value="ident_type" class="admission-field-chk" @checked(in_array('ident_type', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">আইডি টাইপ</span>
+                    <span class="afm-text-en">ID Type (NID / Birth Cert)</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="ident_no" class="admission-field-chk" @checked(in_array('ident_no', $reqFields)) style="accent-color:#0f5132;">
-                <span>NID বা জন্ম সনদ নম্বর (ID Number)</span>
+
+              <label class="afm-row @if(in_array('ident_no', $reqFields)) is-active @endif" for="afm_ident_no">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_ident_no" name="admission_required_fields[]" value="ident_no" class="admission-field-chk" @checked(in_array('ident_no', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">এনআইডি বা জন্ম সনদ নম্বর</span>
+                    <span class="afm-text-en">NID / Birth Cert No.</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="sex" class="admission-field-chk" @checked(in_array('sex', $reqFields)) style="accent-color:#0f5132;">
-                <span>লিঙ্গ (Sex / Gender)</span>
+
+              <label class="afm-row @if(in_array('sex', $reqFields)) is-active @endif" for="afm_sex">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_sex" name="admission_required_fields[]" value="sex" class="admission-field-chk" @checked(in_array('sex', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">লিঙ্গ</span>
+                    <span class="afm-text-en">Sex / Gender</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="pwd" class="admission-field-chk" @checked(in_array('pwd', $reqFields)) style="accent-color:#0f5132;">
-                <span>প্রতিবন্ধিতা (PWD Status)</span>
+
+              <label class="afm-row @if(in_array('pwd', $reqFields)) is-active @endif" for="afm_pwd">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_pwd" name="admission_required_fields[]" value="pwd" class="admission-field-chk" @checked(in_array('pwd', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">প্রতিবন্ধিতা অবস্থা</span>
+                    <span class="afm-text-en">Disability (PWD Status)</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="contact_no" class="admission-field-chk" @checked(in_array('contact_no', $reqFields)) style="accent-color:#0f5132;">
-                <span>মোবাইল নম্বর (Contact Number)</span>
+
+              <label class="afm-row @if(in_array('contact_no', $reqFields)) is-active @endif" for="afm_contact_no">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_contact_no" name="admission_required_fields[]" value="contact_no" class="admission-field-chk" @checked(in_array('contact_no', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">মোবাইল নম্বর</span>
+                    <span class="afm-text-en">Contact Phone Number</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="email" class="admission-field-chk" @checked(in_array('email', $reqFields)) style="accent-color:#0f5132;">
-                <span>ইমেইল ঠিকানা (Email Address)</span>
+
+              <label class="afm-row @if(in_array('email', $reqFields)) is-active @endif" for="afm_email">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_email" name="admission_required_fields[]" value="email" class="admission-field-chk" @checked(in_array('email', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">ইমেইল ঠিকানা</span>
+                    <span class="afm-text-en">Email Address</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="marital_status" class="admission-field-chk" @checked(in_array('marital_status', $reqFields)) style="accent-color:#0f5132;">
-                <span>বৈবাহিক অবস্থা (Marital Status)</span>
+
+              <label class="afm-row @if(in_array('marital_status', $reqFields)) is-active @endif" for="afm_marital_status">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_marital_status" name="admission_required_fields[]" value="marital_status" class="admission-field-chk" @checked(in_array('marital_status', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">বৈবাহিক অবস্থা</span>
+                    <span class="afm-text-en">Marital Status</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
             </div>
           </div>
 
-          {{-- Group 2: Uploads --}}
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;">
-            <strong style="color:#0f5132;font-size:13.5px;display:block;margin-bottom:10px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">
-              ২. ছবি ও ফাইল আপলোড
-            </strong>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="photo" class="admission-field-chk" @checked(in_array('photo', $reqFields)) style="accent-color:#0f5132;">
-                <span>প্রার্থীর ছবি (Passport Photo Upload)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="signature_photo" class="admission-field-chk" @checked(in_array('signature_photo', $reqFields)) style="accent-color:#0f5132;">
-                <span>প্রার্থীর স্বাক্ষর (Signature Upload)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="ident_doc" class="admission-field-chk" @checked(in_array('ident_doc', $reqFields)) style="accent-color:#0f5132;">
-                <span>NID বা জন্ম সনদ কপি (Doc Upload)</span>
-              </label>
+          {{-- Card 2: Uploads & Documents --}}
+          <div class="afm-card">
+            <div class="afm-card-header">
+              <span class="afm-card-title">২. ছবি ও ফাইল আপলোড</span>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">সব</button>
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">বাদ</button>
+                <span class="afm-card-badge">0/0</span>
+              </div>
             </div>
+            <div class="afm-card-body">
+              <label class="afm-row @if(in_array('photo', $reqFields)) is-active @endif" for="afm_photo">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_photo" name="admission_required_fields[]" value="photo" class="admission-field-chk" @checked(in_array('photo', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">প্রার্থীর পাসপোর্ট ছবি</span>
+                    <span class="afm-text-en">Passport Photo Upload</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
 
-            <strong style="color:#0f5132;font-size:13.5px;display:block;margin-top:18px;margin-bottom:10px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">
-              ৩. স্থায়ী ঠিকানা (Permanent Address)
-            </strong>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="perm_division" class="admission-field-chk" @checked(in_array('perm_division', $reqFields)) style="accent-color:#0f5132;">
-                <span>স্থায়ী বিভাগ (Permanent Division)</span>
+              <label class="afm-row @if(in_array('signature_photo', $reqFields)) is-active @endif" for="afm_signature_photo">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_signature_photo" name="admission_required_fields[]" value="signature_photo" class="admission-field-chk" @checked(in_array('signature_photo', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">প্রার্থীর স্বাক্ষর</span>
+                    <span class="afm-text-en">Digital Signature Upload</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="perm_district" class="admission-field-chk" @checked(in_array('perm_district', $reqFields)) style="accent-color:#0f5132;">
-                <span>স্থায়ী জেলা (Permanent District)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="perm_upazilla" class="admission-field-chk" @checked(in_array('perm_upazilla', $reqFields)) style="accent-color:#0f5132;">
-                <span>স্থায়ী উপজেলা/থানা (Upazilla)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="perm_address" class="admission-field-chk" @checked(in_array('perm_address', $reqFields)) style="accent-color:#0f5132;">
-                <span>স্থায়ী পূর্ণ ঠিকানা (Address Line)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="perm_area_type" class="admission-field-chk" @checked(in_array('perm_area_type', $reqFields)) style="accent-color:#0f5132;">
-                <span>পল্লী / শহর এলাকা (Rural/Urban)</span>
-              </label>
-            </div>
-          </div>
 
-          {{-- Group 3: Present Address & Demographics --}}
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;">
-            <strong style="color:#0f5132;font-size:13.5px;display:block;margin-bottom:10px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">
-              ৪. বর্তমান ঠিকানা ও ডেমোগ্রাফিক
-            </strong>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="pres_division" class="admission-field-chk" @checked(in_array('pres_division', $reqFields)) style="accent-color:#0f5132;">
-                <span>বর্তমান বিভাগ (Present Division)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="pres_district" class="admission-field-chk" @checked(in_array('pres_district', $reqFields)) style="accent-color:#0f5132;">
-                <span>বর্তমান জেলা (Present District)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="pres_upazilla" class="admission-field-chk" @checked(in_array('pres_upazilla', $reqFields)) style="accent-color:#0f5132;">
-                <span>বর্তমান উপজেলা/থানা (Upazilla)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="pres_address" class="admission-field-chk" @checked(in_array('pres_address', $reqFields)) style="accent-color:#0f5132;">
-                <span>বর্তমান পূর্ণ ঠিকানা (Address Line)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="religion" class="admission-field-chk" @checked(in_array('religion', $reqFields)) style="accent-color:#0f5132;">
-                <span>ধর্ম (Religion)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="ethnicity" class="admission-field-chk" @checked(in_array('ethnicity', $reqFields)) style="accent-color:#0f5132;">
-                <span>নৃগোষ্ঠী (Ethnicity)</span>
-              </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="education_level" class="admission-field-chk" @checked(in_array('education_level', $reqFields)) style="accent-color:#0f5132;">
-                <span>শিক্ষাগত যোগ্যতা (Education Level)</span>
+              <label class="afm-row @if(in_array('ident_doc', $reqFields)) is-active @endif" for="afm_ident_doc">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_ident_doc" name="admission_required_fields[]" value="ident_doc" class="admission-field-chk" @checked(in_array('ident_doc', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">NID বা জন্ম সনদ কপি</span>
+                    <span class="afm-text-en">Identity Document Upload</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
             </div>
           </div>
 
-          {{-- Group 4: Household & Employment --}}
-          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;">
-            <strong style="color:#0f5132;font-size:13.5px;display:block;margin-bottom:10px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">
-              ৫. পারিবারিক ও কর্মসংস্থান
-            </strong>
-            <div style="display:flex;flex-direction:column;gap:8px;">
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="father_name_en" class="admission-field-chk" @checked(in_array('father_name_en', $reqFields)) style="accent-color:#0f5132;">
-                <span>পিতার নাম ইংরেজিতে (Father's Name EN)</span>
+          {{-- Card 3: Present Address --}}
+          <div class="afm-card">
+            <div class="afm-card-header">
+              <span class="afm-card-title">৩. বর্তমান ঠিকানা</span>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">সব</button>
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">বাদ</button>
+                <span class="afm-card-badge">0/0</span>
+              </div>
+            </div>
+            <div class="afm-card-body">
+              <label class="afm-row @if(in_array('pres_division', $reqFields)) is-active @endif" for="afm_pres_division">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_pres_division" name="admission_required_fields[]" value="pres_division" class="admission-field-chk" @checked(in_array('pres_division', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">বর্তমান বিভাগ</span>
+                    <span class="afm-text-en">Present Division</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="father_name_bn" class="admission-field-chk" @checked(in_array('father_name_bn', $reqFields)) style="accent-color:#0f5132;">
-                <span>পিতার নাম বাংলায় (Father's Name BN)</span>
+
+              <label class="afm-row @if(in_array('pres_district', $reqFields)) is-active @endif" for="afm_pres_district">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_pres_district" name="admission_required_fields[]" value="pres_district" class="admission-field-chk" @checked(in_array('pres_district', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">বর্তমান জেলা</span>
+                    <span class="afm-text-en">Present District</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="mother_name_en" class="admission-field-chk" @checked(in_array('mother_name_en', $reqFields)) style="accent-color:#0f5132;">
-                <span>মাতার নাম ইংরেজিতে (Mother's Name EN)</span>
+
+              <label class="afm-row @if(in_array('pres_upazilla', $reqFields)) is-active @endif" for="afm_pres_upazilla">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_pres_upazilla" name="admission_required_fields[]" value="pres_upazilla" class="admission-field-chk" @checked(in_array('pres_upazilla', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">বর্তমান উপজেলা / থানা</span>
+                    <span class="afm-text-en">Present Upazilla / Thana</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="mother_name_bn" class="admission-field-chk" @checked(in_array('mother_name_bn', $reqFields)) style="accent-color:#0f5132;">
-                <span>মাতার নাম বাংলায় (Mother's Name BN)</span>
+
+              <label class="afm-row @if(in_array('pres_address', $reqFields)) is-active @endif" for="afm_pres_address">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_pres_address" name="admission_required_fields[]" value="pres_address" class="admission-field-chk" @checked(in_array('pres_address', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">বর্তমান পূর্ণ ঠিকানা</span>
+                    <span class="afm-text-en">Present Address Line</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="emergency_contact" class="admission-field-chk" @checked(in_array('emergency_contact', $reqFields)) style="accent-color:#0f5132;">
-                <span>জরুরি যোগাযোগ (Emergency Contact)</span>
+            </div>
+          </div>
+
+          {{-- Card 4: Permanent Address --}}
+          <div class="afm-card">
+            <div class="afm-card-header">
+              <span class="afm-card-title">৪. স্থায়ী ঠিকানা</span>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">সব</button>
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">বাদ</button>
+                <span class="afm-card-badge">0/0</span>
+              </div>
+            </div>
+            <div class="afm-card-body">
+              <label class="afm-row @if(in_array('perm_division', $reqFields)) is-active @endif" for="afm_perm_division">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_perm_division" name="admission_required_fields[]" value="perm_division" class="admission-field-chk" @checked(in_array('perm_division', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">স্থায়ী বিভাগ</span>
+                    <span class="afm-text-en">Permanent Division</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="household_members" class="admission-field-chk" @checked(in_array('household_members', $reqFields)) style="accent-color:#0f5132;">
-                <span>পরিবারের সদস্য সংখ্যা (Members)</span>
+
+              <label class="afm-row @if(in_array('perm_district', $reqFields)) is-active @endif" for="afm_perm_district">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_perm_district" name="admission_required_fields[]" value="perm_district" class="admission-field-chk" @checked(in_array('perm_district', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">স্থায়ী জেলা</span>
+                    <span class="afm-text-en">Permanent District</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="income_source" class="admission-field-chk" @checked(in_array('income_source', $reqFields)) style="accent-color:#0f5132;">
-                <span>আয়ের উৎস (Income Source)</span>
+
+              <label class="afm-row @if(in_array('perm_upazilla', $reqFields)) is-active @endif" for="afm_perm_upazilla">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_perm_upazilla" name="admission_required_fields[]" value="perm_upazilla" class="admission-field-chk" @checked(in_array('perm_upazilla', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">স্থায়ী উপজেলা / থানা</span>
+                    <span class="afm-text-en">Permanent Upazilla / Thana</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="monthly_income" class="admission-field-chk" @checked(in_array('monthly_income', $reqFields)) style="accent-color:#0f5132;">
-                <span>মাসিক পারিবারিক আয় (Monthly Income)</span>
+
+              <label class="afm-row @if(in_array('perm_address', $reqFields)) is-active @endif" for="afm_perm_address">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_perm_address" name="admission_required_fields[]" value="perm_address" class="admission-field-chk" @checked(in_array('perm_address', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">স্থায়ী পূর্ণ ঠিকানা</span>
+                    <span class="afm-text-en">Permanent Address Line</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="has_bank_account" class="admission-field-chk" @checked(in_array('has_bank_account', $reqFields)) style="accent-color:#0f5132;">
-                <span>ব্যাংক অ্যাকাউন্ট আছে কি না (Bank)</span>
+
+              <label class="afm-row @if(in_array('perm_area_type', $reqFields)) is-active @endif" for="afm_perm_area_type">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_perm_area_type" name="admission_required_fields[]" value="perm_area_type" class="admission-field-chk" @checked(in_array('perm_area_type', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">পল্লী / শহর এলাকা</span>
+                    <span class="afm-text-en">Area Type (Rural / Urban)</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="past_training" class="admission-field-chk" @checked(in_array('past_training', $reqFields)) style="accent-color:#0f5132;">
-                <span>পূর্বে প্রশিক্ষণ নেওয়া হয়েছে কি না</span>
+            </div>
+          </div>
+
+          {{-- Card 5: Education & Demographics --}}
+          <div class="afm-card">
+            <div class="afm-card-header">
+              <span class="afm-card-title">৫. শিক্ষা ও জনসংখ্যাতাত্ত্বিক</span>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">সব</button>
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">বাদ</button>
+                <span class="afm-card-badge">0/0</span>
+              </div>
+            </div>
+            <div class="afm-card-body">
+              <label class="afm-row @if(in_array('education_level', $reqFields)) is-active @endif" for="afm_education_level">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_education_level" name="admission_required_fields[]" value="education_level" class="admission-field-chk" @checked(in_array('education_level', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">শিক্ষাগত যোগ্যতা</span>
+                    <span class="afm-text-en">Education Level</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="employment_status" class="admission-field-chk" @checked(in_array('employment_status', $reqFields)) style="accent-color:#0f5132;">
-                <span>কর্মসংস্থান অবস্থা (Employment)</span>
+
+              <label class="afm-row @if(in_array('religion', $reqFields)) is-active @endif" for="afm_religion">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_religion" name="admission_required_fields[]" value="religion" class="admission-field-chk" @checked(in_array('religion', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">ধর্ম</span>
+                    <span class="afm-text-en">Religion</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="monthly_cash_income" class="admission-field-chk" @checked(in_array('monthly_cash_income', $reqFields)) style="accent-color:#0f5132;">
-                <span>মাসিক নগদ আয় (Cash Income)</span>
+
+              <label class="afm-row @if(in_array('ethnicity', $reqFields)) is-active @endif" for="afm_ethnicity">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_ethnicity" name="admission_required_fields[]" value="ethnicity" class="admission-field-chk" @checked(in_array('ethnicity', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">নৃগোষ্ঠী</span>
+                    <span class="afm-text-en">Ethnicity</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
-              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
-                <input type="checkbox" name="admission_required_fields[]" value="training_media_source" class="admission-field-chk" @checked(in_array('training_media_source', $reqFields)) style="accent-color:#0f5132;">
-                <span>কীভাবে জানতে পেরেছেন (Media Source)</span>
+            </div>
+          </div>
+
+          {{-- Card 6: Family & Guardian --}}
+          <div class="afm-card">
+            <div class="afm-card-header">
+              <span class="afm-card-title">৬. অভিভাবক ও পারিবারিক তথ্য</span>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">সব</button>
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">বাদ</button>
+                <span class="afm-card-badge">0/0</span>
+              </div>
+            </div>
+            <div class="afm-card-body">
+              <label class="afm-row @if(in_array('father_name_en', $reqFields)) is-active @endif" for="afm_father_name_en">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_father_name_en" name="admission_required_fields[]" value="father_name_en" class="admission-field-chk" @checked(in_array('father_name_en', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">পিতার নাম ইংরেজিতে</span>
+                    <span class="afm-text-en">Father's Name (English)</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('father_name_bn', $reqFields)) is-active @endif" for="afm_father_name_bn">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_father_name_bn" name="admission_required_fields[]" value="father_name_bn" class="admission-field-chk" @checked(in_array('father_name_bn', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">পিতার নাম বাংলায়</span>
+                    <span class="afm-text-en">Father's Name (Bengali)</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('mother_name_en', $reqFields)) is-active @endif" for="afm_mother_name_en">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_mother_name_en" name="admission_required_fields[]" value="mother_name_en" class="admission-field-chk" @checked(in_array('mother_name_en', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">মাতার নাম ইংরেজিতে</span>
+                    <span class="afm-text-en">Mother's Name (English)</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('mother_name_bn', $reqFields)) is-active @endif" for="afm_mother_name_bn">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_mother_name_bn" name="admission_required_fields[]" value="mother_name_bn" class="admission-field-chk" @checked(in_array('mother_name_bn', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">মাতার নাম বাংলায়</span>
+                    <span class="afm-text-en">Mother's Name (Bengali)</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('emergency_contact', $reqFields)) is-active @endif" for="afm_emergency_contact">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_emergency_contact" name="admission_required_fields[]" value="emergency_contact" class="admission-field-chk" @checked(in_array('emergency_contact', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">জরুরি অভিভাবক যোগাযোগ</span>
+                    <span class="afm-text-en">Emergency / Guardian Contact</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('household_members', $reqFields)) is-active @endif" for="afm_household_members">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_household_members" name="admission_required_fields[]" value="household_members" class="admission-field-chk" @checked(in_array('household_members', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">পরিবারের সদস্য সংখ্যা</span>
+                    <span class="afm-text-en">Household Members Count</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('income_source', $reqFields)) is-active @endif" for="afm_income_source">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_income_source" name="admission_required_fields[]" value="income_source" class="admission-field-chk" @checked(in_array('income_source', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">পরিবারের আয়ের প্রধান উৎস</span>
+                    <span class="afm-text-en">Main Income Source</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('monthly_income', $reqFields)) is-active @endif" for="afm_monthly_income">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_monthly_income" name="admission_required_fields[]" value="monthly_income" class="admission-field-chk" @checked(in_array('monthly_income', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">মাসিক পারিবারিক মোট আয়</span>
+                    <span class="afm-text-en">Monthly Household Income</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          {{-- Card 7: Employment & Background --}}
+          <div class="afm-card">
+            <div class="afm-card-header">
+              <span class="afm-card-title">৭. কর্মসংস্থান ও অন্যান্য</span>
+              <div style="display:flex;align-items:center;gap:5px;">
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, true)">সব</button>
+                <button type="button" class="afm-cat-btn" onclick="toggleAfmCard(this, false)">বাদ</button>
+                <span class="afm-card-badge">0/0</span>
+              </div>
+            </div>
+            <div class="afm-card-body">
+              <label class="afm-row @if(in_array('has_bank_account', $reqFields)) is-active @endif" for="afm_has_bank_account">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_has_bank_account" name="admission_required_fields[]" value="has_bank_account" class="admission-field-chk" @checked(in_array('has_bank_account', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">ব্যাংক অ্যাকাউন্ট আছে কি না</span>
+                    <span class="afm-text-en">Has Bank Account (Yes/No)</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('past_training', $reqFields)) is-active @endif" for="afm_past_training">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_past_training" name="admission_required_fields[]" value="past_training" class="admission-field-chk" @checked(in_array('past_training', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">পূর্বে প্রশিক্ষণ নিয়েছেন কি না</span>
+                    <span class="afm-text-en">Prior Technical Training</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('employment_status', $reqFields)) is-active @endif" for="afm_employment_status">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_employment_status" name="admission_required_fields[]" value="employment_status" class="admission-field-chk" @checked(in_array('employment_status', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">বর্তমান কর্মসংস্থান অবস্থা</span>
+                    <span class="afm-text-en">Current Employment Status</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('monthly_cash_income', $reqFields)) is-active @endif" for="afm_monthly_cash_income">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_monthly_cash_income" name="admission_required_fields[]" value="monthly_cash_income" class="admission-field-chk" @checked(in_array('monthly_cash_income', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">মাসিক নিজস্ব নগদ আয়</span>
+                    <span class="afm-text-en">Applicant Monthly Cash Income</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
+              </label>
+
+              <label class="afm-row @if(in_array('training_media_source', $reqFields)) is-active @endif" for="afm_training_media_source">
+                <div class="afm-row-left">
+                  <input type="checkbox" id="afm_training_media_source" name="admission_required_fields[]" value="training_media_source" class="admission-field-chk" @checked(in_array('training_media_source', $reqFields))>
+                  <div class="afm-row-text">
+                    <span class="afm-text-bn">যেভাবে জানতে পেরেছেন</span>
+                    <span class="afm-text-en">Media / Information Source</span>
+                  </div>
+                </div>
+                <div class="afm-row-right">
+                  <span class="afm-badge-req">আবশ্যক *</span>
+                  <span class="afm-badge-opt">ঐচ্ছিক</span>
+                </div>
               </label>
             </div>
           </div>
@@ -647,10 +1379,87 @@
 </section>
 
 <script>
+function syncAfmUi() {
+  const checkboxes = document.querySelectorAll('.admission-field-chk');
+  let activeCount = 0;
+
+  checkboxes.forEach(chk => {
+    const row = chk.closest('label.afm-row');
+    if (!row) return;
+    const reqBadge = row.querySelector('.afm-badge-req');
+    const optBadge = row.querySelector('.afm-badge-opt');
+
+    if (chk.checked) {
+      activeCount++;
+      row.classList.add('is-active');
+      if (reqBadge) reqBadge.style.setProperty('display', 'inline-block', 'important');
+      if (optBadge) optBadge.style.setProperty('display', 'none', 'important');
+    } else {
+      row.classList.remove('is-active');
+      if (reqBadge) reqBadge.style.setProperty('display', 'none', 'important');
+      if (optBadge) optBadge.style.setProperty('display', 'inline-block', 'important');
+    }
+  });
+
+  // Update card counters
+  document.querySelectorAll('.afm-card').forEach(card => {
+    const cardChks = card.querySelectorAll('.admission-field-chk');
+    const cardActive = Array.from(cardChks).filter(c => c.checked).length;
+    const badge = card.querySelector('.afm-card-badge');
+    if (badge) {
+      badge.textContent = `${cardActive}/${cardChks.length}`;
+      if (cardActive > 0) {
+        badge.style.background = '#dcfce7';
+        badge.style.color = '#15803d';
+      } else {
+        badge.style.background = '#e2e8f0';
+        badge.style.color = '#475569';
+      }
+    }
+  });
+
+  // Update total counter
+  const totalCounter = document.getElementById('afmTotalCounter');
+  if (totalCounter) {
+    totalCounter.textContent = `📊 মোট ${checkboxes.length} টির মধ্যে ${activeCount} টি ফিল্ড আবশ্যিক`;
+  }
+}
+
+function toggleAfmCard(btn, checked) {
+  const card = btn.closest('.afm-card');
+  if (!card) return;
+  card.querySelectorAll('.admission-field-chk').forEach(chk => {
+    chk.checked = checked;
+  });
+  syncAfmUi();
+}
+
+function filterAfmFields(query) {
+  const q = (query || '').toLowerCase().trim();
+  document.querySelectorAll('.afm-card').forEach(card => {
+    let cardHasVisible = false;
+    card.querySelectorAll('label.afm-row').forEach(row => {
+      const text = row.innerText.toLowerCase();
+      if (!q || text.includes(q)) {
+        row.style.setProperty('display', 'flex', 'important');
+        cardHasVisible = true;
+      } else {
+        row.style.setProperty('display', 'none', 'important');
+      }
+    });
+    if (!q || cardHasVisible) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
 function setAllAdmissionFields(checked) {
   document.querySelectorAll('.admission-field-chk').forEach(chk => {
     chk.checked = checked;
   });
+  syncAfmUi();
 }
 
 function setDefaultAdmissionFields() {
@@ -674,7 +1483,16 @@ function setDefaultAdmissionFields() {
   document.querySelectorAll('.admission-field-chk').forEach(chk => {
     chk.checked = defaults.includes(chk.value);
   });
+  syncAfmUi();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  syncAfmUi();
+  document.querySelectorAll('.admission-field-chk').forEach(chk => {
+    chk.addEventListener('change', syncAfmUi);
+  });
+});
+
 function setPalette(primary, deep, accent, accentDeep) {
   document.getElementById('primaryColorPicker').value = primary;
   document.getElementById('primaryColorInput').value = primary;
