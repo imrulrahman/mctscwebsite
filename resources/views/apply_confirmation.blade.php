@@ -12,22 +12,22 @@
       background: #f1f5f3;
       color: #000;
       font-family: 'SolaimanLipi', 'Kalpurush', 'Nikosh', 'Arial', sans-serif;
-      font-size: 12px;
-      line-height: 1.35;
+      font-size: 12.5px;
+      line-height: 1.4;
       margin: 0;
-      padding: 20px 10px;
+      padding: 24px 10px;
     }
     .page-wrap {
-      max-width: 820px;
+      max-width: 840px;
       margin: 0 auto;
     }
     .no-print-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
+      margin-bottom: 16px;
       background: #fff;
-      padding: 10px 18px;
+      padding: 12px 20px;
       border-radius: 8px;
       border: 1px solid #d1d5db;
       box-shadow: 0 2px 6px rgba(0,0,0,0.06);
@@ -40,10 +40,14 @@
       text-decoration: none;
       font-weight: 600;
       font-size: 13px;
-      padding: 7px 14px;
+      padding: 8px 16px;
       border-radius: 5px;
       background: #eef7f2;
       border: 1px solid #c8e0d4;
+      transition: background 0.15s;
+    }
+    .btn-home:hover {
+      background: #dfefe6;
     }
     .btn-print {
       display: inline-flex;
@@ -52,41 +56,43 @@
       background: #0f5132;
       color: #fff;
       border: none;
-      padding: 8px 20px;
+      padding: 9px 22px;
       border-radius: 5px;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 13.5px;
       cursor: pointer;
       box-shadow: 0 2px 4px rgba(15, 81, 50, 0.2);
+      transition: background 0.15s;
     }
     .btn-print:hover {
       background: #093722;
     }
     .official-form {
       background: #fff;
-      border: 1.5px solid #000;
-      padding: 16px 20px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border: 2px solid #000;
+      padding: 20px 24px 22px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
       position: relative;
     }
     .bismillah {
       text-align: center;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: bold;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
+      letter-spacing: 0.3px;
     }
     .form-header-grid {
       display: grid;
-      grid-template-columns: 160px 1fr 140px;
-      gap: 10px;
+      grid-template-columns: 165px 1fr 140px;
+      gap: 12px;
       align-items: start;
-      margin-bottom: 10px;
-      padding-bottom: 6px;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
       border-bottom: 1.5px solid #000;
     }
     .seal-box {
       border: 1px solid #000;
-      height: 60px;
+      height: 64px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -94,47 +100,57 @@
       font-size: 11px;
       font-weight: bold;
       padding: 4px;
+      background: #fafafa;
     }
     .seal-meta {
       font-size: 11px;
-      margin-top: 5px;
-      line-height: 1.35;
+      margin-top: 6px;
+      line-height: 1.4;
     }
     .header-center {
       text-align: center;
+      padding: 0 6px;
     }
     .sub-head {
-      font-size: 11.5px;
+      font-size: 12px;
       margin-bottom: 2px;
+      color: #111;
     }
     .inst-title {
-      font-size: 17px;
+      font-size: 18px;
       font-weight: 800;
-      margin: 0 0 2px 0;
+      margin: 1px 0 2px 0;
       color: #0f5132;
-      letter-spacing: 0.3px;
+      line-height: 1.25;
+    }
+    .inst-title-en {
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 3px;
+      color: #222;
+      letter-spacing: 0.2px;
     }
     .inst-address {
       font-size: 11px;
       margin-bottom: 2px;
     }
     .inst-phone {
-      font-size: 11px;
+      font-size: 11.5px;
       margin-bottom: 3px;
     }
     .instruction-note {
       font-size: 10.5px;
       font-style: italic;
       color: #333;
-      margin-bottom: 3px;
+      margin-bottom: 4px;
     }
     .code-badge {
       display: inline-block;
       font-weight: bold;
-      font-size: 11.5px;
+      font-size: 12px;
       border: 1px solid #000;
-      padding: 1px 8px;
-      background: #fafafa;
+      padding: 2px 10px;
+      background: #fdfdfd;
     }
     .header-right {
       display: flex;
@@ -144,7 +160,7 @@
     }
     .photo-frame {
       width: 105px;
-      height: 115px;
+      height: 120px;
       border: 1px solid #000;
       display: flex;
       align-items: center;
@@ -161,9 +177,9 @@
     }
     .photo-caption {
       font-size: 9.5px;
-      line-height: 1.25;
-      color: #222;
-      padding: 2px;
+      line-height: 1.3;
+      color: #333;
+      padding: 4px;
     }
     .qr-block {
       display: flex;
@@ -171,22 +187,22 @@
       align-items: center;
     }
     .qr-block img {
-      width: 65px;
-      height: 65px;
+      width: 68px;
+      height: 68px;
       border: 1px solid #000;
       padding: 2px;
       background: #fff;
     }
     .qr-tracking {
-      font-size: 9px;
+      font-size: 9.5px;
       font-family: monospace;
       font-weight: bold;
       margin-top: 1px;
       letter-spacing: 0.5px;
     }
     .field-row {
-      margin-bottom: 5px;
-      font-size: 12px;
+      margin-bottom: 7px;
+      font-size: 12.5px;
     }
     .field-title {
       font-weight: bold;
@@ -194,67 +210,68 @@
     .char-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 2px 0 5px 0;
+      margin: 3px 0 6px 0;
     }
     .char-table td {
       border: 1px solid #000;
       width: 4.166%;
-      height: 18px;
+      height: 21px;
       text-align: center;
       font-family: 'Courier New', Courier, monospace;
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: bold;
       padding: 0;
-      line-height: 18px;
+      line-height: 21px;
+      background: #fff;
     }
     .dob-table {
       border-collapse: collapse;
       display: inline-table;
       vertical-align: middle;
-      margin-left: 6px;
+      margin-left: 8px;
     }
     .dob-table th, .dob-table td {
       border: 1px solid #000;
-      width: 20px;
-      height: 17px;
+      width: 22px;
+      height: 19px;
       text-align: center;
-      font-size: 10.5px;
+      font-size: 11px;
       padding: 0;
     }
     .dob-table th {
       font-weight: normal;
-      background: #fdfdfd;
+      background: #fafafa;
     }
     .dob-table td {
       font-family: 'Courier New', Courier, monospace;
       font-weight: bold;
-      font-size: 12px;
+      font-size: 13px;
     }
     .edu-table {
       width: 100%;
       border-collapse: collapse;
-      margin: 4px 0 6px 0;
+      margin: 5px 0 8px 0;
     }
     .edu-table th, .edu-table td {
       border: 1px solid #000;
-      padding: 3px 6px;
-      font-size: 11px;
+      padding: 4px 6px;
+      font-size: 11.5px;
       text-align: center;
     }
     .edu-table th {
       font-weight: bold;
-      background: #fbfbfb;
+      background: #f8fafc;
     }
     .doc-checklist {
-      font-size: 11px;
-      margin: 4px 0 10px 0;
-      line-height: 1.45;
+      font-size: 11.5px;
+      margin: 6px 0 14px 0;
+      line-height: 1.5;
     }
     .signatures-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1fr;
-      gap: 15px;
-      margin-top: 25px;
+      gap: 20px;
+      margin-top: 32px;
       text-align: center;
     }
     .sig-box {
@@ -264,22 +281,22 @@
       justify-content: flex-end;
     }
     .sig-space {
-      height: 38px;
+      height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 2px;
+      margin-bottom: 3px;
     }
     .sig-space img {
-      max-height: 36px;
+      max-height: 38px;
       max-width: 140px;
       object-fit: contain;
     }
     .sig-border {
       width: 90%;
       border-top: 1px dashed #000;
-      padding-top: 4px;
-      font-size: 11px;
+      padding-top: 5px;
+      font-size: 11.5px;
       font-weight: bold;
     }
 
@@ -304,7 +321,7 @@
       .official-form {
         border: 1.5px solid #000 !important;
         box-shadow: none !important;
-        padding: 8px 14px !important;
+        padding: 10px 18px 12px !important;
         margin: 0 !important;
         width: 100% !important;
       }
@@ -313,7 +330,7 @@
       }
       @page {
         size: A4 portrait;
-        margin: 8mm 10mm;
+        margin: 7mm 10mm 8mm 10mm;
       }
     }
   </style>
@@ -333,6 +350,12 @@
   $dobD = $application->dob ? $application->dob->format('d') : '  ';
   $dobM = $application->dob ? $application->dob->format('m') : '  ';
   $dobY = $application->dob ? $application->dob->format('Y') : '    ';
+
+  // Blood group verification
+  $bloodVal = $application->blood_group ?? null;
+  if (!$bloodVal && in_array(strtoupper(trim($application->ethnicity ?? '')), ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-'])) {
+    $bloodVal = strtoupper(trim($application->ethnicity));
+  }
 @endphp
 
 <div class="page-wrap">
@@ -341,8 +364,8 @@
     <a href="{{ route('home') }}" class="btn-home">
       ← হোম পেজে ফিরে যান (Back to Home)
     </a>
-    <div style="font-size:12px;color:#555;">
-      আবেদন ট্র্যাকিং নং: <strong>{{ $application->tracking_no }}</strong>
+    <div style="font-size:12.5px;color:#475569;">
+      আবেদন ট্র্যাকিং নং: <strong style="color:#0f5132;">{{ $application->tracking_no }}</strong>
     </div>
     <button onclick="window.print()" class="btn-print">
       🖨️ প্রিন্ট করুন (Print Application)
@@ -370,6 +393,7 @@
       <div class="header-center">
         <div class="sub-head">বাংলাদেশ কারিগরি শিক্ষা বোর্ড অনুমোদিত প্রশিক্ষণ কেন্দ্র</div>
         <h1 class="inst-title">{{ $settings->get('institution_name', 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ') }}</h1>
+        <div class="inst-title-en">Mahmudunnabi Chowdhury Technical School and College</div>
         <div class="inst-address">{{ $settings->get('address', 'ছদু চৌধুরী রোড, সাগরিকা, পাহাড়তলী, চট্টগ্রাম - ৪২১৯।') }}</div>
         <div class="inst-phone">মোবাইল নং {{ $settings->get('phone', '01880-919275') }}</div>
         <div class="instruction-note">(শিক্ষাগত যোগ্যতার সনদ অনুসারে স্ব-হস্তে পূরণ করতে হবে)</div>
@@ -398,9 +422,9 @@
 
     {{-- 1. Candidate Name --}}
     <div class="field-row">
-      <div style="display:flex;justify-content:space-between;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
         <span><span class="field-title">১. প্রার্থীর নাম :</span> &nbsp; বাংলা : <b>{{ $application->trainee_name_bn ?: $application->name }}</b></span>
-        <span style="font-size:11px;">(স্পষ্টাক্ষরে) &nbsp; ইংরেজিতে (বড় হাতের অক্ষরে)</span>
+        <span style="font-size:11px;color:#333;">(স্পষ্টাক্ষরে) &nbsp; ইংরেজিতে (বড় হাতের অক্ষরে)</span>
       </div>
       <table class="char-table">
         <tr>
@@ -413,9 +437,9 @@
 
     {{-- 2. Father Name --}}
     <div class="field-row">
-      <div style="display:flex;justify-content:space-between;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
         <span><span class="field-title">২. পিতার নাম :</span> &nbsp; বাংলা : <b>{{ $application->father_name_bn ?: '—' }}</b></span>
-        <span style="font-size:11px;">ইংরেজিতে (বড় হাতের অক্ষরে)</span>
+        <span style="font-size:11px;color:#333;">ইংরেজিতে (বড় হাতের অক্ষরে)</span>
       </div>
       <table class="char-table">
         <tr>
@@ -428,9 +452,9 @@
 
     {{-- 3. Mother Name --}}
     <div class="field-row">
-      <div style="display:flex;justify-content:space-between;">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;">
         <span><span class="field-title">৩. মাতার নাম :</span> &nbsp; বাংলা : <b>{{ $application->mother_name_bn ?: '—' }}</b></span>
-        <span style="font-size:11px;">ইংরেজিতে (বড় হাতের অক্ষরে)</span>
+        <span style="font-size:11px;color:#333;">ইংরেজিতে (বড় হাতের অক্ষরে)</span>
       </div>
       <table class="char-table">
         <tr>
@@ -442,7 +466,7 @@
     </div>
 
     {{-- 4. Guardian Name --}}
-    <div class="field-row" style="margin-bottom:6px;">
+    <div class="field-row" style="margin-bottom:7px;">
       <span class="field-title">৪. অভিভাবকের নাম (পিতার অবর্তমানে) :</span>
       <span>{{ $application->emergency_contact_name ?: ($application->father_name_bn ?: $application->father_name_en ?: '—') }}</span>
     </div>
@@ -452,26 +476,26 @@
       <span class="field-title">৫. বর্তমান ঠিকানা :</span>
       <span>{{ $application->pres_address }}, থানা: {{ $application->pres_upazilla }}, জেলা: {{ $application->pres_district }}</span>
     </div>
-    <div class="field-row" style="display:flex;justify-content:space-between;margin-bottom:6px;padding-left:14px;">
+    <div class="field-row" style="display:flex;justify-content:space-between;margin-bottom:7px;padding-left:14px;">
       <span>মোবাইল নম্বর : <b>{{ $application->contact_no ?: $application->phone }}</b></span>
       <span>অভিভাবকের মোবাইল নম্বর : <b>{{ $application->emergency_contact ?: '—' }}</b></span>
     </div>
 
     {{-- 6. Permanent Address --}}
-    <div class="field-row" style="margin-bottom:6px;">
+    <div class="field-row" style="margin-bottom:7px;">
       <span class="field-title">৬. স্থায়ী ঠিকানা :</span>
       <span>{{ $application->perm_address }}, থানা: {{ $application->perm_upazilla }}, জেলা: {{ $application->perm_district }}</span>
     </div>
 
     {{-- 7, 8, 9. Nationality, Religion, Blood Group --}}
-    <div class="field-row" style="display:flex;gap:35px;margin-bottom:6px;">
+    <div class="field-row" style="display:flex;gap:40px;margin-bottom:7px;">
       <span><span class="field-title">৭. জাতীয়তা :</span> <b>বাংলাদেশী</b></span>
       <span><span class="field-title">৮. ধর্ম :</span> <b>{{ $application->religion ?: '—' }}</b></span>
-      <span><span class="field-title">৯. রক্তের গ্রুপ :</span> <b>{{ $application->ethnicity ?: '—' }}</b></span>
+      <span><span class="field-title">৯. রক্তের গ্রুপ :</span> <b>{{ $bloodVal ?: '—' }}</b></span>
     </div>
 
     {{-- 10. Date of Birth --}}
-    <div class="field-row" style="display:flex;align-items:center;margin-bottom:6px;">
+    <div class="field-row" style="display:flex;align-items:center;margin-bottom:7px;">
       <span class="field-title">১০. জন্ম তারিখ (সনদপত্র অনুসারে) :</span>
       <table class="dob-table">
         <tr>
@@ -493,34 +517,41 @@
     </div>
 
     {{-- 11. NID / Birth Reg --}}
-    <div class="field-row" style="margin-bottom:6px;">
+    <div class="field-row" style="margin-bottom:7px;">
       <span class="field-title">১১. জাতীয় পরিচয়পত্র / জন্ম নিবন্ধন নং :</span>
-      <b style="letter-spacing:0.8px;">{{ $application->ident_no ?: '—' }}</b>
+      <b style="letter-spacing:1px;font-family:monospace;font-size:13px;">{{ $application->ident_no ?: '—' }}</b>
     </div>
 
     {{-- 12. Educational Qualifications Table --}}
-    <div class="field-row" style="margin-bottom:2px;">
+    <div class="field-row" style="margin-bottom:3px;">
       <span class="field-title">১২. শিক্ষাগত যোগ্যতা :</span>
       <table class="edu-table">
         <thead>
           <tr>
-            <th style="width:22%;">পরীক্ষা/শ্রেণী</th>
-            <th style="width:32%;">শিক্ষা প্রতিষ্ঠান/বোর্ড</th>
+            <th style="width:20%;">পরীক্ষা / শ্রেণী</th>
+            <th style="width:34%;">শিক্ষা প্রতিষ্ঠান / বোর্ড</th>
             <th style="width:14%;">পাশের সন</th>
-            <th style="width:16%;">জিপিএ/ মোট নম্বর</th>
-            <th style="width:16%;">বিভাগ (প্রযোজ্য ক্ষেত্রে)</th>
+            <th style="width:16%;">জিপিএ / বিভাগ</th>
+            <th style="width:16%;">মন্তব্য</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td><b>{{ $application->education_level ?: '—' }}</b></td>
+            <td style="height:22px;"><b>{{ $application->education_level ?: '—' }}</b></td>
             <td>—</td>
             <td>—</td>
             <td>—</td>
             <td>—</td>
           </tr>
           <tr>
-            <td style="height:17px;"></td>
+            <td style="height:22px;"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td style="height:22px;"></td>
             <td></td>
             <td></td>
             <td></td>
@@ -531,14 +562,14 @@
     </div>
 
     {{-- 13. Self Employed / Industry --}}
-    <div class="field-row" style="margin-bottom:6px;">
+    <div class="field-row" style="margin-bottom:7px;">
       <span class="field-title">১৩. স্ব-নিয়োজিত/ কর্মরত শিল্পকারখানার নাম, পদ ও ঠিকানা :</span>
       <span>{{ $application->employment_status ?: 'প্রযোজ্য নয়' }}</span>
     </div>
 
     {{-- 14. Payment Receipt & Date --}}
-    <div class="field-row" style="display:flex;justify-content:space-between;margin-bottom:6px;">
-      <span><span class="field-title">১৪. টাকা প্রদানের রশিদ নং :</span> <b>{{ $application->tracking_no }}</b></span>
+    <div class="field-row" style="display:flex;justify-content:space-between;margin-bottom:7px;">
+      <span><span class="field-title">১৪. টাকা প্রদানের রশিদ নং :</span> <b style="letter-spacing:0.5px;">{{ $application->tracking_no }}</b></span>
       <span><span class="field-title">তারিখ :</span> <b>{{ $application->created_at->format('d/m/Y') }}</b></span>
     </div>
 
