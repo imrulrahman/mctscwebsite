@@ -2,344 +2,580 @@
 <html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <title>Application Print · {{ $application->tracking_no }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trainee Application Print · {{ $application->tracking_no }}</title>
   <style>
-    @page {
-      size: A4 portrait;
-      margin: 12mm 15mm;
+    * {
+      box-sizing: border-box;
     }
     body {
-      font-family: system-ui, -apple-system, Arial, sans-serif;
+      background: #f1f5f3;
+      color: #000;
+      font-family: 'SolaimanLipi', 'Kalpurush', 'Nikosh', 'Arial', sans-serif;
       font-size: 12px;
       line-height: 1.35;
-      color: #000;
-      background: #fff;
       margin: 0;
-      padding: 0;
+      padding: 20px 10px;
     }
-    .print-container {
-      max-width: 100%;
+    .page-wrap {
+      max-width: 820px;
       margin: 0 auto;
     }
-    .header-table {
-      width: 100%;
-      border-bottom: 2px solid #000;
-      padding-bottom: 8px;
-      margin-bottom: 12px;
-    }
-    .header-logo {
-      width: 70px;
-      height: 70px;
-      object-fit: contain;
-    }
-    .header-center {
-      text-align: center;
-    }
-    .header-center h1 {
-      margin: 0;
-      font-size: 18px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    .header-center p {
-      margin: 2px 0 0;
-      font-size: 11px;
-    }
-    .form-title-badge {
-      display: inline-block;
-      background: #000;
-      color: #fff;
-      padding: 3px 14px;
-      font-size: 12px;
-      font-weight: bold;
-      border-radius: 3px;
-      margin-top: 5px;
-    }
-    .tracking-table {
-      width: 100%;
-      margin-bottom: 10px;
-      font-size: 12px;
-    }
-    .box-title {
-      background: #e5e7eb;
-      font-weight: bold;
-      padding: 4px 8px;
-      font-size: 11px;
-      border: 1px solid #000;
-      border-bottom: none;
-      margin-top: 8px;
-      text-transform: uppercase;
-    }
-    .data-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-bottom: 6px;
-    }
-    .data-table th, .data-table td {
-      border: 1px solid #000;
-      padding: 5px 8px;
-      font-size: 11px;
-      vertical-align: middle;
-    }
-    .data-table th {
-      background: #f3f4f6;
-      width: 26%;
-      text-align: left;
-    }
-    .photo-cell {
-      width: 105px;
-      text-align: center;
-      padding: 4px;
-    }
-    .photo-cell img {
-      width: 95px;
-      height: 115px;
-      object-fit: cover;
-      border: 1px solid #000;
-    }
-    .sig-cell {
-      height: 45px;
-      text-align: center;
-      vertical-align: bottom;
-    }
-    .sig-cell img {
-      max-height: 40px;
-      max-width: 130px;
-      object-fit: contain;
-    }
-    .signatures-table {
-      width: 100%;
-      margin-top: 30px;
-      border-collapse: collapse;
-    }
-    .signatures-table td {
-      width: 33.33%;
-      text-align: center;
-      vertical-align: bottom;
-      font-size: 11px;
-      padding-top: 40px;
-    }
-    .sig-line {
-      border-top: 1px solid #000;
-      width: 80%;
-      margin: 0 auto 4px;
-    }
     .no-print-bar {
-      background: #0f5132;
-      color: #fff;
-      padding: 10px 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 15px;
+      background: #fff;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
     }
-    .no-print-bar button {
-      background: #c59b27;
-      color: #000;
+    .btn-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #0f5132;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+      padding: 7px 14px;
+      border-radius: 5px;
+      background: #eef7f2;
+      border: 1px solid #c8e0d4;
+    }
+    .btn-print {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #0f5132;
+      color: #fff;
       border: none;
-      font-weight: bold;
-      padding: 8px 18px;
-      border-radius: 4px;
+      padding: 8px 20px;
+      border-radius: 5px;
+      font-weight: 600;
+      font-size: 13px;
       cursor: pointer;
+      box-shadow: 0 2px 4px rgba(15, 81, 50, 0.2);
     }
+    .btn-print:hover {
+      background: #093722;
+    }
+    .official-form {
+      background: #fff;
+      border: 1.5px solid #000;
+      padding: 16px 20px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      position: relative;
+    }
+    .bismillah {
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      margin-bottom: 3px;
+    }
+    .form-header-grid {
+      display: grid;
+      grid-template-columns: 160px 1fr 140px;
+      gap: 10px;
+      align-items: start;
+      margin-bottom: 10px;
+      padding-bottom: 6px;
+      border-bottom: 1.5px solid #000;
+    }
+    .seal-box {
+      border: 1px solid #000;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 11px;
+      font-weight: bold;
+      padding: 4px;
+    }
+    .seal-meta {
+      font-size: 11px;
+      margin-top: 5px;
+      line-height: 1.35;
+    }
+    .header-center {
+      text-align: center;
+    }
+    .sub-head {
+      font-size: 11.5px;
+      margin-bottom: 2px;
+    }
+    .inst-title {
+      font-size: 17px;
+      font-weight: 800;
+      margin: 0 0 2px 0;
+      color: #0f5132;
+      letter-spacing: 0.3px;
+    }
+    .inst-address {
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+    .inst-phone {
+      font-size: 11px;
+      margin-bottom: 3px;
+    }
+    .instruction-note {
+      font-size: 10.5px;
+      font-style: italic;
+      color: #333;
+      margin-bottom: 3px;
+    }
+    .code-badge {
+      display: inline-block;
+      font-weight: bold;
+      font-size: 11.5px;
+      border: 1px solid #000;
+      padding: 1px 8px;
+      background: #fafafa;
+    }
+    .header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .photo-frame {
+      width: 105px;
+      height: 115px;
+      border: 1px solid #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .photo-caption {
+      font-size: 9.5px;
+      line-height: 1.25;
+      color: #222;
+      padding: 2px;
+    }
+    .qr-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .qr-block img {
+      width: 65px;
+      height: 65px;
+      border: 1px solid #000;
+      padding: 2px;
+      background: #fff;
+    }
+    .qr-tracking {
+      font-size: 9px;
+      font-family: monospace;
+      font-weight: bold;
+      margin-top: 1px;
+      letter-spacing: 0.5px;
+    }
+    .field-row {
+      margin-bottom: 5px;
+      font-size: 12px;
+    }
+    .field-title {
+      font-weight: bold;
+    }
+    .char-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 2px 0 5px 0;
+    }
+    .char-table td {
+      border: 1px solid #000;
+      width: 4.166%;
+      height: 18px;
+      text-align: center;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 0;
+      line-height: 18px;
+    }
+    .dob-table {
+      border-collapse: collapse;
+      display: inline-table;
+      vertical-align: middle;
+      margin-left: 6px;
+    }
+    .dob-table th, .dob-table td {
+      border: 1px solid #000;
+      width: 20px;
+      height: 17px;
+      text-align: center;
+      font-size: 10.5px;
+      padding: 0;
+    }
+    .dob-table th {
+      font-weight: normal;
+      background: #fdfdfd;
+    }
+    .dob-table td {
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      font-size: 12px;
+    }
+    .edu-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 4px 0 6px 0;
+    }
+    .edu-table th, .edu-table td {
+      border: 1px solid #000;
+      padding: 3px 6px;
+      font-size: 11px;
+      text-align: center;
+    }
+    .edu-table th {
+      font-weight: bold;
+      background: #fbfbfb;
+    }
+    .doc-checklist {
+      font-size: 11px;
+      margin: 4px 0 10px 0;
+      line-height: 1.45;
+    }
+    .signatures-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 15px;
+      margin-top: 25px;
+      text-align: center;
+    }
+    .sig-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+    }
+    .sig-space {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2px;
+    }
+    .sig-space img {
+      max-height: 36px;
+      max-width: 140px;
+      object-fit: contain;
+    }
+    .sig-border {
+      width: 90%;
+      border-top: 1px dashed #000;
+      padding-top: 4px;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
     @media print {
-      .no-print-bar {
+      .no-print, .no-print * {
         display: none !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        visibility: hidden !important;
+      }
+      body {
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .page-wrap {
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .official-form {
+        border: 1.5px solid #000 !important;
+        box-shadow: none !important;
+        padding: 8px 14px !important;
+        margin: 0 !important;
+        width: 100% !important;
+      }
+      .inst-title {
+        color: #000 !important;
+      }
+      @page {
+        size: A4 portrait;
+        margin: 8mm 10mm;
       }
     }
   </style>
 </head>
 <body>
 
-<div class="no-print-bar">
-  <span>Trainee Application: <strong>{{ $application->tracking_no }}</strong> ({{ $application->trainee_name_en }})</span>
-  <div>
-    <button onclick="window.print()">🖨️ Print Form</button>
+@php
+  $nameEn = strtoupper(trim($application->trainee_name_en ?: $application->name ?: ''));
+  $nameChars = array_pad(mb_str_split($nameEn), 24, '');
+
+  $fatherEn = strtoupper(trim($application->father_name_en ?: ''));
+  $fatherChars = array_pad(mb_str_split($fatherEn), 24, '');
+
+  $motherEn = strtoupper(trim($application->mother_name_en ?: ''));
+  $motherChars = array_pad(mb_str_split($motherEn), 24, '');
+
+  $dobD = $application->dob ? $application->dob->format('d') : '  ';
+  $dobM = $application->dob ? $application->dob->format('m') : '  ';
+  $dobY = $application->dob ? $application->dob->format('Y') : '    ';
+@endphp
+
+<div class="page-wrap">
+  {{-- Buttons Bar (Hidden Completely During Print) --}}
+  <div class="no-print no-print-bar">
+    <a href="{{ route('admin.applications.show', $application) }}" class="btn-back">
+      ← Back to Application View
+    </a>
+    <div style="font-size:12px;color:#555;">
+      Tracking No: <strong>{{ $application->tracking_no }}</strong> | Status: <strong>{{ strtoupper($application->status) }}</strong>
+    </div>
+    <button onclick="window.print()" class="btn-print">
+      🖨️ প্রিন্ট করুন (Print Application)
+    </button>
   </div>
-</div>
 
-<div class="print-container">
-  <table class="header-table">
-    <tr>
-      <td style="width: 80px; text-align: left;">
-        @php
-          $logoSrc = storage_asset($settings->get('site_logo'), 'assets/MC Logo.png');
-        @endphp
-        <img class="header-logo" src="{{ $logoSrc }}" alt="Logo">
-      </td>
-      <td class="header-center">
-        <h1>{{ $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School and College') }}</h1>
-        <p>{{ $settings->get('address', 'Chattogram, Bangladesh') }} · Phone: {{ $settings->get('phone') }} · Email: {{ $settings->get('email') }}</p>
-        <span class="form-title-badge">ভর্তি আবেদন ফরম (TRAINEE ADMISSION APPLICATION FORM)</span>
-      </td>
-      <td style="width: 80px; text-align: right; vertical-align: top;">
-        <div style="border: 1px solid #000; padding: 4px; font-size: 10px; text-align: center;">
-          Status:<br><strong>{{ strtoupper($application->status) }}</strong>
+  {{-- Official Form Container --}}
+  <div class="official-form">
+    <div class="bismillah">বিসমিল্লাহির রাহমানির রাহিম</div>
+
+    <div class="form-header-grid">
+      {{-- Header Left: Seal, Siblings, Trade, Date --}}
+      <div>
+        <div class="seal-box">
+          শিক্ষা প্রতিষ্ঠানের<br>সীলমোহর
         </div>
-      </td>
-    </tr>
-  </table>
+        <div class="seal-meta">
+          <div>ভাই-বোন সংখ্যা :- <b>{{ $application->household_members ?? '—' }}</b></div>
+          <div>ট্রেড :- <b>{{ $application->course }}</b></div>
+          <div style="margin-top:2px;">ভর্তির তারিখঃ <b>{{ $application->created_at->format('d/m/Y') }}</b></div>
+        </div>
+      </div>
 
-  <table class="tracking-table">
-    <tr>
-      <td><strong>Application ID:</strong> <span style="font-size: 13px; font-family: monospace; font-weight: bold;">{{ $application->tracking_no }}</span></td>
-      <td style="text-align: right;"><strong>Submission Date:</strong> {{ $application->created_at->format('d/m/Y (h:i A)') }}</td>
-    </tr>
-  </table>
+      {{-- Header Center: Institute Details --}}
+      <div class="header-center">
+        <div class="sub-head">বাংলাদেশ কারিগরি শিক্ষা বোর্ড অনুমোদিত প্রশিক্ষণ কেন্দ্র</div>
+        <h1 class="inst-title">{{ $settings->get('institution_name', 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ') }}</h1>
+        <div class="inst-address">{{ $settings->get('address', 'ছদু চৌধুরী রোড, সাগরিকা, পাহাড়তলী, চট্টগ্রাম - ৪২১৯।') }}</div>
+        <div class="inst-phone">মোবাইল নং {{ $settings->get('phone', '01880-919275') }}</div>
+        <div class="instruction-note">(শিক্ষাগত যোগ্যতার সনদ অনুসারে স্ব-হস্তে পূরণ করতে হবে)</div>
+        <div class="code-badge">প্রতিষ্ঠান কোড : 70102</div>
+      </div>
 
-  <!-- 1. COURSE & BASIC -->
-  <div class="box-title">১. কোর্স ও ট্রেড সংক্রান্ত তথ্য (Course & Trade)</div>
-  <table class="data-table">
-    <tr>
-      <th>Applied Trade / Course:</th>
-      <td @if(!$application->preferred_shift) colspan="3" @endif><strong>{{ $application->course }}</strong></td>
-      @if($application->preferred_shift)
-        <th>Preferred Shift:</th>
-        <td>{{ $application->preferred_shift }}</td>
-      @endif
-      <td rowspan="4" class="photo-cell">
-        @if($application->photo)
-          <img src="{{ storage_asset($application->photo) }}" alt="Trainee Photo">
-        @else
-          <div style="width: 95px; height: 115px; border: 1px dashed #000; display: flex; align-items: center; justify-content: center; font-size: 10px;">Passport Photo</div>
-        @endif
-      </td>
-    </tr>
-    <tr>
-      <th>Trainee Name (English):</th>
-      <td><strong>{{ $application->trainee_name_en ?: $application->name }}</strong></td>
-      <th>Trainee Name (বাংলা):</th>
-      <td>{{ $application->trainee_name_bn ?: '—' }}</td>
-    </tr>
-    <tr>
-      <th>Date of Birth:</th>
-      <td>{{ $application->dob ? $application->dob->format('d/m/Y') : '—' }}</td>
-      <th>Gender / Sex:</th>
-      <td>{{ $application->sex }} (PWD: {{ $application->pwd }})</td>
-    </tr>
-    <tr>
-      <th>Identification ({{ $application->ident_type }}):</th>
-      <td>
-        <strong>{{ $application->ident_no }}</strong>
-        @if($application->ident_doc)
-          <span style="font-size: 10px; color: #0f5132; font-weight: 600;">(Doc Attached ✓)</span>
-        @endif
-      </td>
-      <th>Contact Mobile:</th>
-      <td><strong>{{ $application->contact_no ?: $application->phone }}</strong></td>
-    </tr>
-  </table>
-
-  <!-- 2. PARENTAL & HOUSEHOLD -->
-  <div class="box-title">২. পিতা, মাতা ও পারিবারিক তথ্য (Parental & Household Profile)</div>
-  <table class="data-table">
-    <tr>
-      <th>Father's Name (English):</th>
-      <td>{{ $application->father_name_en }}</td>
-      <th>Father's Name (বাংলা):</th>
-      <td>{{ $application->father_name_bn }}</td>
-    </tr>
-    <tr>
-      <th>Mother's Name (English):</th>
-      <td>{{ $application->mother_name_en }}</td>
-      <th>Mother's Name (বাংলা):</th>
-      <td>{{ $application->mother_name_bn }}</td>
-    </tr>
-    <tr>
-      <th>Emergency Contact:</th>
-      <td>{{ $application->emergency_contact ?: '—' }}</td>
-      <th>Household Members:</th>
-      <td>{{ $application->household_members ?: '—' }} Persons</td>
-    </tr>
-    <tr>
-      <th>Source of Family Income:</th>
-      <td>{{ $application->income_source ?: '—' }}</td>
-      <th>Monthly Income:</th>
-      <td>{{ $application->monthly_income ? number_format($application->monthly_income, 2) . ' BDT' : '—' }}</td>
-    </tr>
-    <tr>
-      <th>Annual Household Income:</th>
-      <td><strong>{{ $application->yearly_income ? number_format($application->yearly_income, 2) . ' BDT' : ($application->monthly_income ? number_format($application->monthly_income * 12, 2) . ' BDT' : '—') }}</strong></td>
-      <th>Has Bank Account?:</th>
-      <td>{{ $application->has_bank_account ?: 'No' }}</td>
-    </tr>
-  </table>
-
-  <!-- 3. ADDRESSES & DEMOGRAPHICS -->
-  <div class="box-title">৩. ঠিকানা ও সামাজিক তথ্য (Address & Socio-Demographics)</div>
-  <table class="data-table">
-    <tr>
-      <th>স্থায়ী ঠিকানা (Permanent):</th>
-      <td colspan="3">
-        {{ $application->perm_address }}, Upazilla/Thana: {{ $application->perm_upazilla }}, District: {{ $application->perm_district }}, Division: {{ $application->perm_division }} ({{ $application->perm_area_type }})
-      </td>
-    </tr>
-    <tr>
-      <th>বর্তমান ঠিকানা (Present):</th>
-      <td colspan="3">
-        {{ $application->pres_address }}, Upazilla/Thana: {{ $application->pres_upazilla }}, District: {{ $application->pres_district }}, Division: {{ $application->pres_division }}
-      </td>
-    </tr>
-    <tr>
-      <th>Religion:</th>
-      <td>{{ $application->religion }}</td>
-      <th>Ethnicity (নৃগোষ্ঠী):</th>
-      <td>{{ $application->ethnicity }}</td>
-    </tr>
-    <tr>
-      <th>Educational Qualification:</th>
-      <td>{{ $application->education_level ?: $application->education }}</td>
-      <th>Marital Status:</th>
-      <td>{{ $application->marital_status ?: 'Single' }}</td>
-    </tr>
-  </table>
-
-  <!-- 4. SKILLS & PAST EMPLOYMENT -->
-  <div class="box-title">৪. পূর্ব অভিজ্ঞতা ও কর্মসংস্থান (Skills & Pre-Training Status)</div>
-  <table class="data-table">
-    <tr>
-      <th>Received Past Skills Training?:</th>
-      <td>{{ $application->past_training ?: 'No' }}</td>
-      <th>Pre-Training Employment:</th>
-      <td>{{ $application->employment_status ?: 'Unemployed' }}</td>
-    </tr>
-    <tr>
-      <th>Monthly Cash Income:</th>
-      <td>{{ $application->monthly_cash_income ? number_format($application->monthly_cash_income, 2) . ' BDT' : '0.00 BDT' }}</td>
-      <th>Heard About Training Via:</th>
-      <td>{{ $application->training_media_source ?: 'College Notice' }}</td>
-    </tr>
-  </table>
-
-  <!-- DECLARATION & SIGNATURES -->
-  <p style="font-size: 10px; margin: 12px 0 0; text-align: justify; line-height: 1.4;">
-    <strong>অঙ্গীকারনামা:</strong> আমি এই মর্মে ঘোষণা করছি যে, এই ভর্তি আবেদনপত্রে প্রদত্ত সকল তথ্য ও বিবরণ আমার জ্ঞান ও বিশ্বাস মতে সম্পূর্ণ সত্য ও সঠিক। কোনো অসত্য বা ভুল প্রমাণিত হলে আমার আবেদন/ভর্তি বাতিল বলিয়া গণ্য হইবে।
-  </p>
-
-  <table class="signatures-table">
-    <tr>
-      <td>
-        <div class="sig-cell">
-          @if($application->signature_photo)
-            <img src="{{ storage_asset($application->signature_photo) }}" alt="Trainee Signature">
+      {{-- Header Right: Photo Frame & Auto-generated QR Code --}}
+      <div class="header-right">
+        <div class="photo-frame">
+          @if($application->photo)
+            <img src="{{ storage_asset($application->photo) }}" alt="Trainee Photo">
+          @else
+            <div class="photo-caption">
+              পাসপোর্ট আকারের<br>দুই কপি ছবি<br>নাম সহ সত্যায়িত
+            </div>
           @endif
         </div>
-        <div class="sig-line"></div>
-        আবেদনকারীর স্বাক্ষর ও তারিখ<br>(Applicant's Signature)
-      </td>
-      <td>
-        <div class="sig-cell"></div>
-        <div class="sig-line"></div>
-        যাচাইকারী কর্মকর্তার স্বাক্ষর<br>(Verified By)
-      </td>
-      <td>
-        <div class="sig-cell"></div>
-        <div class="sig-line"></div>
-        অধ্যক্ষ / ভর্তি ইনচার্জ<br>(Principal / In-Charge)
-      </td>
-    </tr>
-  </table>
+        <div class="qr-block">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ urlencode(url('/?tracking=' . $application->tracking_no)) }}" alt="QR Code">
+          <span class="qr-tracking">{{ $application->tracking_no }}</span>
+        </div>
+      </div>
+    </div>
+
+    {{-- Form Fields --}}
+
+    {{-- 1. Candidate Name --}}
+    <div class="field-row">
+      <div style="display:flex;justify-content:space-between;">
+        <span><span class="field-title">১. প্রার্থীর নাম :</span> &nbsp; বাংলা : <b>{{ $application->trainee_name_bn ?: $application->name }}</b></span>
+        <span style="font-size:11px;">(স্পষ্টাক্ষরে) &nbsp; ইংরেজিতে (বড় হাতের অক্ষরে)</span>
+      </div>
+      <table class="char-table">
+        <tr>
+          @for($i = 0; $i < 24; $i++)
+            <td>{{ $nameChars[$i] ?? '' }}</td>
+          @endfor
+        </tr>
+      </table>
+    </div>
+
+    {{-- 2. Father Name --}}
+    <div class="field-row">
+      <div style="display:flex;justify-content:space-between;">
+        <span><span class="field-title">২. পিতার নাম :</span> &nbsp; বাংলা : <b>{{ $application->father_name_bn ?: '—' }}</b></span>
+        <span style="font-size:11px;">ইংরেজিতে (বড় হাতের অক্ষরে)</span>
+      </div>
+      <table class="char-table">
+        <tr>
+          @for($i = 0; $i < 24; $i++)
+            <td>{{ $fatherChars[$i] ?? '' }}</td>
+          @endfor
+        </tr>
+      </table>
+    </div>
+
+    {{-- 3. Mother Name --}}
+    <div class="field-row">
+      <div style="display:flex;justify-content:space-between;">
+        <span><span class="field-title">৩. মাতার নাম :</span> &nbsp; বাংলা : <b>{{ $application->mother_name_bn ?: '—' }}</b></span>
+        <span style="font-size:11px;">ইংরেজিতে (বড় হাতের অক্ষরে)</span>
+      </div>
+      <table class="char-table">
+        <tr>
+          @for($i = 0; $i < 24; $i++)
+            <td>{{ $motherChars[$i] ?? '' }}</td>
+          @endfor
+        </tr>
+      </table>
+    </div>
+
+    {{-- 4. Guardian Name --}}
+    <div class="field-row" style="margin-bottom:6px;">
+      <span class="field-title">৪. অভিভাবকের নাম (পিতার অবর্তমানে) :</span>
+      <span>{{ $application->emergency_contact_name ?: ($application->father_name_bn ?: $application->father_name_en ?: '—') }}</span>
+    </div>
+
+    {{-- 5. Present Address & Mobile --}}
+    <div class="field-row" style="margin-bottom:4px;">
+      <span class="field-title">৫. বর্তমান ঠিকানা :</span>
+      <span>{{ $application->pres_address }}, থানা: {{ $application->pres_upazilla }}, জেলা: {{ $application->pres_district }}</span>
+    </div>
+    <div class="field-row" style="display:flex;justify-content:space-between;margin-bottom:6px;padding-left:14px;">
+      <span>মোবাইল নম্বর : <b>{{ $application->contact_no ?: $application->phone }}</b></span>
+      <span>অভিভাবকের মোবাইল নম্বর : <b>{{ $application->emergency_contact ?: '—' }}</b></span>
+    </div>
+
+    {{-- 6. Permanent Address --}}
+    <div class="field-row" style="margin-bottom:6px;">
+      <span class="field-title">৬. স্থায়ী ঠিকানা :</span>
+      <span>{{ $application->perm_address }}, থানা: {{ $application->perm_upazilla }}, জেলা: {{ $application->perm_district }}</span>
+    </div>
+
+    {{-- 7, 8, 9. Nationality, Religion, Blood Group --}}
+    <div class="field-row" style="display:flex;gap:35px;margin-bottom:6px;">
+      <span><span class="field-title">৭. জাতীয়তা :</span> <b>বাংলাদেশী</b></span>
+      <span><span class="field-title">৮. ধর্ম :</span> <b>{{ $application->religion ?: '—' }}</b></span>
+      <span><span class="field-title">৯. রক্তের গ্রুপ :</span> <b>{{ $application->ethnicity ?: '—' }}</b></span>
+    </div>
+
+    {{-- 10. Date of Birth --}}
+    <div class="field-row" style="display:flex;align-items:center;margin-bottom:6px;">
+      <span class="field-title">১০. জন্ম তারিখ (সনদপত্র অনুসারে) :</span>
+      <table class="dob-table">
+        <tr>
+          <th colspan="2">দিন</th>
+          <th colspan="2">মাস</th>
+          <th colspan="4">বছর</th>
+        </tr>
+        <tr>
+          <td>{{ $dobD[0] ?? '' }}</td>
+          <td>{{ $dobD[1] ?? '' }}</td>
+          <td>{{ $dobM[0] ?? '' }}</td>
+          <td>{{ $dobM[1] ?? '' }}</td>
+          <td>{{ $dobY[0] ?? '' }}</td>
+          <td>{{ $dobY[1] ?? '' }}</td>
+          <td>{{ $dobY[2] ?? '' }}</td>
+          <td>{{ $dobY[3] ?? '' }}</td>
+        </tr>
+      </table>
+    </div>
+
+    {{-- 11. NID / Birth Reg --}}
+    <div class="field-row" style="margin-bottom:6px;">
+      <span class="field-title">১১. জাতীয় পরিচয়পত্র / জন্ম নিবন্ধন নং :</span>
+      <b style="letter-spacing:0.8px;">{{ $application->ident_no ?: '—' }}</b>
+    </div>
+
+    {{-- 12. Educational Qualifications Table --}}
+    <div class="field-row" style="margin-bottom:2px;">
+      <span class="field-title">১২. শিক্ষাগত যোগ্যতা :</span>
+      <table class="edu-table">
+        <thead>
+          <tr>
+            <th style="width:22%;">পরীক্ষা/শ্রেণী</th>
+            <th style="width:32%;">শিক্ষা প্রতিষ্ঠান/বোর্ড</th>
+            <th style="width:14%;">পাশের সন</th>
+            <th style="width:16%;">জিপিএ/ মোট নম্বর</th>
+            <th style="width:16%;">বিভাগ (প্রযোজ্য ক্ষেত্রে)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><b>{{ $application->education_level ?: '—' }}</b></td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td style="height:17px;"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    {{-- 13. Self Employed / Industry --}}
+    <div class="field-row" style="margin-bottom:6px;">
+      <span class="field-title">১৩. স্ব-নিয়োজিত/ কর্মরত শিল্পকারখানার নাম, পদ ও ঠিকানা :</span>
+      <span>{{ $application->employment_status ?: 'প্রযোজ্য নয়' }}</span>
+    </div>
+
+    {{-- 14. Payment Receipt & Date --}}
+    <div class="field-row" style="display:flex;justify-content:space-between;margin-bottom:6px;">
+      <span><span class="field-title">১৪. টাকা প্রদানের রশিদ নং :</span> <b>{{ $application->tracking_no }}</b></span>
+      <span><span class="field-title">তারিখ :</span> <b>{{ $application->created_at->format('d/m/Y') }}</b></span>
+    </div>
+
+    {{-- 15. Attachments Checklist --}}
+    <div class="doc-checklist">
+      <span class="field-title">১৫. সংযোজন যোগ্য :</span> &nbsp;
+      <span>ক. পরীক্ষা পাশের সনদপত্রের ফটোকপি।</span> &nbsp;&nbsp;&nbsp;&nbsp;
+      <span>খ. জন্ম নিবন্ধন সনদ / এনআইডি কার্ড এর ফটোকপি।</span> &nbsp;&nbsp;&nbsp;&nbsp;
+      <span>গ. সদ্যতোলা পাসপোর্ট আকারের ২ কপি রঙিন ছবি।</span>
+    </div>
+
+    {{-- Signatures Row --}}
+    <div class="signatures-grid">
+      <div class="sig-box">
+        <div class="sig-space">
+          @if($application->signature_photo)
+            <img src="{{ storage_asset($application->signature_photo) }}" alt="Applicant Signature">
+          @endif
+        </div>
+        <div class="sig-border">
+          আবেদনকারীর স্বাক্ষর ও তারিখ
+        </div>
+      </div>
+      <div class="sig-box">
+        <div class="sig-space"></div>
+        <div class="sig-border">
+          যাচাইকারীর স্বাক্ষর ও তারিখ
+        </div>
+      </div>
+      <div class="sig-box">
+        <div class="sig-space"></div>
+        <div class="sig-border">
+          অনুমোদনকারীর স্বাক্ষর ও তারিখ
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 </body>
