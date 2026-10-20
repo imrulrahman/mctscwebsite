@@ -85,11 +85,18 @@ Route::get('/storage/{path}', function (string $path) {
     $candidates = [
         storage_path('app/public/' . $cleanPath),
         public_path('storage/' . $cleanPath),
+        base_path('storage/app/public/' . $cleanPath),
         '/home/mctscedu/public_html/storage/' . $cleanPath,
+        '/home/mctscedu/storage/app/public/' . $cleanPath,
+        storage_path('app/' . $cleanPath),
     ];
     foreach ($candidates as $filePath) {
         if (file_exists($filePath) && !is_dir($filePath)) {
-            return response()->file($filePath);
+            $mime = @mime_content_type($filePath) ?: 'application/octet-stream';
+            return response()->file($filePath, [
+                'Content-Type' => $mime,
+                'Cache-Control' => 'public, max-age=86400',
+            ]);
         }
     }
     abort(404);
@@ -113,6 +120,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/applications/create', [InboxController::class, 'createApplication'])->name('applications.create');
         Route::post('/applications', [InboxController::class, 'storeApplication'])->name('applications.store');
         Route::get('/applications/{application}', [InboxController::class, 'showApplication'])->name('applications.show');
+        Route::get('/applications/{application}/file/{type}', [InboxController::class, 'serveFile'])->name('applications.file');
         Route::post('/applications/{application}/approve', [InboxController::class, 'approveApplication'])->name('applications.approve');
         Route::post('/applications/{application}/payment', [InboxController::class, 'recordPayment'])->name('applications.payment');
         Route::get('/applications/{application}/print', [InboxController::class, 'printApplication'])->name('applications.print');

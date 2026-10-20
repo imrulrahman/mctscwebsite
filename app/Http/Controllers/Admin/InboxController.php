@@ -239,6 +239,44 @@ class InboxController extends Controller
         return view('admin.inbox.application_show', compact('application', 'projects'));
     }
 
+    public function serveFile(AdmissionApplication $application, string $type)
+    {
+        abort_unless(auth()->user()?->can('admissions.view'), 403, 'Unauthorized access to application files.');
+
+        $relative = match ($type) {
+            'photo' => $application->photo,
+            'signature' => $application->signature_photo,
+            'doc' => $application->ident_doc,
+            default => null,
+        };
+
+        if (!$relative) {
+            abort(404, 'File not attached to this application record.');
+        }
+
+        $cleanPath = ltrim(preg_replace('#^storage/#', '', $relative), '/');
+        $candidates = [
+            storage_path('app/public/' . $cleanPath),
+            public_path('storage/' . $cleanPath),
+            base_path('storage/app/public/' . $cleanPath),
+            '/home/mctscedu/public_html/storage/' . $cleanPath,
+            '/home/mctscedu/storage/app/public/' . $cleanPath,
+            storage_path('app/' . $cleanPath),
+        ];
+
+        foreach ($candidates as $filePath) {
+            if (file_exists($filePath) && !is_dir($filePath)) {
+                $mime = @mime_content_type($filePath) ?: 'application/octet-stream';
+                return response()->file($filePath, [
+                    'Content-Type' => $mime,
+                    'Cache-Control' => 'no-cache, private',
+                ]);
+            }
+        }
+
+        abort(404, 'File not found on storage disk.');
+    }
+
     public function printApplication(AdmissionApplication $application): View
     {
         abort_unless(auth()->user()?->can('admissions.print'), 403, 'Unauthorized. Permission to print application required.');

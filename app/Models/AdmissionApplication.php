@@ -82,16 +82,30 @@ class AdmissionApplication extends Model
 
     public function photoUrl(): string
     {
+        if (auth()->check() && $this->photo) {
+            return route('admin.applications.file', [$this, 'photo']);
+        }
         return $this->photo ? storage_asset($this->photo, 'assets/images/user-placeholder.png') : asset('assets/images/user-placeholder.png');
     }
 
     public function signatureUrl(): ?string
     {
+        if (auth()->check() && $this->signature_photo) {
+            return route('admin.applications.file', [$this, 'signature']);
+        }
         return $this->signature_photo ? storage_asset($this->signature_photo) : null;
     }
 
     public function identDocUrl(): ?string
     {
+        if (auth()->check() && $this->ident_doc) {
+            return route('admin.applications.file', [$this, 'doc']);
+        }
         return $this->ident_doc ? storage_asset($this->ident_doc) : null;
+    }
+
+    public function fileRoute(string $type): string
+    {
+        return route('admin.applications.file', [$this, $type]);
     }
 }

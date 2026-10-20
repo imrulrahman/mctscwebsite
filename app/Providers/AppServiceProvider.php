@@ -10,33 +10,43 @@ use Illuminate\Support\ServiceProvider;
 if (!function_exists('storage_asset')) {
     function storage_asset(?string $path, ?string $default = null): string {
         if (!$path) {
-            return $default ? asset($default) : '';
+            return $default ? (function_exists('asset') ? asset($default) : $default) : '';
         }
-        if (str_starts_with($path, 'assets/') || str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
-            return asset($path);
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+        if (str_starts_with($path, 'assets/')) {
+            return function_exists('asset') ? asset($path) : '/' . ltrim($path, '/');
         }
         $cleanPath = ltrim(preg_replace('#^storage/#', '', $path), '/');
         
         // If default is provided, verify file existence on disk
         if ($default) {
             $candidates = [
-                public_path('storage/' . $cleanPath),
                 storage_path('app/public/' . $cleanPath),
+                public_path('storage/' . $cleanPath),
+                base_path('storage/app/public/' . $cleanPath),
                 '/home/mctscedu/public_html/storage/' . $cleanPath,
+                '/home/mctscedu/storage/app/public/' . $cleanPath,
             ];
             $exists = false;
             foreach ($candidates as $cand) {
-                if (file_exists($cand)) {
+                if (file_exists($cand) && !is_dir($cand)) {
                     $exists = true;
                     break;
                 }
             }
             if (!$exists) {
-                return asset($default);
+                return function_exists('asset') ? asset($default) : '/' . ltrim($default, '/');
             }
         }
         
-        return asset('storage/' . $cleanPath);
+        // Always generate URL using current request host & scheme to prevent APP_URL localhost:8080 mismatch
+        if (function_exists('request') && request() && request()->getHost()) {
+            return rtrim(request()->getSchemeAndHttpHost() . request()->getBasePath(), '/') . '/storage/' . $cleanPath;
+        }
+
+        return function_exists('asset') ? asset('storage/' . $cleanPath) : '/storage/' . $cleanPath;
     }
 }
 

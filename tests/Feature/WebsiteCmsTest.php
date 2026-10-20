@@ -144,5 +144,15 @@ class WebsiteCmsTest extends TestCase
         $this->assertEquals(400, (float)$app->paid_amount);
         $this->assertEquals('paid', $app->payment_status);
         $this->assertEquals($admin->id, $app->approved_by);
+
+        // 3. Verify Admin can view Application Show with A4 form and billing voucher
+        $showResponse = $this->actingAs($admin)->get(route('admin.applications.show', $app));
+        $showResponse->assertOk();
+        $showResponse->assertSee('ভর্তি আবেদন ফরম (TRAINEE ADMISSION APPLICATION FORM)');
+        $showResponse->assertSee('OFFICIAL MONEY RECEIPT & ADMISSION BILLING VOUCHER', false);
+        $showResponse->assertSee('Paid Batch');
+        $showResponse->assertSee('ECHO');
+        $showResponse->assertSee('NHRDF');
+        $showResponse->assertSee('ASSET');
     }
 }

@@ -496,7 +496,7 @@
         {{-- BOTTOM: Student Passport Photo Frame --}}
         <div class="photo-frame">
           @if($application->photo)
-            <img src="{{ storage_asset($application->photo) }}" alt="Trainee Photo">
+            <img src="{{ $application->photoUrl() }}" alt="Trainee Photo">
           @else
             <div class="photo-placeholder">
               শিক্ষার্থীর ছবি<br>(পাসপোর্ট সাইজ)
@@ -740,7 +740,7 @@
           <div class="sig-col">
             <div class="sig-space">
               @if($application->signature_photo)
-                <img src="{{ storage_asset($application->signature_photo) }}" alt="Signature">
+                <img src="{{ $application->signatureUrl() }}" alt="Signature">
               @endif
             </div>
             <div class="sig-line">শিক্ষার্থীর স্বাক্ষর ও তারিখ</div>
