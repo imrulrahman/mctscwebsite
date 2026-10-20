@@ -64,6 +64,15 @@ class SettingsController extends Controller
             }
         }
 
+        // Update Admission Form required fields configuration
+        if ($request->has('admission_fields_config_submitted')) {
+            $reqFields = $request->input('admission_required_fields', []);
+            SiteSetting::updateOrCreate(
+                ['key' => 'admission_required_fields'],
+                ['value' => json_encode(array_values($reqFields))]
+            );
+        }
+
         // Update image uploads
         foreach (self::IMAGE_FIELDS as $field) {
             if ($request->hasFile($field)) {

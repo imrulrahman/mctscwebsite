@@ -476,41 +476,35 @@
       </div>
     @endif
 
+    @php
+      $reqList = $requiredAdmissionFields ?? \App\Models\SiteSetting::getRequiredAdmissionFields();
+      $isReq = fn(string $f): bool => in_array($f, $reqList);
+    @endphp
+
     <form method="POST" action="{{ route('apply.store') }}" enctype="multipart/form-data" id="traineeApplicationForm">
       @csrf
 
-      <!-- 1. COURSE & SHIFT SELECTION -->
+      <!-- 1. COURSE SELECTION -->
       <div class="section-title">
-        <span>১. কোর্স ও শিফট নির্বাচন (Course & Shift Selection)</span>
+        <span>১. পছন্দের কোর্স নির্বাচন (Course Selection)</span>
       </div>
 
-      <div class="grid-2" style="margin-bottom: 20px;">
-        <div class="form-group">
-          <label><span class="req">*</span> পছন্দের ট্রেড / কোর্স (Desired Course/Trade):</label>
-          <select name="course" required id="courseSelect" style="font-size: 15px; padding: 11px 14px; font-weight: 500;">
-            <option value="">-- কোর্স সিলেক্ট করুন (Select Course) --</option>
-            @foreach($courses as $c)
-              <option value="{{ $c->title }}" @selected(old('course', $selectedCourse) == $c->title)>{{ $c->title }}</option>
-            @endforeach
-            @if($courses->isEmpty())
-              <option value="Computer Operation & IT Support" @selected(old('course', $selectedCourse) == 'Computer Operation & IT Support')>Computer Operation & IT Support</option>
-              <option value="Electrical Installation & Maintenance (EIM)" @selected(old('course', $selectedCourse) == 'Electrical Installation & Maintenance (EIM)')>Electrical Installation & Maintenance (EIM)</option>
-              <option value="Refrigeration & Air Conditioning (RAC)" @selected(old('course', $selectedCourse) == 'Refrigeration & Air Conditioning (RAC)')>Refrigeration & Air Conditioning (RAC)</option>
-              <option value="Plumbing & Pipe Fitting" @selected(old('course', $selectedCourse) == 'Plumbing & Pipe Fitting')>Plumbing & Pipe Fitting</option>
-              <option value="Sewing Machine Operation (SMO)" @selected(old('course', $selectedCourse) == 'Sewing Machine Operation (SMO)')>Sewing Machine Operation (SMO)</option>
-              <option value="Driving & Auto Mechanics" @selected(old('course', $selectedCourse) == 'Driving & Auto Mechanics')>Driving & Auto Mechanics</option>
-            @endif
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>পছন্দের শিফট (Preferred Shift):</label>
-          <div class="shift-radios" style="margin-top: 10px;">
-            <label><input type="radio" name="preferred_shift" value="Morning" @checked(old('preferred_shift', 'Morning') === 'Morning')> সকাল (Morning)</label>
-            <label><input type="radio" name="preferred_shift" value="Afternoon" @checked(old('preferred_shift') === 'Afternoon')> দুপুর (Afternoon)</label>
-            <label><input type="radio" name="preferred_shift" value="Evening" @checked(old('preferred_shift') === 'Evening')> সন্ধ্যা (Evening)</label>
-          </div>
-        </div>
+      <div class="form-group" style="max-width: 650px; margin-bottom: 22px;">
+        <label><span class="req">*</span> পছন্দের ট্রেড / কোর্স (Desired Course/Trade):</label>
+        <select name="course" required id="courseSelect" style="font-size: 15px; padding: 11px 14px; font-weight: 500;">
+          <option value="">-- কোর্স সিলেক্ট করুন (Select Course) --</option>
+          @foreach($courses as $c)
+            <option value="{{ $c->title }}" @selected(old('course', $selectedCourse) == $c->title)>{{ $c->title }}</option>
+          @endforeach
+          @if($courses->isEmpty())
+            <option value="Computer Operation & IT Support" @selected(old('course', $selectedCourse) == 'Computer Operation & IT Support')>Computer Operation & IT Support</option>
+            <option value="Electrical Installation & Maintenance (EIM)" @selected(old('course', $selectedCourse) == 'Electrical Installation & Maintenance (EIM)')>Electrical Installation & Maintenance (EIM)</option>
+            <option value="Refrigeration & Air Conditioning (RAC)" @selected(old('course', $selectedCourse) == 'Refrigeration & Air Conditioning (RAC)')>Refrigeration & Air Conditioning (RAC)</option>
+            <option value="Plumbing & Pipe Fitting" @selected(old('course', $selectedCourse) == 'Plumbing & Pipe Fitting')>Plumbing & Pipe Fitting</option>
+            <option value="Sewing Machine Operation (SMO)" @selected(old('course', $selectedCourse) == 'Sewing Machine Operation (SMO)')>Sewing Machine Operation (SMO)</option>
+            <option value="Driving & Auto Mechanics" @selected(old('course', $selectedCourse) == 'Driving & Auto Mechanics')>Driving & Auto Mechanics</option>
+          @endif
+        </select>
       </div>
 
       <!-- 2. PERSONAL DATA -->
@@ -523,16 +517,16 @@
           <input type="text" name="trainee_name_en" value="{{ old('trainee_name_en') }}" placeholder="Insert trainee name in english" required>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Trainee Name in Bangla:</label>
-          <input type="text" name="trainee_name_bn" value="{{ old('trainee_name_bn') }}" placeholder="আবেদনকারীর নাম বাংলায়" required>
+          <label>@if($isReq('trainee_name_bn'))<span class="req">*</span>@endif Trainee Name in Bangla:</label>
+          <input type="text" name="trainee_name_bn" value="{{ old('trainee_name_bn') }}" placeholder="আবেদনকারীর নাম বাংলায়" @if($isReq('trainee_name_bn')) required @endif>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Date of Birth:</label>
-          <input type="date" name="dob" value="{{ old('dob') }}" required>
+          <label>@if($isReq('dob'))<span class="req">*</span>@endif Date of Birth:</label>
+          <input type="date" name="dob" value="{{ old('dob') }}" @if($isReq('dob')) required @endif>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Identification type:</label>
-          <select name="ident_type" required>
+          <label>@if($isReq('ident_type'))<span class="req">*</span>@endif Identification type:</label>
+          <select name="ident_type" @if($isReq('ident_type')) required @endif>
             <option value="">Select one</option>
             <option value="National ID" @selected(old('ident_type') == 'National ID')>National ID (জাতীয় পরিচয়পত্র)</option>
             <option value="Birth Certificate" @selected(old('ident_type') == 'Birth Certificate')>Birth Certificate (জন্ম নিবন্ধন)</option>
@@ -543,12 +537,12 @@
 
       <div class="grid-4">
         <div class="form-group">
-          <label><span class="req">*</span> NID / Birth Reg No (নম্বর):</label>
-          <input type="text" name="ident_no" value="{{ old('ident_no') }}" placeholder="NID বা জন্ম সনদ নম্বর লিখুন" required>
+          <label>@if($isReq('ident_no'))<span class="req">*</span>@endif NID / Birth Reg No (নম্বর):</label>
+          <input type="text" name="ident_no" value="{{ old('ident_no') }}" placeholder="NID বা জন্ম সনদ নম্বর লিখুন" @if($isReq('ident_no')) required @endif>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Sex (লিঙ্গ):</label>
-          <select name="sex" required>
+          <label>@if($isReq('sex'))<span class="req">*</span>@endif Sex (লিঙ্গ):</label>
+          <select name="sex" @if($isReq('sex')) required @endif>
             <option value="">Select one</option>
             <option value="Male" @selected(old('sex') == 'Male')>Male (পুরুষ)</option>
             <option value="Female" @selected(old('sex') == 'Female')>Female (মহিলা)</option>
@@ -556,28 +550,31 @@
           </select>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Person With Disability (PWD)?:</label>
-          <select name="pwd" required>
+          <label>@if($isReq('pwd'))<span class="req">*</span>@endif Person With Disability (PWD)?:</label>
+          <select name="pwd" @if($isReq('pwd')) required @endif>
             <option value="No" @selected(old('pwd', 'No') == 'No')>No</option>
             <option value="Yes" @selected(old('pwd') == 'Yes')>Yes</option>
           </select>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Contact Number (মোবাইল নং):</label>
-          <input type="text" name="contact_no" value="{{ old('contact_no') }}" placeholder="01XXXXXXXXX" required>
+          <label>@if($isReq('contact_no'))<span class="req">*</span>@endif Contact Number (মোবাইল নং):</label>
+          <input type="text" name="contact_no" value="{{ old('contact_no') }}" placeholder="01XXXXXXXXX" @if($isReq('contact_no')) required @endif>
         </div>
       </div>
 
       <div class="grid-2">
         <div class="form-group">
-          <label>Email Address (ইমেইল):</label>
-          <input type="email" name="email" value="{{ old('email') }}" placeholder="example@gmail.com">
+          <label>@if($isReq('email'))<span class="req">*</span>@endif Email Address (ইমেইল):</label>
+          <input type="email" name="email" value="{{ old('email') }}" placeholder="example@gmail.com" @if($isReq('email')) required @endif>
         </div>
         <div class="form-group">
-          <label>Marital Status (বৈবাহিক অবস্থা):</label>
-          <select name="marital_status">
+          <label>@if($isReq('marital_status'))<span class="req">*</span>@endif Marital Status (বৈবাহিক অবস্থা):</label>
+          <select name="marital_status" @if($isReq('marital_status')) required @endif>
+            <option value="">Select one</option>
             <option value="Single" @selected(old('marital_status', 'Single') == 'Single')>Single (অবিবাহিত)</option>
             <option value="Married" @selected(old('marital_status') == 'Married')>Married (বিবাহিত)</option>
+            <option value="Widowed" @selected(old('marital_status') == 'Widowed')>Widowed (বিধবা/বিপত্নীক)</option>
+            <option value="Divorced" @selected(old('marital_status') == 'Divorced')>Divorced (তালাকপ্রাপ্ত)</option>
             <option value="Other" @selected(old('marital_status') == 'Other')>Other (অন্যান্য)</option>
           </select>
         </div>
@@ -591,15 +588,15 @@
 
         <div class="grid-3">
           <div class="form-group upload-box">
-            <label><span class="req">*</span> আবেদনকারীর ছবি (Trainee Photo):</label>
-            <input type="file" name="photo" accept=".png, .jpg, .jpeg" required id="photoInput">
+            <label>@if($isReq('photo'))<span class="req">*</span>@endif আবেদনকারীর ছবি (Trainee Photo):</label>
+            <input type="file" name="photo" accept=".png, .jpg, .jpeg" @if($isReq('photo')) required @endif id="photoInput">
             <span class="note-text">*পাসপোর্ট সাইজ ছবি (JPG, PNG - সর্বোচ্চ 3 MB)</span>
             <img id="photoPreview" class="upload-preview" style="display:none;" alt="Preview">
           </div>
 
           <div class="form-group upload-box">
-            <label><span class="req">*</span> NID বা জন্ম নিবন্ধন সনদ (NID / Birth Certificate Doc):</label>
-            <input type="file" name="ident_doc" accept=".png, .jpg, .jpeg, .pdf" required id="identDocInput">
+            <label>@if($isReq('ident_doc'))<span class="req">*</span>@endif NID বা জন্ম নিবন্ধন সনদ (NID / Birth Certificate Doc):</label>
+            <input type="file" name="ident_doc" accept=".png, .jpg, .jpeg, .pdf" @if($isReq('ident_doc')) required @endif id="identDocInput">
             <span class="note-text">*NID বা জন্ম সনদ কপি (PDF, JPG, PNG - সর্বোচ্চ 3 MB)</span>
             <div id="identDocSelected" style="display:none; font-size:12px; color:#15803d; font-weight:600; margin-top:6px;">
               ✓ ফাইল সিলেক্ট হয়েছে: <span id="identDocFileName"></span>
@@ -608,8 +605,8 @@
           </div>
 
           <div class="form-group upload-box">
-            <label><span class="req">*</span> আবেদনকারীর স্বাক্ষর (Signature Photo):</label>
-            <input type="file" name="signature_photo" accept=".png, .jpg, .jpeg" required id="sigInput">
+            <label>@if($isReq('signature_photo'))<span class="req">*</span>@endif আবেদনকারীর স্বাক্ষর (Signature Photo):</label>
+            <input type="file" name="signature_photo" accept=".png, .jpg, .jpeg" @if($isReq('signature_photo')) required @endif id="sigInput">
             <span class="note-text">*স্বাক্ষরের ছবি (JPG, PNG - সর্বোচ্চ 3 MB)</span>
             <img id="sigPreview" class="upload-preview" style="display:none;" alt="Signature Preview">
           </div>
@@ -622,8 +619,8 @@
       </div>
       <div class="grid-3">
         <div class="form-group">
-          <label><span class="req">*</span> Division:</label>
-          <select name="perm_division" id="permDivision" required>
+          <label>@if($isReq('perm_division'))<span class="req">*</span>@endif Division:</label>
+          <select name="perm_division" id="permDivision" @if($isReq('perm_division')) required @endif>
             <option value="">Select one</option>
             <option value="Chattogram">Chattogram</option>
             <option value="Dhaka">Dhaka</option>
@@ -636,24 +633,24 @@
           </select>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> District:</label>
-          <select name="perm_district" id="permDistrict" required>
+          <label>@if($isReq('perm_district'))<span class="req">*</span>@endif District:</label>
+          <select name="perm_district" id="permDistrict" @if($isReq('perm_district')) required @endif>
             <option value="">Select one</option>
           </select>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Upazilla / Thana:</label>
-          <input type="text" name="perm_upazilla" id="permUpazilla" value="{{ old('perm_upazilla') }}" placeholder="Upazilla / Thana name" required>
+          <label>@if($isReq('perm_upazilla'))<span class="req">*</span>@endif Upazilla / Thana:</label>
+          <input type="text" name="perm_upazilla" id="permUpazilla" value="{{ old('perm_upazilla') }}" placeholder="Upazilla / Thana name" @if($isReq('perm_upazilla')) required @endif>
         </div>
       </div>
       <div class="grid-2">
         <div class="form-group">
-          <label><span class="req">*</span> Address (গ্রাম / বাসা নং, রোড, পোস্ট অফিস):</label>
-          <textarea name="perm_address" id="permAddress" rows="2" placeholder="Write your address please" required>{{ old('perm_address') }}</textarea>
+          <label>@if($isReq('perm_address'))<span class="req">*</span>@endif Address (গ্রাম / বাসা নং, রোড, পোস্ট অফিস):</label>
+          <textarea name="perm_address" id="permAddress" rows="2" placeholder="Write your address please" @if($isReq('perm_address')) required @endif>{{ old('perm_address') }}</textarea>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> From Rural or Urban area?:</label>
-          <select name="perm_area_type" id="permAreaType" required>
+          <label>@if($isReq('perm_area_type'))<span class="req">*</span>@endif From Rural or Urban area?:</label>
+          <select name="perm_area_type" id="permAreaType" @if($isReq('perm_area_type')) required @endif>
             <option value="">Select one</option>
             <option value="Rural" @selected(old('perm_area_type') == 'Rural')>Rural (পল্লী / গ্রাম)</option>
             <option value="Urban" @selected(old('perm_area_type') == 'Urban')>Urban (পৌরসভা / শহর)</option>
@@ -668,8 +665,8 @@
       </div>
       <div class="grid-4">
         <div class="form-group">
-          <label><span class="req">*</span> Division:</label>
-          <select name="pres_division" id="presDivision" required>
+          <label>@if($isReq('pres_division'))<span class="req">*</span>@endif Division:</label>
+          <select name="pres_division" id="presDivision" @if($isReq('pres_division')) required @endif>
             <option value="">Select one</option>
             <option value="Chattogram">Chattogram</option>
             <option value="Dhaka">Dhaka</option>
@@ -682,25 +679,25 @@
           </select>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> District:</label>
-          <select name="pres_district" id="presDistrict" required>
+          <label>@if($isReq('pres_district'))<span class="req">*</span>@endif District:</label>
+          <select name="pres_district" id="presDistrict" @if($isReq('pres_district')) required @endif>
             <option value="">Select one</option>
           </select>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Upazilla / Thana:</label>
-          <input type="text" name="pres_upazilla" id="presUpazilla" value="{{ old('pres_upazilla') }}" placeholder="Upazilla / Thana name" required>
+          <label>@if($isReq('pres_upazilla'))<span class="req">*</span>@endif Upazilla / Thana:</label>
+          <input type="text" name="pres_upazilla" id="presUpazilla" value="{{ old('pres_upazilla') }}" placeholder="Upazilla / Thana name" @if($isReq('pres_upazilla')) required @endif>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Address:</label>
-          <textarea name="pres_address" id="presAddress" rows="1" placeholder="Write your address please" required>{{ old('pres_address') }}</textarea>
+          <label>@if($isReq('pres_address'))<span class="req">*</span>@endif Address:</label>
+          <textarea name="pres_address" id="presAddress" rows="1" placeholder="Write your address please" @if($isReq('pres_address')) required @endif>{{ old('pres_address') }}</textarea>
         </div>
       </div>
 
-      <div class="grid-4">
+      <div class="grid-3">
         <div class="form-group">
-          <label><span class="req">*</span> Religion (ধর্ম):</label>
-          <select name="religion" required>
+          <label>@if($isReq('religion'))<span class="req">*</span>@endif Religion (ধর্ম):</label>
+          <select name="religion" @if($isReq('religion')) required @endif>
             <option value="">Select one</option>
             <option value="Islam" @selected(old('religion') == 'Islam')>Islam</option>
             <option value="Hinduism" @selected(old('religion') == 'Hinduism')>Hinduism</option>
@@ -710,8 +707,8 @@
           </select>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Ethnicity (নৃগোষ্ঠী):</label>
-          <select name="ethnicity" required>
+          <label>@if($isReq('ethnicity'))<span class="req">*</span>@endif Ethnicity (নৃগোষ্ঠী):</label>
+          <select name="ethnicity" @if($isReq('ethnicity')) required @endif>
             <option value="">Select one</option>
             <option value="Bengali" @selected(old('ethnicity', 'Bengali') == 'Bengali')>Bengali (বাঙালি)</option>
             <option value="Chakma" @selected(old('ethnicity') == 'Chakma')>Chakma (চাকমা)</option>
@@ -723,8 +720,8 @@
           </select>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Educational Qualification:</label>
-          <select name="education_level" required>
+          <label>@if($isReq('education_level'))<span class="req">*</span>@endif Educational Qualification:</label>
+          <select name="education_level" @if($isReq('education_level')) required @endif>
             <option value="">Select one</option>
             <option value="Class 8 / JSC / JDC" @selected(old('education_level') == 'Class 8 / JSC / JDC')>Class 8 / JSC / JDC</option>
             <option value="SSC / Dakhil / Equivalent" @selected(old('education_level') == 'SSC / Dakhil / Equivalent')>SSC / Dakhil / Equivalent</option>
@@ -735,16 +732,6 @@
             <option value="Other" @selected(old('education_level') == 'Other')>Other</option>
           </select>
         </div>
-        <div class="form-group">
-          <label>Marital status:</label>
-          <select name="marital_status">
-            <option value="">Select one</option>
-            <option value="Single" @selected(old('marital_status') == 'Single')>Single (অবিবাহিত)</option>
-            <option value="Married" @selected(old('marital_status') == 'Married')>Married (বিবাহিত)</option>
-            <option value="Widowed" @selected(old('marital_status') == 'Widowed')>Widowed (বিধবা/বিপত্নীক)</option>
-            <option value="Divorced" @selected(old('marital_status') == 'Divorced')>Divorced (তালাকপ্রাপ্ত)</option>
-          </select>
-        </div>
       </div>
 
       <!-- 5. HOUSEHOLD PROFILE -->
@@ -753,39 +740,39 @@
       </div>
       <div class="grid-4">
         <div class="form-group">
-          <label><span class="req">*</span> Father's Name in English:</label>
-          <input type="text" name="father_name_en" value="{{ old('father_name_en') }}" placeholder="Father Name English" required>
+          <label>@if($isReq('father_name_en'))<span class="req">*</span>@endif Father's Name in English:</label>
+          <input type="text" name="father_name_en" value="{{ old('father_name_en') }}" placeholder="Father Name English" @if($isReq('father_name_en')) required @endif>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Father's Name in Bangla:</label>
-          <input type="text" name="father_name_bn" value="{{ old('father_name_bn') }}" placeholder="পিতার নাম বাংলায়" required>
+          <label>@if($isReq('father_name_bn'))<span class="req">*</span>@endif Father's Name in Bangla:</label>
+          <input type="text" name="father_name_bn" value="{{ old('father_name_bn') }}" placeholder="পিতার নাম বাংলায়" @if($isReq('father_name_bn')) required @endif>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Mother's Name in English:</label>
-          <input type="text" name="mother_name_en" value="{{ old('mother_name_en') }}" placeholder="Mother Name English" required>
+          <label>@if($isReq('mother_name_en'))<span class="req">*</span>@endif Mother's Name in English:</label>
+          <input type="text" name="mother_name_en" value="{{ old('mother_name_en') }}" placeholder="Mother Name English" @if($isReq('mother_name_en')) required @endif>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Mother's Name in Bangla:</label>
-          <input type="text" name="mother_name_bn" value="{{ old('mother_name_bn') }}" placeholder="মাতার নাম বাংলায়" required>
+          <label>@if($isReq('mother_name_bn'))<span class="req">*</span>@endif Mother's Name in Bangla:</label>
+          <input type="text" name="mother_name_bn" value="{{ old('mother_name_bn') }}" placeholder="মাতার নাম বাংলায়" @if($isReq('mother_name_bn')) required @endif>
         </div>
       </div>
 
       <div class="grid-4">
         <div class="form-group">
-          <label>Emergency Contact Number:</label>
-          <input type="text" name="emergency_contact" value="{{ old('emergency_contact') }}" placeholder="Insert number">
+          <label>@if($isReq('emergency_contact'))<span class="req">*</span>@endif Emergency Contact Number:</label>
+          <input type="text" name="emergency_contact" value="{{ old('emergency_contact') }}" placeholder="Insert number" @if($isReq('emergency_contact')) required @endif>
         </div>
         <div class="form-group">
-          <label>Number of household member:</label>
-          <input type="number" name="household_members" id="householdMembers" value="{{ old('household_members', 4) }}" min="1" max="25" placeholder="Insert family member">
+          <label>@if($isReq('household_members'))<span class="req">*</span>@endif Number of household member:</label>
+          <input type="number" name="household_members" id="householdMembers" value="{{ old('household_members', 4) }}" min="1" max="25" placeholder="Insert family member" @if($isReq('household_members')) required @endif>
         </div>
         <div class="form-group">
-          <label>Source of household income:</label>
-          <input type="text" name="income_source" value="{{ old('income_source') }}" placeholder="e.g. Agriculture / Business / Job">
+          <label>@if($isReq('income_source'))<span class="req">*</span>@endif Source of household income:</label>
+          <input type="text" name="income_source" value="{{ old('income_source') }}" placeholder="e.g. Agriculture / Business / Job" @if($isReq('income_source')) required @endif>
         </div>
         <div class="form-group">
-          <label>Monthly household income (BDT):</label>
-          <input type="number" name="monthly_income" id="monthlyIncome" value="{{ old('monthly_income') }}" min="0" placeholder="Insert amount">
+          <label>@if($isReq('monthly_income'))<span class="req">*</span>@endif Monthly household income (BDT):</label>
+          <input type="number" name="monthly_income" id="monthlyIncome" value="{{ old('monthly_income') }}" min="0" placeholder="Insert amount" @if($isReq('monthly_income')) required @endif>
         </div>
       </div>
 
@@ -795,8 +782,8 @@
           <input type="text" name="yearly_income" id="yearlyIncome" value="{{ old('yearly_income') }}" readonly placeholder="স্বয়ংক্রিয়ভাবে হিসাব হবে (মাসিক আয় × ১২)" style="background:#f8fafc; font-weight:700; color:#0f5132;">
         </div>
         <div class="form-group">
-          <label>Do you have any Bank Account?:</label>
-          <select name="has_bank_account">
+          <label>@if($isReq('has_bank_account'))<span class="req">*</span>@endif Do you have any Bank Account?:</label>
+          <select name="has_bank_account" @if($isReq('has_bank_account')) required @endif>
             <option value="No" @selected(old('has_bank_account') == 'No')>No</option>
             <option value="Yes" @selected(old('has_bank_account') == 'Yes')>Yes</option>
           </select>
@@ -809,16 +796,16 @@
       </div>
       <div class="grid-3">
         <div class="form-group">
-          <label><span class="req">*</span> Received any skills training in the past?:</label>
-          <select name="past_training" required>
+          <label>@if($isReq('past_training'))<span class="req">*</span>@endif Received any skills training in the past?:</label>
+          <select name="past_training" @if($isReq('past_training')) required @endif>
             <option value="">Please select</option>
             <option value="No" @selected(old('past_training') == 'No')>No (না)</option>
             <option value="Yes" @selected(old('past_training') == 'Yes')>Yes (হ্যাঁ)</option>
           </select>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Employment status before training:</label>
-          <select name="employment_status" required>
+          <label>@if($isReq('employment_status'))<span class="req">*</span>@endif Employment status before training:</label>
+          <select name="employment_status" @if($isReq('employment_status')) required @endif>
             <option value="">Please select</option>
             <option value="Unemployed" @selected(old('employment_status') == 'Unemployed')>Unemployed (বেকার)</option>
             <option value="Employed" @selected(old('employment_status') == 'Employed')>Employed (চাকরিজীবী)</option>
@@ -829,14 +816,14 @@
           </select>
         </div>
         <div class="form-group">
-          <label><span class="req">*</span> Amount of Monthly Income (BDT) - Cash:</label>
-          <input type="number" name="monthly_cash_income" value="{{ old('monthly_cash_income', 0) }}" min="0" placeholder="Insert amount" required>
+          <label>@if($isReq('monthly_cash_income'))<span class="req">*</span>@endif Amount of Monthly Income (BDT) - Cash:</label>
+          <input type="number" name="monthly_cash_income" value="{{ old('monthly_cash_income', 0) }}" min="0" placeholder="Insert amount" @if($isReq('monthly_cash_income')) required @endif>
         </div>
       </div>
 
       <div class="form-group" style="max-width: 500px; margin-bottom: 20px;">
-        <label>How did you learn about this training?:</label>
-        <select name="training_media_source">
+        <label>@if($isReq('training_media_source'))<span class="req">*</span>@endif How did you learn about this training?:</label>
+        <select name="training_media_source" @if($isReq('training_media_source')) required @endif>
           <option value="">Please select</option>
           <option value="Social Media / Facebook" @selected(old('training_media_source') == 'Social Media / Facebook')>Social Media / Facebook</option>
           <option value="Newspaper / Advertisement" @selected(old('training_media_source') == 'Newspaper / Advertisement')>Newspaper / Advertisement</option>
@@ -851,13 +838,13 @@
       <div class="declaration-box">
         <label>
           <input type="checkbox" required name="agreement">
-          <span>আমি এই মর্মে অঙ্গীকার করছি যে, উপরে প্রদত্ত সকল তথ্য সত্য ও নির্ভুল। ভবিষ্যতে কোনো তথ্য অসত্য বা ভুল প্রমাণিত হলে কলেজ কর্তৃপক্ষের গৃহীত যেকোনো সিদ্ধান্ত বা প্রার্থিতা বাতিল আমি মেনে নিতে বাধ্য থাকিব। (I declare that the information provided above is true and correct to the best of my knowledge).</span>
+          <span>I declare that the information provided above is true and correct to the best of my knowledge (আমি এই মর্মে অঙ্গীকার করছি যে, উপরে প্রদত্ত সকল তথ্য সত্য ও নির্ভুল)।</span>
         </label>
       </div>
 
       <div class="submit-bar">
-        <a href="{{ route('home') }}" class="back-home">← হোম পেজে ফিরে যান (Back to Home)</a>
-        <button type="submit" class="btn-submit">আবেদন দাখিল করুন (Submit Application) ➔</button>
+        <a href="{{ route('home') }}" class="back-home">← Back to Home</a>
+        <button type="submit" class="btn-submit">Submit Application</button>
       </div>
     </form>
   </div>
@@ -879,6 +866,7 @@
   function updateDistricts(divSelectId, distSelectId, selectedDistrict = '') {
     const divSelect = document.getElementById(divSelectId);
     const distSelect = document.getElementById(distSelectId);
+    if (!divSelect || !distSelect) return;
     const division = divSelect.value;
     distSelect.innerHTML = '<option value="">Select one</option>';
     if (districtData[division]) {
@@ -892,18 +880,30 @@
     }
   }
 
-  document.getElementById('permDivision').addEventListener('change', function() {
+  document.getElementById('permDivision')?.addEventListener('change', function() {
     updateDistricts('permDivision', 'permDistrict');
   });
-  document.getElementById('presDivision').addEventListener('change', function() {
+  document.getElementById('presDivision')?.addEventListener('change', function() {
     updateDistricts('presDivision', 'presDistrict');
   });
 
-  // Initialize districts if old values exist
-  updateDistricts('permDivision', 'permDistrict', '{{ old('perm_district', 'Chattogram') }}');
-  updateDistricts('presDivision', 'presDistrict', '{{ old('pres_district', 'Chattogram') }}');
-  document.getElementById('permDivision').value = '{{ old('perm_division', 'Chattogram') }}';
-  document.getElementById('presDivision').value = '{{ old('pres_division', 'Chattogram') }}';
+  // Set division and populate corresponding districts immediately on load
+  const initialPermDiv = '{{ old('perm_division', 'Chattogram') }}';
+  const initialPermDist = '{{ old('perm_district', 'Chattogram') }}';
+  const initialPresDiv = '{{ old('pres_division', 'Chattogram') }}';
+  const initialPresDist = '{{ old('pres_district', 'Chattogram') }}';
+
+  const pDivEl = document.getElementById('permDivision');
+  if (pDivEl) {
+    pDivEl.value = initialPermDiv;
+    updateDistricts('permDivision', 'permDistrict', initialPermDist);
+  }
+
+  const presDivEl = document.getElementById('presDivision');
+  if (presDivEl) {
+    presDivEl.value = initialPresDiv;
+    updateDistricts('presDivision', 'presDistrict', initialPresDist);
+  }
 
   // Copy Permanent to Present Address
   document.getElementById('btnCopyAddress').addEventListener('click', function() {

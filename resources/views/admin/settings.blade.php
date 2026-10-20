@@ -390,7 +390,7 @@
     </div>
 
     <!-- 6. ADMISSION & QUOTES -->
-    <div style="margin-bottom: 25px;">
+    <div style="border-bottom: 2px solid #e2ebe6; padding-bottom: 22px; margin-bottom: 25px;">
       <h2 style="font-size: 18px; color: var(--green); margin: 0 0 6px;">6. ভর্তি ও অন্যান্য স্লোগান (Admissions & Quote Banner)</h2>
       <div class="field-grid">
         <label>
@@ -415,6 +415,231 @@
       </div>
     </div>
 
+    <!-- 7. ADMISSION FORM REQUIRED FIELDS SETTINGS -->
+    @php
+      $reqFields = \App\Models\SiteSetting::getRequiredAdmissionFields();
+    @endphp
+    <div style="margin-bottom: 25px;">
+      <input type="hidden" name="admission_fields_config_submitted" value="1">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:12px;">
+        <div>
+          <h2 style="font-size: 18px; color: var(--green); margin: 0 0 6px;">7. ভর্তি আবেদন ফরমের ফিল্ড রিকোয়ারমেন্ট (Admission Form Mandatory Fields)</h2>
+          <p style="color: var(--muted); margin: 0; font-size: 13px;">
+            অনলাইন আবেদন ফরমে যে ফিল্ডগুলোতে টিক দেওয়া থাকবে সেগুলো শিক্ষার্থীকে পূরণ করা <strong>বাধ্যতামূলক (Mandatory — লাল তারাচিহ্ন <span style="color:#dc2626;font-weight:bold;">*</span>)</strong> থাকবে। আনটিক করলে তা ঐচ্ছিক (Optional) হয়ে যাবে।
+          </p>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button type="button" onclick="setAllAdmissionFields(true)" style="background:#eef7f2;color:#0f5132;border:1px solid #7cb5a9;padding:6px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">
+            Select All (সব আবশ্যক)
+          </button>
+          <button type="button" onclick="setDefaultAdmissionFields()" style="background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;padding:6px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">
+            Recommended Defaults
+          </button>
+          <button type="button" onclick="setAllAdmissionFields(false)" style="background:#fff;color:#dc2626;border:1px solid #fca5a5;padding:6px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">
+            Clear All (সব ঐচ্ছিক)
+          </button>
+        </div>
+      </div>
+
+      <div style="background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px;padding:16px;">
+        <div style="margin-bottom:8px;font-size:12px;color:#0f5132;font-weight:700;">
+          📌 দ্রষ্টব্য: শিক্ষার্থীর নাম (Trainee Name in English) এবং কোর্সের নাম (Course) সিস্টেমের জন্য সর্বদা আবশ্যিক থাকবে।
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));gap:16px;margin-top:12px;">
+          {{-- Group 1: Personal Profile --}}
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;">
+            <strong style="color:#0f5132;font-size:13.5px;display:block;margin-bottom:10px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">
+              ১. প্রার্থীর ব্যক্তিগত তথ্য
+            </strong>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="trainee_name_bn" class="admission-field-chk" @checked(in_array('trainee_name_bn', $reqFields)) style="accent-color:#0f5132;">
+                <span>নাম বাংলায় (Trainee Name Bangla)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="dob" class="admission-field-chk" @checked(in_array('dob', $reqFields)) style="accent-color:#0f5132;">
+                <span>জন্ম তারিখ (Date of Birth)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="ident_type" class="admission-field-chk" @checked(in_array('ident_type', $reqFields)) style="accent-color:#0f5132;">
+                <span>আইডি টাইপ (NID / Birth Cert)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="ident_no" class="admission-field-chk" @checked(in_array('ident_no', $reqFields)) style="accent-color:#0f5132;">
+                <span>NID বা জন্ম সনদ নম্বর (ID Number)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="sex" class="admission-field-chk" @checked(in_array('sex', $reqFields)) style="accent-color:#0f5132;">
+                <span>লিঙ্গ (Sex / Gender)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="pwd" class="admission-field-chk" @checked(in_array('pwd', $reqFields)) style="accent-color:#0f5132;">
+                <span>প্রতিবন্ধিতা (PWD Status)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="contact_no" class="admission-field-chk" @checked(in_array('contact_no', $reqFields)) style="accent-color:#0f5132;">
+                <span>মোবাইল নম্বর (Contact Number)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="email" class="admission-field-chk" @checked(in_array('email', $reqFields)) style="accent-color:#0f5132;">
+                <span>ইমেইল ঠিকানা (Email Address)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="marital_status" class="admission-field-chk" @checked(in_array('marital_status', $reqFields)) style="accent-color:#0f5132;">
+                <span>বৈবাহিক অবস্থা (Marital Status)</span>
+              </label>
+            </div>
+          </div>
+
+          {{-- Group 2: Uploads --}}
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;">
+            <strong style="color:#0f5132;font-size:13.5px;display:block;margin-bottom:10px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">
+              ২. ছবি ও ফাইল আপলোড
+            </strong>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="photo" class="admission-field-chk" @checked(in_array('photo', $reqFields)) style="accent-color:#0f5132;">
+                <span>প্রার্থীর ছবি (Passport Photo Upload)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="signature_photo" class="admission-field-chk" @checked(in_array('signature_photo', $reqFields)) style="accent-color:#0f5132;">
+                <span>প্রার্থীর স্বাক্ষর (Signature Upload)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="ident_doc" class="admission-field-chk" @checked(in_array('ident_doc', $reqFields)) style="accent-color:#0f5132;">
+                <span>NID বা জন্ম সনদ কপি (Doc Upload)</span>
+              </label>
+            </div>
+
+            <strong style="color:#0f5132;font-size:13.5px;display:block;margin-top:18px;margin-bottom:10px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">
+              ৩. স্থায়ী ঠিকানা (Permanent Address)
+            </strong>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="perm_division" class="admission-field-chk" @checked(in_array('perm_division', $reqFields)) style="accent-color:#0f5132;">
+                <span>স্থায়ী বিভাগ (Permanent Division)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="perm_district" class="admission-field-chk" @checked(in_array('perm_district', $reqFields)) style="accent-color:#0f5132;">
+                <span>স্থায়ী জেলা (Permanent District)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="perm_upazilla" class="admission-field-chk" @checked(in_array('perm_upazilla', $reqFields)) style="accent-color:#0f5132;">
+                <span>স্থায়ী উপজেলা/থানা (Upazilla)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="perm_address" class="admission-field-chk" @checked(in_array('perm_address', $reqFields)) style="accent-color:#0f5132;">
+                <span>স্থায়ী পূর্ণ ঠিকানা (Address Line)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="perm_area_type" class="admission-field-chk" @checked(in_array('perm_area_type', $reqFields)) style="accent-color:#0f5132;">
+                <span>পল্লী / শহর এলাকা (Rural/Urban)</span>
+              </label>
+            </div>
+          </div>
+
+          {{-- Group 3: Present Address & Demographics --}}
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;">
+            <strong style="color:#0f5132;font-size:13.5px;display:block;margin-bottom:10px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">
+              ৪. বর্তমান ঠিকানা ও ডেমোগ্রাফিক
+            </strong>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="pres_division" class="admission-field-chk" @checked(in_array('pres_division', $reqFields)) style="accent-color:#0f5132;">
+                <span>বর্তমান বিভাগ (Present Division)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="pres_district" class="admission-field-chk" @checked(in_array('pres_district', $reqFields)) style="accent-color:#0f5132;">
+                <span>বর্তমান জেলা (Present District)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="pres_upazilla" class="admission-field-chk" @checked(in_array('pres_upazilla', $reqFields)) style="accent-color:#0f5132;">
+                <span>বর্তমান উপজেলা/থানা (Upazilla)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="pres_address" class="admission-field-chk" @checked(in_array('pres_address', $reqFields)) style="accent-color:#0f5132;">
+                <span>বর্তমান পূর্ণ ঠিকানা (Address Line)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="religion" class="admission-field-chk" @checked(in_array('religion', $reqFields)) style="accent-color:#0f5132;">
+                <span>ধর্ম (Religion)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="ethnicity" class="admission-field-chk" @checked(in_array('ethnicity', $reqFields)) style="accent-color:#0f5132;">
+                <span>নৃগোষ্ঠী (Ethnicity)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="education_level" class="admission-field-chk" @checked(in_array('education_level', $reqFields)) style="accent-color:#0f5132;">
+                <span>শিক্ষাগত যোগ্যতা (Education Level)</span>
+              </label>
+            </div>
+          </div>
+
+          {{-- Group 4: Household & Employment --}}
+          <div style="background:#fff;border:1px solid #e2e8f0;border-radius:6px;padding:12px;">
+            <strong style="color:#0f5132;font-size:13.5px;display:block;margin-bottom:10px;border-bottom:1px solid #e2e8f0;padding-bottom:6px;">
+              ৫. পারিবারিক ও কর্মসংস্থান
+            </strong>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="father_name_en" class="admission-field-chk" @checked(in_array('father_name_en', $reqFields)) style="accent-color:#0f5132;">
+                <span>পিতার নাম ইংরেজিতে (Father's Name EN)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="father_name_bn" class="admission-field-chk" @checked(in_array('father_name_bn', $reqFields)) style="accent-color:#0f5132;">
+                <span>পিতার নাম বাংলায় (Father's Name BN)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="mother_name_en" class="admission-field-chk" @checked(in_array('mother_name_en', $reqFields)) style="accent-color:#0f5132;">
+                <span>মাতার নাম ইংরেজিতে (Mother's Name EN)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="mother_name_bn" class="admission-field-chk" @checked(in_array('mother_name_bn', $reqFields)) style="accent-color:#0f5132;">
+                <span>মাতার নাম বাংলায় (Mother's Name BN)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="emergency_contact" class="admission-field-chk" @checked(in_array('emergency_contact', $reqFields)) style="accent-color:#0f5132;">
+                <span>জরুরি যোগাযোগ (Emergency Contact)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="household_members" class="admission-field-chk" @checked(in_array('household_members', $reqFields)) style="accent-color:#0f5132;">
+                <span>পরিবারের সদস্য সংখ্যা (Members)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="income_source" class="admission-field-chk" @checked(in_array('income_source', $reqFields)) style="accent-color:#0f5132;">
+                <span>আয়ের উৎস (Income Source)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="monthly_income" class="admission-field-chk" @checked(in_array('monthly_income', $reqFields)) style="accent-color:#0f5132;">
+                <span>মাসিক পারিবারিক আয় (Monthly Income)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="has_bank_account" class="admission-field-chk" @checked(in_array('has_bank_account', $reqFields)) style="accent-color:#0f5132;">
+                <span>ব্যাংক অ্যাকাউন্ট আছে কি না (Bank)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="past_training" class="admission-field-chk" @checked(in_array('past_training', $reqFields)) style="accent-color:#0f5132;">
+                <span>পূর্বে প্রশিক্ষণ নেওয়া হয়েছে কি না</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="employment_status" class="admission-field-chk" @checked(in_array('employment_status', $reqFields)) style="accent-color:#0f5132;">
+                <span>কর্মসংস্থান অবস্থা (Employment)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="monthly_cash_income" class="admission-field-chk" @checked(in_array('monthly_cash_income', $reqFields)) style="accent-color:#0f5132;">
+                <span>মাসিক নগদ আয় (Cash Income)</span>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px;font-size:12.5px;cursor:pointer;">
+                <input type="checkbox" name="admission_required_fields[]" value="training_media_source" class="admission-field-chk" @checked(in_array('training_media_source', $reqFields)) style="accent-color:#0f5132;">
+                <span>কীভাবে জানতে পেরেছেন (Media Source)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div class="form-actions" style="position: sticky; bottom: 0; background: #fff; padding: 16px 0; border-top: 1px solid #ddd; z-index: 2;">
       <button class="btn gold" type="submit" style="font-size: 15px; padding: 12px 28px;">Save All Website Settings</button>
     </div>
@@ -422,6 +647,34 @@
 </section>
 
 <script>
+function setAllAdmissionFields(checked) {
+  document.querySelectorAll('.admission-field-chk').forEach(chk => {
+    chk.checked = checked;
+  });
+}
+
+function setDefaultAdmissionFields() {
+  const defaults = [
+    'trainee_name_bn',
+    'dob',
+    'ident_type',
+    'ident_no',
+    'sex',
+    'pwd',
+    'contact_no',
+    'photo',
+    'signature_photo',
+    'ident_doc',
+    'perm_division',
+    'perm_district',
+    'perm_upazilla',
+    'perm_address',
+    'perm_area_type'
+  ];
+  document.querySelectorAll('.admission-field-chk').forEach(chk => {
+    chk.checked = defaults.includes(chk.value);
+  });
+}
 function setPalette(primary, deep, accent, accentDeep) {
   document.getElementById('primaryColorPicker').value = primary;
   document.getElementById('primaryColorInput').value = primary;

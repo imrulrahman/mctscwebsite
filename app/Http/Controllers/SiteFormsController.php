@@ -30,6 +30,16 @@ class SiteFormsController extends Controller
 
     public function apply(Request $request): RedirectResponse
     {
+        if ($request->filled('name') && !$request->filled('trainee_name_en')) {
+            $request->merge(['trainee_name_en' => $request->input('name')]);
+        }
+        if ($request->filled('phone') && !$request->filled('contact_no')) {
+            $request->merge(['contact_no' => $request->input('phone')]);
+        }
+
+        $reqFields = \App\Models\SiteSetting::getRequiredAdmissionFields();
+        $isReq = fn($f) => in_array($f, $reqFields);
+
         $validated = $request->validate([
             // Project & Course selection
             'project_name' => ['nullable', 'string', 'max:150'],
@@ -39,59 +49,59 @@ class SiteFormsController extends Controller
             'preferred_shift' => ['nullable', 'string', 'max:30'],
 
             // Personal Data
-            'trainee_name_en' => ['nullable', 'string', 'max:150'],
+            'trainee_name_en' => ['required', 'string', 'max:150'],
             'name' => ['nullable', 'string', 'max:150'],
-            'trainee_name_bn' => ['nullable', 'string', 'max:150'],
-            'dob' => ['nullable', 'date'],
-            'ident_type' => ['nullable', 'string', 'max:50'],
-            'ident_no' => ['nullable', 'string', 'max:60'],
-            'sex' => ['nullable', 'string', 'in:Male,Female,Other'],
-            'pwd' => ['nullable', 'string', 'in:Yes,No'],
-            'contact_no' => ['nullable', 'string', 'max:30'],
+            'trainee_name_bn' => [$isReq('trainee_name_bn') ? 'required' : 'nullable', 'string', 'max:150'],
+            'dob' => [$isReq('dob') ? 'required' : 'nullable', 'date'],
+            'ident_type' => [$isReq('ident_type') ? 'required' : 'nullable', 'string', 'max:50'],
+            'ident_no' => [$isReq('ident_no') ? 'required' : 'nullable', 'string', 'max:60'],
+            'sex' => [$isReq('sex') ? 'required' : 'nullable', 'string', 'in:Male,Female,Other'],
+            'pwd' => [$isReq('pwd') ? 'required' : 'nullable', 'string', 'in:Yes,No'],
+            'contact_no' => [$isReq('contact_no') ? 'required' : 'nullable', 'string', 'max:30'],
             'phone' => ['nullable', 'string', 'max:30'],
-            'email' => ['nullable', 'email', 'max:190'],
+            'email' => [$isReq('email') ? 'required' : 'nullable', 'email', 'max:190'],
+            'marital_status' => [$isReq('marital_status') ? 'required' : 'nullable', 'string', 'max:30'],
 
             // File uploads (max 3MB each)
-            'photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:3072'],
-            'ident_doc' => ['nullable', 'file', 'mimes:jpeg,png,jpg,pdf', 'max:3072'],
-            'signature_photo' => ['nullable', 'image', 'mimes:jpeg,png,jpg', 'max:3072'],
+            'photo' => [$isReq('photo') ? 'required' : 'nullable', 'image', 'mimes:jpeg,png,jpg', 'max:3072'],
+            'ident_doc' => [$isReq('ident_doc') ? 'required' : 'nullable', 'file', 'mimes:jpeg,png,jpg,pdf', 'max:3072'],
+            'signature_photo' => [$isReq('signature_photo') ? 'required' : 'nullable', 'image', 'mimes:jpeg,png,jpg', 'max:3072'],
 
             // Permanent Address
-            'perm_division' => ['nullable', 'string', 'max:60'],
-            'perm_district' => ['nullable', 'string', 'max:60'],
-            'perm_upazilla' => ['nullable', 'string', 'max:80'],
-            'perm_address' => ['nullable', 'string', 'max:500'],
-            'perm_area_type' => ['nullable', 'string', 'in:Rural,Urban'],
+            'perm_division' => [$isReq('perm_division') ? 'required' : 'nullable', 'string', 'max:60'],
+            'perm_district' => [$isReq('perm_district') ? 'required' : 'nullable', 'string', 'max:60'],
+            'perm_upazilla' => [$isReq('perm_upazilla') ? 'required' : 'nullable', 'string', 'max:80'],
+            'perm_address' => [$isReq('perm_address') ? 'required' : 'nullable', 'string', 'max:500'],
+            'perm_area_type' => [$isReq('perm_area_type') ? 'required' : 'nullable', 'string', 'in:Rural,Urban'],
 
             // Present Address
-            'pres_division' => ['nullable', 'string', 'max:60'],
-            'pres_district' => ['nullable', 'string', 'max:60'],
-            'pres_upazilla' => ['nullable', 'string', 'max:80'],
-            'pres_address' => ['nullable', 'string', 'max:500'],
-            'religion' => ['nullable', 'string', 'max:40'],
-            'ethnicity' => ['nullable', 'string', 'max:40'],
-            'education_level' => ['nullable', 'string', 'max:100'],
+            'pres_division' => [$isReq('pres_division') ? 'required' : 'nullable', 'string', 'max:60'],
+            'pres_district' => [$isReq('pres_district') ? 'required' : 'nullable', 'string', 'max:60'],
+            'pres_upazilla' => [$isReq('pres_upazilla') ? 'required' : 'nullable', 'string', 'max:80'],
+            'pres_address' => [$isReq('pres_address') ? 'required' : 'nullable', 'string', 'max:500'],
+            'religion' => [$isReq('religion') ? 'required' : 'nullable', 'string', 'max:40'],
+            'ethnicity' => [$isReq('ethnicity') ? 'required' : 'nullable', 'string', 'max:40'],
+            'education_level' => [$isReq('education_level') ? 'required' : 'nullable', 'string', 'max:100'],
             'education' => ['nullable', 'string', 'max:100'],
-            'marital_status' => ['nullable', 'string', 'max:30'],
 
             // Household Profile
-            'father_name_en' => ['nullable', 'string', 'max:150'],
-            'father_name_bn' => ['nullable', 'string', 'max:150'],
-            'mother_name_en' => ['nullable', 'string', 'max:150'],
-            'mother_name_bn' => ['nullable', 'string', 'max:150'],
-            'emergency_contact' => ['nullable', 'string', 'max:30'],
-            'household_members' => ['nullable', 'integer', 'min:1', 'max:30'],
-            'income_source' => ['nullable', 'string', 'max:150'],
-            'monthly_income' => ['nullable', 'numeric', 'min:0'],
+            'father_name_en' => [$isReq('father_name_en') ? 'required' : 'nullable', 'string', 'max:150'],
+            'father_name_bn' => [$isReq('father_name_bn') ? 'required' : 'nullable', 'string', 'max:150'],
+            'mother_name_en' => [$isReq('mother_name_en') ? 'required' : 'nullable', 'string', 'max:150'],
+            'mother_name_bn' => [$isReq('mother_name_bn') ? 'required' : 'nullable', 'string', 'max:150'],
+            'emergency_contact' => [$isReq('emergency_contact') ? 'required' : 'nullable', 'string', 'max:30'],
+            'household_members' => [$isReq('household_members') ? 'required' : 'nullable', 'integer', 'min:1', 'max:30'],
+            'income_source' => [$isReq('income_source') ? 'required' : 'nullable', 'string', 'max:150'],
+            'monthly_income' => [$isReq('monthly_income') ? 'required' : 'nullable', 'numeric', 'min:0'],
             'yearly_income' => ['nullable', 'numeric', 'min:0'],
             'daily_income_per_person' => ['nullable', 'numeric', 'min:0'],
-            'has_bank_account' => ['nullable', 'string', 'in:Yes,No'],
+            'has_bank_account' => [$isReq('has_bank_account') ? 'required' : 'nullable', 'string', 'in:Yes,No'],
 
             // Skills & Experiences
-            'past_training' => ['nullable', 'string', 'in:Yes,No'],
-            'employment_status' => ['nullable', 'string', 'max:60'],
-            'monthly_cash_income' => ['nullable', 'numeric', 'min:0'],
-            'training_media_source' => ['nullable', 'string', 'max:100'],
+            'past_training' => [$isReq('past_training') ? 'required' : 'nullable', 'string', 'in:Yes,No'],
+            'employment_status' => [$isReq('employment_status') ? 'required' : 'nullable', 'string', 'max:60'],
+            'monthly_cash_income' => [$isReq('monthly_cash_income') ? 'required' : 'nullable', 'numeric', 'min:0'],
+            'training_media_source' => [$isReq('training_media_source') ? 'required' : 'nullable', 'string', 'max:100'],
         ]);
 
         // Upload files

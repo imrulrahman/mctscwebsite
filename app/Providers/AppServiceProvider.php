@@ -80,9 +80,12 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('settings', $settings);
                 $pendingAdmissionsCount = AdmissionApplication::where('status', 'new')->count();
                 $view->with('pendingAdmissionsCount', $pendingAdmissionsCount);
+                $requiredAdmissionFields = SiteSetting::getRequiredAdmissionFields();
+                $view->with('requiredAdmissionFields', $requiredAdmissionFields);
             } catch (\Throwable $e) {
                 $view->with('settings', collect([]));
                 $view->with('pendingAdmissionsCount', 0);
+                $view->with('requiredAdmissionFields', []);
             }
         });
     }

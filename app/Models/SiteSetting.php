@@ -18,4 +18,28 @@ class SiteSetting extends Model
         $val = static::where('key', $key)->value('value');
         return function_exists('storage_asset') ? storage_asset($val, $defaultAsset) : asset($defaultAsset ?? '');
     }
+
+    public static function getRequiredAdmissionFields(): array
+    {
+        $val = static::where('key', 'admission_required_fields')->value('value');
+        if ($val !== null) {
+            $decoded = json_decode($val, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+        // Default minimal required fields before admin customizes in Site Settings
+        return [
+            'contact_no',
+        ];
+    }
+
+    public static function isAdmissionFieldRequired(string $field): bool
+    {
+        if (in_array($field, ['course', 'trainee_name_en'])) {
+            return true;
+        }
+        $req = static::getRequiredAdmissionFields();
+        return in_array($field, $req);
+    }
 }
