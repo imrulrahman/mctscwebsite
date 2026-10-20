@@ -166,7 +166,8 @@
       padding-top: 10px !important;
       text-align: center !important;
     }
-    html.sidebar-is-collapsed .side-footer a {
+    html.sidebar-is-collapsed .side-footer a,
+    html.sidebar-is-collapsed .side-footer .side-user-btn {
       justify-content: center !important;
       padding: 0 !important;
     }
@@ -296,7 +297,7 @@
       </a>
     </nav>
     <div class="side-footer">
-      <a href="{{ route('admin.profile.edit') }}" style="color:#fff;text-decoration:none;display:flex;align-items:center;gap:10px;" title="My Profile & Security">
+      <div class="side-user-btn" onclick="window.location='{{ route('admin.profile.edit') }}'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location='{{ route('admin.profile.edit') }}';}" role="button" tabindex="0" title="My Profile & Security" style="color:#fff;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;">
         @if(auth()->user()?->avatarUrl())
           <img src="{{ auth()->user()->avatarUrl() }}" alt="{{ auth()->user()->name }}" style="width:34px;height:34px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,0.4);flex-shrink:0;">
         @else
@@ -308,7 +309,7 @@
           <p style="margin:0;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ auth()->user()->name ?? 'Administrator' }}</p>
           <small style="color:#c3d9d0;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ auth()->user()->role?->name ?? (auth()->user()?->isSystemAdmin() ? 'System Admin' : 'Staff') }}</small>
         </div>
-      </a>
+      </div>
     </div>
   </aside>
 
