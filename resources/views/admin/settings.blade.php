@@ -645,6 +645,17 @@
   </div>
 </div>
 
+@if ($errors->any())
+  <div style="background: #fef2f2; border: 1px solid #f87171; color: #991b1b; padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(220,38,38,0.1);">
+    <strong style="display: block; font-size: 14px; margin-bottom: 6px;">⚠️ Settings could not be saved due to validation errors:</strong>
+    <ul style="margin: 0; padding-left: 20px; font-size: 13px;">
+      @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+      @endforeach
+    </ul>
+  </div>
+@endif
+
 <section class="panel form-panel" style="max-width: 1120px;">
   <form method="post" enctype="multipart/form-data" action="{{ route('admin.settings.update') }}">
     @csrf
@@ -951,13 +962,33 @@
           </div>
         </div>
         <div class="accordion-body">
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;padding:16px;border-radius:8px;margin-bottom:16px;">
+            <div style="font-weight:700;color:#166534;margin-bottom:8px;font-size:14px;display:flex;align-items:center;gap:6px;">
+              <span>🏛️</span> Institution Name on Hero Banner Display
+            </div>
+            <p style="font-size:12.5px;color:#15803d;margin:0 0 12px 0;">Configure whether and how the institution name appears in large prominent text at the top-left of the hero banner.</p>
+            <div class="field-grid">
+              <label>
+                <strong>Visibility on Hero Banner:</strong>
+                <select name="hero_show_institution_name" style="background:#fff;font-weight:600;">
+                  <option value="1" {{ old('hero_show_institution_name', $settings->get('hero_show_institution_name', '1')) === '1' ? 'selected' : '' }}>✓ Show Institution Name on Banner</option>
+                  <option value="0" {{ old('hero_show_institution_name', $settings->get('hero_show_institution_name', '1')) === '0' ? 'selected' : '' }}>✕ Hide Institution Name from Banner</option>
+                </select>
+              </label>
+              <label>
+                <strong>Institution Name (Hero Banner Text):</strong>
+                <input name="hero_institution_name" value="{{ old('hero_institution_name', $settings->get('hero_institution_name', 'Mahmudunnabi Chowdhury Technical School and College')) }}" placeholder="Mahmudunnabi Chowdhury Technical School and College">
+              </label>
+            </div>
+          </div>
+
           <div class="field-grid">
             <label>
-              Eyebrow Badge Text
+              Eyebrow Badge Text (Optional)
               <input name="hero_eyebrow" value="{{ old('hero_eyebrow', $settings->get('hero_eyebrow', 'SKILLS FOR A BRIGHTER FUTURE')) }}" placeholder="e.g. SKILLS FOR A BRIGHTER FUTURE">
             </label>
             <label>
-              Hero Action Button Text
+              Hero Action Button Text (Optional)
               <input name="hero_btn_text" value="{{ old('hero_btn_text', $settings->get('hero_btn_text', 'Explore Our Courses')) }}" placeholder="e.g. Explore Our Courses">
             </label>
           </div>

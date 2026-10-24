@@ -19,28 +19,7 @@ if (!function_exists('storage_asset')) {
             return function_exists('asset') ? asset($path) : '/' . ltrim($path, '/');
         }
         $cleanPath = ltrim(preg_replace('#^storage/#', '', $path), '/');
-        
-        // If default is provided, verify file existence on disk
-        if ($default) {
-            $candidates = [
-                storage_path('app/public/' . $cleanPath),
-                public_path('storage/' . $cleanPath),
-                base_path('storage/app/public/' . $cleanPath),
-                '/home/mctscedu/public_html/storage/' . $cleanPath,
-                '/home/mctscedu/storage/app/public/' . $cleanPath,
-            ];
-            $exists = false;
-            foreach ($candidates as $cand) {
-                if (file_exists($cand) && !is_dir($cand)) {
-                    $exists = true;
-                    break;
-                }
-            }
-            if (!$exists) {
-                return function_exists('asset') ? asset($default) : '/' . ltrim($default, '/');
-            }
-        }
-        
+
         // Always generate URL using current request host & scheme to prevent APP_URL localhost:8080 mismatch
         if (function_exists('request') && request() && request()->getHost()) {
             return rtrim(request()->getSchemeAndHttpHost() . request()->getBasePath(), '/') . '/storage/' . $cleanPath;
@@ -137,6 +116,7 @@ class AppServiceProvider extends ServiceProvider
             $locale = session('locale', 'en');
             app()->setLocale($locale);
             $view->with('currentLocale', $locale);
+            $view->with('isBn', $locale === 'bn');
 
             try {
                 $settings = SiteSetting::query()->pluck('value', 'key');

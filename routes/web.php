@@ -10,9 +10,20 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SiteFormsController;
+use App\Http\Controllers\SitePageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
+Route::get('/about', [SitePageController::class, 'about'])->name('about');
+Route::get('/courses', [SitePageController::class, 'courses'])->name('courses');
+Route::get('/projects', [SitePageController::class, 'projects'])->name('projects');
+Route::get('/notices', [SitePageController::class, 'notices'])->name('notices');
+Route::get('/gallery', [SitePageController::class, 'gallery'])->name('gallery');
+Route::get('/contact', [SitePageController::class, 'contact'])->name('contact');
+Route::get('/admissions', function () {
+    return redirect()->route('apply');
+})->name('admissions');
+
 Route::get('/apply', [SiteFormsController::class, 'showApplyForm'])->name('apply');
 Route::post('/apply', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1')->name('apply.store');
 Route::get('/apply/confirmation/{tracking_no}', [SiteFormsController::class, 'applyConfirmation'])->name('apply.confirmation');
@@ -57,6 +68,15 @@ Route::get('/deploy-update', function () {
 // Subfolder route support for local XAMPP environment (/MNCTSC/...)
 Route::prefix('MNCTSC')->group(function () {
     Route::get('/', HomeController::class);
+    Route::get('/about', [SitePageController::class, 'about']);
+    Route::get('/courses', [SitePageController::class, 'courses']);
+    Route::get('/projects', [SitePageController::class, 'projects']);
+    Route::get('/notices', [SitePageController::class, 'notices']);
+    Route::get('/gallery', [SitePageController::class, 'gallery']);
+    Route::get('/contact', [SitePageController::class, 'contact']);
+    Route::get('/admissions', function () {
+        return redirect('/MNCTSC/apply');
+    });
     Route::get('/apply', [SiteFormsController::class, 'showApplyForm']);
     Route::post('/apply', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1');
     Route::get('/apply/confirmation/{tracking_no}', [SiteFormsController::class, 'applyConfirmation']);

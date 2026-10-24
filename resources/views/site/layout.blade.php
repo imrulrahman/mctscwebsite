@@ -1,0 +1,474 @@
+@php
+  $isBn = $isBn ?? (session('locale', 'en') === 'bn');
+  $getSetting = function($key, $default = null) use ($settings) {
+      if (is_array($settings)) {
+          return $settings[$key] ?? $default;
+      }
+      return $settings?->get($key, $default) ?? $default;
+  };
+  $primaryColor = $getSetting('primary_color', '#0f5132');
+  $primaryHover = $getSetting('primary_hover', '#093722');
+  $secondaryColor = $getSetting('secondary_color', '#c59b27');
+  $secondaryHover = $getSetting('secondary_hover', '#a37d18');
+
+  $toRgba = function($hex, $alpha = 1) {
+      $hex = str_replace('#', '', $hex);
+      if (strlen($hex) == 3) {
+          $r = hexdec(substr($hex, 0, 1) . substr($hex, 0, 1));
+          $g = hexdec(substr($hex, 1, 1) . substr($hex, 1, 1));
+          $b = hexdec(substr($hex, 2, 1) . substr($hex, 2, 1));
+      } elseif (strlen($hex) == 6) {
+          $r = hexdec(substr($hex, 0, 2));
+          $g = hexdec(substr($hex, 2, 2));
+          $b = hexdec(substr($hex, 4, 2));
+      } else {
+          return "rgba(15, 81, 50, {$alpha})";
+      }
+      return "rgba({$r}, {$g}, {$b}, {$alpha})";
+  };
+
+  $siteLogo = storage_asset($getSetting('site_logo'), 'assets/MC Logo.png');
+  $instName = $getSetting('institution_name', 'Mahmudunnabi Chowdhury Technical School and College');
+@endphp
+<!doctype html>
+<html lang="{{ $isBn ? 'bn' : 'en' }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@yield('title') · {{ $instName }}</title>
+  <link rel="stylesheet" href="{{ asset('css/site.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
+  <style>
+    :root {
+      --green: {{ $primaryColor }};
+      --green-deep: {{ $primaryHover }};
+      --gold: {{ $secondaryColor }};
+      --gold-deep: {{ $secondaryHover }};
+      --mint: {{ $toRgba($primaryColor, 0.05) }};
+      --ink: {{ $primaryHover }};
+      --line: {{ $toRgba($primaryColor, 0.15) }};
+    }
+    .brand { color: {{ $primaryColor }} !important; }
+    .menu-toggle { color: {{ $primaryColor }} !important; }
+    .button-green { background: {{ $primaryColor }} !important; }
+    .button-green:hover { background: {{ $primaryHover }} !important; }
+    .button-gold { background: {{ $secondaryColor }} !important; color: #000 !important; }
+    .button-gold:hover { background: {{ $secondaryHover }} !important; }
+
+    /* Header responsive & brand wrapping fix */
+    .site-header {
+      min-height: 78px !important;
+      height: auto !important;
+      padding: 6px 0 !important;
+      background: #ffffff;
+      border-bottom: 1px solid #e2ebe6;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+    }
+    .nav-wrap {
+      min-height: 66px !important;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .brand {
+      max-width: 400px !important;
+      font-size: 15px !important;
+      line-height: 1.25 !important;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+    .brand img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+      margin-right: 12px;
+    }
+    @media (max-width: 1200px) {
+      .brand {
+        max-width: 320px !important;
+        font-size: 13.5px !important;
+      }
+    }
+
+    /* Top Page Banner */
+    .page-hero-banner {
+      background: linear-gradient(135deg, {{ $primaryHover }} 0%, {{ $primaryColor }} 100%);
+      color: #ffffff;
+      padding: 38px 0 34px 0;
+      position: relative;
+      border-bottom: 4px solid {{ $secondaryColor }};
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    }
+    .page-hero-banner h1 {
+      margin: 0 0 8px 0;
+      font-family: var(--serif);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+    }
+    .page-hero-banner p {
+      margin: 0;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 720px;
+      line-height: 1.5;
+    }
+    .page-breadcrumbs {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.75);
+      margin-top: 14px;
+    }
+    .page-breadcrumbs a {
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .page-breadcrumbs a:hover {
+      text-decoration: underline;
+    }
+
+    /* Skeuomorphic Flag Language Switcher */
+    .header-right-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .lang-switch-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      user-select: none;
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
+    .lang-switch-box .lang-code {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      text-decoration: none;
+      transition: color 0.2s ease;
+      line-height: 1;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .lang-switch-box .lang-code.active {
+      color: #1e293b;
+      font-weight: 900;
+    }
+    .lang-switch-box .lang-code.inactive {
+      color: #94a3b8;
+    }
+    .toggle-slider-track {
+      position: relative;
+      display: inline-block;
+      width: 52px;
+      height: 27px;
+      background: #e2e8f0;
+      border-radius: 999px;
+      border: 1px solid #cbd5e1;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2), inset 0 1px 2px rgba(0, 0, 0, 0.12);
+      box-sizing: border-box;
+      padding: 2px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .toggle-slider-knob {
+      width: 21px;
+      height: 21px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.32);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: transform 0.24s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .toggle-slider-knob svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 50%;
+    }
+    .toggle-slider-track.is-en .toggle-slider-knob {
+      transform: translateX(0);
+    }
+    .toggle-slider-track.is-bn .toggle-slider-knob {
+      transform: translateX(25px);
+    }
+
+    /* Standard, Compact & Elegant Footer */
+    .site-footer {
+      background: {{ $primaryHover }} !important;
+      color: #ffffff !important;
+      padding-top: 24px !important;
+      margin-top: 50px;
+      position: relative;
+    }
+    .site-footer .footer-main {
+      display: grid !important;
+      grid-template-columns: 1.15fr 1.7fr 0.65fr !important;
+      gap: 26px !important;
+      padding: 0 0 16px !important;
+      align-items: center !important;
+    }
+    .site-footer .footer-brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+    .site-footer .footer-brand img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 3px;
+      border-radius: 6px;
+      flex-shrink: 0;
+    }
+    .site-footer .footer-brand strong {
+      display: block;
+      font: 700 14px/1.3 var(--serif);
+      color: #ffffff;
+    }
+    .site-footer .footer-contact-block {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .site-footer .contact-row-top,
+    .site-footer .contact-sub-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+    }
+    .site-footer .contact-row-sub {
+      display: flex;
+      gap: 24px;
+      align-items: flex-start;
+      flex-wrap: wrap;
+    }
+    .site-footer .c-icon {
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .site-footer small {
+      display: block;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1.2;
+    }
+    .social-text-link {
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.12);
+      padding: 4px 10px;
+      border-radius: 4px;
+      transition: background 0.15s ease;
+    }
+    .social-text-link:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+    .site-footer .footer-bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    @media (max-width: 900px) {
+      .site-footer .footer-main {
+        grid-template-columns: 1fr !important;
+        gap: 18px !important;
+      }
+    }
+    @media (max-width: 680px) {
+      .main-nav {
+        display: none;
+        position: absolute;
+        top: 66px;
+        left: 0;
+        right: 0;
+        background: #fff;
+        padding: 14px 20px;
+        box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .main-nav.open { display: flex; }
+      .menu-toggle { display: block; }
+      .site-footer .footer-bottom {
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+  </style>
+  @yield('styles')
+</head>
+<body>
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a class="brand" href="{{ route('home') }}">
+      <img src="{{ $siteLogo }}" alt="{{ $instName }} logo">
+      <span>{{ $instName }}</span>
+    </a>
+    <div class="header-right-group">
+      <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+      <nav class="main-nav" aria-label="Primary navigation">
+        <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
+        <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About' }}</a>
+        <a class="{{ request()->routeIs('courses') ? 'active' : '' }}" href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
+        <a class="{{ request()->routeIs('projects') ? 'active' : '' }}" href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
+        <a class="{{ request()->routeIs('apply') ? 'active' : '' }}" href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>
+        <a class="{{ request()->routeIs('notices') ? 'active' : '' }}" href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
+        <a class="{{ request()->routeIs('gallery') ? 'active' : '' }}" href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
+        <a class="{{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">{{ $isBn ? 'যোগাযোগ' : 'Contact' }}</a>
+        <a class="nav-cta" href="{{ route('apply') }}">{{ $isBn ? 'এপ্লাই নাও' : 'Apply Now' }}</a>
+      </nav>
+
+      <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->
+      <div class="lang-switch-box" title="{{ $isBn ? 'Switch to English' : 'বাংলা ভাষায় দেখুন' }}">
+        <a href="{{ route('lang.switch', 'en') }}" class="lang-code {{ !$isBn ? 'active' : 'inactive' }}" title="English Version">EN</a>
+        <a href="{{ route('lang.switch', $isBn ? 'en' : 'bn') }}" class="toggle-slider-track {{ $isBn ? 'is-bn' : 'is-en' }}" aria-label="{{ $isBn ? 'Switch to English' : 'Switch to Bangla' }}" title="{{ $isBn ? 'Switch to English' : 'Switch to Bangla' }}">
+          <div class="toggle-slider-knob">
+            @if($isBn)
+              <!-- Bangladesh Flag Knob (Round) -->
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <clipPath id="bd-knob-clip-layout"><circle cx="30" cy="30" r="30"/></clipPath>
+                <g clip-path="url(#bd-knob-clip-layout)">
+                  <rect width="60" height="60" fill="#006a4e"/>
+                  <circle cx="28" cy="30" r="14" fill="#f42a41"/>
+                </g>
+              </svg>
+            @else
+              <!-- UK Flag Knob (Round) -->
+              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <clipPath id="uk-knob-clip-layout"><circle cx="30" cy="30" r="30"/></clipPath>
+                <g clip-path="url(#uk-knob-clip-layout)">
+                  <rect width="60" height="60" fill="#012169"/>
+                  <path d="M0 0 L60 60 M60 0 L0 60" stroke="#ffffff" stroke-width="11"/>
+                  <path d="M0 0 L60 60" stroke="#C8102E" stroke-width="4"/>
+                  <path d="M60 0 L0 60" stroke="#C8102E" stroke-width="4"/>
+                  <path d="M30 0 v60 M0 30 h60" stroke="#ffffff" stroke-width="15"/>
+                  <path d="M30 0 v60 M0 30 h60" stroke="#C8102E" stroke-width="9"/>
+                </g>
+              </svg>
+            @endif
+          </div>
+        </a>
+        <a href="{{ route('lang.switch', 'bn') }}" class="lang-code {{ $isBn ? 'active' : 'inactive' }}" title="বাংলা সংস্করণ">বাং</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+@hasSection('header')
+  @yield('header')
+@else
+  <section class="page-hero-banner">
+    <div class="container">
+      <h1>@yield('page_title', 'Page')</h1>
+      @hasSection('page_subtitle')
+        <p>@yield('page_subtitle')</p>
+      @endif
+      <div class="page-breadcrumbs">
+        <a href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
+        <span>›</span>
+        <span>@yield('page_title', 'Page')</span>
+      </div>
+    </div>
+  </section>
+@endif
+
+<main>
+  @yield('content')
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-main">
+    <div class="footer-brand">
+      <img src="{{ $siteLogo }}" alt="{{ $instName }} crest">
+      <strong>{{ $instName }}</strong>
+    </div>
+
+    <div class="footer-contact-block">
+      <div class="contact-row-top">
+        <svg class="c-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+          <circle cx="12" cy="10" r="3"></circle>
+        </svg>
+        <div>
+          <small>{{ $isBn ? 'আমাদের ঠিকানা' : 'Our address' }}</small>
+          <strong>{{ $getSetting('address', '273/A/520, Chodu Chowdhury Road, Sagorika, Pahartali, Chattogram') }}</strong>
+        </div>
+      </div>
+
+      <div class="contact-row-sub">
+        <div class="contact-sub-item">
+          <svg class="c-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+          <div>
+            <small>{{ $isBn ? 'ফোন নম্বর' : 'Phone number' }}</small>
+            <strong>{{ $getSetting('phone', '+8801880919275') }}</strong>
+          </div>
+        </div>
+
+        <div class="contact-sub-item">
+          <svg class="c-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+            <polyline points="22,6 12,13 2,6"></polyline>
+          </svg>
+          <div>
+            <small>{{ $isBn ? 'ইমেইল এড্রেস' : 'Email address' }}</small>
+            <strong>{{ $getSetting('email', 'mnctsc@gmail.com') }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-social-col">
+      <small>{{ $isBn ? 'সোশ্যাল মিডিয়ায় আমরা' : 'Follow Us' }}</small>
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:6px;">
+        <a class="social-text-link" href="{{ $getSetting('social_facebook', 'https://www.facebook.com/mnctsc') }}" target="_blank" rel="noopener">
+          Facebook
+        </a>
+        @if(!empty($getSetting('social_youtube')))
+          <a class="social-text-link" href="{{ $getSetting('social_youtube') }}" target="_blank" rel="noopener">
+            YouTube
+          </a>
+        @endif
+        @if(!empty($getSetting('social_linkedin')))
+          <a class="social-text-link" href="{{ $getSetting('social_linkedin') }}" target="_blank" rel="noopener">
+            LinkedIn
+          </a>
+        @endif
+      </div>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <span>© {{ date('Y') }} {{ $instName }}. {{ $isBn ? 'সর্বস্বত্ব সংরক্ষিত।' : 'All rights reserved.' }}</span>
+    <span>{{ $isBn ? 'বাস্তবমুখী স্কিলস · উন্নত কর্মসংস্থান' : $getSetting('tagline', 'Practical Skills · Better Opportunities') }}</span>
+  </div>
+</footer>
+
+<div class="lightbox" aria-hidden="true">
+  <button aria-label="Close gallery">×</button>
+  <img src="" alt="">
+</div>
+
+<script src="{{ asset('js/site.js') }}"></script>
+@yield('scripts')
+</body>
+</html>

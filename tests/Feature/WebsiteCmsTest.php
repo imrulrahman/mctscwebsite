@@ -182,4 +182,15 @@ class WebsiteCmsTest extends TestCase
         $this->assertEquals('reviewing', $app->status);
         $this->assertNull($app->approved_at);
     }
+
+    public function test_dedicated_site_pages_render_successfully(): void
+    {
+        $this->get(route('about'))->assertOk()->assertSee('About');
+        $this->get(route('courses'))->assertOk()->assertSee('Courses');
+        $this->get(route('projects'))->assertOk()->assertSee('Projects');
+        $this->get(route('notices'))->assertOk()->assertSee('Notice');
+        $this->get(route('gallery'))->assertOk()->assertSee('Gallery');
+        $this->get(route('contact'))->assertOk()->assertSee('Contact');
+        $this->get(route('admissions'))->assertRedirect(route('apply'));
+    }
 }

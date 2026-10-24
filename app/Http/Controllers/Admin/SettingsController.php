@@ -19,6 +19,7 @@ class SettingsController extends Controller
         'primary_color', 'primary_hover', 'secondary_color', 'secondary_hover',
         // Hero
         'hero_eyebrow', 'hero_title', 'hero_subtitle', 'hero_btn_text',
+        'hero_show_institution_name', 'hero_institution_name',
         // About
         'about_title', 'about', 'about_aside',
         // Facilities
@@ -52,7 +53,7 @@ class SettingsController extends Controller
             $rules[$field] = ['nullable', 'string', 'max:5000'];
         }
         foreach (self::IMAGE_FIELDS as $field) {
-            $rules[$field] = ['nullable', 'image', 'max:5120']; // up to 5MB
+            $rules[$field] = ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,svg,webp,ico', 'max:5120']; // up to 5MB
         }
 
         $request->validate($rules);
@@ -103,6 +104,14 @@ class SettingsController extends Controller
                     }
                 }
             }
+        }
+
+        // Clear cached views and settings cache so changes take effect immediately
+        try {
+            \Illuminate\Support\Facades\Artisan::call('view:clear');
+            \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        } catch (\Throwable $e) {
+            // Ignore if artisan calls fail in restricted hosting
         }
 
         if ($request->input('action') === 'apply_color') {

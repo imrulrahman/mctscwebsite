@@ -89,9 +89,111 @@
     .button-gold { background: {{ $secondaryColor }} !important; color: #000 !important; }
     .button-gold:hover { background: {{ $secondaryHover }} !important; }
 
-    /* Dynamic Theme Hero Overlay - Eliminates old green tint */
+    /* Header responsive & brand wrapping fix */
+    .site-header {
+      min-height: 78px !important;
+      height: auto !important;
+      padding: 6px 0 !important;
+    }
+    .nav-wrap {
+      min-height: 66px !important;
+    }
+    .brand {
+      max-width: 400px !important;
+      font-size: 15px !important;
+      line-height: 1.25 !important;
+      text-decoration: none !important;
+    }
+    @media (max-width: 1200px) {
+      .brand {
+        max-width: 320px !important;
+        font-size: 13.5px !important;
+      }
+    }
+
+    /* Hero Overlay - Completely removed as requested by user */
     .hero-overlay {
-      background: linear-gradient(90deg, {{ $toRgba($primaryHover, 0.94) }} 0%, {{ $toRgba($primaryHover, 0.65) }} 42%, {{ $toRgba($primaryHover, 0.10) }} 85%) !important;
+      display: none !important;
+    }
+
+    /* Hero Institution Banner & Prominent Title */
+    .hero {
+      position: relative;
+      min-height: 380px !important;
+      display: flex;
+      align-items: flex-start;
+    }
+    .hero-inst-banner {
+      max-width: 680px;
+      padding: 12px 0 24px 0;
+    }
+    .hero-inst-name {
+      font-family: var(--serif);
+      font-weight: 700;
+      font-size: 38px;
+      line-height: 1.22;
+      color: #ffffff;
+      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.85), 0 1px 4px rgba(0, 0, 0, 0.95);
+      margin: 0;
+      letter-spacing: -0.3px;
+    }
+    @media (max-width: 768px) {
+      .hero-inst-name {
+        font-size: 26px;
+        line-height: 1.25;
+      }
+      .hero {
+        min-height: 300px !important;
+      }
+    }
+
+    /* 2 Rows of 4 Cards (total 8), significantly larger cards & images */
+    .course-grid {
+      display: grid !important;
+      grid-template-columns: repeat(4, 1fr) !important;
+      gap: 20px !important;
+    }
+    .course-card {
+      border-radius: 8px !important;
+      overflow: hidden !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+      transition: transform 0.22s ease, box-shadow 0.22s ease !important;
+      background: #ffffff !important;
+      display: flex !important;
+      flex-direction: column !important;
+      text-decoration: none !important;
+    }
+    .course-card:hover {
+      transform: translateY(-6px) !important;
+      box-shadow: 0 12px 24px rgba(15, 81, 50, 0.16) !important;
+    }
+    .course-card img {
+      width: 100% !important;
+      height: 165px !important;
+      object-fit: cover !important;
+      display: block !important;
+    }
+    .course-card b {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      text-align: center !important;
+      padding: 14px 12px !important;
+      font: 700 15px/1.35 var(--serif) !important;
+      color: #1e3d35 !important;
+      min-height: 58px !important;
+      background: #ffffff !important;
+    }
+    @media (max-width: 960px) {
+      .course-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 14px !important;
+      }
+    }
+    @media (max-width: 520px) {
+      .course-grid {
+        grid-template-columns: 1fr !important;
+      }
     }
 
     /* Notice Bar bullet fix */
@@ -382,21 +484,21 @@
 <body>
 <header class="site-header">
   <div class="container nav-wrap">
-    <a class="brand" href="#home">
+    <a class="brand" href="{{ route('home') }}">
       <img src="{{ $siteLogo }}" alt="{{ $settings->get('institution_name', 'MCTSC') }} logo">
       <span>{{ $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School and College') }}</span>
     </a>
     <div class="header-right-group">
       <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
       <nav class="main-nav" aria-label="Primary navigation">
-        <a class="active" href="#home">{{ $isBn ? 'হোম' : 'Home' }}</a>
-        <a href="#about">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About' }}</a>
-        <a href="#courses">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
-        <a href="#projects">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
-        <a href="#admissions">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>
-        <a href="#notices">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
-        <a href="#gallery">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
-        <a href="#contact">{{ $isBn ? 'যোগাযোগ' : 'Contact' }}</a>
+        <a class="active" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
+        <a href="{{ route('about') }}">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About' }}</a>
+        <a href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
+        <a href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
+        <a href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>
+        <a href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
+        <a href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
+        <a href="{{ route('contact') }}">{{ $isBn ? 'যোগাযোগ' : 'Contact' }}</a>
         <a class="nav-cta" href="{{ route('apply') }}">{{ $isBn ? 'এপ্লাই নাও' : 'Apply Now' }}</a>
       </nav>
       <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->
@@ -438,12 +540,16 @@
 <main>
   <!-- HERO SECTION -->
   <section id="home" class="hero" style="background-image: url('{{ $heroBanner }}'); background-size: cover; background-position: center;">
-    <div class="hero-overlay"></div>
-    <div class="container hero-content">
-      <p class="eyebrow">{{ $isBn ? 'উজ্জ্বল ভবিষ্যতের জন্য প্র্যাকটিক্যাল স্কিলস' : $settings->get('hero_eyebrow', 'SKILLS FOR A BRIGHTER FUTURE') }}</p>
-      <h1>{{ $isBn ? 'ব্যবহারিক দক্ষতা · উন্নত সম্ভাবনা' : $settings->get('hero_title', 'Practical Skills. Better Opportunities.') }}</h1>
-      <p>{{ $isBn ? 'আত্মবিশ্বাসী ভবিষ্যতের জন্য দক্ষতাভিত্তিক কারিগরি প্রশিক্ষণ।' : $settings->get('hero_subtitle', 'Skills-focused technical training for a confident future.') }}</p>
-      <a class="button button-gold" href="#courses">{{ $isBn ? 'আমাদের কোর্সসমূহ দেখুন' : $settings->get('hero_btn_text', 'Explore Our Courses') }} <span>→</span></a>
+    <div class="container hero-content" style="padding-top: 48px;">
+      @php
+        $showHeroInstName = $settings->get('hero_show_institution_name', '1') !== '0';
+        $heroInstName = $settings->get('hero_institution_name', $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School and College'));
+      @endphp
+      @if($showHeroInstName && !empty($heroInstName))
+        <div class="hero-inst-banner">
+          <h1 class="hero-inst-name">{{ $heroInstName }}</h1>
+        </div>
+      @endif
     </div>
   </section>
 
@@ -458,7 +564,7 @@
           <span>{{ $isBn ? 'নতুন নোটিশ এখানে প্রকাশিত হবে।' : 'New notices will be published here.' }}</span>
         @endforelse
       </div>
-      <a href="#notices-list">{{ $isBn ? 'সব নোটিশ দেখুন →' : 'View All Notices →' }}</a>
+      <a href="{{ route('notices') }}">{{ $isBn ? 'সব নোটিশ দেখুন →' : 'View All Notices →' }}</a>
     </div>
   </section>
 
@@ -470,7 +576,7 @@
         <h2>{{ $isBn ? 'আমাদের ইনস্টিটিউট সম্পর্কে' : $settings->get('about_title', 'About Our College') }}</h2>
         <div class="gold-rule"></div>
         <p>{{ $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ একটি মানসম্মত কারিগরি ও বৃত্তিমূলক শিক্ষা প্রতিষ্ঠান। ব্যবহারিক প্রশিক্ষণ, বাস্তবমুখী দক্ষতা ও উপযুক্ত দিকনির্দেশনার মাধ্যমে শিক্ষার্থীদের আত্মবিশ্বাসী করে গড়ে তোলা এবং উন্নত কর্মসংস্থানের সুযোগ সৃষ্টি করাই আমাদের মূল লক্ষ্য।' : $settings->get('about', 'Quality technical and vocational education for a brighter future.') }}</p>
-        <a class="button button-green" href="#contact">{{ $isBn ? 'যোগাযোগ করুন' : 'Contact Our College' }} <span>→</span></a>
+        <a class="button button-green" href="{{ route('contact') }}">{{ $isBn ? 'যোগাযোগ করুন' : 'Contact Our College' }} <span>→</span></a>
       </div>
       <div class="about-image">
         <img src="{{ $aboutImg }}" alt="{{ $settings->get('institution_name', 'College campus') }}">
@@ -507,6 +613,11 @@
         @empty
           <p>{{ $isBn ? 'কোর্স সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে।' : 'Course information will be published soon.' }}</p>
         @endforelse
+      </div>
+      <div style="text-align: center; margin-top: 28px;">
+        <a href="{{ route('courses') }}" class="button button-gold" style="font-weight: 700; padding: 12px 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+          {{ $isBn ? 'সবগুলো কোর্স ও পাঠ্যক্রম বিস্তারিত দেখুন →' : 'View All Courses & Full Curriculum →' }}
+        </a>
       </div>
     </div>
   </section>
