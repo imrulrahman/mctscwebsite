@@ -250,4 +250,41 @@ class WebsiteCmsTest extends TestCase
         $settingsResponse->assertSee('📐 Recommended Resolution: 1000 × 650 px');
         $settingsResponse->assertSee('📐 Recommended: 800 × 500 px');
     }
+
+    public function test_admin_can_upload_custom_about_image_and_it_reflects_on_site(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $admin = User::first() ?? User::create([
+            'name' => 'Settings Admin',
+            'email' => 'settings_admin@test.local',
+            'password' => 'Passw0rd!123',
+            'is_admin' => true,
+            'is_system_admin' => true,
+            'is_active' => true,
+        ]);
+
+        $fakeImage = \Illuminate\Http\UploadedFile::fake()->image('custom_campus_about.jpg', 1200, 800);
+
+        $response = $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'about_image' => $fakeImage,
+        ]);
+
+        $response->assertRedirect();
+        $response->assertSessionHas('success');
+
+        $savedPath = \App\Models\SiteSetting::where('key', 'about_image')->value('value');
+        $this->assertNotEmpty($savedPath);
+        $this->assertStringStartsWith('settings/', $savedPath);
+
+        // Check About page
+        $aboutResponse = $this->get(route('about'));
+        $aboutResponse->assertOk();
+        $aboutResponse->assertSee($savedPath);
+
+        // Check Home page
+        $homeResponse = $this->get(route('home'));
+        $homeResponse->assertOk();
+        $homeResponse->assertSee($savedPath);
+    }
 }

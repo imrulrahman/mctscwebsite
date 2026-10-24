@@ -1161,17 +1161,20 @@
 
           <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin-top:14px;">
             <label>
-              <strong>Campus Building Photograph</strong>
+              <strong>About Us & Institute Photograph (আমাদের পরিচিতি ও ইন্সটিটিউট ছবি)</strong>
               <small style="color:#0369a1;background:#e0f2fe;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:600;display:inline-block;margin:4px 0 6px 0;">
-                📐 Recommended Resolution: 1000 × 650 px or 1200 × 800 px (3:2 Aspect Ratio, Landscape JPG/WEBP).
+                📐 Recommended Resolution: 1000 × 650 px or 1200 × 800 px (3:2 Aspect Ratio, Landscape JPG/PNG/WEBP). এই ছবিটি ওয়েবসাইট হোমপেইজের Institute Background এবং About Us পেইজে সরাসরি প্রদর্শিত হয়।
               </small>
               <input type="file" name="about_image" accept="image/*">
               @php
-                $currentAbout = storage_asset($settings->get('about_image'), 'assets/MC Building Photo.jpg');
+                $currentAbout = storage_asset($settings->get('about_image'), 'assets/about_mahmudunnabi_legacy.jpg');
+                if (empty($settings->get('about_image')) || $settings->get('about_image') === 'assets/MC Building Photo.jpg') {
+                    $currentAbout = asset('assets/about_mahmudunnabi_legacy.jpg');
+                }
               @endphp
               <div style="margin-top: 10px; display: flex; align-items: center; gap: 14px;">
-                <img src="{{ $currentAbout }}" alt="Campus" style="height: 70px; max-width: 180px; object-fit: cover; border: 1px solid #ccc; border-radius: 4px;">
-                <span style="font-size: 12px; color: #555;">Current Campus Building Preview</span>
+                <img src="{{ $currentAbout }}" alt="About Image" style="height: 70px; max-width: 180px; object-fit: cover; border: 1px solid #ccc; border-radius: 4px;">
+                <span style="font-size: 12px; color: #555;">বর্তমান প্রদর্শিত ছবি (Current About Preview)</span>
               </div>
             </label>
           </div>
