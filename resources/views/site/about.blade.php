@@ -19,72 +19,90 @@
   $f4_img = storage_asset($settings['facility_4_image'] ?? null, 'assets/SMO Lab.jpg');
 @endphp
 
+<style>
+.about-float-media {
+  float: right;
+  width: 440px;
+  max-width: 44%;
+  margin: 6px 0 24px 34px;
+}
+@media (max-width: 768px) {
+  .about-float-media {
+    float: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 0 22px 0 !important;
+  }
+}
+</style>
+
 <section class="section" style="padding-top: 36px; padding-bottom: 50px;">
   <div class="container">
 
-    <!-- 1. INTRO GRID (HERITAGE & FOUNDATION) -->
-    <div style="display: grid; grid-template-columns: 1.25fr 0.95fr; gap: 40px; align-items: start; margin-bottom: 54px;">
-      <div>
-        <span class="section-kicker">{{ $isBn ? 'আমাদের পরিচিতি' : 'ABOUT US' }}</span>
-        <h2 style="font-family: var(--serif); font-size: 30px; color: var(--green); margin: 6px 0 8px 0; line-height: 1.25;">
-          {{ $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Mahmudunnabi Chowdhury Technical School & College' }}
-        </h2>
-        <p style="color: var(--gold); font-weight: 700; font-size: 15px; margin: 0 0 16px 0; letter-spacing: 0.3px;">
-          {{ $isBn ? 'দক্ষতা অর্জন · সুপ্ত সম্ভাবনার বিকাশ · ভবিষ্যৎ বিনির্মাণ' : 'Building Skills. Unlocking Potential. Shaping Futures.' }}
-        </p>
-        <div class="gold-rule" style="width: 50px; height: 3px; background: var(--gold); margin-bottom: 22px;"></div>
+    <!-- 1. INTRO (HERITAGE & FOUNDATION) WITH WRAP-AROUND IMAGE -->
+    <div style="margin-bottom: 54px;">
+      <span class="section-kicker">{{ $isBn ? 'আমাদের পরিচিতি' : 'ABOUT US' }}</span>
+      <h2 style="font-family: var(--serif); font-size: 30px; color: var(--green); margin: 6px 0 8px 0; line-height: 1.25;">
+        {{ $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Mahmudunnabi Chowdhury Technical School & College' }}
+      </h2>
+      <p style="color: var(--gold); font-weight: 700; font-size: 15px; margin: 0 0 16px 0; letter-spacing: 0.3px;">
+        {{ $isBn ? 'দক্ষতা অর্জন · সুপ্ত সম্ভাবনার বিকাশ · ভবিষ্যৎ বিনির্মাণ' : 'Building Skills. Unlocking Potential. Shaping Futures.' }}
+      </p>
+      <div class="gold-rule" style="width: 50px; height: 3px; background: var(--gold); margin-bottom: 22px;"></div>
 
-        <div style="font-size: 15px; line-height: 1.8; color: #334155; text-align: justify; text-justify: inter-word;">
-          @if($isBn)
-            <p style="margin-bottom: 14px;">
-              <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> চট্টগ্রামের পাহাড়তলী থানাধীন সাগরিকা এলাকায় অবস্থিত একটি বৃত্তিমূলক শিক্ষা ও দক্ষতা উন্নয়ন প্রতিষ্ঠান, যা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative-IMI)</strong> কর্তৃক পরিচালিত। ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি অন্তর্ভুক্তি ও বাজার-চাহিদাভিত্তিক কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণের (TVET) মাধ্যমে সুবিধাবঞ্চিত ও বেকার তরুণ-তরুণী, পুরুষ ও নারীদের ক্ষমতায়নে প্রতিশ্রুতিবদ্ধ।
-            </p>
-            <p style="margin-bottom: 14px;">
-              প্রায় ২০ বছরের প্রাতিষ্ঠানিক অভিজ্ঞতার মাধ্যমে MCTSC বিভিন্ন পেশা ও ট্রেডে ৭,০০০-এরও বেশি তরুণ-তরুণীকে বাস্তবমুখী কারিগরি দক্ষতায় সজ্জিত করেছে, যা তাদেরকে বেতনভিত্তিক চাকরি, আত্মকর্মসংস্থান এবং উদ্যোক্তা হতে সহায়তা করেছে। আমাদের প্রশিক্ষণ পদ্ধতিতে <strong>৮০% ব্যবহারিক ও হাতে-কলমে শিক্ষা এবং ২০% তাত্ত্বিক নির্দেশনা</strong> প্রদান করা হয়, যা কর্মক্ষেত্রের বাস্তব অভিজ্ঞতা, শিল্পপ্রতিষ্ঠানের সাথে নিবিড় সংযোগ এবং সমাজভিত্তিক প্রশিক্ষণের মাধ্যমে পরিচালিত।
-            </p>
-            <p style="margin-bottom: 14px;">
-              MCTSC সরকারি সংস্থা, উন্নয়ন সহযোগী, শিল্পপ্রতিষ্ঠান এবং জাতীয় ও আন্তর্জাতিক সংস্থার (যার মধ্যে <strong>ASSET, BRAC, UNDP, ILO, SOS Children's Villages</strong> এবং অন্যান্য অংশীদার অন্তর্ভুক্ত) সাথে যৌথভাবে কাজ করে। সংশ্লিষ্ট কারিগরি শিক্ষা ও দক্ষতা উন্নয়ন কর্তৃপক্ষের অধীন একটি অনুমোদিত ও স্বীকৃত প্রশিক্ষণ কেন্দ্র হিসেবে আমরা যোগ্যতাভিত্তিক প্রশিক্ষণ (CBT), পূর্ব অভিজ্ঞতার স্বীকৃতি (RPL) এবং বিভিন্ন কারিগরি ও বৃত্তিমূলক পেশায় স্বল্পমেয়াদী কোর্স পরিচালনা করি।
-            </p>
-            <p style="margin-bottom: 16px;">
-              প্রশিক্ষণ প্রদানের পাশাপাশি গ্র্যাজুয়েটদের টেকসই জীবিকা গড়ে তুলতে আমরা কর্মসংস্থান সহায়তা, ক্যারিয়ার গাইডেন্স, উদ্যোক্তা উন্নয়ন সহায়তা এবং প্রশিক্ষণোত্তর নিয়মিত ফলোআপ প্রদান করি।
-            </p>
-            <div style="background: rgba(15, 81, 50, 0.06); border-left: 4px solid var(--green); border-radius: 8px; padding: 14px 18px; margin-top: 14px; font-size: 14.5px; line-height: 1.65; color: #163d32;">
-              <strong style="color: var(--green);">আমাদের অঙ্গীকার (Our Commitment):</strong> মানসম্মত, অন্তর্ভুক্তিমূলক এবং শিল্প-উপযোগী বৃত্তিমূলক শিক্ষার মাধ্যমে একটি দক্ষ কর্মীবাহিনী গড়ে তোলা, কর্মসংস্থানের সুযোগ সম্প্রসারণ করা, দারিদ্র্য হ্রাস করা এবং বাংলাদেশের টেকসই আর্থ-সামাজিক উন্নয়নে সক্রিয় অবদান রাখা।
-            </div>
-          @else
-            <p style="margin-bottom: 14px;">
-              <strong>Mahmudunnabi Chowdhury Technical School and College (MCTSC)</strong> is a vocational education and skills development institution managed by <strong>Impact Initiative-IMI</strong> and based in Sagorika, Chattogram, Bangladesh. Established in 2006, MCTSC is committed to empowering disadvantaged and unemployed youth, men, and women through inclusive, market-oriented technical and vocational education and training (TVET).
-            </p>
-            <p style="margin-bottom: 14px;">
-              With nearly 20 years of institutional experience, MCTSC has equipped more than 7,000 young people with practical skills across various occupations, helping them pursue wage employment, self-employment, and entrepreneurship. Our training approach emphasizes <strong>80% practical learning and 20% theoretical instruction</strong>, supported by real-work experience, industry engagement, and community-based training.
-            </p>
-            <p style="margin-bottom: 14px;">
-              MCTSC works in collaboration with government agencies, development partners, employers, and national and international organizations, including <strong>ASSET, BRAC, UNDP, ILO, SOS Children's Villages</strong>, and other stakeholders. As an affiliated and recognized training centre under relevant technical education and skills development authorities, we offer competency-based training, Recognition of Prior Learning (RPL), and short courses in diverse technical and vocational occupations.
-            </p>
-            <p style="margin-bottom: 16px;">
-              Beyond training, we provide employment support, career guidance, entrepreneurship assistance, and post-employment follow-up to help graduates build sustainable livelihoods.
-            </p>
-            <div style="background: rgba(15, 81, 50, 0.06); border-left: 4px solid var(--green); border-radius: 8px; padding: 14px 18px; margin-top: 14px; font-size: 14.5px; line-height: 1.65; color: #163d32;">
-              <strong style="color: var(--green);">Our Commitment:</strong> To develop a skilled workforce, expand employment opportunities, reduce poverty, and contribute to Bangladesh's sustainable socioeconomic development through quality, inclusive, and industry-responsive vocational education.
-            </div>
-          @endif
-        </div>
-
-        <div style="margin-top: 26px; display: flex; gap: 14px; flex-wrap: wrap;">
-          <a href="{{ route('apply') }}" class="button button-gold" style="font-weight: 700; padding: 11px 24px;">
-            {{ $isBn ? 'অনলাইন ভর্তি আবেদন ➔' : 'Apply for Admission ➔' }}
-          </a>
-          <a href="{{ route('courses') }}" class="button button-green" style="font-weight: 700; padding: 11px 24px;">
-            {{ $isBn ? 'কোর্সসমূহ দেখুন' : 'Explore Courses' }}
-          </a>
-        </div>
-      </div>
-
-      <div>
+      <!-- Floated Image (Text wraps around it and expands full width below) -->
+      <div class="about-float-media">
         <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(15,81,50,0.12); border: 1px solid #e2e8f0; background: #ffffff; padding: 6px;">
           <img src="{{ $aboutImg }}" alt="Mahmudunnabi Chowdhury Legacy & College Campus" style="width: 100%; height: auto; display: block; object-fit: contain; border-radius: 8px;">
         </div>
       </div>
+
+      <div style="font-size: 15px; line-height: 1.8; color: #334155; text-align: justify; text-justify: inter-word;">
+        @if($isBn)
+          <p style="margin-bottom: 14px;">
+            <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> চট্টগ্রামের পাহাড়তলী থানাধীন সাগরিকা এলাকায় অবস্থিত একটি বৃত্তিমূলক শিক্ষা ও দক্ষতা উন্নয়ন প্রতিষ্ঠান, যা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative-IMI)</strong> কর্তৃক পরিচালিত। ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি অন্তর্ভুক্তি ও বাজার-চাহিদাভিত্তিক কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণের (TVET) মাধ্যমে সুবিধাবঞ্চিত ও বেকার তরুণ-তরুণী, পুরুষ ও নারীদের ক্ষমতায়নে প্রতিশ্রুতিবদ্ধ।
+          </p>
+          <p style="margin-bottom: 14px;">
+            প্রায় ২০ বছরের প্রাতিষ্ঠানিক অভিজ্ঞতার মাধ্যমে MCTSC বিভিন্ন পেশা ও ট্রেডে ৭,০০০-এরও বেশি তরুণ-তরুণীকে বাস্তবমুখী কারিগরি দক্ষতায় সজ্জিত করেছে, যা তাদেরকে বেতনভিত্তিক চাকরি, আত্মকর্মসংস্থান এবং উদ্যোক্তা হতে সহায়তা করেছে। আমাদের প্রশিক্ষণ পদ্ধতিতে <strong>৮০% ব্যবহারিক ও হাতে-কলমে শিক্ষা এবং ২০% তাত্ত্বিক নির্দেশনা</strong> প্রদান করা হয়, যা কর্মক্ষেত্রের বাস্তব অভিজ্ঞতা, শিল্পপ্রতিষ্ঠানের সাথে নিবিড় সংযোগ এবং সমাজভিত্তিক প্রশিক্ষণের মাধ্যমে পরিচালিত।
+          </p>
+          <p style="margin-bottom: 14px;">
+            MCTSC সরকারি সংস্থা, উন্নয়ন সহযোগী, শিল্পপ্রতিষ্ঠান এবং জাতীয় ও আন্তর্জাতিক সংস্থার (যার মধ্যে <strong>ASSET, BRAC, UNDP, ILO, SOS Children's Villages</strong> এবং অন্যান্য অংশীদার অন্তর্ভুক্ত) সাথে যৌথভাবে কাজ করে। সংশ্লিষ্ট কারিগরি শিক্ষা ও দক্ষতা উন্নয়ন কর্তৃপক্ষের অধীন একটি অনুমোদিত ও স্বীকৃত প্রশিক্ষণ কেন্দ্র হিসেবে আমরা যোগ্যতাভিত্তিক প্রশিক্ষণ (CBT), পূর্ব অভিজ্ঞতার স্বীকৃতি (RPL) এবং বিভিন্ন কারিগরি ও বৃত্তিমূলক পেশায় স্বল্পমেয়াদী কোর্স পরিচালনা করি।
+          </p>
+          <p style="margin-bottom: 16px;">
+            প্রশিক্ষণ প্রদানের পাশাপাশি গ্র্যাজুয়েটদের টেকসই জীবিকা গড়ে তুলতে আমরা কর্মসংস্থান সহায়তা, ক্যারিয়ার গাইডেন্স, উদ্যোক্তা উন্নয়ন সহায়তা এবং প্রশিক্ষণোত্তর নিয়মিত ফলোআপ প্রদান করি।
+          </p>
+          <div style="background: rgba(15, 81, 50, 0.06); border-left: 4px solid var(--green); border-radius: 8px; padding: 14px 18px; margin-top: 14px; font-size: 14.5px; line-height: 1.65; color: #163d32;">
+            <strong style="color: var(--green);">আমাদের অঙ্গীকার (Our Commitment):</strong> মানসম্মত, অন্তর্ভুক্তিমূলক এবং শিল্প-উপযোগী বৃত্তিমূলক শিক্ষার মাধ্যমে একটি দক্ষ কর্মীবাহিনী গড়ে তোলা, কর্মসংস্থানের সুযোগ সম্প্রসারণ করা, দারিদ্র্য হ্রাস করা এবং বাংলাদেশের টেকসই আর্থ-সামাজিক উন্নয়নে সক্রিয় অবদান রাখা।
+          </div>
+        @else
+          <p style="margin-bottom: 14px;">
+            <strong>Mahmudunnabi Chowdhury Technical School and College (MCTSC)</strong> is a vocational education and skills development institution managed by <strong>Impact Initiative-IMI</strong> and based in Sagorika, Chattogram, Bangladesh. Established in 2006, MCTSC is committed to empowering disadvantaged and unemployed youth, men, and women through inclusive, market-oriented technical and vocational education and training (TVET).
+          </p>
+          <p style="margin-bottom: 14px;">
+            With nearly 20 years of institutional experience, MCTSC has equipped more than 7,000 young people with practical skills across various occupations, helping them pursue wage employment, self-employment, and entrepreneurship. Our training approach emphasizes <strong>80% practical learning and 20% theoretical instruction</strong>, supported by real-work experience, industry engagement, and community-based training.
+          </p>
+          <p style="margin-bottom: 14px;">
+            MCTSC works in collaboration with government agencies, development partners, employers, and national and international organizations, including <strong>ASSET, BRAC, UNDP, ILO, SOS Children's Villages</strong>, and other stakeholders. As an affiliated and recognized training centre under relevant technical education and skills development authorities, we offer competency-based training, Recognition of Prior Learning (RPL), and short courses in diverse technical and vocational occupations.
+          </p>
+          <p style="margin-bottom: 16px;">
+            Beyond training, we provide employment support, career guidance, entrepreneurship assistance, and post-employment follow-up to help graduates build sustainable livelihoods.
+          </p>
+          <div style="background: rgba(15, 81, 50, 0.06); border-left: 4px solid var(--green); border-radius: 8px; padding: 14px 18px; margin-top: 14px; font-size: 14.5px; line-height: 1.65; color: #163d32;">
+            <strong style="color: var(--green);">Our Commitment:</strong> To develop a skilled workforce, expand employment opportunities, reduce poverty, and contribute to Bangladesh's sustainable socioeconomic development through quality, inclusive, and industry-responsive vocational education.
+          </div>
+        @endif
+      </div>
+
+      <div style="margin-top: 26px; display: flex; gap: 14px; flex-wrap: wrap;">
+        <a href="{{ route('apply') }}" class="button button-gold" style="font-weight: 700; padding: 11px 24px;">
+          {{ $isBn ? 'অনলাইন ভর্তি আবেদন ➔' : 'Apply for Admission ➔' }}
+        </a>
+        <a href="{{ route('courses') }}" class="button button-green" style="font-weight: 700; padding: 11px 24px;">
+          {{ $isBn ? 'কোর্সসমূহ দেখুন' : 'Explore Courses' }}
+        </a>
+      </div>
+
+      <div style="clear: both;"></div>
     </div>
 
     <!-- 2. HONOURING THE LEGACY OF MAHMUDUNNABI CHOWDHURY -->
