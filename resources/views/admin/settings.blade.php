@@ -1056,15 +1056,61 @@
             </div>
           </div>
 
+          <!-- PRE-DESIGNED INSTITUTIONAL BANNERS SELECTOR -->
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:16px;border-radius:8px;margin-top:14px;">
+            <div style="font-weight:700;color:#0f5132;margin-bottom:6px;font-size:14px;display:flex;align-items:center;gap:6px;">
+              <span>🎨</span> Quick Select: Professional Institutional Hero Banners
+            </div>
+            <p style="font-size:12.5px;color:#64748b;margin:0 0 12px 0;">Choose from our crafted high-resolution institutional banner designs, or upload your custom image below:</p>
+            
+            @php
+              $activeBannerVal = $settings->get('hero_banner', 'assets/banners/banner_robotics_lab.jpg');
+              if (!$activeBannerVal || $activeBannerVal === 'assets/mc Banner.jpg') {
+                  $activeBannerVal = 'assets/banners/banner_robotics_lab.jpg';
+              }
+            @endphp
+            <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:14px;">
+              <!-- Option 1 -->
+              <label style="border:2px solid {{ $activeBannerVal === 'assets/banners/banner_robotics_lab.jpg' ? '#0f5132' : '#cbd5e1' }};padding:10px;border-radius:8px;cursor:pointer;background:#fff;display:block;transition:all 0.2s ease;">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+                  <input type="radio" name="preset_banner" value="assets/banners/banner_robotics_lab.jpg" style="width:auto;margin:0;" {{ $activeBannerVal === 'assets/banners/banner_robotics_lab.jpg' ? 'checked' : '' }}>
+                  <strong style="font-size:12px;color:#0f5132;">1. Robotics & TVET Lab</strong>
+                </div>
+                <img src="{{ asset('assets/banners/banner_robotics_lab.jpg') }}" alt="Robotics & TVET Lab" style="width:100%;height:85px;object-fit:cover;border-radius:4px;display:block;border:1px solid #e2e8f0;">
+                <small style="color:#64748b;font-size:11px;display:block;margin-top:6px;line-height:1.3;">Robotics & digital test benches in modern glass lab with green accents</small>
+              </label>
+
+              <!-- Option 2 -->
+              <label style="border:2px solid {{ $activeBannerVal === 'assets/banners/banner_innovation_hub.jpg' ? '#0f5132' : '#cbd5e1' }};padding:10px;border-radius:8px;cursor:pointer;background:#fff;display:block;transition:all 0.2s ease;">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+                  <input type="radio" name="preset_banner" value="assets/banners/banner_innovation_hub.jpg" style="width:auto;margin:0;" {{ $activeBannerVal === 'assets/banners/banner_innovation_hub.jpg' ? 'checked' : '' }}>
+                  <strong style="font-size:12px;color:#0f5132;">2. Technical Innovation Hub</strong>
+                </div>
+                <img src="{{ asset('assets/banners/banner_innovation_hub.jpg') }}" alt="Innovation Hub" style="width:100%;height:85px;object-fit:cover;border-radius:4px;display:block;border:1px solid #e2e8f0;">
+                <small style="color:#64748b;font-size:11px;display:block;margin-top:6px;line-height:1.3;">CAD & 3D prototyping maker lab with modern workstations & pillared hall</small>
+              </label>
+
+              <!-- Option 3 -->
+              <label style="border:2px solid {{ $activeBannerVal === 'assets/banners/banner_electrical_lab.jpg' ? '#0f5132' : '#cbd5e1' }};padding:10px;border-radius:8px;cursor:pointer;background:#fff;display:block;transition:all 0.2s ease;">
+                <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+                  <input type="radio" name="preset_banner" value="assets/banners/banner_electrical_lab.jpg" style="width:auto;margin:0;" {{ $activeBannerVal === 'assets/banners/banner_electrical_lab.jpg' ? 'checked' : '' }}>
+                  <strong style="font-size:12px;color:#0f5132;">3. Electrical & Solar Tech</strong>
+                </div>
+                <img src="{{ asset('assets/banners/banner_electrical_lab.jpg') }}" alt="Electrical Lab" style="width:100%;height:85px;object-fit:cover;border-radius:4px;display:block;border:1px solid #e2e8f0;">
+                <small style="color:#64748b;font-size:11px;display:block;margin-top:6px;line-height:1.3;">Smart industrial PLC automation and clean renewable energy units</small>
+              </label>
+            </div>
+          </div>
+
           <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin-top:14px;">
             <label>
-              <strong>Hero Banner Background Graphic</strong> — (Formats: JPG, PNG, WEBP)
+              <strong>Upload Custom Hero Banner File</strong> — (Formats: JPG, PNG, WEBP)
               <small style="color:#0369a1;background:#e0f2fe;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:600;display:inline-block;margin:4px 0 6px 0;">
                 📐 Recommended Resolution: 1920 × 350 px (Fixed 350px Height). The banner height remains fixed; taller images fit cleanly without being cropped.
               </small>
               <input type="file" name="hero_banner" accept="image/*">
               @php
-                $currentHero = storage_asset($settings->get('hero_banner'), 'assets/mc Banner.jpg');
+                $currentHero = storage_asset($settings->get('hero_banner'), 'assets/banners/banner_robotics_lab.jpg');
               @endphp
               <div style="margin-top: 10px; display: flex; align-items: center; gap: 14px;">
                 <img src="{{ $currentHero }}" alt="Hero Banner" style="height: 70px; max-width: 180px; object-fit: cover; border: 1px solid #ccc; border-radius: 4px;">

@@ -12,7 +12,11 @@
   <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
   @php
     $siteLogo = storage_asset($settings->get('site_logo'), 'assets/MC Logo.png');
-    $heroBanner = storage_asset($settings->get('hero_banner'), 'assets/mc Banner.jpg');
+    $rawHero = $settings->get('hero_banner');
+    if (!$rawHero || $rawHero === 'assets/mc Banner.jpg') {
+        $rawHero = 'assets/banners/banner_robotics_lab.jpg';
+    }
+    $heroBanner = storage_asset($rawHero, 'assets/banners/banner_robotics_lab.jpg');
     $aboutImg = storage_asset($settings->get('about_image'), 'assets/MC Building Photo.jpg');
     
     $f1_img = storage_asset($settings->get('facility_1_image'), 'assets/Computer Lab r.jpg');

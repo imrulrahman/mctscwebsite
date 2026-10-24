@@ -84,6 +84,14 @@ class SettingsController extends Controller
             );
         }
 
+        // Handle preset banner selection if no new custom image file uploaded
+        if (!$request->hasFile('hero_banner') && $request->filled('preset_banner')) {
+            $preset = $request->input('preset_banner');
+            if (str_starts_with($preset, 'assets/banners/')) {
+                SiteSetting::updateOrCreate(['key' => 'hero_banner'], ['value' => $preset]);
+            }
+        }
+
         // Update image uploads
         foreach (self::IMAGE_FIELDS as $field) {
             if ($request->hasFile($field)) {
