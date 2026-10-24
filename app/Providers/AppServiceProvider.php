@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\AdmissionApplication;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\View;

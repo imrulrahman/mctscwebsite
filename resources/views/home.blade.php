@@ -111,36 +111,44 @@
       }
     }
 
-    /* Hero Banner Wrap & Non-cropping Display Mode */
+    /* Hero Banner Wrap & Strict Fixed Height Non-cropping Display Mode */
     .hero-wrap {
       position: relative;
       width: 100%;
+      height: 350px !important;
+      max-height: 350px !important;
       overflow: hidden;
       background-color: #0b3d30;
     }
     .hero-media {
       position: relative;
       width: 100%;
+      height: 100% !important;
     }
     .hero-img {
-      width: 100%;
-      height: auto;
-      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+      object-fit: fill !important; /* Stretches/squashes image to exact fixed 350px height with zero cropping */
     }
-    .hero-wrap.mode-cover .hero-img {
-      min-height: 380px;
-      object-fit: cover;
-    }
+    .hero-wrap.mode-cover .hero-img,
     .hero-wrap.mode-natural .hero-img {
-      max-height: 650px;
-      width: 100%;
-      height: auto;
-      object-fit: contain;
+      width: 100% !important;
+      height: 100% !important;
+      min-height: 100% !important;
+      max-height: 100% !important;
+      object-fit: fill !important;
+    }
+    @media (max-width: 992px) {
+      .hero-wrap {
+        height: 250px !important;
+        max-height: 250px !important;
+      }
     }
     @media (max-width: 600px) {
-      .hero-wrap.mode-natural .hero-img {
-        min-height: 200px;
-        object-fit: cover;
+      .hero-wrap {
+        height: 190px !important;
+        max-height: 190px !important;
       }
     }
     .hero-overlay {
@@ -259,8 +267,69 @@
       color: {{ $primaryColor }} !important;
     }
     .about-aside {
-      background: {{ $toRgba($primaryColor, 0.06) }} !important;
+      display: none !important;
+    }
+    .about-section {
+      padding: 42px 0 36px 0 !important;
+      background: #ffffff;
+    }
+    .about-grid {
+      display: grid !important;
+      grid-template-columns: 1.25fr 0.95fr !important;
+      gap: 36px !important;
+      align-items: center !important;
+    }
+    .about-copy {
+      padding: 10px 0 !important;
+      max-width: 100% !important;
+    }
+    .about-copy h2 {
+      font-size: 28px !important;
+      line-height: 1.25 !important;
+      margin: 0 0 10px 0 !important;
       color: {{ $primaryColor }} !important;
+    }
+    .about-copy p:not(.section-kicker) {
+      font-size: 15.5px !important;
+      line-height: 1.7 !important;
+      color: #334d44 !important;
+      margin-bottom: 24px !important;
+    }
+    .about-image {
+      width: 100% !important;
+      height: 100% !important;
+      min-height: 280px !important;
+      max-height: 380px !important;
+      border-radius: 10px !important;
+      overflow: hidden !important;
+      box-shadow: 0 6px 20px rgba(15, 81, 50, 0.12) !important;
+    }
+    .about-image img {
+      width: 100% !important;
+      height: 100% !important;
+      min-height: 280px !important;
+      max-height: 380px !important;
+      object-fit: cover !important;
+      display: block !important;
+      border-radius: 10px !important;
+      transition: transform 0.3s ease;
+    }
+    .about-image:hover img {
+      transform: scale(1.02);
+    }
+    @media (max-width: 900px) {
+      .about-grid {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+      }
+      .about-image {
+        max-height: 300px !important;
+        min-height: 220px !important;
+      }
+      .about-image img {
+        max-height: 300px !important;
+        min-height: 220px !important;
+      }
     }
     .courses-section, .gallery-section {
       background: {{ $toRgba($primaryColor, 0.04) }} !important;
@@ -735,18 +804,19 @@
   <!-- NOTICE BAR -->
   @php
     $noticeBgColor = $settings->get('notice_bar_bg_color', '#0f5132');
-    $noticeOpacity = floatval($settings->get('notice_bar_opacity', '0.08'));
+    $rawNoticeOp = floatval($settings->get('notice_bar_opacity', '10'));
+    $noticeOpacity = ($rawNoticeOp > 1.0) ? ($rawNoticeOp / 100.0) : ($rawNoticeOp > 0 ? $rawNoticeOp : 0.10);
     $noticeRgba = $toRgba($noticeBgColor, $noticeOpacity);
     $noticeTextColor = $settings->get('notice_bar_text_color', '#163d32');
   @endphp
-  <section id="notices" class="notice-bar" style="background: {{ $noticeRgba }}; border-bottom: 1px solid {{ $toRgba($noticeBgColor, 0.18) }};">
+  <section id="notices" class="notice-bar" style="background: {{ $noticeRgba }} !important; border-bottom: 1px solid {{ $toRgba($noticeBgColor, 0.18) }};">
     <div class="container notice-inner" style="color: {{ $noticeTextColor }};">
       <strong style="color: {{ $primaryColor }}; font-weight: 700;">⚑ &nbsp; {{ $isBn ? 'সাম্প্রতিক নোটিশ' : 'Latest Notices' }}</strong>
       <div class="notice-scroll" style="color: {{ $noticeTextColor }};">
         @forelse($notices->take(4) as $notice)
-          <span>{{ $isBn ? ($noticeTranslations[$notice->title] ?? $notice->title) : $notice->title }}</span>
+          <span style="color: {{ $noticeTextColor }};">{{ $isBn ? ($noticeTranslations[$notice->title] ?? $notice->title) : $notice->title }}</span>
         @empty
-          <span>{{ $isBn ? 'নতুন নোটিশ এখানে প্রকাশিত হবে।' : 'New notices will be published here.' }}</span>
+          <span style="color: {{ $noticeTextColor }};">{{ $isBn ? 'নতুন নোটিশ এখানে প্রকাশিত হবে।' : 'New notices will be published here.' }}</span>
         @endforelse
       </div>
       <a href="{{ route('notices') }}" style="color: {{ $primaryColor }}; font-weight: 700;">{{ $isBn ? 'সব নোটিশ দেখুন →' : 'View All Notices →' }}</a>
@@ -760,16 +830,12 @@
         <p class="section-kicker">{{ $isBn ? 'আমাদের পরিচিতি' : 'ABOUT US' }}</p>
         <h2>{{ $isBn ? 'আমাদের ইনস্টিটিউট সম্পর্কে' : $settings->get('about_title', 'About Our College') }}</h2>
         <div class="gold-rule"></div>
-        <p>{{ $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ একটি মানসম্মত কারিগরি ও বৃত্তিমূলক শিক্ষা প্রতিষ্ঠান। ব্যবহারিক প্রশিক্ষণ, বাস্তবমুখী দক্ষতা ও উপযুক্ত দিকনির্দেশনার মাধ্যমে শিক্ষার্থীদের আত্মবিশ্বাসী করে গড়ে তোলা এবং উন্নত কর্মসংস্থানের সুযোগ সৃষ্টি করাই আমাদের মূল লক্ষ্য।' : $settings->get('about', 'Quality technical and vocational education for a brighter future.') }}</p>
+        <p>{{ $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ একটি মানসম্মত কারিগরি ও বৃত্তিমূলক শিক্ষা প্রতিষ্ঠান। ব্যবহারিক প্রশিক্ষণ, বাস্তবমুখী দক্ষতা ও উপযুক্ত দিকনির্দেশনার মাধ্যমে শিক্ষার্থীদের আত্মবিশ্বাসী করে গড়ে তোলা এবং উন্নত কর্মসংস্থানের সুযোগ সৃষ্টি করাই আমাদের মূল লক্ষ্য।' : $settings->get('about', 'Mahmudunnabi Chowdhury Technical School and College provides quality technical and vocational education to equip learners with practical skills for a brighter future.') }}</p>
         <a class="button button-green" href="{{ route('contact') }}">{{ $isBn ? 'যোগাযোগ করুন' : 'Contact Our College' }} <span>→</span></a>
       </div>
       <div class="about-image">
         <img src="{{ $aboutImg }}" alt="{{ $settings->get('institution_name', 'College campus') }}">
       </div>
-      <aside class="about-aside">
-        <div></div>
-        <strong>{!! nl2br(e($isBn ? "কোয়ালিটি এডুকেশন\nপ্র্যাকটিক্যাল স্কিলস\nকাজের সুযোগ\nসমৃদ্ধ আগামী" : $settings->get('about_aside', "Education\nSkills\nOpportunities\nA Stronger Tomorrow"))) !!}</strong>
-      </aside>
     </div>
   </section>
 

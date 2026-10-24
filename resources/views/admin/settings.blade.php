@@ -694,6 +694,9 @@
           <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin-top:14px;">
             <label>
               <strong>Official Institution Logo</strong> — (Formats: PNG, JPG, SVG, WEBP; max 5 MB)
+              <small style="color:#0369a1;background:#e0f2fe;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:600;display:inline-block;margin:4px 0 6px 0;">
+                📐 Recommended Resolution: 512 × 512 px (Square PNG/SVG) or 600 × 200 px (Horizontal PNG). Transparent background recommended.
+              </small>
               <input type="file" name="site_logo" accept="image/*">
               @php
                 $currentLogo = storage_asset($settings->get('site_logo'), 'assets/MC Logo.png');
@@ -1022,15 +1025,25 @@
                   <input name="notice_bar_bg_color" id="noticeBgHex" value="{{ old('notice_bar_bg_color', $settings->get('notice_bar_bg_color', '#0f5132')) }}" oninput="this.previousElementSibling.value = this.value;" placeholder="#0f5132" style="font-family:monospace;font-weight:600;">
                 </div>
               </label>
+              @php
+                $curOp = (float)($settings->get('notice_bar_opacity', '10'));
+                if ($curOp <= 1.0 && $curOp > 0) {
+                    $curOpPct = (int)round($curOp * 100);
+                } else {
+                    $curOpPct = (int)$curOp;
+                }
+                if ($curOpPct <= 0) $curOpPct = 10;
+              @endphp
               <label>
                 <strong>Background Transparency:</strong>
                 <select name="notice_bar_opacity" style="background:#fff;font-weight:600;">
-                  <option value="0.05" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '0.05' ? 'selected' : '' }}>5% (Very Subtle Tint)</option>
-                  <option value="0.08" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '0.08' ? 'selected' : '' }}>8% (Default Soft Tint)</option>
-                  <option value="0.15" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '0.15' ? 'selected' : '' }}>15% (Light Tint)</option>
-                  <option value="0.30" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '0.30' ? 'selected' : '' }}>30% (Medium Tint)</option>
-                  <option value="0.60" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '0.60' ? 'selected' : '' }}>60% (Dark Tint)</option>
-                  <option value="1.00" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '1.00' ? 'selected' : '' }}>100% (Solid Color)</option>
+                  <option value="5" {{ $curOpPct == 5 ? 'selected' : '' }}>5% (Very Subtle Tint / অত্যন্ত হালকা)</option>
+                  <option value="10" {{ $curOpPct == 10 ? 'selected' : '' }}>10% (Default Soft Tint / মৃদু ব্যাকগ্রাউন্ড)</option>
+                  <option value="15" {{ $curOpPct == 15 ? 'selected' : '' }}>15% (Light Tint / হালকা ব্যাকগ্রাউন্ড)</option>
+                  <option value="25" {{ $curOpPct == 25 ? 'selected' : '' }}>25% (Noticeable Tint / স্পষ্ট হালকা)</option>
+                  <option value="40" {{ $curOpPct == 40 ? 'selected' : '' }}>40% (Medium Tint / মাঝারি)</option>
+                  <option value="60" {{ $curOpPct == 60 ? 'selected' : '' }}>60% (Dark Tint / গাঢ়)</option>
+                  <option value="100" {{ $curOpPct == 100 ? 'selected' : '' }}>100% (Solid Color / ১০০% সলিড কালার)</option>
                 </select>
               </label>
               <label>
@@ -1045,7 +1058,10 @@
 
           <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin-top:14px;">
             <label>
-              <strong>Hero Banner Background Graphic</strong> — (Formats: JPG, PNG, WEBP; recommended 1920x650 or 1920x800)
+              <strong>Hero Banner Background Graphic</strong> — (Formats: JPG, PNG, WEBP)
+              <small style="color:#0369a1;background:#e0f2fe;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:600;display:inline-block;margin:4px 0 6px 0;">
+                📐 Recommended Resolution: 1920 × 350 px (Fixed 350px Height). The banner height remains fixed; taller images fit cleanly without being cropped.
+              </small>
               <input type="file" name="hero_banner" accept="image/*">
               @php
                 $currentHero = storage_asset($settings->get('hero_banner'), 'assets/mc Banner.jpg');
@@ -1055,6 +1071,12 @@
                 <span style="font-size: 12px; color: #555;">Current Active Hero Banner Preview</span>
               </div>
             </label>
+          </div>
+
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="submit" style="background: #0f5132; color: #ffffff; border: none; padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(15,81,50,0.25);">
+              <span>💾</span> Save Banner & Notice Settings
+            </button>
           </div>
         </div>
       </div>
@@ -1094,6 +1116,9 @@
           <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin-top:14px;">
             <label>
               <strong>Campus Building Photograph</strong>
+              <small style="color:#0369a1;background:#e0f2fe;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:600;display:inline-block;margin:4px 0 6px 0;">
+                📐 Recommended Resolution: 1000 × 650 px or 1200 × 800 px (3:2 Aspect Ratio, Landscape JPG/WEBP).
+              </small>
               <input type="file" name="about_image" accept="image/*">
               @php
                 $currentAbout = storage_asset($settings->get('about_image'), 'assets/MC Building Photo.jpg');
@@ -1103,6 +1128,12 @@
                 <span style="font-size: 12px; color: #555;">Current Campus Building Preview</span>
               </div>
             </label>
+          </div>
+
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="submit" style="background: #0f5132; color: #ffffff; border: none; padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(15,81,50,0.25);">
+              <span>💾</span> Save About Section Settings
+            </button>
           </div>
         </div>
       </div>
@@ -1135,6 +1166,9 @@
               </label>
               <label>
                 Facility 1 Image
+                <small style="color:#0369a1;background:#e0f2fe;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600;display:block;margin:3px 0 4px 0;">
+                  📐 Recommended: 800 × 500 px (16:10 Ratio, JPG/WEBP)
+                </small>
                 <input type="file" name="facility_1_image" accept="image/*">
               </label>
             </div>
@@ -1156,6 +1190,9 @@
               </label>
               <label>
                 Facility 2 Image
+                <small style="color:#0369a1;background:#e0f2fe;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600;display:block;margin:3px 0 4px 0;">
+                  📐 Recommended: 800 × 500 px (16:10 Ratio, JPG/WEBP)
+                </small>
                 <input type="file" name="facility_2_image" accept="image/*">
               </label>
             </div>
@@ -1177,6 +1214,9 @@
               </label>
               <label>
                 Facility 3 Image
+                <small style="color:#0369a1;background:#e0f2fe;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600;display:block;margin:3px 0 4px 0;">
+                  📐 Recommended: 800 × 500 px (16:10 Ratio, JPG/WEBP)
+                </small>
                 <input type="file" name="facility_3_image" accept="image/*">
               </label>
             </div>
@@ -1198,6 +1238,9 @@
               </label>
               <label>
                 Facility 4 Image
+                <small style="color:#0369a1;background:#e0f2fe;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600;display:block;margin:3px 0 4px 0;">
+                  📐 Recommended: 800 × 500 px (16:10 Ratio, JPG/WEBP)
+                </small>
                 <input type="file" name="facility_4_image" accept="image/*">
               </label>
             </div>
@@ -1209,6 +1252,14 @@
               <small style="color:#666;">Current photo: {{ $settings->get('facility_4_title', 'Tailoring and Sewing Workshop') }}</small>
             </div>
           </div>
+
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="submit" style="background: #0f5132; color: #ffffff; border: none; padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(15,81,50,0.25);">
+              <span>💾</span> Save Facilities Settings
+            </button>
+          </div>
+        </div>
+      </div>
         </div>
       </div>
 

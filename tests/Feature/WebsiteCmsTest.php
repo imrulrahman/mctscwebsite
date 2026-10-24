@@ -195,4 +195,43 @@ class WebsiteCmsTest extends TestCase
         $this->get(route('contact'))->assertOk()->assertSee('Contact');
         $this->get(route('admissions'))->assertRedirect(route('apply'));
     }
+
+    public function test_notice_transparency_hero_banner_and_about_layout_settings(): void
+    {
+        $admin = User::first() ?? User::create([
+            'name' => 'Settings Admin',
+            'email' => 'settings_admin@test.local',
+            'password' => 'Passw0rd!123',
+            'is_admin' => true,
+            'is_system_admin' => true,
+            'is_active' => true,
+        ]);
+
+        // 1. Save Notice Bar transparency and color in admin settings
+        $response = $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'institution_name' => 'Mahmudunnabi Chowdhury Technical School and College',
+            'notice_bar_bg_color' => '#0f5132',
+            'notice_bar_opacity' => '25',
+            'notice_bar_text_color' => '#163d32',
+        ]);
+        $response->assertRedirect();
+
+        // 2. Verify setting is persisted in DB
+        $this->assertEquals('25', \App\Models\SiteSetting::where('key', 'notice_bar_opacity')->value('value'));
+
+        // 3. Verify Homepage renders proper rgba(15, 81, 50, 0.25) transparency and fixed 350px hero
+        $homeResponse = $this->get(route('home'));
+        $homeResponse->assertOk();
+        $homeResponse->assertSee('rgba(15, 81, 50, 0.25)');
+        $homeResponse->assertSee('height: 350px !important;');
+        $homeResponse->assertSee('object-fit: fill !important;');
+        $homeResponse->assertSee('grid-template-columns: 1.25fr 0.95fr !important;');
+
+        // 4. Verify Admin Settings page displays recommended resolution badges
+        $settingsResponse = $this->actingAs($admin)->get(route('admin.settings'));
+        $settingsResponse->assertOk();
+        $settingsResponse->assertSee('📐 Recommended Resolution: 1920 × 350 px');
+        $settingsResponse->assertSee('📐 Recommended Resolution: 1000 × 650 px');
+        $settingsResponse->assertSee('📐 Recommended: 800 × 500 px');
+    }
 }

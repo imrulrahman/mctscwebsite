@@ -64,7 +64,14 @@ class SettingsController extends Controller
         // Update text fields
         foreach (self::TEXT_FIELDS as $field) {
             if ($request->has($field)) {
-                SiteSetting::updateOrCreate(['key' => $field], ['value' => $request->input($field) ?? '']);
+                $val = $request->input($field) ?? '';
+                if ($field === 'notice_bar_opacity') {
+                    $rawOp = floatval($val);
+                    $cleanOp = $rawOp <= 1.0 && $rawOp > 0 ? (int)round($rawOp * 100) : (int)$rawOp;
+                    if ($cleanOp <= 0) $cleanOp = 10;
+                    $val = (string)$cleanOp;
+                }
+                SiteSetting::updateOrCreate(['key' => $field], ['value' => $val]);
             }
         }
 

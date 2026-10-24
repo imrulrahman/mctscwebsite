@@ -53,6 +53,9 @@
         <div style="flex:1;min-width:0;">
           <label style="margin:0;display:grid;gap:5px;">
             <span style="font-size:12px;font-weight:600;color:#2c3e37;">Profile Photo (Optional)</span>
+            <small style="color:#0369a1;background:#e0f2fe;padding:2px 6px;border-radius:4px;font-size:11px;font-weight:600;display:inline-block;width:fit-content;">
+              📐 Recommended: 300 × 300 px (Square JPG/PNG/WEBP, Max 2MB)
+            </small>
             <input type="file" name="avatar" id="profileAvatarInput" accept="image/png,image/jpeg,image/webp" style="padding:6px 8px;font-size:12px;background:#fff;">
             <small class="subline" style="margin-top:2px;">Upload JPG, PNG or WEBP (Max 2MB).</small>
             @error('avatar')<div class="field-error">{{ $message }}</div>@enderror
