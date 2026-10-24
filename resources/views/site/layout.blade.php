@@ -313,6 +313,127 @@
         gap: 6px;
       }
     }
+
+    /* Lightbox Modal with Prev/Next and Close */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 99999;
+      inset: 0;
+      background: rgba(4, 20, 15, 0.94) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+    .lightbox.open {
+      display: flex !important;
+    }
+    .lightbox-stage {
+      max-width: 90vw;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 100000;
+    }
+    .lightbox-img {
+      max-width: min(1000px, 86vw);
+      max-height: 78vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      background: #000;
+      transition: opacity 0.2s ease;
+    }
+    .lightbox-caption {
+      margin-top: 12px;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      font-family: var(--serif);
+    }
+    .lightbox-counter {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 4px;
+    }
+    .lightbox-btn {
+      position: fixed;
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 100001;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    .lightbox-btn:hover {
+      background: {{ $primaryColor }} !important;
+      border-color: #ffffff;
+      transform: scale(1.1);
+    }
+    .lightbox-close {
+      top: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      font-size: 22px;
+      line-height: 1;
+    }
+    .lightbox-prev {
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+    }
+    .lightbox-prev:hover {
+      transform: translateY(-50%) scale(1.1);
+    }
+    .lightbox-next {
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+    }
+    .lightbox-next:hover {
+      transform: translateY(-50%) scale(1.1);
+    }
+    @media (max-width: 680px) {
+      .lightbox-prev {
+        left: 8px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+      .lightbox-next {
+        right: 8px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+      .lightbox-close {
+        top: 14px;
+        right: 14px;
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+      }
+    }
   </style>
   @yield('styles')
 </head>
@@ -463,9 +584,15 @@
   </div>
 </footer>
 
-<div class="lightbox" aria-hidden="true">
-  <button aria-label="Close gallery">×</button>
-  <img src="" alt="">
+<div class="lightbox" id="siteLightbox" aria-hidden="true" role="dialog" aria-modal="true">
+  <button class="lightbox-btn lightbox-close" type="button" aria-label="Close" title="Close (Esc)">✕</button>
+  <button class="lightbox-btn lightbox-prev" type="button" aria-label="Previous" title="Previous (Left Arrow)">❮</button>
+  <div class="lightbox-stage">
+    <img id="lightboxImg" class="lightbox-img" src="" alt="">
+    <div id="lightboxCaption" class="lightbox-caption"></div>
+    <div id="lightboxCounter" class="lightbox-counter"></div>
+  </div>
+  <button class="lightbox-btn lightbox-next" type="button" aria-label="Next" title="Next (Right Arrow)">❯</button>
 </div>
 
 <script src="{{ asset('js/site.js') }}"></script>

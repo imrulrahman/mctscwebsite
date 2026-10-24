@@ -111,39 +111,90 @@
       }
     }
 
-    /* Hero Overlay - Completely removed as requested by user */
-    .hero-overlay {
-      display: none !important;
-    }
-
-    /* Hero Institution Banner & Prominent Title */
-    .hero {
+    /* Hero Banner Wrap & Non-cropping Display Mode */
+    .hero-wrap {
       position: relative;
-      min-height: 380px !important;
+      width: 100%;
+      overflow: hidden;
+      background-color: #0b3d30;
+    }
+    .hero-media {
+      position: relative;
+      width: 100%;
+    }
+    .hero-img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .hero-wrap.mode-cover .hero-img {
+      min-height: 380px;
+      object-fit: cover;
+    }
+    .hero-wrap.mode-natural .hero-img {
+      max-height: 650px;
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+    @media (max-width: 600px) {
+      .hero-wrap.mode-natural .hero-img {
+        min-height: 200px;
+        object-fit: cover;
+      }
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(0, 37, 30, 0.88) 0%, rgba(0, 37, 30, 0.48) 42%, rgba(0, 0, 0, 0) 80%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .hero-overlay-content {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       display: flex;
       align-items: flex-start;
+      padding-top: 24px;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .hero-overlay-content .container {
+      width: min(1120px, calc(100% - 64px));
+      margin: 0 auto;
+      display: flex;
+      justify-content: flex-start;
     }
     .hero-inst-banner {
+      text-align: left;
       max-width: 680px;
-      padding: 12px 0 24px 0;
+      pointer-events: auto;
+      padding: 0;
     }
     .hero-inst-name {
       font-family: var(--serif);
       font-weight: 700;
       font-size: 38px;
       line-height: 1.22;
-      color: #ffffff;
       text-shadow: 0 3px 12px rgba(0, 0, 0, 0.85), 0 1px 4px rgba(0, 0, 0, 0.95);
       margin: 0;
       letter-spacing: -0.3px;
     }
     @media (max-width: 768px) {
+      .hero-overlay-content {
+        padding-top: 14px;
+      }
       .hero-inst-name {
-        font-size: 26px;
+        font-size: 24px;
         line-height: 1.25;
       }
-      .hero {
-        min-height: 300px !important;
+    }
+    @media (max-width: 480px) {
+      .hero-inst-name {
+        font-size: 19px;
       }
     }
 
@@ -250,8 +301,125 @@
       border-radius: 4px;
     }
 
+    /* Lightbox Modal with Prev/Next and Close */
     .lightbox {
-      background: {{ $toRgba($primaryHover, 0.95) }} !important;
+      display: none;
+      position: fixed;
+      z-index: 99999;
+      inset: 0;
+      background: rgba(4, 20, 15, 0.94) !important;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      align-items: center;
+      justify-content: center;
+      user-select: none;
+    }
+    .lightbox.open {
+      display: flex !important;
+    }
+    .lightbox-stage {
+      max-width: 90vw;
+      max-height: 88vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 100000;
+    }
+    .lightbox-img {
+      max-width: min(1000px, 86vw);
+      max-height: 78vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      background: #000;
+      transition: opacity 0.2s ease;
+    }
+    .lightbox-caption {
+      margin-top: 12px;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      font-family: var(--serif);
+    }
+    .lightbox-counter {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.7);
+      margin-top: 4px;
+    }
+    .lightbox-btn {
+      position: fixed;
+      background: rgba(255, 255, 255, 0.18);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 100001;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+    .lightbox-btn:hover {
+      background: {{ $primaryColor }} !important;
+      border-color: #ffffff;
+      transform: scale(1.1);
+    }
+    .lightbox-close {
+      top: 24px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      font-size: 22px;
+      line-height: 1;
+    }
+    .lightbox-prev {
+      left: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+    }
+    .lightbox-prev:hover {
+      transform: translateY(-50%) scale(1.1);
+    }
+    .lightbox-next {
+      right: 24px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      font-size: 24px;
+    }
+    .lightbox-next:hover {
+      transform: translateY(-50%) scale(1.1);
+    }
+    @media (max-width: 680px) {
+      .lightbox-prev {
+        left: 8px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+      .lightbox-next {
+        right: 8px;
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+      }
+      .lightbox-close {
+        top: 14px;
+        right: 14px;
+        width: 38px;
+        height: 38px;
+        font-size: 18px;
+      }
     }
 
     /* Standard, Compact & Elegant Footer */
@@ -539,32 +707,49 @@
 
 <main>
   <!-- HERO SECTION -->
-  <section id="home" class="hero" style="background-image: url('{{ $heroBanner }}'); background-size: cover; background-position: center;">
-    <div class="container hero-content" style="padding-top: 48px;">
-      @php
-        $showHeroInstName = $settings->get('hero_show_institution_name', '1') !== '0';
-        $heroInstName = $settings->get('hero_institution_name', $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School and College'));
-      @endphp
-      @if($showHeroInstName && !empty($heroInstName))
-        <div class="hero-inst-banner">
-          <h1 class="hero-inst-name">{{ $heroInstName }}</h1>
-        </div>
+  @php
+    $showHeroInstName = $settings->get('hero_show_institution_name', '1') !== '0';
+    $heroInstName = $settings->get('hero_institution_name', $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School and College'));
+    $heroTextColor = $settings->get('hero_text_color', '#ffffff');
+    $showHeroOverlay = $settings->get('hero_show_overlay', '0') === '1';
+    $heroFitMode = $settings->get('hero_fit_mode', 'natural');
+  @endphp
+  <section id="home" class="hero-wrap {{ $heroFitMode === 'cover' ? 'mode-cover' : 'mode-natural' }}">
+    <div class="hero-media">
+      <img src="{{ $heroBanner }}" alt="{{ $heroInstName }}" class="hero-img">
+      @if($showHeroOverlay)
+        <div class="hero-overlay"></div>
       @endif
+    </div>
+    <div class="hero-overlay-content">
+      <div class="container">
+        @if($showHeroInstName && !empty($heroInstName))
+          <div class="hero-inst-banner">
+            <h1 class="hero-inst-name" style="color: {{ $heroTextColor }};">{{ $heroInstName }}</h1>
+          </div>
+        @endif
+      </div>
     </div>
   </section>
 
   <!-- NOTICE BAR -->
-  <section id="notices" class="notice-bar">
-    <div class="container notice-inner">
-      <strong>⚑ &nbsp; {{ $isBn ? 'সাম্প্রতিক নোটিশ' : 'Latest Notices' }}</strong>
-      <div class="notice-scroll">
-        @forelse($notices->take(3) as $notice)
+  @php
+    $noticeBgColor = $settings->get('notice_bar_bg_color', '#0f5132');
+    $noticeOpacity = floatval($settings->get('notice_bar_opacity', '0.08'));
+    $noticeRgba = $toRgba($noticeBgColor, $noticeOpacity);
+    $noticeTextColor = $settings->get('notice_bar_text_color', '#163d32');
+  @endphp
+  <section id="notices" class="notice-bar" style="background: {{ $noticeRgba }}; border-bottom: 1px solid {{ $toRgba($noticeBgColor, 0.18) }};">
+    <div class="container notice-inner" style="color: {{ $noticeTextColor }};">
+      <strong style="color: {{ $primaryColor }}; font-weight: 700;">⚑ &nbsp; {{ $isBn ? 'সাম্প্রতিক নোটিশ' : 'Latest Notices' }}</strong>
+      <div class="notice-scroll" style="color: {{ $noticeTextColor }};">
+        @forelse($notices->take(4) as $notice)
           <span>{{ $isBn ? ($noticeTranslations[$notice->title] ?? $notice->title) : $notice->title }}</span>
         @empty
           <span>{{ $isBn ? 'নতুন নোটিশ এখানে প্রকাশিত হবে।' : 'New notices will be published here.' }}</span>
         @endforelse
       </div>
-      <a href="{{ route('notices') }}">{{ $isBn ? 'সব নোটিশ দেখুন →' : 'View All Notices →' }}</a>
+      <a href="{{ route('notices') }}" style="color: {{ $primaryColor }}; font-weight: 700;">{{ $isBn ? 'সব নোটিশ দেখুন →' : 'View All Notices →' }}</a>
     </div>
   </section>
 
@@ -601,7 +786,7 @@
         </div>
       </div>
       <div class="course-grid">
-        @forelse($courses as $course)
+        @forelse($courses->take(4) as $course)
           <a class="course-card" href="{{ route('apply') }}?course={{ urlencode($course->title) }}">
             @php
               $cImg = storage_asset($course->image, 'assets/MC Building Photo.jpg');
@@ -614,9 +799,9 @@
           <p>{{ $isBn ? 'কোর্স সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে।' : 'Course information will be published soon.' }}</p>
         @endforelse
       </div>
-      <div style="text-align: center; margin-top: 28px;">
-        <a href="{{ route('courses') }}" class="button button-gold" style="font-weight: 700; padding: 12px 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
-          {{ $isBn ? 'সবগুলো কোর্স ও পাঠ্যক্রম বিস্তারিত দেখুন →' : 'View All Courses & Full Curriculum →' }}
+      <div style="text-align: center; margin-top: 26px;">
+        <a href="{{ route('courses') }}" class="button button-gold" style="font-weight: 700; padding: 12px 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-size: 15px;">
+          {{ $isBn ? 'সব কোর্স দেখুন →' : 'View All Courses →' }}
         </a>
       </div>
     </div>
@@ -737,10 +922,10 @@
       </div>
       <div class="gallery-grid">
         @forelse($gallery as $photo)
-          <button class="gallery-item" type="button">
-            @php
-              $gImg = storage_asset($photo->image, 'assets/MC Building Photo.jpg');
-            @endphp
+          @php
+            $gImg = storage_asset($photo->image, 'assets/MC Building Photo.jpg');
+          @endphp
+          <button class="gallery-item" type="button" data-src="{{ $gImg }}" data-title="{{ $photo->title }}">
             <img src="{{ $gImg }}" alt="{{ $photo->title }}">
           </button>
         @empty
@@ -912,9 +1097,15 @@
   <div class="toast-error">{{ $errors->first() }}</div>
 @endif
 
-<div class="lightbox" aria-hidden="true">
-  <button aria-label="Close gallery">×</button>
-  <img src="" alt="">
+<div class="lightbox" id="siteLightbox" aria-hidden="true" role="dialog" aria-modal="true">
+  <button class="lightbox-btn lightbox-close" type="button" aria-label="Close" title="Close (Esc)">✕</button>
+  <button class="lightbox-btn lightbox-prev" type="button" aria-label="Previous" title="Previous (Left Arrow)">❮</button>
+  <div class="lightbox-stage">
+    <img id="lightboxImg" class="lightbox-img" src="" alt="">
+    <div id="lightboxCaption" class="lightbox-caption"></div>
+    <div id="lightboxCounter" class="lightbox-counter"></div>
+  </div>
+  <button class="lightbox-btn lightbox-next" type="button" aria-label="Next" title="Next (Right Arrow)">❯</button>
 </div>
 <script src="{{ asset('js/site.js') }}"></script>
 </body>

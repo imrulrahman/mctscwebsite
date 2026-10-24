@@ -73,6 +73,7 @@ class WebsiteCmsTest extends TestCase
         $response->assertOk();
         $response->assertSee('Our Training Courses');
         $response->assertSee('Online Trainee Admission');
+        $response->assertSee('View All Courses');
         $response->assertDontSee('অনলাইন ভর্তি আবেদন (Trainee Admission)');
         $response->assertSee('EN</a>', false);
     }
@@ -83,6 +84,7 @@ class WebsiteCmsTest extends TestCase
         $response = $this->get('/?lang=bn');
         $response->assertOk();
         $response->assertSee('আমাদের ট্রেইনিং কোর্সসমূহ');
+        $response->assertSee('সব কোর্স দেখুন');
         $response->assertSee('অনলাইন ট্রেইনী এডমিশন আবেদন');
         $response->assertSee('একাডেমিক রেজাল্ট');
         $response->assertSee('বাং</a>', false);

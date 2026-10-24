@@ -29,7 +29,7 @@
           $imgUrl = storage_asset($item->image, 'assets/MC Building Photo.jpg');
           $title = $item->title ?: ($isBn ? 'ক্যাম্পাস ছবি' : 'Campus Photo');
         @endphp
-        <div class="gallery-card" style="background: #ffffff; border: 1px solid #d8e4dc; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.22s, box-shadow 0.22s;" onclick="showModalImage('{{ $imgUrl }}', '{{ addslashes($title) }}')">
+        <div class="gallery-card" data-src="{{ $imgUrl }}" data-title="{{ $title }}" style="background: #ffffff; border: 1px solid #d8e4dc; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; transition: transform 0.22s, box-shadow 0.22s;">
           <div style="overflow: hidden; position: relative;">
             <img src="{{ $imgUrl }}" alt="{{ $title }}" style="width: 100%; height: 210px; object-fit: cover; display: block; transition: transform 0.3s ease;">
             <div class="gallery-overlay" style="position: absolute; inset: 0; background: rgba(15, 81, 50, 0.4); opacity: 0; transition: opacity 0.2s ease; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 26px;">
@@ -53,20 +53,6 @@
     </div>
   </div>
 </section>
-
-<!-- LIGHTBOX MODAL SCRIPT -->
-<script>
-  function showModalImage(src, title) {
-    const box = document.querySelector('.lightbox');
-    if (!box) return;
-    const img = box.querySelector('img');
-    if (img) {
-      img.src = src;
-      img.alt = title || '';
-    }
-    box.classList.add('open');
-  }
-</script>
 <style>
   .gallery-card:hover {
     transform: translateY(-4px);

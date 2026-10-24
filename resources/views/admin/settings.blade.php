@@ -966,47 +966,86 @@
             <div style="font-weight:700;color:#166534;margin-bottom:8px;font-size:14px;display:flex;align-items:center;gap:6px;">
               <span>🏛️</span> Institution Name on Hero Banner Display
             </div>
-            <p style="font-size:12.5px;color:#15803d;margin:0 0 12px 0;">Configure whether and how the institution name appears in large prominent text at the top-left of the hero banner.</p>
-            <div class="field-grid">
+            <p style="font-size:12.5px;color:#15803d;margin:0 0 12px 0;">Configure whether and how the institution name appears at the top-left of the hero banner, including visibility and custom text color.</p>
+            <div class="field-grid" style="grid-template-columns: 1fr 1.6fr 1fr;">
               <label>
-                <strong>Visibility on Hero Banner:</strong>
+                <strong>Visibility on Banner:</strong>
                 <select name="hero_show_institution_name" style="background:#fff;font-weight:600;">
-                  <option value="1" {{ old('hero_show_institution_name', $settings->get('hero_show_institution_name', '1')) === '1' ? 'selected' : '' }}>✓ Show Institution Name on Banner</option>
-                  <option value="0" {{ old('hero_show_institution_name', $settings->get('hero_show_institution_name', '1')) === '0' ? 'selected' : '' }}>✕ Hide Institution Name from Banner</option>
+                  <option value="1" {{ old('hero_show_institution_name', $settings->get('hero_show_institution_name', '1')) === '1' ? 'selected' : '' }}>✓ Show Name on Banner</option>
+                  <option value="0" {{ old('hero_show_institution_name', $settings->get('hero_show_institution_name', '1')) === '0' ? 'selected' : '' }}>✕ Hide Name from Banner</option>
                 </select>
               </label>
               <label>
                 <strong>Institution Name (Hero Banner Text):</strong>
                 <input name="hero_institution_name" value="{{ old('hero_institution_name', $settings->get('hero_institution_name', 'Mahmudunnabi Chowdhury Technical School and College')) }}" placeholder="Mahmudunnabi Chowdhury Technical School and College">
               </label>
+              <label>
+                <strong>Name Text Color:</strong>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+                  <input type="color" value="{{ old('hero_text_color', $settings->get('hero_text_color', '#ffffff')) }}" onchange="document.getElementById('heroColorHex').value = this.value;" style="width:42px;height:38px;padding:2px;border:1px solid #cbd5e1;border-radius:4px;cursor:pointer;">
+                  <input name="hero_text_color" id="heroColorHex" value="{{ old('hero_text_color', $settings->get('hero_text_color', '#ffffff')) }}" oninput="this.previousElementSibling.value = this.value;" placeholder="#ffffff" style="font-family:monospace;font-weight:700;">
+                </div>
+              </label>
             </div>
           </div>
 
-          <div class="field-grid">
+          <div class="field-grid" style="margin-bottom: 16px;">
             <label>
-              Eyebrow Badge Text (Optional)
-              <input name="hero_eyebrow" value="{{ old('hero_eyebrow', $settings->get('hero_eyebrow', 'SKILLS FOR A BRIGHTER FUTURE')) }}" placeholder="e.g. SKILLS FOR A BRIGHTER FUTURE">
+              <strong>Hero Image Cropping / Display Mode:</strong>
+              <select name="hero_fit_mode" style="background:#fff;font-weight:600;">
+                <option value="natural" {{ old('hero_fit_mode', $settings->get('hero_fit_mode', 'natural')) === 'natural' ? 'selected' : '' }}>✓ Full Resolution (No Cropping / সম্পূর্ণ ছবি ক্রপ ছাড়া দেখাবে)</option>
+                <option value="cover" {{ old('hero_fit_mode', $settings->get('hero_fit_mode', 'natural')) === 'cover' ? 'selected' : '' }}>Cover Full Frame (Crop to Fill Height)</option>
+              </select>
+              <small style="color:#64748b;font-size:11.5px;display:block;margin-top:4px;">'Full Resolution' ensures the image displays in its native aspect ratio without cutting off any details.</small>
             </label>
             <label>
-              Hero Action Button Text (Optional)
-              <input name="hero_btn_text" value="{{ old('hero_btn_text', $settings->get('hero_btn_text', 'Explore Our Courses')) }}" placeholder="e.g. Explore Our Courses">
+              <strong>Hero Left Shadow Overlay (শেডো কালার):</strong>
+              <select name="hero_show_overlay" style="background:#fff;font-weight:600;">
+                <option value="0" {{ old('hero_show_overlay', $settings->get('hero_show_overlay', '0')) === '0' ? 'selected' : '' }}>✕ Off (Default - No Shadow / ক্লিয়ার ব্যানার ছবি)</option>
+                <option value="1" {{ old('hero_show_overlay', $settings->get('hero_show_overlay', '0')) === '1' ? 'selected' : '' }}>✓ On (Dark Shadow on Left / বামে হালকা শেডো ইফেক্ট)</option>
+              </select>
+              <small style="color:#64748b;font-size:11.5px;display:block;margin-top:4px;">Controls the subtle gradient overlay on the left side of the hero image.</small>
             </label>
           </div>
 
-          <div class="field-grid" style="margin-top: 12px;">
-            <label>
-              Main Hero Heading
-              <input name="hero_title" value="{{ old('hero_title', $settings->get('hero_title', 'Practical Skills. Better Opportunities.')) }}" placeholder="e.g. Practical Skills. Better Opportunities.">
-            </label>
-            <label>
-              Hero Subtitle Description
-              <input name="hero_subtitle" value="{{ old('hero_subtitle', $settings->get('hero_subtitle', 'Skills-focused technical training for a confident future.')) }}" placeholder="e.g. Skills-focused technical training for a confident future.">
-            </label>
+          <!-- LATEST NOTICES BAR CUSTOMIZATION -->
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:16px;border-radius:8px;margin-bottom:16px;">
+            <div style="font-weight:700;color:#0f5132;margin-bottom:6px;font-size:14px;display:flex;align-items:center;gap:6px;">
+              <span>📢</span> Latest Notices Bar Background & Transparency
+            </div>
+            <p style="font-size:12.5px;color:#64748b;margin:0 0 12px 0;">Customize the background tint color, transparency level, and text color for the rolling notices bar underneath the hero section.</p>
+            <div class="field-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+              <label>
+                <strong>Background Tint Color:</strong>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+                  <input type="color" value="{{ old('notice_bar_bg_color', $settings->get('notice_bar_bg_color', '#0f5132')) }}" onchange="document.getElementById('noticeBgHex').value = this.value;" style="width:40px;height:36px;padding:2px;border:1px solid #cbd5e1;border-radius:4px;cursor:pointer;">
+                  <input name="notice_bar_bg_color" id="noticeBgHex" value="{{ old('notice_bar_bg_color', $settings->get('notice_bar_bg_color', '#0f5132')) }}" oninput="this.previousElementSibling.value = this.value;" placeholder="#0f5132" style="font-family:monospace;font-weight:600;">
+                </div>
+              </label>
+              <label>
+                <strong>Background Transparency:</strong>
+                <select name="notice_bar_opacity" style="background:#fff;font-weight:600;">
+                  <option value="0.05" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '0.05' ? 'selected' : '' }}>5% (Very Subtle Tint)</option>
+                  <option value="0.08" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '0.08' ? 'selected' : '' }}>8% (Default Soft Tint)</option>
+                  <option value="0.15" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '0.15' ? 'selected' : '' }}>15% (Light Tint)</option>
+                  <option value="0.30" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '0.30' ? 'selected' : '' }}>30% (Medium Tint)</option>
+                  <option value="0.60" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '0.60' ? 'selected' : '' }}>60% (Dark Tint)</option>
+                  <option value="1.00" {{ old('notice_bar_opacity', $settings->get('notice_bar_opacity', '0.08')) == '1.00' ? 'selected' : '' }}>100% (Solid Color)</option>
+                </select>
+              </label>
+              <label>
+                <strong>Notice Text Color:</strong>
+                <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
+                  <input type="color" value="{{ old('notice_bar_text_color', $settings->get('notice_bar_text_color', '#163d32')) }}" onchange="document.getElementById('noticeTextHex').value = this.value;" style="width:40px;height:36px;padding:2px;border:1px solid #cbd5e1;border-radius:4px;cursor:pointer;">
+                  <input name="notice_bar_text_color" id="noticeTextHex" value="{{ old('notice_bar_text_color', $settings->get('notice_bar_text_color', '#163d32')) }}" oninput="this.previousElementSibling.value = this.value;" placeholder="#163d32" style="font-family:monospace;font-weight:600;">
+                </div>
+              </label>
+            </div>
           </div>
 
           <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin-top:14px;">
             <label>
-              <strong>Hero Banner Background Graphic</strong> — (Formats: JPG, PNG, WEBP; recommended 1920x800)
+              <strong>Hero Banner Background Graphic</strong> — (Formats: JPG, PNG, WEBP; recommended 1920x650 or 1920x800)
               <input type="file" name="hero_banner" accept="image/*">
               @php
                 $currentHero = storage_asset($settings->get('hero_banner'), 'assets/mc Banner.jpg');

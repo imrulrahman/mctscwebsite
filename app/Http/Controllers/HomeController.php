@@ -14,7 +14,7 @@ class HomeController extends Controller
         $settings = SiteSetting::query()->pluck('value', 'key');
 
         return view('home', [
-            'courses' => $published('courses', 8),
+            'courses' => $published('courses', 4),
             'projects' => $published('projects', 6),
             'notices' => $published('notices', 8),
             'events' => $published('events', 3),
