@@ -3,83 +3,217 @@
 @endphp
 @extends('site.layout')
 
-@section('title', $isBn ? 'আমাদের সম্পর্কে' : 'About Us')
-@section('page_title', $isBn ? 'আমাদের পরিচিতি ও লক্ষ্য' : 'About Our College')
-@section('page_subtitle', $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজের পরিচিতি, লক্ষ্য, উদ্দেশ্য ও প্র্যাকটিক্যাল ল্যাব সুযোগ-সুবিধা।' : 'Practical, skills-focused technical education preparing the youth for national and global employment.')
+@section('title', $isBn ? 'আমাদের সম্পর্কে · এমসি টেকনিক্যাল স্কুল এন্ড কলেজ' : 'About Us · MC Technical School & College')
+@section('page_title', $isBn ? 'এমসি টেকনিক্যাল স্কুল এন্ড কলেজ পরিচিতি' : 'About MC Technical School & College')
+@section('page_subtitle', $isBn ? 'দক্ষতা অর্জন · সুপ্ত সম্ভাবনার বিকাশ · ভবিষ্যৎ বিনির্মাণ' : 'Building Skills. Unlocking Potential. Shaping Futures.')
 
 @section('content')
 @php
-  $aboutImg = storage_asset($settings['about_image'] ?? null, 'assets/MC Building Photo.jpg');
+  $aboutImg = storage_asset($settings['about_image'] ?? null, 'assets/about_mahmudunnabi_legacy.jpg');
+  if (empty($settings['about_image']) || $settings['about_image'] === 'assets/MC Building Photo.jpg') {
+      $aboutImg = asset('assets/about_mahmudunnabi_legacy.jpg');
+  }
   $f1_img = storage_asset($settings['facility_1_image'] ?? null, 'assets/Computer Lab r.jpg');
   $f2_img = storage_asset($settings['facility_2_image'] ?? null, 'assets/RAC Lab.jpg');
   $f3_img = storage_asset($settings['facility_3_image'] ?? null, 'assets/Plumbing Class.jpg');
   $f4_img = storage_asset($settings['facility_4_image'] ?? null, 'assets/SMO Lab.jpg');
 @endphp
 
-<section class="section" style="padding-top: 40px;">
+<section class="section" style="padding-top: 36px; padding-bottom: 50px;">
   <div class="container">
-    <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; margin-bottom: 50px;">
+
+    <!-- 1. INTRO GRID (HERITAGE & FOUNDATION) -->
+    <div style="display: grid; grid-template-columns: 1.25fr 0.95fr; gap: 40px; align-items: center; margin-bottom: 54px;">
       <div>
-        <span class="section-kicker">{{ $isBn ? 'ইতিহাস ও পটভূমি' : 'OUR HERITAGE & MISSION' }}</span>
-        <h2 style="font-family: var(--serif); font-size: 28px; color: var(--green); margin: 6px 0 16px 0;">
-          {{ $settings['about_title'] ?? ($isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Mahmudunnabi Chowdhury Technical School and College') }}
+        <span class="section-kicker">{{ $isBn ? 'আমাদের পরিচিতি' : 'ABOUT OUR COLLEGE' }}</span>
+        <h2 style="font-family: var(--serif); font-size: 32px; color: var(--green); margin: 6px 0 8px 0; line-height: 1.25;">
+          {{ $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Mahmudunnabi Chowdhury Technical School & College' }}
         </h2>
-        <div class="gold-rule" style="width: 50px; height: 3px; background: var(--gold); margin-bottom: 20px;"></div>
-        <div style="font-size: 15px; line-height: 1.8; color: #334155;">
-          {!! nl2br(e($settings['about'] ?? ($isBn 
-            ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ একটি মানসম্মত কারিগরি ও বৃত্তিমূলক শিক্ষা প্রতিষ্ঠান। আধুনিক প্রযুক্তিনির্ভর ল্যাবরেটরি, অভিজ্ঞ প্রশিক্ষকমণ্ডলী ও যুগোপযোগী কারিকুলামের মাধ্যমে আমরা শিক্ষার্থীদের আন্তর্জাতিক মানের প্র্যাকটিক্যাল দক্ষতায় দক্ষ করে গড়ে তুলছি। বাংলাদেশ কারিগরি শিক্ষা বোর্ড (BTEB) এবং জাতীয় দক্ষতা উন্নয়ন কর্তৃপক্ষ (NSDA) এর মানদণ্ড অনুসারে প্রশিক্ষণ নিশ্চিত করাই আমাদের মূল ব্রত।'
-            : 'Mahmudunnabi Chowdhury Technical School and College is dedicated to providing industry-standard technical and vocational training. With modern workshop facilities, experienced instructors, and standardized curriculum aligned with BTEB and NSDA, our goal is to empower trainees with hands-on, marketable skills for a productive career.'))) !!}
+        <p style="color: var(--gold); font-weight: 700; font-size: 16px; margin: 0 0 16px 0; letter-spacing: 0.3px;">
+          {{ $isBn ? 'দক্ষতা অর্জন · সুপ্ত সম্ভাবনার বিকাশ · ভবিষ্যৎ বিনির্মাণ' : 'Building Skills. Unlocking Potential. Shaping Futures.' }}
+        </p>
+        <div class="gold-rule" style="width: 50px; height: 3px; background: var(--gold); margin-bottom: 22px;"></div>
+
+        <div style="font-size: 15.5px; line-height: 1.8; color: #334155;">
+          @if($isBn)
+            <p style="margin-bottom: 14px;">
+              <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ</strong> একটি মানসম্মত কারিগরি ও বৃত্তিমূলক শিক্ষা এবং প্রশিক্ষণ প্রতিষ্ঠান, যা বাস্তবমুখী ও কর্মসংস্থানমুখী প্রশিক্ষণের মাধ্যমে দক্ষ মানবসম্পদ তৈরিতে প্রতিশ্রুতিবদ্ধ।
+            </p>
+            <p style="margin: 0;">
+              প্রখ্যাত শিল্পপতি ও সাবেক মন্ত্রী মরহুম <strong>মাহমুদুন্নবী চৌধুরী</strong>-এর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) খাতে দীর্ঘ অভিজ্ঞতাসম্পন্ন সংস্থা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative)</strong>-এর যৌথ উদ্যোগে <strong>২০০৬ সালে</strong> প্রতিষ্ঠানটি প্রতিষ্ঠিত হয়। প্রতিষ্ঠানটি ট্রেইনিদের বাস্তবমুখী ব্যবহারিক দক্ষতা, কর্মসংস্থান যোগ্যতা এবং পেশাগত উৎকর্ষ বৃদ্ধিতে নিরবচ্ছিন্নভাবে কাজ করে চলেছে।
+            </p>
+          @else
+            <p style="margin-bottom: 14px;">
+              <strong>Mahmudunnabi Chowdhury Technical School & College</strong> is a technical and vocational education and training institution committed to developing skilled human resources through practical, employment-oriented training.
+            </p>
+            <p style="margin: 0;">
+              Established in <strong>2006</strong> as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of the late Mahmudunnabi Chowdhury, and <strong>Impact Initiative</strong>, an organization with experience in the Technical and Vocational Education and Training (TVET) sector, the institution works to enhance the practical skills, employability and professional capabilities of its trainees.
+            </p>
+          @endif
         </div>
-        <div style="margin-top: 24px; display: flex; gap: 14px; flex-wrap: wrap;">
-          <a href="{{ route('apply') }}" class="button button-gold" style="font-weight: 700;">
+
+        <div style="margin-top: 26px; display: flex; gap: 14px; flex-wrap: wrap;">
+          <a href="{{ route('apply') }}" class="button button-gold" style="font-weight: 700; padding: 11px 24px;">
             {{ $isBn ? 'অনলাইন ভর্তি আবেদন ➔' : 'Apply for Admission ➔' }}
           </a>
-          <a href="{{ route('courses') }}" class="button button-green" style="font-weight: 700;">
-            {{ $isBn ? 'কোর্সসমূহ দেখুন' : 'View All Courses' }}
+          <a href="{{ route('courses') }}" class="button button-green" style="font-weight: 700; padding: 11px 24px;">
+            {{ $isBn ? 'কোর্সসমূহ দেখুন' : 'Explore Courses' }}
           </a>
         </div>
       </div>
+
       <div>
-        <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 12px 30px rgba(0,0,0,0.12); border: 4px solid #fff;">
-          <img src="{{ $aboutImg }}" alt="College Campus" style="width: 100%; height: auto; display: block; object-fit: cover;">
+        <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(15,81,50,0.12); border: 1px solid #e2e8f0; background: #ffffff; padding: 6px;">
+          <img src="{{ $aboutImg }}" alt="Mahmudunnabi Chowdhury Legacy & College Campus" style="width: 100%; height: auto; display: block; object-fit: contain; border-radius: 8px;">
         </div>
       </div>
     </div>
 
-    <!-- MISSION & VISION CARDS -->
-    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 50px;">
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 4px solid var(--green); border-radius: 8px; padding: 26px;">
-        <div style="font-size: 28px; margin-bottom: 10px;">🎯</div>
-        <h3 style="font-family: var(--serif); font-size: 19px; color: var(--green); margin: 0 0 10px 0;">
-          {{ $isBn ? 'আমাদের ভিশন (Vision)' : 'Our Vision' }}
+    <!-- 2. HONOURING THE LEGACY OF MAHMUDUNNABI CHOWDHURY -->
+    <div style="background: #fdfbf7; border: 1px solid #f1e6d0; border-left: 5px solid var(--gold); border-radius: 10px; padding: 32px 36px; margin-bottom: 48px; box-shadow: 0 4px 18px rgba(197, 155, 39, 0.08);">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+        <span style="font-size: 28px;">🏛️</span>
+        <div>
+          <span style="font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase;">
+            {{ $isBn ? 'স্মৃতি ও ঐতিহ্য' : 'INSPIRATION & HERITAGE' }}
+          </span>
+          <h3 style="font-family: var(--serif); font-size: 23px; color: var(--green); margin: 2px 0 0 0;">
+            {{ $isBn ? 'মরহুম মাহমুদুন্নবী চৌধুরীর অমর স্মৃতি ও সামাজিক অবদান' : 'Honouring the Legacy of Mahmudunnabi Chowdhury' }}
+          </h3>
+        </div>
+      </div>
+      <p style="font-size: 15.5px; line-height: 1.8; color: #475569; margin: 0;">
+        @if($isBn)
+          <strong>মাহমুদুন্নবী চৌধুরী (১৯০৮–১৯৯৫)</strong> ছিলেন চট্টগ্রামের একজন প্রখ্যাত শিল্পপতি, দানবীর ও রাজনীতিবিদ। তিনি তৎকালীন পূর্ব পাকিস্তান প্রাদেশিক পরিষদের সম্মানিত সদস্য হিসেবে দায়িত্ব পালন করেন এবং প্রাদেশিক সরকারের মন্ত্রী হিসেবে গুরুত্বপূর্ণ ভূমিকা রেখেছিলেন। তাঁর জনকল্যাণমুখী চিন্তা, শিক্ষা বিস্তার এবং সমাজ প্রগতির আজীবন অঙ্গীকারকে ধারণ করেই এ প্রতিষ্ঠানটি নতুন প্রজন্মের জন্য বাস্তবমুখী দক্ষতা বিনির্মাণে নিরলস কাজ করে যাচ্ছে।
+        @else
+          <strong>Mahmudunnabi Chowdhury (1908–1995)</strong> was a prominent businessman and politician from Chattogram who served as a member of the East Pakistan Legislative Assembly and held ministerial responsibilities. The institution carries forward a commitment to human development and community progress in remembrance of his legacy.
+        @endif
+      </p>
+    </div>
+
+    <!-- 3. DUAL VISION CARDS (FOUNDING VISION & FUTURE VISION) -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-bottom: 48px;">
+      <!-- Founding Vision -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid var(--green); border-radius: 10px; padding: 30px; box-shadow: 0 4px 14px rgba(0,0,0,0.04);">
+        <div style="font-size: 32px; margin-bottom: 12px;">🎯</div>
+        <h3 style="font-family: var(--serif); font-size: 21px; color: var(--green); margin: 0 0 12px 0;">
+          {{ $isBn ? 'আমাদের প্রতিষ্ঠাকালীন লক্ষ্য ও দর্শন' : 'Our Founding Vision' }}
         </h3>
-        <p style="font-size: 14px; color: #475569; line-height: 1.6; margin: 0;">
-          {{ $isBn ? 'আন্তর্জাতিক মানসম্পন্ন দক্ষ জনশক্তি তৈরির মাধ্যমে দেশের অর্থনৈতিক সমৃদ্ধি অর্জন ও বেকারত্ব দূরীকরণে অগ্রণী ভূমিকা পালন।' : 'To become a premier center of technical excellence, empowering the youth through market-driven vocational skills.' }}
+        <p style="font-size: 15px; color: #475569; line-height: 1.75; margin: 0;">
+          @if($isBn)
+            আমরা বিশ্বাস করি যে মানসম্মত কারিগরি শিক্ষা মানুষের জীবন বদলে দিতে পারে। তরুণ সমাজকে বাস্তব জ্ঞান ও শিল্প-উপযোগী দক্ষতায় দক্ষ করে তোলার মাধ্যমে আমাদের লক্ষ্য তাদেরকে অর্থবহ ও সম্মানজনক কর্মসংস্থান খুঁজে পেতে, আত্মনির্ভরশীলতা অর্জন করতে এবং বাংলাদেশের সামগ্রিক আর্থ-সামাজিক উন্নয়নে সক্রিয় অবদান রাখতে সহায়তা করা।
+          @else
+            We believe that quality technical education can transform lives. By equipping young people with practical knowledge and industry-relevant skills, we aim to help them pursue meaningful employment, achieve greater self-reliance and contribute to the socioeconomic development of Bangladesh.
+          @endif
         </p>
       </div>
 
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 4px solid var(--gold); border-radius: 8px; padding: 26px;">
-        <div style="font-size: 28px; margin-bottom: 10px;">⚙️</div>
-        <h3 style="font-family: var(--serif); font-size: 19px; color: var(--green); margin: 0 0 10px 0;">
-          {{ $isBn ? 'আমাদের মিশন (Mission)' : 'Our Mission' }}
+      <!-- Vision for the Future -->
+      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid var(--gold); border-radius: 10px; padding: 30px; box-shadow: 0 4px 14px rgba(0,0,0,0.04);">
+        <div style="font-size: 32px; margin-bottom: 12px;">🚀</div>
+        <h3 style="font-family: var(--serif); font-size: 21px; color: var(--green); margin: 0 0 12px 0;">
+          {{ $isBn ? 'ভবিষ্যতের রূপকল্প ও প্রত্যয়' : 'Our Vision for the Future' }}
         </h3>
-        <p style="font-size: 14px; color: #475569; line-height: 1.6; margin: 0;">
-          {{ $isBn ? 'প্রত্যেক ট্রেইনীকে বাস্তবমুখী প্র্যাকটিক্যাল ল্যাব ট্রেইনিং, কারিগরি শিক্ষা বোর্ডের সনদ এবং কর্মসংস্থানের সুযোগ নিশ্চিত করা।' : 'Deliver rigorous hands-on technical training adhering to national standards and connect trainees directly with industry careers.' }}
-        </p>
-      </div>
-
-      <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-top: 4px solid var(--green); border-radius: 8px; padding: 26px;">
-        <div style="font-size: 28px; margin-bottom: 10px;">🏆</div>
-        <h3 style="font-family: var(--serif); font-size: 19px; color: var(--green); margin: 0 0 10px 0;">
-          {{ $isBn ? 'মূল্যায়ন ও স্বীকৃতি' : 'Accreditation' }}
-        </h3>
-        <p style="font-size: 14px; color: #475569; line-height: 1.6; margin: 0;">
-          {{ $isBn ? 'বাংলাদেশ কারিগরি শিক্ষা বোর্ড (BTEB) স্বীকৃত ও অনুমোদিত পাঠ্যক্রম এবং সরকারি প্রজেক্ট বৃত্তি সহায়তা সুবিধা।' : 'Approved training programs aligned with BTEB standards, fully equipped workshop facilities, and scholarship partner programs.' }}
+        <p style="font-size: 15px; color: #475569; line-height: 1.75; margin: 0;">
+          @if($isBn)
+            আমরা মানসম্মত কারিগরি প্রশিক্ষণের সুযোগকে আরও বিস্তৃত করতে চাই, যাতে শিক্ষার্থীরা বাস্তবমুখী দক্ষতায় সমৃদ্ধ হয়ে টেকসই জীবিকা গড়ে তুলতে পারে। আমাদের চূড়ান্ত লক্ষ্য এমন এক দক্ষ কর্মীবাহিনী গড়ে তোলা যা সমাজকে শক্তিশালী করবে এবং সমৃদ্ধ বাংলাদেশের অগ্রযাত্রাকে বেগবান রাখবে।
+          @else
+            We aspire to expand access to quality skills training, empower learners with practical competencies and help them build sustainable livelihoods. Our goal is to contribute to a skilled workforce that can strengthen communities and support the continued development of Bangladesh.
+          @endif
         </p>
       </div>
     </div>
 
-    <!-- CAMPUS WORKSHOP & FACILITIES -->
+    <!-- 4. PARTNERSHIP WITH IMPACT INITIATIVE (IMI) -->
+    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 32px 36px; margin-bottom: 48px;">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+        <span style="font-size: 28px;">🤝</span>
+        <div>
+          <span style="font-size: 12px; font-weight: 700; color: #166534; letter-spacing: 1.5px; text-transform: uppercase;">
+            {{ $isBn ? 'কৌশলগত অংশীদারিত্ব' : 'STRATEGIC PARTNERSHIP' }}
+          </span>
+          <h3 style="font-family: var(--serif); font-size: 22px; color: #14532d; margin: 2px 0 0 0;">
+            {{ $isBn ? 'ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative)-এর সাথে অংশীদারিত্ব' : 'Our Partnership with Impact Initiative' }}
+          </h3>
+        </div>
+      </div>
+      <div style="font-size: 15px; line-height: 1.8; color: #166534;">
+        @if($isBn)
+          <p style="margin-bottom: 12px;">
+            <strong>১৯৯৫ সালে</strong> প্রতিষ্ঠিত <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI)</strong> বাংলাদেশের একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।
+          </p>
+          <p style="margin: 0; font-weight: 600;">
+            এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে।
+          </p>
+        @else
+          <p style="margin-bottom: 12px;">
+            Established in <strong>1995</strong>, <strong>Impact Initiative (IMI)</strong> is a national humanitarian and development organization in Bangladesh. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.
+          </p>
+          <p style="margin: 0; font-weight: 600;">
+            Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.
+          </p>
+        @endif
+      </div>
+    </div>
+
+    <!-- 5. WHAT WE DO (CORE PILLARS) -->
+    <div style="margin-bottom: 50px;">
+      <div style="text-align: center; margin-bottom: 30px;">
+        <span class="section-kicker">{{ $isBn ? 'কার্যক্রম ও সেবাসমূহ' : 'CORE PILLARS' }}</span>
+        <h2 style="font-family: var(--serif); font-size: 28px; color: var(--green); margin: 6px 0;">
+          {{ $isBn ? 'আমাদের মূল কার্যক্রম (What We Do)' : 'What We Do' }}
+        </h2>
+        <div class="gold-rule" style="margin: 10px auto 0 auto; width: 45px; height: 3px; background: var(--gold);"></div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+        <!-- Pillar 1 -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column;">
+          <div style="font-size: 32px; margin-bottom: 14px;">🛠️</div>
+          <h4 style="font-family: var(--serif); font-size: 17px; color: var(--green); margin: 0 0 8px 0; line-height: 1.3;">
+            {{ $isBn ? 'কারিগরি ও বৃত্তিমূলক প্রশিক্ষণ' : 'Technical & Vocational Training' }}
+          </h4>
+          <p style="font-size: 13.5px; color: #64748b; line-height: 1.6; margin: 0;">
+            {{ $isBn ? 'বাস্তবমুখী ও পেশাভিত্তিক ব্যবহারিক দক্ষতা উন্নয়ন।' : 'Practical, occupation-focused skills development.' }}
+          </p>
+        </div>
+
+        <!-- Pillar 2 -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column;">
+          <div style="font-size: 32px; margin-bottom: 14px;">📋</div>
+          <h4 style="font-family: var(--serif); font-size: 17px; color: var(--green); margin: 0 0 8px 0; line-height: 1.3;">
+            {{ $isBn ? 'প্রকল্পভিত্তিক প্রশিক্ষণ' : 'Project-Based Training' }}
+          </h4>
+          <p style="font-size: 13.5px; color: #64748b; line-height: 1.6; margin: 0;">
+            {{ $isBn ? 'জাতীয় ও আন্তর্জাতিক উন্নয়ন প্রকল্পের আওতায় প্রশিক্ষণ প্রদান।' : 'Skills training delivered under relevant development projects.' }}
+          </p>
+        </div>
+
+        <!-- Pillar 3 -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column;">
+          <div style="font-size: 32px; margin-bottom: 14px;">🎖️</div>
+          <h4 style="font-family: var(--serif); font-size: 17px; color: var(--green); margin: 0 0 8px 0; line-height: 1.3;">
+            {{ $isBn ? 'মূল্যায়ন ও সনদপত্র' : 'Assessment & Certification' }}
+          </h4>
+          <p style="font-size: 13.5px; color: #64748b; line-height: 1.6; margin: 0;">
+            {{ $isBn ? 'জাতীয় ও কারিগরি শিক্ষা বোর্ডের মানদণ্ড অনুযায়ী মূল্যায়ন ও স্বীকৃতি।' : 'Skills assessment and certification opportunities in accordance with applicable requirements.' }}
+          </p>
+        </div>
+
+        <!-- Pillar 4 -->
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column;">
+          <div style="font-size: 32px; margin-bottom: 14px;">💼</div>
+          <h4 style="font-family: var(--serif); font-size: 17px; color: var(--green); margin: 0 0 8px 0; line-height: 1.3;">
+            {{ $isBn ? 'কর্মসংস্থান সংযোগ' : 'Employment Linkages' }}
+          </h4>
+          <p style="font-size: 13.5px; color: #64748b; line-height: 1.6; margin: 0;">
+            {{ $isBn ? 'অর্জিত দক্ষতাকে সরাসরি কার্যকর কর্মসংস্থানের সুযোগের সাথে যুক্ত করা।' : 'Supporting trainees in connecting their acquired skills with employment opportunities.' }}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. CAMPUS WORKSHOP & FACILITIES -->
     <div style="margin-bottom: 50px;">
       <div style="text-align: center; margin-bottom: 30px;">
         <span class="section-kicker">{{ $isBn ? 'আধুনিক অবকাঠামো' : 'INFRASTRUCTURE' }}</span>
@@ -126,19 +260,25 @@
       </div>
     </div>
 
-    <!-- QUOTE CALLOUT -->
-    <div style="background: linear-gradient(135deg, var(--green-deep), var(--green)); color: #fff; padding: 36px 30px; border-radius: 10px; text-align: center; box-shadow: 0 6px 20px rgba(15,81,50,0.18);">
-      <h3 style="font-family: var(--serif); font-size: 24px; font-weight: 700; margin: 0 0 10px 0;">
-        {!! nl2br(e($isBn ? "দক্ষ জনশক্তিই গড়ে সমৃদ্ধ বাংলাদেশ" : ($settings['quote_title'] ?? "Skilled People Build a Better Bangladesh"))) !!}
+    <!-- 7. MOTTO & CALLOUT FOOTER -->
+    <div style="background: linear-gradient(135deg, var(--green-deep), var(--green)); color: #fff; padding: 38px 30px; border-radius: 12px; text-align: center; box-shadow: 0 6px 20px rgba(15,81,50,0.18);">
+      <h3 style="font-family: var(--serif); font-size: 26px; font-weight: 700; margin: 0 0 8px 0; color: #ffffff;">
+        MC Technical School & College — {{ $isBn ? 'সুন্দর আগামী বিনির্মাণে বাস্তবমুখী দক্ষতা।' : 'Skills for a Better Tomorrow.' }}
       </h3>
-      <div style="width: 40px; height: 3px; background: var(--gold); margin: 12px auto 18px auto;"></div>
-      <p style="font-size: 15px; color: rgba(255,255,255,0.85); max-width: 640px; margin: 0 auto 20px auto;">
-        {{ $isBn ? 'আজই আপনার পছন্দের কোর্সে ভর্তি হয়ে গড়ে তুলুন একটি নিশ্চিত ও সম্মানজনক ক্যারিয়ার।' : 'Enroll in your chosen technical training program today and build an independent, rewarding career.' }}
+      <div style="width: 45px; height: 3px; background: var(--gold); margin: 12px auto 16px auto;"></div>
+      <p style="font-size: 15.5px; color: rgba(255,255,255,0.9); max-width: 680px; margin: 0 auto 22px auto;">
+        {{ $isBn ? 'আজই আপনার পছন্দের কোর্সে ভর্তি হয়ে গড়ে তুলুন একটি নিশ্চিত, আত্মনির্ভরশীল ও সম্মানজনক ক্যারিয়ার।' : 'Join our practical vocational courses today to unlock your potential and build a sustainable livelihood.' }}
       </p>
-      <a href="{{ route('apply') }}" class="button button-gold" style="font-weight: 700; padding: 12px 30px;">
-        {{ $isBn ? 'ভর্তি আবেদন ফরম পূরণ করুন ➔' : 'Apply Online Now ➔' }}
-      </a>
+      <div style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+        <a href="{{ route('apply') }}" class="button button-gold" style="font-weight: 700; padding: 12px 32px; font-size: 15px;">
+          {{ $isBn ? 'অনলাইন ভর্তি আবেদন ➔' : 'Apply Online Now ➔' }}
+        </a>
+        <a href="{{ route('contact') }}" class="button" style="background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); font-weight: 700; padding: 12px 28px;">
+          {{ $isBn ? 'যোগাযোগ করুন' : 'Contact Us' }}
+        </a>
+      </div>
     </div>
+
   </div>
 </section>
 @endsection

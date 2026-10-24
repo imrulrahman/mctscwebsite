@@ -304,16 +304,19 @@
       height: 100% !important;
       min-height: 280px !important;
       max-height: 380px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
       border-radius: 10px !important;
       overflow: hidden !important;
-      box-shadow: 0 6px 20px rgba(15, 81, 50, 0.12) !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+      background: #ffffff !important;
     }
     .about-image img {
       width: 100% !important;
       height: 100% !important;
-      min-height: 280px !important;
       max-height: 380px !important;
-      object-fit: cover !important;
+      object-fit: contain !important;
       display: block !important;
       border-radius: 10px !important;
       transition: transform 0.3s ease;
@@ -832,13 +835,27 @@
     <div class="container about-grid">
       <div class="about-copy">
         <p class="section-kicker">{{ $isBn ? 'আমাদের পরিচিতি' : 'ABOUT US' }}</p>
-        <h2>{{ $isBn ? 'আমাদের ইনস্টিটিউট সম্পর্কে' : $settings->get('about_title', 'About Our College') }}</h2>
+        <h2>{{ $isBn ? 'আমাদের ইনস্টিটিউট সম্পর্কে' : ($settings->get('about_title') ?: 'About Our College') }}</h2>
         <div class="gold-rule"></div>
-        <p>{{ $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ একটি মানসম্মত কারিগরি ও বৃত্তিমূলক শিক্ষা প্রতিষ্ঠান। ব্যবহারিক প্রশিক্ষণ, বাস্তবমুখী দক্ষতা ও উপযুক্ত দিকনির্দেশনার মাধ্যমে শিক্ষার্থীদের আত্মবিশ্বাসী করে গড়ে তোলা এবং উন্নত কর্মসংস্থানের সুযোগ সৃষ্টি করাই আমাদের মূল লক্ষ্য।' : $settings->get('about', 'Mahmudunnabi Chowdhury Technical School and College provides quality technical and vocational education to equip learners with practical skills for a brighter future.') }}</p>
-        <a class="button button-green" href="{{ route('contact') }}">{{ $isBn ? 'যোগাযোগ করুন' : 'Contact Our College' }} <span>→</span></a>
+        <div class="about-summary-text" style="font-size: 15px; line-height: 1.75; color: #334d44; margin-bottom: 24px;">
+          @if($isBn)
+            <p style="margin: 0 0 12px 0;"><strong>মাহমুদুন্নবী চৌধুরী</strong> টেকনিক্যাল স্কুল এন্ড কলেজ ২০০৬ সালে প্রতিষ্ঠিত হয় প্রখ্যাত শিল্পপতি ও সাবেক মন্ত্রী <strong>মাহমুদুন্নবী চৌধুরী</strong>-এর স্মরণে গঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং ১৯৯৫ সাল থেকে TVET খাতে অভিজ্ঞতাসম্পন্ন সংস্থা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong>-এর যৌথ উদ্যোগে।</p>
+            <p style="margin: 0;">প্রতিষ্ঠানটি তরুণ সমাজকে বাস্তবমুখী ব্যবহারিক দক্ষতার মাধ্যমে দক্ষ ও কর্মসংস্থান উপযোগী মানবসম্পদে পরিণত করতে মানসম্মত কারিগরি শিক্ষা প্রদান করে আসছে।</p>
+          @else
+            <p style="margin: 0 0 12px 0;"><strong>Mahmudunnabi Chowdhury</strong> Technical School and College was established in 2006 through the joint initiative of the <strong>Mahmudunnabi Foundation</strong>, formed in memory of the renowned industrialist and former minister <strong>Mahmudunnabi Chowdhury</strong>, and <strong>Impact Initiative</strong>, an organization with long-standing experience in TVET since 1995.</p>
+            <p style="margin: 0;">The college provides quality technical and vocational education to equip young people with practical skills for a brighter future.</p>
+          @endif
+        </div>
+        <a class="button button-green" href="{{ route('about') }}">{{ $isBn ? 'আরও জানুন' : 'Read More' }} <span>→</span></a>
       </div>
       <div class="about-image">
-        <img src="{{ $aboutImg }}" alt="{{ $settings->get('institution_name', 'College campus') }}">
+        @php
+          $aboutImgSrc = storage_asset($settings->get('about_image'), 'assets/about_mahmudunnabi_legacy.jpg');
+          if (empty($settings->get('about_image')) || $settings->get('about_image') === 'assets/MC Building Photo.jpg') {
+              $aboutImgSrc = asset('assets/about_mahmudunnabi_legacy.jpg');
+          }
+        @endphp
+        <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus">
       </div>
     </div>
   </section>
