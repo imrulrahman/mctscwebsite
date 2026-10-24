@@ -42,6 +42,10 @@ Route::get('/deploy-update', function () {
     if (!auth()->check() && request('key') !== 'mnctsc2026') {
         abort(403, 'Unauthorized access. Provide correct key or login as admin.');
     }
+    $gitOutput = 'shell_exec not available';
+    if (function_exists('shell_exec')) {
+        $gitOutput = shell_exec('cd ' . escapeshellarg(base_path()) . ' && git pull origin main 2>&1') ?? 'No git output';
+    }
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     $mig = \Illuminate\Support\Facades\Artisan::output();
     \Illuminate\Support\Facades\Artisan::call('view:clear');
@@ -52,8 +56,10 @@ Route::get('/deploy-update', function () {
     
     return response("<div style='max-width:700px;margin:50px auto;background:#1e293b;color:#f8fafc;padding:32px;border-radius:12px;font-family:system-ui,monospace;box-shadow:0 10px 25px rgba(0,0,0,0.3);'>
         <h2 style='color:#34d399;margin-top:0;'>✓ Live Server Updated Successfully!</h2>
-        <p style='color:#94a3b8;font-size:14px;'>Database migrations and application caches were refreshed.</p>
+        <p style='color:#94a3b8;font-size:14px;'>Git repository, database migrations and application caches were refreshed.</p>
         <hr style='border:none;border-top:1px solid #334155;margin:20px 0;'>
+        <h4 style='color:#38bdf8;margin-bottom:6px;'>Git Pull Output:</h4>
+        <pre style='background:#0f172a;padding:14px;border-radius:6px;color:#fef08a;font-size:13px;white-space:pre-wrap;'>" . e(trim($gitOutput)) . "</pre>
         <h4 style='color:#38bdf8;margin-bottom:6px;'>Database Migrations:</h4>
         <pre style='background:#0f172a;padding:14px;border-radius:6px;color:#a7f3d0;font-size:13px;white-space:pre-wrap;'>" . e(trim($mig) ?: 'Nothing to migrate. All tables are up to date.') . "</pre>
         <h4 style='color:#38bdf8;margin:18px 0 6px;'>Cache Clear:</h4>
