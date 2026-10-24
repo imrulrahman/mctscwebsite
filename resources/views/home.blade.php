@@ -833,43 +833,45 @@
 
   <!-- 2. ABOUT SECTION: Institute Background (Directly below Hero Slider, No Notice Bar) -->
   <section id="about" class="section about-section">
-    <div class="container about-grid">
-      <div class="about-copy">
-        <h2>{{ $isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background' }}</h2>
-        <div class="gold-rule"></div>
-        <div class="about-summary-text" style="font-size: 15px; line-height: 1.75; color: #334d44; margin-bottom: 24px; text-align: justify; text-justify: inter-word;">
-          @if($isBn)
-            <p style="margin: 0 0 14px 0;">
-              <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
-            </p>
-            <p style="margin: 0 0 14px 0;">
-              <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong> কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে।
-            </p>
-            <p style="margin: 0;">
-              প্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।
-            </p>
-          @else
-            <p style="margin: 0 0 14px 0;">
-              <strong>Mahmudunnabi Chowdhury Technical School & College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006 as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, and <strong>Impact Initiative (IMI)</strong>, the institution is committed to developing skilled human resources and creating employment opportunities for socially and economically disadvantaged people.
-            </p>
-            <p style="margin: 0 0 14px 0;">
-              Managed by <strong>Impact Initiative</strong>, MCTSC provides vocational and technical training opportunities for unemployed, unskilled, underprivileged group and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.
-            </p>
-            <p style="margin: 0;">
-              Since its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.
-            </p>
-          @endif
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-copy">
+          <h2>{{ $isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background' }}</h2>
+          <div class="gold-rule"></div>
+          <div class="about-summary-text" style="font-size: 15px; line-height: 1.75; color: #334d44; margin-bottom: 24px; text-align: justify; text-justify: inter-word;">
+            @if($isBn)
+              <p style="margin: 0 0 14px 0;">
+                <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
+              </p>
+              <p style="margin: 0 0 14px 0;">
+                <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong> কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে।
+              </p>
+              <p style="margin: 0;">
+                প্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।
+              </p>
+            @else
+              <p style="margin: 0 0 14px 0;">
+                <strong>Mahmudunnabi Chowdhury Technical School & College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006 as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, and <strong>Impact Initiative (IMI)</strong>, the institution is committed to developing skilled human resources and creating employment opportunities for socially and economically disadvantaged people.
+              </p>
+              <p style="margin: 0 0 14px 0;">
+                Managed by <strong>Impact Initiative</strong>, MCTSC provides vocational and technical training opportunities for unemployed, unskilled, underprivileged group and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.
+              </p>
+              <p style="margin: 0;">
+                Since its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.
+              </p>
+            @endif
+          </div>
+          <a class="button button-green" href="{{ route('about') }}">{{ $isBn ? 'আরও বিস্তারিত দেখুন' : 'Read More' }} <span>→</span></a>
         </div>
-        <a class="button button-green" href="{{ route('about') }}">{{ $isBn ? 'আরও বিস্তারিত দেখুন' : 'Read More' }} <span>→</span></a>
-      </div>
-      <div class="about-image">
-        @php
-          $aboutImgSrc = storage_asset($settings->get('about_image'), 'assets/about_mahmudunnabi_legacy.jpg');
-          if (empty($settings->get('about_image')) || $settings->get('about_image') === 'assets/MC Building Photo.jpg') {
-              $aboutImgSrc = asset('assets/about_mahmudunnabi_legacy.jpg');
-          }
-        @endphp
-        <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus">
+        <div class="about-image">
+          @php
+            $aboutImgSrc = storage_asset($settings->get('about_image'), 'assets/about_mahmudunnabi_legacy.jpg');
+            if (empty($settings->get('about_image')) || $settings->get('about_image') === 'assets/MC Building Photo.jpg') {
+                $aboutImgSrc = asset('assets/about_mahmudunnabi_legacy.jpg');
+            }
+          @endphp
+          <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus">
+        </div>
       </div>
     </div>
   </section>
