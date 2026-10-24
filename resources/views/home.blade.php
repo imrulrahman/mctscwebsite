@@ -18,44 +18,11 @@
     }
     $heroBanner = storage_asset($rawHero, 'assets/banners/banner_robotics_lab.jpg');
     $aboutImg = storage_asset($settings->get('about_image'), 'assets/MC Building Photo.jpg');
-    
-    $f1_img = storage_asset($settings->get('facility_1_image'), 'assets/Computer Lab r.jpg');
-    $f2_img = storage_asset($settings->get('facility_2_image'), 'assets/RAC Lab.jpg');
-    $f3_img = storage_asset($settings->get('facility_3_image'), 'assets/Plumbing Class.jpg');
-    $f4_img = storage_asset($settings->get('facility_4_image'), 'assets/SMO Lab.jpg');
 
     $primaryColor = $settings->get('primary_color', '#0f5132');
     $primaryHover = $settings->get('primary_hover', '#093722');
     $secondaryColor = $settings->get('secondary_color', '#c59b27');
     $secondaryHover = $settings->get('secondary_hover', '#a37d18');
-
-    $courseTranslations = [
-      'Computer Operation' => 'কম্পিউটার অপারেশন',
-      'Refrigeration and Air Conditioning' => 'রেফ্রিজারেশন এন্ড এয়ারকন্ডিশনিং (RAC)',
-      'Plumbing' => 'প্লাম্বিং (পাইপ ফিটিং)',
-      'Driving' => 'ড্রাইভিং ট্রেনিং',
-      'Sewing Machine Operation' => 'স্যুইং মেশিন অপারেশন (SMO)',
-      'Electrical Installation' => 'ইলেকট্রিক্যাল ইনস্টলেশন এন্ড মেইনটেন্যান্স',
-    ];
-
-    $facilityTranslations = [
-      'Computer Lab' => 'কম্পিউটার ল্যাব',
-      'Refrigeration and AC Workshop' => 'রেফ্রিজারেশন ও এসি ওয়ার্কশপ',
-      'Plumbing Workshop' => 'প্লাম্বিং ওয়ার্কশপ',
-      'Tailoring and Sewing Workshop' => 'টেইলারিং ও স্যুইং ল্যাব',
-    ];
-
-    $noticeTranslations = [
-      'Admission process for the next session' => 'নতুন সেশনে ট্রেইনী এডমিশন কার্যক্রম শুরু',
-      'Practical class schedules' => 'প্র্যাকটিক্যাল ক্লাসের সময়সূচী',
-      'College notice board is now online' => 'কলেজের অনলাইন নোটিশ বোর্ড চালু প্রসঙ্গে',
-    ];
-
-    $eventTranslations = [
-      'Orientation Program' => 'নতুন ট্রেইনী ওরিয়েন্টেশন প্রোগ্রাম',
-      'Practical Exam' => 'সেমিস্টার প্র্যাকটিক্যাল পরীক্ষা',
-      'Cultural Program' => 'বার্ষিক সাংস্কৃতিক ও পুরস্কার বিতরণী',
-    ];
 
     $toRgba = function (?string $hex, float $alpha = 1.0): string {
       if (!$hex) {
@@ -93,7 +60,7 @@
     .button-gold { background: {{ $secondaryColor }} !important; color: #000 !important; }
     .button-gold:hover { background: {{ $secondaryHover }} !important; }
 
-    /* Header responsive & brand wrapping fix */
+    /* Header responsive & brand wrapping */
     .site-header {
       min-height: 78px !important;
       height: auto !important;
@@ -115,189 +82,196 @@
       }
     }
 
-    /* Hero Banner Wrap & Strict Fixed Height Non-cropping Display Mode */
-    .hero-wrap {
+    /* Hero Image Carousel Slider (Fixed Height & Non-Cropping) */
+    .hero-slider-wrap {
       position: relative;
       width: 100%;
       height: 350px !important;
       max-height: 350px !important;
       overflow: hidden;
       background-color: #0b3d30;
+      user-select: none;
     }
-    .hero-media {
+    .hero-slides-container {
       position: relative;
       width: 100%;
-      height: 100% !important;
+      height: 100%;
     }
-    .hero-img {
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
+      z-index: 1;
+    }
+    .hero-slide.active {
+      opacity: 1;
+      visibility: visible;
+      z-index: 2;
+    }
+    .hero-slide img {
       width: 100% !important;
       height: 100% !important;
       display: block !important;
-      object-fit: fill !important; /* Stretches/squashes image to exact fixed 350px height with zero cropping */
-    }
-    .hero-wrap.mode-cover .hero-img,
-    .hero-wrap.mode-natural .hero-img {
-      width: 100% !important;
-      height: 100% !important;
-      min-height: 100% !important;
-      max-height: 100% !important;
       object-fit: fill !important;
     }
+    /* Slider Prev/Next Controls */
+    .hero-slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 10;
+      background: rgba(0, 0, 0, 0.4);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 20px;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    }
+    .hero-slider-btn:hover {
+      background: {{ $primaryColor }} !important;
+      border-color: #ffffff;
+      transform: translateY(-50%) scale(1.08);
+    }
+    .hero-slider-prev {
+      left: 20px;
+    }
+    .hero-slider-next {
+      right: 20px;
+    }
+    /* Slider Pagination Dots */
+    .hero-slider-dots {
+      position: absolute;
+      bottom: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.42);
+      padding: 6px 14px;
+      border-radius: 20px;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .hero-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+      border: none;
+      padding: 0;
+      transition: all 0.25s ease;
+    }
+    .hero-dot.active {
+      background: {{ $secondaryColor }} !important;
+      width: 26px;
+      border-radius: 10px;
+    }
     @media (max-width: 992px) {
-      .hero-wrap {
+      .hero-slider-wrap {
         height: 250px !important;
         max-height: 250px !important;
       }
+      .hero-slider-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 16px;
+      }
+      .hero-slider-prev { left: 10px; }
+      .hero-slider-next { right: 10px; }
     }
     @media (max-width: 600px) {
-      .hero-wrap {
+      .hero-slider-wrap {
         height: 190px !important;
         max-height: 190px !important;
       }
-    }
-    .hero-overlay {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, rgba(0, 37, 30, 0.88) 0%, rgba(0, 37, 30, 0.48) 42%, rgba(0, 0, 0, 0) 80%);
-      pointer-events: none;
-      z-index: 2;
-    }
-    .hero-overlay-content {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      align-items: flex-start;
-      padding-top: 24px;
-      z-index: 3;
-      pointer-events: none;
-    }
-    .hero-overlay-content .container {
-      width: min(1120px, calc(100% - 64px));
-      margin: 0 auto;
-      display: flex;
-      justify-content: flex-start;
-    }
-    .hero-inst-banner {
-      text-align: left;
-      max-width: 680px;
-      pointer-events: auto;
-      padding: 0;
-    }
-    .hero-inst-name {
-      font-family: var(--serif);
-      font-weight: 700;
-      font-size: 38px;
-      line-height: 1.22;
-      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.85), 0 1px 4px rgba(0, 0, 0, 0.95);
-      margin: 0;
-      letter-spacing: -0.3px;
-    }
-    @media (max-width: 768px) {
-      .hero-overlay-content {
-        padding-top: 14px;
+      .hero-slider-btn {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
       }
-      .hero-inst-name {
-        font-size: 24px;
-        line-height: 1.25;
+      .hero-slider-prev { left: 8px; }
+      .hero-slider-next { right: 8px; }
+      .hero-slider-dots {
+        bottom: 8px;
+        padding: 4px 10px;
+        gap: 6px;
       }
-    }
-    @media (max-width: 480px) {
-      .hero-inst-name {
-        font-size: 19px;
-      }
+      .hero-dot { width: 8px; height: 8px; }
+      .hero-dot.active { width: 18px; }
     }
 
-    /* 2 Rows of 4 Cards (total 8), significantly larger cards & images */
-    .course-grid {
-      display: grid !important;
-      grid-template-columns: repeat(4, 1fr) !important;
-      gap: 20px !important;
+    /* Global Symmetrical Container */
+    body {
+      overflow-x: hidden !important;
     }
-    .course-card {
-      border-radius: 8px !important;
-      overflow: hidden !important;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
-      transition: transform 0.22s ease, box-shadow 0.22s ease !important;
-      background: #ffffff !important;
-      display: flex !important;
-      flex-direction: column !important;
-      text-decoration: none !important;
-    }
-    .course-card:hover {
-      transform: translateY(-6px) !important;
-      box-shadow: 0 12px 24px rgba(15, 81, 50, 0.16) !important;
-    }
-    .course-card img {
-      width: 100% !important;
-      height: 165px !important;
-      object-fit: cover !important;
-      display: block !important;
-    }
-    .course-card b {
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-      text-align: center !important;
-      padding: 14px 12px !important;
-      font: 700 15px/1.35 var(--serif) !important;
-      color: #1e3d35 !important;
-      min-height: 58px !important;
-      background: #ffffff !important;
-    }
-    @media (max-width: 960px) {
-      .course-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 14px !important;
-      }
-    }
-    @media (max-width: 520px) {
-      .course-grid {
-        grid-template-columns: 1fr !important;
-      }
+    .container {
+      width: min(1140px, calc(100% - 64px)) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      box-sizing: border-box !important;
     }
 
-    /* Notice Bar bullet fix */
-    .notice-scroll span:before {
-      content: '\2022\a0 ' !important;
-      color: {{ $secondaryColor }} !important;
-      font-weight: 700;
-    }
-
-    /* Section Overrides to adopt chosen theme */
-    .about-copy h2, .section-heading h2, .lower-grid h3 {
+    /* About Section */
+    .about-copy h2, .section-heading h2 {
       color: {{ $primaryColor }} !important;
     }
     .about-aside {
       display: none !important;
     }
     .about-section {
-      padding: 42px 0 36px 0 !important;
+      padding: 50px 0 46px 0 !important;
       background: #ffffff;
+      width: 100% !important;
+      overflow: hidden !important;
     }
     .about-grid {
       display: grid !important;
       grid-template-columns: 1.25fr 0.95fr !important;
-      gap: 36px !important;
+      gap: 40px !important;
       align-items: center !important;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+    .about-grid > * {
+      min-width: 0 !important;
+      box-sizing: border-box !important;
     }
     .about-copy {
       padding: 10px 0 !important;
       max-width: 100% !important;
+      box-sizing: border-box !important;
     }
     .about-copy h2 {
-      font-size: 28px !important;
+      font-size: 30px !important;
       line-height: 1.25 !important;
-      margin: 0 0 10px 0 !important;
+      margin: 0 0 12px 0 !important;
       color: {{ $primaryColor }} !important;
     }
+    .about-summary-text p,
     .about-copy p:not(.section-kicker) {
-      font-size: 15.5px !important;
-      line-height: 1.7 !important;
+      font-size: 15px !important;
+      line-height: 1.75 !important;
       color: #334d44 !important;
-      margin-bottom: 24px !important;
+      text-align: justify !important;
+      text-justify: inter-word !important;
     }
     .about-image {
       width: 100% !important;
@@ -307,10 +281,11 @@
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
-      border-radius: 10px !important;
+      border-radius: 12px !important;
       overflow: hidden !important;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06) !important;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07) !important;
       background: #ffffff !important;
+      box-sizing: border-box !important;
     }
     .about-image img {
       width: 100% !important;
@@ -318,7 +293,7 @@
       max-height: 380px !important;
       object-fit: contain !important;
       display: block !important;
-      border-radius: 10px !important;
+      border-radius: 12px !important;
       transition: transform 0.3s ease;
     }
     .about-image:hover img {
@@ -338,163 +313,204 @@
         min-height: 220px !important;
       }
     }
-    .courses-section, .gallery-section {
-      background: {{ $toRgba($primaryColor, 0.04) }} !important;
-    }
-    .course-card:hover {
-      box-shadow: 0 7px 18px {{ $toRgba($primaryColor, 0.15) }} !important;
-    }
-    .project-card {
-      background: #ffffff !important;
-      border: 1px solid {{ $toRgba($primaryColor, 0.12) }} !important;
-    }
-    .project-card i {
-      background: {{ $primaryColor }} !important;
-      color: #ffffff !important;
-    }
-    .admission-band {
-      background: {{ $toRgba($primaryColor, 0.08) }} !important;
-      border-top: 1px solid {{ $toRgba($primaryColor, 0.12) }};
-      border-bottom: 1px solid {{ $toRgba($primaryColor, 0.12) }};
-    }
-    .admission-icon {
-      background: {{ $primaryColor }} !important;
-      color: #ffffff !important;
-    }
-    .admission-links {
-      color: {{ $primaryColor }} !important;
-    }
-    .result.green {
-      background: {{ $primaryColor }} !important;
-    }
-    .result.gold {
-      background: {{ $secondaryColor }} !important;
-    }
 
-    /* Dynamic Quote Card - Matches selected theme gradient perfectly */
-    .quote-card {
-      background: linear-gradient(145deg, {{ $toRgba($primaryColor, 0.85) }}, {{ $toRgba($primaryHover, 0.96) }}), url('{{ $aboutImg }}') center/cover !important;
-      border-radius: 4px;
+    /* ========================================================
+       VISION, MISSION & OBJECTIVES (PILL BADGE & NATURAL HEIGHT)
+       ======================================================== */
+    .vmo-section {
+      padding: 48px 0 54px 0 !important;
+      background: #f8faf9 !important;
+      border-top: 1px solid rgba(15, 81, 50, 0.08);
+      border-bottom: 1px solid rgba(15, 81, 50, 0.08);
     }
-
-    /* Lightbox Modal with Prev/Next and Close */
-    .lightbox {
-      display: none;
-      position: fixed;
-      z-index: 99999;
-      inset: 0;
-      background: rgba(4, 20, 15, 0.94) !important;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      align-items: center;
-      justify-content: center;
-      user-select: none;
+    .vmo-layout {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 30px !important;
+      align-items: start !important;
     }
-    .lightbox.open {
+    .vmo-col-left {
       display: flex !important;
+      flex-direction: column !important;
+      gap: 24px !important;
     }
-    .lightbox-stage {
-      max-width: 90vw;
-      max-height: 88vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      z-index: 100000;
+    .vmo-col-right {
+      display: flex !important;
+      flex-direction: column !important;
     }
-    .lightbox-img {
-      max-width: min(1000px, 86vw);
-      max-height: 78vh;
-      object-fit: contain;
-      border-radius: 8px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-      border: 2px solid rgba(255, 255, 255, 0.15);
-      background: #000;
-      transition: opacity 0.2s ease;
+    .vmo-card-wrap {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      width: 100% !important;
     }
-    .lightbox-caption {
-      margin-top: 12px;
-      color: #ffffff;
-      font-size: 15px;
-      font-weight: 600;
+    .vmo-pill {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 8px 24px !important;
+      border-radius: 8px !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      font-size: 20px !important;
+      line-height: 1.2 !important;
+      margin-bottom: 12px !important;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08) !important;
+      letter-spacing: -0.2px !important;
+    }
+    .pill-vision {
+      background: #1b8e4b !important;
+    }
+    .pill-mission {
+      background: #2b5288 !important;
+    }
+    .pill-objectives {
+      background: #b45309 !important;
+    }
+    .vmo-box {
+      width: 100% !important;
+      background: #ffffff !important;
+      border-radius: 10px !important;
+      padding: 24px 28px !important;
+      border: 1px solid rgba(0, 0, 0, 0.06) !important;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04) !important;
+      transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+      box-sizing: border-box !important;
+      height: auto !important;
+    }
+    .vmo-box:hover {
+      transform: translateY(-4px) !important;
+      box-shadow: 0 12px 30px rgba(15, 81, 50, 0.1) !important;
+    }
+    .vmo-box p {
+      font-size: 15.5px !important;
+      line-height: 1.75 !important;
+      color: #2d3748 !important;
+      margin: 0 !important;
+    }
+    .vmo-objectives-list {
+      list-style: none !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 13px !important;
+    }
+    .vmo-objectives-list li {
+      display: flex !important;
+      align-items: flex-start !important;
+      gap: 11px !important;
+      font-size: 14.5px !important;
+      line-height: 1.55 !important;
+      color: #2d3748 !important;
+    }
+    .vmo-objectives-list li span {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 22px !important;
+      height: 22px !important;
+      border-radius: 50% !important;
+      background: #e8f5e9 !important;
+      color: #1b8e4b !important;
+      font-size: 13px !important;
+      font-weight: 800 !important;
+      flex-shrink: 0 !important;
+      margin-top: 2px !important;
+    }
+    @media (max-width: 900px) {
+      .vmo-layout {
+        grid-template-columns: 1fr !important;
+        gap: 24px !important;
+      }
+    }
+
+    /* ========================================================
+       DEVELOPMENT PARTNERS (SLIDING MARQUEE - HIERARCHICAL MATCH)
+       ======================================================== */
+    .partners-marquee-section {
+      padding: 56px 0 52px 0 !important;
+      background: #ffffff !important;
+      overflow: hidden !important;
+    }
+    .partners-intro {
       text-align: center;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+      max-width: 880px;
+      margin: 0 auto 36px auto;
+    }
+    .partners-intro h2 {
+      font-size: 30px;
+      color: var(--green);
+      margin: 0 0 12px 0;
       font-family: var(--serif);
     }
-    .lightbox-counter {
-      font-size: 12px;
-      color: rgba(255, 255, 255, 0.7);
-      margin-top: 4px;
+    .partners-intro p {
+      font-size: 15.5px;
+      line-height: 1.75;
+      color: #3f584e;
+      margin: 0;
     }
-    .lightbox-btn {
-      position: fixed;
-      background: rgba(255, 255, 255, 0.18);
-      color: #ffffff;
-      border: 1.5px solid rgba(255, 255, 255, 0.4);
-      border-radius: 50%;
-      cursor: pointer;
+    /* Infinite Marquee exact to impactini.org */
+    .imi-lmq {
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+      mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+      padding: 12px 0 16px 0;
+      width: 100%;
+    }
+    .imi-lmq-in {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      z-index: 100001;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      width: max-content;
+      animation: imiLmq 38s linear infinite;
     }
-    .lightbox-btn:hover {
-      background: {{ $primaryColor }} !important;
-      border-color: #ffffff;
-      transform: scale(1.1);
+    .imi-lmq:hover .imi-lmq-in {
+      animation-play-state: paused;
     }
-    .lightbox-close {
-      top: 24px;
-      right: 24px;
-      width: 44px;
-      height: 44px;
-      font-size: 22px;
-      line-height: 1;
-    }
-    .lightbox-prev {
-      left: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 50px;
-      height: 50px;
-      font-size: 24px;
-    }
-    .lightbox-prev:hover {
-      transform: translateY(-50%) scale(1.1);
-    }
-    .lightbox-next {
-      right: 24px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 50px;
-      height: 50px;
-      font-size: 24px;
-    }
-    .lightbox-next:hover {
-      transform: translateY(-50%) scale(1.1);
-    }
-    @media (max-width: 680px) {
-      .lightbox-prev {
-        left: 8px;
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
+    @keyframes imiLmq {
+      to {
+        transform: translateX(-50%);
       }
-      .lightbox-next {
-        right: 8px;
-        width: 40px;
-        height: 40px;
-        font-size: 20px;
-      }
-      .lightbox-close {
-        top: 14px;
-        right: 14px;
-        width: 38px;
-        height: 38px;
-        font-size: 18px;
+    }
+    .imi-lcard {
+      flex: 0 0 auto;
+      width: 220px;
+      height: 110px;
+      margin-right: 22px;
+      background: #ffffff;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      padding: 18px 24px;
+      box-shadow: 0 8px 24px rgba(0, 26, 117, 0.06);
+      border: 1px solid rgba(0, 0, 0, 0.07);
+      transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
+      box-sizing: border-box;
+    }
+    .imi-lcard:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 18px 40px rgba(15, 81, 50, 0.14);
+      border-color: rgba(15, 81, 50, 0.3);
+    }
+    .imi-lcard img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: grayscale(15%);
+      transition: filter 0.3s ease, transform 0.3s ease;
+      display: block;
+    }
+    .imi-lcard:hover img {
+      filter: grayscale(0%);
+      transform: scale(1.05);
+    }
+    @media (max-width: 768px) {
+      .imi-lcard {
+        width: 175px;
+        height: 94px;
+        margin-right: 14px;
+        padding: 14px 18px;
+        border-radius: 14px;
       }
     }
 
@@ -619,7 +635,7 @@
       }
     }
 
-    /* Skeuomorphic Flag Language Switcher (matches user design) */
+    /* Skeuomorphic Flag Language Switcher */
     .header-right-group {
       display: flex;
       align-items: center;
@@ -736,7 +752,7 @@
       <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
       <nav class="main-nav" aria-label="Primary navigation">
         <a class="active" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
-        <a href="{{ route('about') }}">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About' }}</a>
+        <a href="{{ route('about') }}">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}</a>
         <a href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
         <a href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
         <a href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>
@@ -782,71 +798,69 @@
 </header>
 
 <main>
-  <!-- HERO SECTION -->
+  <!-- 1. HERO SLIDER SECTION (NO TEXT OVERLAY, MULTIPLE SLIDING IMAGES) -->
   @php
-    $showHeroInstName = $settings->get('hero_show_institution_name', '1') !== '0';
-    $heroInstName = $settings->get('hero_institution_name', $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School and College'));
-    $heroTextColor = $settings->get('hero_text_color', '#ffffff');
-    $showHeroOverlay = $settings->get('hero_show_overlay', '0') === '1';
-    $heroFitMode = $settings->get('hero_fit_mode', 'natural');
+    $sliderImages = [
+      asset('assets/banners/banner_robotics_lab.jpg'),
+      asset('assets/banners/banner_innovation_hub.jpg'),
+      asset('assets/banners/banner_electrical_lab.jpg'),
+    ];
+    $customBanner = $settings->get('hero_banner');
+    if ($customBanner && !str_contains($customBanner, 'banner_robotics_lab.jpg') && !str_contains($customBanner, 'mc Banner.jpg')) {
+      array_unshift($sliderImages, storage_asset($customBanner));
+    }
   @endphp
-  <section id="home" class="hero-wrap {{ $heroFitMode === 'cover' ? 'mode-cover' : 'mode-natural' }}">
-    <div class="hero-media">
-      <img src="{{ $heroBanner }}" alt="{{ $heroInstName }}" class="hero-img">
-      @if($showHeroOverlay)
-        <div class="hero-overlay"></div>
-      @endif
+  <section id="home" class="hero-slider-wrap" aria-label="Campus Hero Image Slideshow">
+    <div class="hero-slides-container">
+      @foreach($sliderImages as $idx => $imgUrl)
+        <div class="hero-slide {{ $idx === 0 ? 'active' : '' }}" data-slide="{{ $idx }}">
+          <img src="{{ $imgUrl }}" alt="MCTSC Technical Campus Banner {{ $idx + 1 }}" loading="{{ $idx === 0 ? 'eager' : 'lazy' }}">
+        </div>
+      @endforeach
     </div>
-    <div class="hero-overlay-content">
-      <div class="container">
-        @if($showHeroInstName && !empty($heroInstName))
-          <div class="hero-inst-banner">
-            <h1 class="hero-inst-name" style="color: {{ $heroTextColor }};">{{ $heroInstName }}</h1>
-          </div>
-        @endif
-      </div>
+
+    <!-- Controls -->
+    <button class="hero-slider-btn hero-slider-prev" type="button" aria-label="Previous Slide">❮</button>
+    <button class="hero-slider-btn hero-slider-next" type="button" aria-label="Next Slide">❯</button>
+
+    <!-- Indicators -->
+    <div class="hero-slider-dots">
+      @foreach($sliderImages as $idx => $imgUrl)
+        <button class="hero-dot {{ $idx === 0 ? 'active' : '' }}" type="button" data-index="{{ $idx }}" aria-label="Go to Slide {{ $idx + 1 }}"></button>
+      @endforeach
     </div>
   </section>
 
-  <!-- NOTICE BAR -->
-  @php
-    $noticeBgColor = $settings->get('notice_bar_bg_color', '#0f5132');
-    $rawNoticeOp = floatval($settings->get('notice_bar_opacity', '10'));
-    $noticeOpacity = ($rawNoticeOp > 1.0) ? ($rawNoticeOp / 100.0) : ($rawNoticeOp > 0 ? $rawNoticeOp : 0.10);
-    $noticeRgba = $toRgba($noticeBgColor, $noticeOpacity);
-    $noticeTextColor = $settings->get('notice_bar_text_color', '#163d32');
-  @endphp
-  <section id="notices" class="notice-bar" style="background: {{ $noticeRgba }} !important; border-bottom: 1px solid {{ $toRgba($noticeBgColor, 0.18) }};">
-    <div class="container notice-inner" style="color: {{ $noticeTextColor }};">
-      <strong style="color: {{ $primaryColor }}; font-weight: 700;">⚑ &nbsp; {{ $isBn ? 'সাম্প্রতিক নোটিশ' : 'Latest Notices' }}</strong>
-      <div class="notice-scroll" style="color: {{ $noticeTextColor }};">
-        @forelse($notices->take(4) as $notice)
-          <span style="color: {{ $noticeTextColor }};">{{ $isBn ? ($noticeTranslations[$notice->title] ?? $notice->title) : $notice->title }}</span>
-        @empty
-          <span style="color: {{ $noticeTextColor }};">{{ $isBn ? 'নতুন নোটিশ এখানে প্রকাশিত হবে।' : 'New notices will be published here.' }}</span>
-        @endforelse
-      </div>
-      <a href="{{ route('notices') }}" style="color: {{ $primaryColor }}; font-weight: 700;">{{ $isBn ? 'সব নোটিশ দেখুন →' : 'View All Notices →' }}</a>
-    </div>
-  </section>
-
-  <!-- ABOUT SECTION -->
+  <!-- 2. ABOUT SECTION: Institute Background (Directly below Hero Slider, No Notice Bar) -->
   <section id="about" class="section about-section">
     <div class="container about-grid">
       <div class="about-copy">
-        <p class="section-kicker">{{ $isBn ? 'আমাদের পরিচিতি' : 'ABOUT US' }}</p>
-        <h2>{{ $isBn ? 'আমাদের ইনস্টিটিউট সম্পর্কে' : ($settings->get('about_title') ?: 'About Our College') }}</h2>
+        <h2>{{ $isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background' }}</h2>
         <div class="gold-rule"></div>
-        <div class="about-summary-text" style="font-size: 15px; line-height: 1.75; color: #334d44; margin-bottom: 24px;">
+        <div class="about-summary-text" style="font-size: 15px; line-height: 1.75; color: #334d44; margin-bottom: 24px; text-align: justify; text-justify: inter-word;">
           @if($isBn)
-            <p style="margin: 0 0 12px 0;"><strong>মাহমুদুন্নবী চৌধুরী</strong> টেকনিক্যাল স্কুল এন্ড কলেজ ২০০৬ সালে প্রতিষ্ঠিত হয় প্রখ্যাত শিল্পপতি ও সাবেক মন্ত্রী <strong>মাহমুদুন্নবী চৌধুরী</strong>-এর স্মরণে গঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং ১৯৯৫ সাল থেকে TVET খাতে অভিজ্ঞতাসম্পন্ন সংস্থা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong>-এর যৌথ উদ্যোগে।</p>
-            <p style="margin: 0;">প্রতিষ্ঠানটি তরুণ সমাজকে বাস্তবমুখী ব্যবহারিক দক্ষতার মাধ্যমে দক্ষ ও কর্মসংস্থান উপযোগী মানবসম্পদে পরিণত করতে মানসম্মত কারিগরি শিক্ষা প্রদান করে আসছে।</p>
+            <p style="margin: 0 0 14px 0;">
+              <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
+            </p>
+            <p style="margin: 0 0 14px 0;">
+              <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong> কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে।
+            </p>
+            <p style="margin: 0;">
+              প্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।
+            </p>
           @else
-            <p style="margin: 0 0 12px 0;"><strong>Mahmudunnabi Chowdhury</strong> Technical School and College was established in 2006 through the joint initiative of the <strong>Mahmudunnabi Foundation</strong>, formed in memory of the renowned industrialist and former minister <strong>Mahmudunnabi Chowdhury</strong>, and <strong>Impact Initiative</strong>, an organization with long-standing experience in TVET since 1995.</p>
-            <p style="margin: 0;">The college provides quality technical and vocational education to equip young people with practical skills for a brighter future.</p>
+            <p style="margin: 0 0 14px 0;">
+              <strong>Mahmudunnabi Chowdhury Technical School & College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006 as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, and <strong>Impact Initiative (IMI)</strong>, the institution is committed to developing skilled human resources and creating employment opportunities for socially and economically disadvantaged people.
+            </p>
+            <p style="margin: 0 0 14px 0;">
+              Managed by <strong>Impact Initiative</strong>, MCTSC provides vocational and technical training opportunities for unemployed, unskilled, underprivileged group and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.
+            </p>
+            <p style="margin: 0;">
+              Since its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.
+            </p>
           @endif
         </div>
-        <a class="button button-green" href="{{ route('about') }}">{{ $isBn ? 'আরও জানুন' : 'Read More' }} <span>→</span></a>
+        <a class="button button-green" href="{{ route('about') }}">{{ $isBn ? 'আরও বিস্তারিত দেখুন' : 'Read More' }} <span>→</span></a>
       </div>
       <div class="about-image">
         @php
@@ -860,250 +874,105 @@
     </div>
   </section>
 
-  <!-- COURSES SECTION -->
-  <section id="courses" class="section courses-section">
+  <!-- 3. VISION, MISSION & OBJECTIVES (PILL BADGE VIEW & TEXT-BASED AUTO-HEIGHT) -->
+  <section id="vision-mission-objectives" class="section vmo-section">
     <div class="container">
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">{{ $isBn ? 'কোর্সসমূহ' : 'WHAT WE TEACH' }}</p>
-          <h2>{{ $isBn ? 'আমাদের ট্রেইনিং কোর্সসমূহ' : 'Our Training Courses' }}</h2>
-        </div>
-        <div class="heading-action">
-          {{ $isBn ? 'বাস্তবমুখী ও স্কিল-ভিত্তিক প্র্যাকটিক্যাল ট্রেইনিং' : 'Practical, skills-based training' }} <a class="button button-green" href="{{ route('apply') }}">{{ $isBn ? 'কোর্সে এডমিশন আবেদন →' : 'Apply for a Course →' }}</a>
-        </div>
-      </div>
-      <div class="course-grid">
-        @forelse($courses->take(4) as $course)
-          <a class="course-card" href="{{ route('apply') }}?course={{ urlencode($course->title) }}">
-            @php
-              $cImg = storage_asset($course->image, 'assets/MC Building Photo.jpg');
-              $cTitle = $isBn ? ($courseTranslations[$course->title] ?? $course->title) : $course->title;
-            @endphp
-            <img src="{{ $cImg }}" alt="{{ $cTitle }}">
-            <b>{{ $cTitle }}</b>
-          </a>
-        @empty
-          <p>{{ $isBn ? 'কোর্স সংক্রান্ত তথ্য শীঘ্রই প্রকাশ করা হবে।' : 'Course information will be published soon.' }}</p>
-        @endforelse
-      </div>
-      <div style="text-align: center; margin-top: 26px;">
-        <a href="{{ route('courses') }}" class="button button-gold" style="font-weight: 700; padding: 12px 28px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-size: 15px;">
-          {{ $isBn ? 'সব কোর্স দেখুন →' : 'View All Courses →' }}
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROJECTS SECTION (WITH CUSTOM PROJECT LOGOS) -->
-  <section id="projects" class="section projects-section">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">{{ $isBn ? 'পার্টনারশিপ' : 'OUR PARTNERSHIPS' }}</p>
-          <h2>{{ $isBn ? 'প্রজেক্টস ও ট্রেইনিং কার্যক্রম' : 'Projects & Training Initiatives' }}</h2>
-        </div>
-      </div>
-      <div class="project-grid">
-        @forelse($projects as $project)
-          <div class="project-card">
-            @if($project->image)
-              @php
-                $pImg = storage_asset($project->image);
-              @endphp
-              <img src="{{ $pImg }}" alt="{{ $project->title }}" style="width:48px;height:48px;object-fit:contain;border-radius:6px;background:#fff;padding:2px;box-shadow:0 1px 3px rgba(0,0,0,0.1);flex-shrink:0;">
-            @else
-              <i>⌁</i>
-            @endif
-            <div>
-              <b>{{ $project->title }}</b>
-              <span>{{ $isBn ? ($project->excerpt ?: 'ট্রেইনিং ইনিশিয়েটিভ') : ($project->excerpt ?: 'Training initiative') }}</span>
+      <div class="vmo-layout">
+        <!-- Left Column: Vision & Mission (Stacked vertically with snug auto-height) -->
+        <div class="vmo-col vmo-col-left">
+          <!-- Vision Card -->
+          <div class="vmo-card-wrap">
+            <div class="vmo-pill pill-vision">{{ $isBn ? 'আমাদের রূপকল্প' : 'Our Vision' }}</div>
+            <div class="vmo-box">
+              <p>
+                {{ $isBn 
+                  ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) সুবিধাবঞ্চিত যুবক, পুরুষ ও নারীদের কর্মসংস্থানের সুযোগ সৃষ্টি করতে এবং দেশের মূলধারার উন্নয়নমূলক কর্মকাণ্ডে তাদের অংশগ্রহণে উদ্বুদ্ধ করতে কাজ করে।' 
+                  : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) envisions employing socially disadvantaged youth, men, and women, and encourages them to participate in the country\'s mainstream development initiatives.' }}
+              </p>
             </div>
           </div>
-        @empty
-          <p>{{ $isBn ? 'প্রজেক্ট সংক্রান্ত তথ্য শীঘ্রই যুক্ত করা হবে।' : 'Project information will be published soon.' }}</p>
-        @endforelse
+
+          <!-- Mission Card -->
+          <div class="vmo-card-wrap">
+            <div class="vmo-pill pill-mission">{{ $isBn ? 'আমাদের লক্ষ্য' : 'Our Mission' }}</div>
+            <div class="vmo-box">
+              <p>
+                {{ $isBn 
+                  ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)-এর মূল লক্ষ্য হলো উচ্চমান বজায় রাখা, পরিকল্পনা ও সিদ্ধান্ত গ্রহণের জন্য নির্ভরযোগ্য তথ্য নিশ্চিতকরণ, তহবিল সংগ্রহ ও সঠিক বণ্টন এবং শিল্পের সাথে কার্যকর সংযোগ স্থাপনের মাধ্যমে দক্ষ ও আধা-দক্ষ কারিগরি ও পেশাদার জনশক্তি তৈরি করে জাতীয় অর্থনীতিকে পুনরুজ্জীবিত ও টেকসই করা এবং বেকারত্ব ও দারিদ্র্য হ্রাস করা।' 
+                  : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) is to promote the production of skilled/semi-skilled technical and professional manpower, to revitalize and sustain the national economy, reduce unemployment and poverty through the setting and maintenance of high standards, provision of current and reliable information for planning and decision making, sourcing and disbursing of funds, and adequate linkages with industry.' }}
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Column: Objectives Card -->
+        <div class="vmo-col vmo-col-right">
+          <div class="vmo-card-wrap">
+            <div class="vmo-pill pill-objectives">{{ $isBn ? 'আমাদের উদ্দেশ্যসমূহ' : 'Our Objectives' }}</div>
+            <div class="vmo-box">
+              <ul class="vmo-objectives-list">
+                @if($isBn)
+                  <li><span>✓</span> <div>সহজলভ্য, বাস্তবমুখী ও কর্মসংস্থানমুখী কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ প্রদান।</div></li>
+                  <li><span>✓</span> <div>সুবিধাবঞ্চিত ও বেকার যুবসমাজের কারিগরি, পেশাগত ও জীবন দক্ষতার বিকাশ সাধন।</div></li>
+                  <li><span>✓</span> <div>আত্মকর্মসংস্থান উৎসাহিত করা এবং উপযুক্ত কর্মসংস্থান ও উদ্যোক্তা তৈরির সুযোগ সৃষ্টি।</div></li>
+                  <li><span>✓</span> <div>শিল্পপ্রতিষ্ঠান ও নিয়োগকারীদের সাথে অংশীদারিত্ব জোরদার করে প্রশিক্ষণের উপযোগিতা ও চাকরি প্রাপ্তি নিশ্চিত করা।</div></li>
+                  <li><span>✓</span> <div>দক্ষতা উন্নয়ন ও টেকসই জীবিকার মাধ্যমে বেকারত্ব ও দারিদ্র্য হ্রাসকরণে অবদান রাখা।</div></li>
+                  <li><span>✓</span> <div>প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তা এবং নিয়মিত ফলোআপের মাধ্যমে ট্রেইনিদের সহায়তা প্রদান।</div></li>
+                @else
+                  <li><span>✓</span> <div>To provide accessible, practical, and employment-oriented technical and vocational education and training.</div></li>
+                  <li><span>✓</span> <div>To develop the technical, professional, and life skills of disadvantaged and unemployed youth.</div></li>
+                  <li><span>✓</span> <div>To promote self-employment and facilitate access to suitable employment and entrepreneurship development opportunities.</div></li>
+                  <li><span>✓</span> <div>To strengthen collaboration with industries and employers to improve training relevance and job placement.</div></li>
+                  <li><span>✓</span> <div>To contribute to reducing unemployment and poverty through skills development and sustainable livelihoods.</div></li>
+                  <li><span>✓</span> <div>To support trainees through post-training employment assistance and follow-up.</div></li>
+                @endif
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ADMISSIONS BAND -->
-  <section id="admissions" class="admission-band">
-    <div class="container admission-inner">
-      <div class="admission-icon">▤</div>
-      <div>
-        <h3>{{ $isBn ? 'এডমিশন ইনফরমেশন' : $settings->get('admission_title', 'Admission Information') }}</h3>
-        <p>{{ $isBn ? 'ভর্তি যোগ্যতা, আবেদন পদ্ধতি ও গুরুত্বপূর্ণ তারিখ সম্পর্কে জানুন।' : $settings->get('admission_subtitle', 'Ask about eligibility, application process and important dates.') }}</p>
-      </div>
-      <div class="admission-links">
-        <span>♟ <b>{{ $isBn ? 'যোগ্যতা' : 'Eligibility' }}</b></span>
-        <span>▤ <b>{{ $isBn ? 'আবেদন পদ্ধতি' : 'How to Apply' }}</b></span>
-        <span>▦ <b>{{ $isBn ? 'জরুরি তারিখ' : 'Important Dates' }}</b></span>
-      </div>
-      <a class="button button-gold" href="{{ route('apply') }}">{{ $isBn ? 'অনলাইন এডমিশন আবেদন →' : 'Apply Online Now →' }}</a>
-    </div>
-  </section>
-
-  <!-- FACILITIES SECTION (ALL 4 DYNAMIC IMAGES & TITLES) -->
-  <section class="section facilities-section">
+  <!-- 4. OUR DEVELOPMENT PARTNERS (EXACT SLIDING MARQUEE AS ON IMPACTINI.ORG) -->
+  <section id="development-partners" class="section partners-marquee-section">
     <div class="container">
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">{{ $isBn ? 'হাতে-কলমে শিক্ষা' : 'LEARN BY DOING' }}</p>
-          <h2>{{ $isBn ? 'আমাদের সুযোগ-সুবিধা ও ল্যাব ওয়ার্কশপ' : 'Our Facilities and Hands-on Learning' }}</h2>
-        </div>
-        <span>{{ $isBn ? 'বাস্তবমুখী স্কিল ডেভেলপমেন্টের জন্য আধুনিক ল্যাব সুবিধা' : 'Modern facilities for practical skill development' }}</span>
-      </div>
-      <div class="facility-grid">
-        @php
-          $f1_title = $settings->get('facility_1_title', 'Computer Lab');
-          $f2_title = $settings->get('facility_2_title', 'Refrigeration and AC Workshop');
-          $f3_title = $settings->get('facility_3_title', 'Plumbing Workshop');
-          $f4_title = $settings->get('facility_4_title', 'Tailoring and Sewing Workshop');
-        @endphp
-        <figure>
-          <img src="{{ $f1_img }}" alt="{{ $f1_title }}">
-          <figcaption>{{ $isBn ? ($facilityTranslations[$f1_title] ?? $f1_title) : $f1_title }}</figcaption>
-        </figure>
-        <figure>
-          <img src="{{ $f2_img }}" alt="{{ $f2_title }}">
-          <figcaption>{{ $isBn ? ($facilityTranslations[$f2_title] ?? $f2_title) : $f2_title }}</figcaption>
-        </figure>
-        <figure>
-          <img src="{{ $f3_img }}" alt="{{ $f3_title }}">
-          <figcaption>{{ $isBn ? ($facilityTranslations[$f3_title] ?? $f3_title) : $f3_title }}</figcaption>
-        </figure>
-        <figure>
-          <img src="{{ $f4_img }}" alt="{{ $f4_title }}">
-          <figcaption>{{ $isBn ? ($facilityTranslations[$f4_title] ?? $f4_title) : $f4_title }}</figcaption>
-        </figure>
+      <div class="partners-intro">
+        <p class="section-kicker" style="justify-content: center;">{{ $isBn ? 'অংশীদারিত্ব ও কোলাবোরেশন' : 'COLLABORATION & PARTNERSHIPS' }}</p>
+        <h2>{{ $isBn ? 'আমাদের উন্নয়ন অংশীদারগণ' : 'Our Development Partners' }}</h2>
+        <div class="gold-rule" style="margin: 0 auto 16px auto;"></div>
+        <p>
+          {{ $isBn 
+            ? "MCTSC-এর প্রাতিষ্ঠানিক পথচলায় বিভিন্ন শীর্ষস্থানীয় উন্নয়ন সংস্থা ও কর্মসূচির সাথে যৌথভাবে কাজ করার অভিজ্ঞতা রয়েছে, যার মধ্যে ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO এবং MAA International অন্যতম। এই অংশীদারিত্বগুলো দক্ষ জনশক্তি গড়ে তোলা ও কর্মসংস্থানমুখী প্রশিক্ষণ কার্যক্রম পরিচালনায় প্রতিষ্ঠানের অভিজ্ঞতা ও সফলতার প্রতিফলন।" 
+            : "MCTSC's institutional profile records collaboration with development organisations and programmes including ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO, and MAA International, among others. These partnerships reflect the institution's experience in delivering skills development and employment-oriented training initiatives." }}
+        </p>
       </div>
     </div>
-  </section>
 
-  <!-- RESULTS & ACHIEVEMENTS -->
-  <section class="section results-section">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">{{ $isBn ? 'অর্জন ও সাফল্য' : 'OUR IMPACT' }}</p>
-          <h2>{{ $isBn ? 'ফলাফল ও অর্জনসমূহ' : 'Results &amp; Achievements' }}</h2>
-        </div>
-      </div>
-      <div class="result-grid">
-        <div class="result green"><span>♜</span>{{ $isBn ? 'একাডেমিক রেজাল্ট' : 'Academic Results' }}</div>
-        <div class="result gold"><span>▥</span>{{ $isBn ? 'স্কিল ডেভেলপমেন্ট' : 'Skills Development' }}</div>
-        <div class="result green"><span>♟</span>{{ $isBn ? 'স্টুডেন্ট অর্জন' : 'Student Achievements' }}</div>
-        <div class="result gold"><span>♙</span>{{ $isBn ? 'প্রাতিষ্ঠানিক স্বীকৃতি' : 'Institutional Recognition' }}</div>
-      </div>
-    </div>
-  </section>
+    <!-- Infinite Scrolling Partner Cards (Exact CSS & Structure as impactini.org) -->
+    <div class="imi-lmq" aria-label="Development Partners Carousel">
+      <div class="imi-lmq-in">
+        <!-- Set 1: Partner Logos -->
+        <div class="imi-lcard" title="ASSET Project (DTE / World Bank)"><img src="{{ asset('assets/partners/asset_project.svg') }}" alt="ASSET Project"></div>
+        <div class="imi-lcard" title="BRAC / POWER_kfw-BRAC"><img src="{{ asset('assets/partners/brac.png') }}" alt="BRAC"></div>
+        <div class="imi-lcard" title="UPPR - UNDP"><img src="{{ asset('assets/partners/undp.png') }}" alt="UNDP"></div>
+        <div class="imi-lcard" title="ILO - International Labour Organization"><img src="{{ asset('assets/partners/ilo.svg') }}" alt="ILO"></div>
+        <div class="imi-lcard" title="ECHO - European Civil Protection & Humanitarian Aid Operations"><img src="{{ asset('assets/partners/echo.png') }}" alt="ECHO"></div>
+        <div class="imi-lcard" title="MAA International"><img src="{{ asset('assets/partners/maa_international.png') }}" alt="MAA International"></div>
+        <div class="imi-lcard" title="SOS Children's Villages"><img src="{{ asset('assets/partners/sos.svg') }}" alt="SOS Children's Villages"></div>
+        <div class="imi-lcard" title="PAA"><img src="{{ asset('assets/partners/paa.png') }}" alt="PAA"></div>
+        <div class="imi-lcard" title="KfW Development Bank"><img src="{{ asset('assets/partners/partner_kfw.png') }}" alt="KfW"></div>
 
-  <!-- PHOTO GALLERY -->
-  <section id="gallery" class="section gallery-section">
-    <div class="container">
-      <div class="section-heading">
-        <div>
-          <p class="section-kicker">{{ $isBn ? 'ছবিতে ক্যাম্পাস' : 'SEE OUR WORK' }}</p>
-          <h2>{{ $isBn ? 'ফটো গ্যালারি' : 'Photo Gallery' }}</h2>
-        </div>
-      </div>
-      <div class="gallery-grid">
-        @forelse($gallery as $photo)
-          @php
-            $gImg = storage_asset($photo->image, 'assets/MC Building Photo.jpg');
-          @endphp
-          <button class="gallery-item" type="button" data-src="{{ $gImg }}" data-title="{{ $photo->title }}">
-            <img src="{{ $gImg }}" alt="{{ $photo->title }}">
-          </button>
-        @empty
-          <p>{{ $isBn ? 'গ্যালারির ছবি শীঘ্রই যুক্ত করা হবে।' : 'Photos will be published soon.' }}</p>
-        @endforelse
-      </div>
-    </div>
-  </section>
-
-  <!-- EVENTS & NOTICES -->
-  <section class="section lower-section">
-    <div class="container lower-grid">
-      <div>
-        <h3>▦ &nbsp; {{ $isBn ? 'আসন্ন ইভেন্টস' : 'Upcoming Events' }}</h3>
-        @forelse($events as $event)
-          <div class="event">
-            <b>{{ $loop->iteration }}<br><small>{{ $event->starts_at?->format('M') ?? 'TBA' }}</small></b>
-            <span><strong>{{ $isBn ? ($eventTranslations[$event->title] ?? $event->title) : $event->title }}</strong><small>{{ $event->excerpt }}</small></span>
-          </div>
-        @empty
-          <p>{{ $isBn ? 'আসন্ন ইভেন্টের বিবরণ এখানে প্রকাশিত হবে।' : 'Upcoming events will be announced here.' }}</p>
-        @endforelse
-      </div>
-      <div id="notices-list">
-        <h3>⚑ &nbsp; {{ $isBn ? 'সাম্প্রতিক নোটিশ' : 'Recent Notices' }}</h3>
-        @forelse($notices->take(4) as $notice)
-          <div class="event">
-            <b>•</b>
-            <span><strong>{{ $isBn ? ($noticeTranslations[$notice->title] ?? $notice->title) : $notice->title }}</strong><small>{{ $notice->excerpt }}</small></span>
-          </div>
-        @empty
-          <p>{{ $isBn ? 'কোনো নোটিশ পাওয়া যায়নি।' : 'No notices yet.' }}</p>
-        @endforelse
-      </div>
-      <div class="quote-card">
-        <h2>{!! nl2br(e($isBn ? "দক্ষ জনশক্তিই\nগড়বে সমৃদ্ধ বাংলাদেশ" : $settings->get('quote_title', "Skilled People\nBuild a Better Bangladesh"))) !!}</h2>
-        <div class="gold-rule"></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- FORMS & CONTACT -->
-  <section class="section form-section" id="apply-form">
-    <div class="container form-grid">
-      @if($isBn)
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 32px 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
-          <p class="section-kicker">এডমিশন ও রেজিস্ট্রেশন</p>
-          <h2 style="font-size: 24px; color: var(--green); margin-bottom: 12px;">অনলাইন ট্রেইনী এডমিশন আবেদন</h2>
-          <p style="color: #475569; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
-            মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজে বিভিন্ন টেকনিক্যাল ও বৃত্তিমূলক ট্রেড কোর্সে ট্রেইনী ভর্তি কার্যক্রম চলছে। আগ্রহী প্রার্থীরা সরকারি ও ইনস্টিটিউট নির্ধারিত পূর্ণাঙ্গ ফরম পূরণ করে অনলাইনে সরাসরি আবেদন দাখিল করতে পারেন।
-          </p>
-          <div style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #334155;">
-            <span>✓ <b>সহজ ও দ্রুত:</b> ব্যক্তিগত ও ঠিকানার তথ্য অনলাইনে জমা দিন</span>
-            <span>✓ <b>ডকুমেন্ট আপলোড:</b> ছবি, পরিচয়পত্র ও স্বাক্ষর সরাসরি সংযুক্ত করুন</span>
-            <span>✓ <b>ইনস্ট্যান্ট ট্র্যাকিং:</b> আবেদন শেষে প্রিন্ট কপি ও ট্র্যাকিং নম্বর সংগ্রহ করুন</span>
-          </div>
-          <a class="button button-gold" style="display: block; text-align: center; font-size: 16px; padding: 14px 24px; font-weight: 700; text-decoration: none;" href="{{ route('apply') }}">
-            ভর্তি আবেদন ফরম পূরণ করুন (Apply Now) ➔
-          </a>
-        </div>
-      @else
-        <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 32px 28px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);">
-          <p class="section-kicker">ADMISSIONS & REGISTRATION</p>
-          <h2 style="font-size: 24px; color: var(--green); margin-bottom: 12px;">Online Trainee Admission</h2>
-          <p style="color: #475569; font-size: 14px; line-height: 1.6; margin-bottom: 20px;">
-            Admissions are now open for various technical and vocational trade courses at Mahmudunnabi Chowdhury Technical School and College. Interested candidates can apply directly online by completing the official trainee admission application form.
-          </p>
-          <div style="margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; font-size: 13px; color: #334155;">
-            <span>✓ <b>Fast &amp; Simple:</b> Submit your personal and address details online</span>
-            <span>✓ <b>Document Upload:</b> Attach photo, NID / Birth certificate &amp; signature</span>
-            <span>✓ <b>Instant Tracking:</b> Receive your printable application copy and tracking code</span>
-          </div>
-          <a class="button button-gold" style="display: block; text-align: center; font-size: 16px; padding: 14px 24px; font-weight: 700; text-decoration: none;" href="{{ route('apply') }}">
-            Fill Out Admission Form (Apply Now) ➔
-          </a>
-        </div>
-      @endif
-
-      <div id="contact">
-        <p class="section-kicker">{{ $isBn ? 'যোগাযোগ' : 'CONTACT' }}</p>
-        <h2>{{ $isBn ? 'যোগাযোগ করুন' : 'Get in Touch' }}</h2>
-        <p>{{ $settings->get('address', '273/A/520, Chodu Chowdhury Road, Sagorika, Pahartali, Chattogram') }}</p>
-        <p>{{ $settings->get('phone', '+8801880919275') }}<br>{{ $settings->get('email', 'mnctsc@gmail.com') }}</p>
-        <form method="post" action="{{ route('contact.store') }}">
-          @csrf
-          <label>{{ $isBn ? 'আপনার নাম' : 'Your name' }}<input name="name" required maxlength="150"></label>
-          <label>{{ $isBn ? 'ইমেইল এড্রেস' : 'Email' }}<input name="email" type="email" required></label>
-          <label>{{ $isBn ? 'বিষয়' : 'Subject' }}<input name="subject" maxlength="180"></label>
-          <label>{{ $isBn ? 'বার্তা' : 'Message' }}<textarea name="message" rows="4" required maxlength="3000"></textarea></label>
-          <button class="button button-gold" type="submit">{{ $isBn ? 'বার্তা পাঠান →' : 'Send Message →' }}</button>
-        </form>
+        <!-- Set 2: Duplicate Set for Seamless Continuous Sliding Loop -->
+        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/asset_project.svg') }}" alt="ASSET Project"></div>
+        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/brac.png') }}" alt="BRAC"></div>
+        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/undp.png') }}" alt="UNDP"></div>
+        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/ilo.svg') }}" alt="ILO"></div>
+        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/echo.png') }}" alt="ECHO"></div>
+        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/maa_international.png') }}" alt="MAA International"></div>
+        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/sos.svg') }}" alt="SOS Children's Villages"></div>
+        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/paa.png') }}" alt="PAA"></div>
+        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/partner_kfw.png') }}" alt="KfW"></div>
       </div>
     </div>
   </section>
@@ -1184,16 +1053,85 @@
   <div class="toast-error">{{ $errors->first() }}</div>
 @endif
 
-<div class="lightbox" id="siteLightbox" aria-hidden="true" role="dialog" aria-modal="true">
-  <button class="lightbox-btn lightbox-close" type="button" aria-label="Close" title="Close (Esc)">✕</button>
-  <button class="lightbox-btn lightbox-prev" type="button" aria-label="Previous" title="Previous (Left Arrow)">❮</button>
-  <div class="lightbox-stage">
-    <img id="lightboxImg" class="lightbox-img" src="" alt="">
-    <div id="lightboxCaption" class="lightbox-caption"></div>
-    <div id="lightboxCounter" class="lightbox-counter"></div>
-  </div>
-  <button class="lightbox-btn lightbox-next" type="button" aria-label="Next" title="Next (Right Arrow)">❯</button>
-</div>
 <script src="{{ asset('js/site.js') }}"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const wrap = document.querySelector('.hero-slider-wrap');
+    if (!wrap) return;
+    const slides = wrap.querySelectorAll('.hero-slide');
+    const dots = wrap.querySelectorAll('.hero-dot');
+    const prevBtn = wrap.querySelector('.hero-slider-prev');
+    const nextBtn = wrap.querySelector('.hero-slider-next');
+    if (slides.length <= 1) {
+      if (prevBtn) prevBtn.style.display = 'none';
+      if (nextBtn) nextBtn.style.display = 'none';
+      const dotsWrap = wrap.querySelector('.hero-slider-dots');
+      if (dotsWrap) dotsWrap.style.display = 'none';
+      return;
+    }
+
+    let current = 0;
+    let timer = null;
+    const interval = 4500;
+
+    function goToSlide(idx) {
+      slides[current].classList.remove('active');
+      if (dots[current]) dots[current].classList.remove('active');
+      current = (idx + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      if (dots[current]) dots[current].classList.add('active');
+    }
+
+    function nextSlide() {
+      goToSlide(current + 1);
+    }
+
+    function prevSlide() {
+      goToSlide(current - 1);
+    }
+
+    function startTimer() {
+      stopTimer();
+      timer = setInterval(nextSlide, interval);
+    }
+
+    function stopTimer() {
+      if (timer) clearInterval(timer);
+    }
+
+    if (nextBtn) nextBtn.addEventListener('click', function (e) { e.preventDefault(); nextSlide(); startTimer(); });
+    if (prevBtn) prevBtn.addEventListener('click', function (e) { e.preventDefault(); prevSlide(); startTimer(); });
+
+    dots.forEach((dot, idx) => {
+      dot.addEventListener('click', function (e) {
+        e.preventDefault();
+        goToSlide(idx);
+        startTimer();
+      });
+    });
+
+    wrap.addEventListener('mouseenter', stopTimer);
+    wrap.addEventListener('mouseleave', startTimer);
+
+    // Touch swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    wrap.addEventListener('touchstart', function (e) {
+      touchStartX = e.changedTouches[0].screenX;
+      stopTimer();
+    }, { passive: true });
+    wrap.addEventListener('touchend', function (e) {
+      touchEndX = e.changedTouches[0].screenX;
+      if (touchStartX - touchEndX > 45) {
+        nextSlide();
+      } else if (touchEndX - touchStartX > 45) {
+        prevSlide();
+      }
+      startTimer();
+    }, { passive: true });
+
+    startTimer();
+  });
+</script>
 </body>
 </html>

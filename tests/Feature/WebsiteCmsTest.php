@@ -14,7 +14,16 @@ class WebsiteCmsTest extends TestCase
     public function test_public_homepage_shows_seeded_site_content(): void
     {
         $this->seed();
-        $this->get('/')->assertOk()->assertSee('Our Training Courses')->assertSee('Computer Operation')->assertSee('NHRDF');
+        // Homepage now features Hero Slider, About, Vision/Mission/Objectives, and Partners
+        $this->get('/')->assertOk()
+            ->assertSee('Our Vision')
+            ->assertSee('Our Mission')
+            ->assertSee('Our Objectives')
+            ->assertSee('Our Development Partners');
+
+        // Dedicated sub-pages host Courses and Projects
+        $this->get('/courses')->assertOk()->assertSee('Our Training Courses')->assertSee('Computer Operation');
+        $this->get('/projects')->assertOk()->assertSee('NHRDF');
     }
 
     public function test_admin_dashboard_requires_administrator_login(): void
@@ -71,10 +80,10 @@ class WebsiteCmsTest extends TestCase
         $this->seed();
         $response = $this->get('/');
         $response->assertOk();
-        $response->assertSee('Our Training Courses');
-        $response->assertSee('Online Trainee Admission');
-        $response->assertSee('View All Courses');
-        $response->assertDontSee('অনলাইন ভর্তি আবেদন (Trainee Admission)');
+        $response->assertSee('Our Vision');
+        $response->assertSee('Our Mission');
+        $response->assertSee('Our Objectives');
+        $response->assertSee('Our Development Partners');
         $response->assertSee('EN</a>', false);
     }
 
@@ -83,10 +92,10 @@ class WebsiteCmsTest extends TestCase
         $this->seed();
         $response = $this->get('/?lang=bn');
         $response->assertOk();
-        $response->assertSee('আমাদের ট্রেইনিং কোর্সসমূহ');
-        $response->assertSee('সব কোর্স দেখুন');
-        $response->assertSee('অনলাইন ট্রেইনী এডমিশন আবেদন');
-        $response->assertSee('একাডেমিক রেজাল্ট');
+        $response->assertSee('আমাদের রূপকল্প');
+        $response->assertSee('আমাদের লক্ষ্য');
+        $response->assertSee('আমাদের উদ্দেশ্যসমূহ');
+        $response->assertSee('আমাদের উন্নয়ন অংশীদারগণ');
         $response->assertSee('বাং</a>', false);
     }
 
@@ -98,8 +107,9 @@ class WebsiteCmsTest extends TestCase
 
         $homeResponse = $this->withSession(['locale' => 'bn'])->get('/');
         $homeResponse->assertOk();
-        $homeResponse->assertSee('আমাদের ট্রেইনিং কোর্সসমূহ');
-        $homeResponse->assertSee('অনলাইন ট্রেইনী এডমিশন আবেদন');
+        $homeResponse->assertSee('আমাদের রূপকল্প');
+        $homeResponse->assertSee('আমাদের লক্ষ্য');
+        $homeResponse->assertSee('আমাদের উদ্দেশ্যসমূহ');
     }
 
     public function test_admission_approval_workflow_assigns_project_and_calculates_fees(): void
@@ -219,13 +229,19 @@ class WebsiteCmsTest extends TestCase
         // 2. Verify setting is persisted in DB
         $this->assertEquals('25', \App\Models\SiteSetting::where('key', 'notice_bar_opacity')->value('value'));
 
-        // 3. Verify Homepage renders proper rgba(15, 81, 50, 0.25) transparency and fixed 350px hero
+        // 3. Verify Homepage renders hero image slider, Institute Background section, and no homepage notice bar
         $homeResponse = $this->get(route('home'));
         $homeResponse->assertOk();
-        $homeResponse->assertSee('rgba(15, 81, 50, 0.25)');
+        $homeResponse->assertSee('hero-slider-wrap');
         $homeResponse->assertSee('height: 350px !important;');
         $homeResponse->assertSee('object-fit: fill !important;');
+        $homeResponse->assertSee('Institute Background');
+        $homeResponse->assertSee('About us');
+        $homeResponse->assertDontSee('class="section-kicker">ABOUT US');
+        $homeResponse->assertSee('Mahmudunnabi Chowdhury Technical School');
+        $homeResponse->assertSee('Technical and Vocational Education and Training (TVET) institution');
         $homeResponse->assertSee('grid-template-columns: 1.25fr 0.95fr !important;');
+        $homeResponse->assertDontSee('id="notices"');
 
         // 4. Verify Admin Settings page displays recommended resolution badges
         $settingsResponse = $this->actingAs($admin)->get(route('admin.settings'));

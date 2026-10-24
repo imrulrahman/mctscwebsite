@@ -448,7 +448,7 @@
       <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
       <nav class="main-nav" aria-label="Primary navigation">
         <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
-        <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About' }}</a>
+        <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}</a>
         <a class="{{ request()->routeIs('courses') ? 'active' : '' }}" href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
         <a class="{{ request()->routeIs('projects') ? 'active' : '' }}" href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
         <a class="{{ request()->routeIs('apply') ? 'active' : '' }}" href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>
