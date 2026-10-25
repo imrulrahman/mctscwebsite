@@ -25,8 +25,9 @@ class SettingsController extends Controller
         // Notice Bar
         'notice_bar_bg_color', 'notice_bar_opacity', 'notice_bar_text_color',
         // About
-        'about_title', 'about', 'about_aside',
+        'about_title', 'about', 'about_bn', 'about_aside',
         'about_intro_kicker', 'about_intro_title', 'about_intro_subtitle',
+        'about_intro_body', 'about_intro_body_bn',
         'about_commitment',
         // Industry Partnerships
         'industry_partners_kicker', 'industry_partners_title',

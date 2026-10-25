@@ -70,6 +70,8 @@
     .site-header .container {
       width: min(1440px, calc(100% - 32px)) !important;
       max-width: 1440px !important;
+      padding: 0 16px !important;
+      box-sizing: border-box !important;
     }
     .nav-wrap {
       min-height: 66px !important;
@@ -89,8 +91,8 @@
       white-space: nowrap !important;
     }
     .brand img {
-      width: 50px;
-      height: 50px;
+      width: 48px;
+      height: 48px;
       object-fit: contain;
       margin-right: 10px;
       flex-shrink: 0;
@@ -98,46 +100,130 @@
     .header-right-group {
       display: flex;
       align-items: center;
-      gap: clamp(10px, 1.2vw, 18px);
-      flex-shrink: 1;
-      min-width: 0;
+      gap: 14px;
+      flex-shrink: 0;
+      margin-left: auto;
     }
     .main-nav {
       display: flex;
       align-items: center;
-      gap: clamp(8px, 1vw, 14px) !important;
+      gap: clamp(10px, 1.2vw, 18px) !important;
       font-weight: 700;
-      font-size: clamp(12px, 0.85vw, 13.5px) !important;
+      font-size: 13.5px !important;
     }
     .main-nav a {
       white-space: nowrap !important;
-      padding: 8px 4px !important;
+      padding: 8px 3px !important;
+      color: #252d2a;
+      text-decoration: none;
     }
-    .main-nav .nav-cta {
-      padding: 7px 14px !important;
-      white-space: nowrap !important;
-      font-size: 12.5px !important;
+    .main-nav a:hover,
+    .main-nav a.active {
+      color: {{ $primaryColor }};
+    }
+
+    /* About us Submenu Dropdown */
+    .nav-item-dropdown {
+      position: relative;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      border-radius: 4px;
     }
+    .nav-item-dropdown .nav-link-parent {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap !important;
+    }
+    .nav-item-dropdown .dropdown-caret {
+      font-size: 9px;
+      transition: transform 0.2s ease;
+      display: inline-block;
+      color: #718096;
+    }
+    .nav-item-dropdown:hover .dropdown-caret {
+      transform: rotate(180deg);
+      color: {{ $primaryColor }};
+    }
+    .nav-item-dropdown .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 165px;
+      background: #ffffff;
+      border: 1px solid #d7e2dd;
+      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      padding: 6px 0;
+      display: none;
+      z-index: 100;
+    }
+    .nav-item-dropdown:hover .dropdown-menu,
+    .nav-item-dropdown:focus-within .dropdown-menu {
+      display: block;
+    }
+    .nav-item-dropdown .dropdown-menu a {
+      display: block !important;
+      padding: 9px 16px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: #1e3d35 !important;
+      border-bottom: 1px solid #f1f5f3 !important;
+      white-space: nowrap !important;
+      text-decoration: none !important;
+    }
+    .nav-item-dropdown .dropdown-menu a:last-child {
+      border-bottom: none !important;
+    }
+    .nav-item-dropdown .dropdown-menu a:hover,
+    .nav-item-dropdown .dropdown-menu a.active {
+      background: rgba(15, 81, 50, 0.08) !important;
+      color: {{ $primaryColor }} !important;
+    }
+
+    /* 2-line Apply for Admission CTA button */
+    .main-nav .nav-cta {
+      background: var(--gold, #bd9635) !important;
+      color: #ffffff !important;
+      padding: 5px 12px !important;
+      border-radius: 5px !important;
+      display: inline-flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      line-height: 1.15 !important;
+      font-size: 11.5px !important;
+      font-weight: 700 !important;
+      text-align: center !important;
+      white-space: nowrap !important;
+      margin-left: 2px !important;
+      border: 0 !important;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+      transition: transform 0.15s, background 0.15s;
+      flex-shrink: 0 !important;
+    }
+    .main-nav .nav-cta:hover {
+      transform: translateY(-1px);
+      background: var(--secondaryHover, #a37d18) !important;
+      color: #ffffff !important;
+    }
+    .main-nav .nav-cta span {
+      display: block;
+      line-height: 1.15;
+    }
+
+    /* Language Switcher safe margin */
+    .lang-switch-box {
+      flex-shrink: 0 !important;
+      margin-left: 2px !important;
+    }
+
     @media (max-width: 1200px) and (min-width: 1025px) {
-      .brand {
-        font-size: 13px !important;
-      }
-      .brand img {
-        width: 44px;
-        height: 44px;
-        margin-right: 8px;
-      }
       .main-nav {
-        gap: 8px !important;
-        font-size: 12px !important;
+        gap: 10px !important;
+        font-size: 12.5px !important;
       }
-      .main-nav .nav-cta {
-        padding: 6px 10px !important;
-        font-size: 11.5px !important;
+      .brand {
+        font-size: 13.5px !important;
       }
     }
     @media (max-width: 1024px) {
@@ -163,11 +249,29 @@
         border-bottom: 1px solid #f1f5f3;
         font-size: 14px !important;
       }
+      .nav-item-dropdown {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .nav-item-dropdown .dropdown-menu {
+        position: static;
+        display: block;
+        box-shadow: none;
+        border: none;
+        padding: 0 0 0 14px;
+        background: #f8faf9;
+        border-radius: 6px;
+        margin: 4px 0 8px 0;
+      }
+      .nav-item-dropdown .dropdown-menu a {
+        padding: 10px 12px !important;
+        font-size: 13px !important;
+      }
       .main-nav .nav-cta {
         text-align: center;
         margin-top: 10px;
         padding: 10px !important;
-        font-size: 14px !important;
+        font-size: 13px !important;
       }
       .menu-toggle {
         display: block !important;
@@ -522,15 +626,32 @@
       <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
       <nav class="main-nav" aria-label="Primary navigation">
         <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
-        <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}" style="white-space: nowrap;">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}</a>
+        <div class="nav-item-dropdown">
+          <a class="nav-link-parent {{ request()->routeIs('about') || request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('about') }}">
+            {{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }} <span class="dropdown-caret">▾</span>
+          </a>
+          <div class="dropdown-menu">
+            <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">
+              {{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}
+            </a>
+            <a class="{{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
+              {{ $isBn ? 'যোগাযোগ' : 'Contact Us' }}
+            </a>
+          </div>
+        </div>
         <a class="{{ request()->routeIs('infrastructure') ? 'active' : '' }}" href="{{ route('infrastructure') }}" style="white-space: nowrap;">{{ $isBn ? 'অবকাঠামো' : 'Infrastructure' }}</a>
         <a class="{{ request()->routeIs('courses') ? 'active' : '' }}" href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
         <a class="{{ request()->routeIs('projects') ? 'active' : '' }}" href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
         <a class="{{ request()->routeIs('apply') ? 'active' : '' }}" href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>
         <a class="{{ request()->routeIs('notices') ? 'active' : '' }}" href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
         <a class="{{ request()->routeIs('gallery') ? 'active' : '' }}" href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
-        <a class="{{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">{{ $isBn ? 'যোগাযোগ' : 'Contact' }}</a>
-        <a class="nav-cta" href="{{ route('apply') }}">{{ $isBn ? 'ভর্তি আবেদন' : 'Apply for Admission' }}</a>
+        <a class="nav-cta" href="{{ route('apply') }}">
+          @if($isBn)
+            <span>ভর্তি</span><span>আবেদন</span>
+          @else
+            <span>Apply for</span><span>Admission</span>
+          @endif
+        </a>
       </nav>
 
       <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->

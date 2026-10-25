@@ -491,7 +491,9 @@ class WebsiteCmsTest extends TestCase
         $home->assertOk();
         $home->assertSee(route('infrastructure'));
         $home->assertSee('Infrastructure');
-        $home->assertSee('Apply for Admission');
+        $home->assertSee('nav-item-dropdown', false);
+        $home->assertSee('Contact Us');
+        $home->assertSee('<span>Apply for</span><span>Admission</span>', false);
         $home->assertDontSee('Apply Now');
         $home->assertSee('const interval = 1000;', false);
 
@@ -514,13 +516,16 @@ class WebsiteCmsTest extends TestCase
         $infrBn->assertDontSee('(Training Facilities)');
         $infrBn->assertDontSee('(Theory Classrooms)');
 
-        // 4. Admin can change slider interval to 2000ms
+        // 4. Admin can change slider interval to 2000ms and customize about text
         $admin = User::firstOrCreate(
             ['email' => 'admin_test_slider@mctsc.test'],
             ['name' => 'Admin Slider', 'password' => bcrypt('password'), 'is_admin' => true]
         );
         $settingsResponse = $this->actingAs($admin)->put(route('admin.settings.update'), [
             'hero_slider_interval' => '2000',
+            'about_title' => 'Custom Institute Story',
+            'about' => "Paragraph 1: Welcome to MCTSC.\n\nParagraph 2: Specialized TVET Excellence with Mahmudunnabi Chowdhury.",
+            'about_intro_body' => "About Page Custom Paragraph 1.\n\nAbout Page Custom Paragraph 2.",
         ]);
         $settingsResponse->assertRedirect();
         $this->assertEquals('2000', \App\Models\SiteSetting::where('key', 'hero_slider_interval')->value('value'));
@@ -528,8 +533,18 @@ class WebsiteCmsTest extends TestCase
         $homeUpdated = $this->get(route('home'));
         $homeUpdated->assertOk();
         $homeUpdated->assertSee('const interval = 2000;', false);
+        $homeUpdated->assertSee('Custom Institute Story');
+        $homeUpdated->assertSee('Specialized TVET Excellence with Mahmudunnabi Chowdhury.');
+
+        $aboutPage = $this->get(route('about'));
+        $aboutPage->assertOk();
+        $aboutPage->assertSee('About Page Custom Paragraph 1.');
+        $aboutPage->assertSee('About Page Custom Paragraph 2.');
 
         // Cleanup
         \App\Models\SiteSetting::where('key', 'hero_slider_interval')->delete();
+        \App\Models\SiteSetting::where('key', 'about_title')->delete();
+        \App\Models\SiteSetting::where('key', 'about')->delete();
+        \App\Models\SiteSetting::where('key', 'about_intro_body')->delete();
     }
 }

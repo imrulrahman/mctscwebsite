@@ -70,10 +70,13 @@
       z-index: 50;
       background: #ffffff;
       border-bottom: 1px solid #e2ebe6;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     }
     .site-header .container {
       width: min(1440px, calc(100% - 32px)) !important;
       max-width: 1440px !important;
+      padding: 0 16px !important;
+      box-sizing: border-box !important;
     }
     .nav-wrap {
       min-height: 66px !important;
@@ -93,8 +96,8 @@
       align-items: center !important;
     }
     .brand img {
-      width: 50px;
-      height: 50px;
+      width: 48px;
+      height: 48px;
       object-fit: contain;
       margin-right: 10px;
       flex-shrink: 0;
@@ -102,46 +105,130 @@
     .header-right-group {
       display: flex;
       align-items: center;
-      gap: clamp(10px, 1.2vw, 18px);
-      flex-shrink: 1;
-      min-width: 0;
+      gap: 14px;
+      flex-shrink: 0;
+      margin-left: auto;
     }
     .main-nav {
       display: flex;
       align-items: center;
-      gap: clamp(8px, 1vw, 14px) !important;
+      gap: clamp(10px, 1.2vw, 18px) !important;
       font-weight: 700;
-      font-size: clamp(12px, 0.85vw, 13.5px) !important;
+      font-size: 13.5px !important;
     }
     .main-nav a {
       white-space: nowrap !important;
-      padding: 8px 4px !important;
+      padding: 8px 3px !important;
+      color: #252d2a;
+      text-decoration: none;
     }
-    .main-nav .nav-cta {
-      padding: 7px 14px !important;
-      white-space: nowrap !important;
-      font-size: 12.5px !important;
+    .main-nav a:hover,
+    .main-nav a.active {
+      color: {{ $primaryColor }};
+    }
+
+    /* About us Submenu Dropdown */
+    .nav-item-dropdown {
+      position: relative;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      border-radius: 4px;
     }
+    .nav-item-dropdown .nav-link-parent {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      white-space: nowrap !important;
+    }
+    .nav-item-dropdown .dropdown-caret {
+      font-size: 9px;
+      transition: transform 0.2s ease;
+      display: inline-block;
+      color: #718096;
+    }
+    .nav-item-dropdown:hover .dropdown-caret {
+      transform: rotate(180deg);
+      color: {{ $primaryColor }};
+    }
+    .nav-item-dropdown .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      min-width: 165px;
+      background: #ffffff;
+      border: 1px solid #d7e2dd;
+      border-radius: 6px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      padding: 6px 0;
+      display: none;
+      z-index: 100;
+    }
+    .nav-item-dropdown:hover .dropdown-menu,
+    .nav-item-dropdown:focus-within .dropdown-menu {
+      display: block;
+    }
+    .nav-item-dropdown .dropdown-menu a {
+      display: block !important;
+      padding: 9px 16px !important;
+      font-size: 13px !important;
+      font-weight: 600 !important;
+      color: #1e3d35 !important;
+      border-bottom: 1px solid #f1f5f3 !important;
+      white-space: nowrap !important;
+      text-decoration: none !important;
+    }
+    .nav-item-dropdown .dropdown-menu a:last-child {
+      border-bottom: none !important;
+    }
+    .nav-item-dropdown .dropdown-menu a:hover,
+    .nav-item-dropdown .dropdown-menu a.active {
+      background: rgba(15, 81, 50, 0.08) !important;
+      color: {{ $primaryColor }} !important;
+    }
+
+    /* 2-line Apply for Admission CTA button */
+    .main-nav .nav-cta {
+      background: var(--gold, #bd9635) !important;
+      color: #ffffff !important;
+      padding: 5px 12px !important;
+      border-radius: 5px !important;
+      display: inline-flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      line-height: 1.15 !important;
+      font-size: 11.5px !important;
+      font-weight: 700 !important;
+      text-align: center !important;
+      white-space: nowrap !important;
+      margin-left: 2px !important;
+      border: 0 !important;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+      transition: transform 0.15s, background 0.15s;
+      flex-shrink: 0 !important;
+    }
+    .main-nav .nav-cta:hover {
+      transform: translateY(-1px);
+      background: var(--secondaryHover, #a37d18) !important;
+      color: #ffffff !important;
+    }
+    .main-nav .nav-cta span {
+      display: block;
+      line-height: 1.15;
+    }
+
+    /* Language Switcher safe margin */
+    .lang-switch-box {
+      flex-shrink: 0 !important;
+      margin-left: 2px !important;
+    }
+
     @media (max-width: 1200px) and (min-width: 1025px) {
-      .brand {
-        font-size: 13px !important;
-      }
-      .brand img {
-        width: 44px;
-        height: 44px;
-        margin-right: 8px;
-      }
       .main-nav {
-        gap: 8px !important;
-        font-size: 12px !important;
+        gap: 10px !important;
+        font-size: 12.5px !important;
       }
-      .main-nav .nav-cta {
-        padding: 6px 10px !important;
-        font-size: 11.5px !important;
+      .brand {
+        font-size: 13.5px !important;
       }
     }
     @media (max-width: 1024px) {
@@ -167,11 +254,29 @@
         border-bottom: 1px solid #f1f5f3;
         font-size: 14px !important;
       }
+      .nav-item-dropdown {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .nav-item-dropdown .dropdown-menu {
+        position: static;
+        display: block;
+        box-shadow: none;
+        border: none;
+        padding: 0 0 0 14px;
+        background: #f8faf9;
+        border-radius: 6px;
+        margin: 4px 0 8px 0;
+      }
+      .nav-item-dropdown .dropdown-menu a {
+        padding: 10px 12px !important;
+        font-size: 13px !important;
+      }
       .main-nav .nav-cta {
         text-align: center;
         margin-top: 10px;
         padding: 10px !important;
-        font-size: 14px !important;
+        font-size: 13px !important;
       }
       .menu-toggle {
         display: block !important;
@@ -867,15 +972,32 @@
       <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
       <nav class="main-nav" aria-label="Primary navigation">
         <a class="active" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
-        <a href="{{ route('about') }}" style="white-space: nowrap;">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}</a>
+        <div class="nav-item-dropdown">
+          <a class="nav-link-parent {{ request()->routeIs('about') || request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('about') }}">
+            {{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }} <span class="dropdown-caret">▾</span>
+          </a>
+          <div class="dropdown-menu">
+            <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">
+              {{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}
+            </a>
+            <a class="{{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">
+              {{ $isBn ? 'যোগাযোগ' : 'Contact Us' }}
+            </a>
+          </div>
+        </div>
         <a class="{{ request()->routeIs('infrastructure') ? 'active' : '' }}" href="{{ route('infrastructure') }}" style="white-space: nowrap;">{{ $isBn ? 'অবকাঠামো' : 'Infrastructure' }}</a>
         <a href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
         <a href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
         <a href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>
         <a href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
         <a href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
-        <a href="{{ route('contact') }}">{{ $isBn ? 'যোগাযোগ' : 'Contact' }}</a>
-        <a class="nav-cta" href="{{ route('apply') }}">{{ $isBn ? 'ভর্তি আবেদন' : 'Apply for Admission' }}</a>
+        <a class="nav-cta" href="{{ route('apply') }}">
+          @if($isBn)
+            <span>ভর্তি</span><span>আবেদন</span>
+          @else
+            <span>Apply for</span><span>Admission</span>
+          @endif
+        </a>
       </nav>
       <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->
       <div class="lang-switch-box" title="{{ $isBn ? 'Switch to English' : 'বাংলা ভাষায় দেখুন' }}">
@@ -978,29 +1100,46 @@
     <div class="container">
       <div class="about-grid">
         <div class="about-copy">
-          <h2>{{ $isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background' }}</h2>
+          <h2>{{ $settings->get('about_title') ?: ($isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background') }}</h2>
           <div class="gold-rule"></div>
           <div class="about-summary-text" style="font-size: 15px; line-height: 1.75; color: #334d44; margin-bottom: 24px; text-align: justify; text-justify: inter-word;">
-            @if($isBn)
-              <p style="margin: 0 0 14px 0;">
-                <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
-              </p>
-              <p style="margin: 0 0 14px 0;">
-                <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong> কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে।
-              </p>
-              <p style="margin: 0;">
-                প্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।
-              </p>
+            @php
+              $customAbout = $settings->get('about');
+            @endphp
+            @if($isBn && !empty($settings->get('about_bn')))
+              @foreach(explode("\n\n", str_replace("\r\n", "\n", $settings->get('about_bn'))) as $par)
+                @if(trim($par))
+                  <p style="margin: 0 0 14px 0;">{!! nl2br(e(trim($par))) !!}</p>
+                @endif
+              @endforeach
+            @elseif(!empty($customAbout))
+              @foreach(explode("\n\n", str_replace("\r\n", "\n", $customAbout)) as $par)
+                @if(trim($par))
+                  <p style="margin: 0 0 14px 0;">{!! nl2br(e(trim($par))) !!}</p>
+                @endif
+              @endforeach
             @else
-              <p style="margin: 0 0 14px 0;">
-                <strong>Mahmudunnabi Chowdhury Technical School & College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006 as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, and <strong>Impact Initiative (IMI)</strong>, the institution is committed to developing skilled human resources and creating employment opportunities for socially and economically disadvantaged people.
-              </p>
-              <p style="margin: 0 0 14px 0;">
-                Managed by <strong>Impact Initiative</strong>, MCTSC provides vocational and technical training opportunities for unemployed, unskilled, underprivileged group and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.
-              </p>
-              <p style="margin: 0;">
-                Since its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.
-              </p>
+              @if($isBn)
+                <p style="margin: 0 0 14px 0;">
+                  <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
+                </p>
+                <p style="margin: 0 0 14px 0;">
+                  <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong> কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে।
+                </p>
+                <p style="margin: 0;">
+                  প্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।
+                </p>
+              @else
+                <p style="margin: 0 0 14px 0;">
+                  <strong>Mahmudunnabi Chowdhury Technical School & College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006 as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, and <strong>Impact Initiative (IMI)</strong>, the institution is committed to developing skilled human resources and creating employment opportunities for socially and economically disadvantaged people.
+                </p>
+                <p style="margin: 0 0 14px 0;">
+                  Managed by <strong>Impact Initiative</strong>, MCTSC provides vocational and technical training opportunities for unemployed, unskilled, underprivileged group and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.
+                </p>
+                <p style="margin: 0;">
+                  Since its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.
+                </p>
+              @endif
             @endif
           </div>
           <a class="button button-green" href="{{ route('about') }}">{{ $isBn ? 'আরও বিস্তারিত দেখুন' : 'Read More' }} <span>→</span></a>

@@ -1259,6 +1259,10 @@
               <input name="about_intro_subtitle" value="{{ old('about_intro_subtitle', $settings->get('about_intro_subtitle', 'Building Skills. Unlocking Potential. Shaping Futures.')) }}">
             </label>
             <label style="margin-top: 10px;">
+              About Page Detailed Introduction Body (এবাউট পেজের মূল বর্ণনা প্যারাগ্রাফসমূহ)
+              <textarea name="about_intro_body" rows="5" placeholder="Leave blank to use default institutional history and TVET overview...">{{ old('about_intro_body', $settings->get('about_intro_body')) }}</textarea>
+            </label>
+            <label style="margin-top: 10px;">
               Institutional Commitment (প্রতিষ্ঠানিক অঙ্গীকার)
               <textarea name="about_commitment" rows="2">{{ old('about_commitment', $settings->get('about_commitment', 'To develop a skilled workforce, expand employment opportunities, reduce poverty, and contribute to Bangladesh\'s sustainable socioeconomic development through quality, inclusive, and industry-responsive vocational education.')) }}</textarea>
             </label>

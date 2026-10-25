@@ -220,32 +220,46 @@
       </div>
 
       <div style="font-size: 15px; line-height: 1.8; color: #334155; text-align: justify; text-justify: inter-word;">
-        @if($isBn)
-          <p style="margin-bottom: 14px;">
-            <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> চট্টগ্রামের পাহাড়তলী থানাধীন সাগরিকা এলাকায় অবস্থিত একটি বৃত্তিমূলক শিক্ষা ও দক্ষতা উন্নয়ন প্রতিষ্ঠান, যা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative-IMI)</strong> কর্তৃক পরিচালিত। ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি অন্তর্ভুক্তি ও বাজার-চাহিদাভিত্তিক কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণের (TVET) মাধ্যমে সুবিধাবঞ্চিত ও বেকার তরুণ-তরুণী, পুরুষ ও নারীদের ক্ষমতায়নে প্রতিশ্রুতিবদ্ধ।
-          </p>
-          <p style="margin-bottom: 14px;">
-            প্রায় ২০ বছরের প্রাতিষ্ঠানিক অভিজ্ঞতার মাধ্যমে MCTSC বিভিন্ন পেশা ও ট্রেডে ৭,০০০-এরও বেশি তরুণ-তরুণীকে বাস্তবমুখী কারিগরি দক্ষতায় সজ্জিত করেছে, যা তাদেরকে বেতনভিত্তিক চাকরি, আত্মকর্মসংস্থান এবং উদ্যোক্তা হতে সহায়তা করেছে। আমাদের প্রশিক্ষণ পদ্ধতিতে <strong>৮০% ব্যবহারিক ও হাতে-কলমে শিক্ষা এবং ২০% তাত্ত্বিক নির্দেশনা</strong> প্রদান করা হয়, যা কর্মক্ষেত্রের বাস্তব অভিজ্ঞতা, শিল্পপ্রতিষ্ঠানের সাথে নিবিড় সংযোগ এবং সমাজভিত্তিক প্রশিক্ষণের মাধ্যমে পরিচালিত।
-          </p>
-          <p style="margin-bottom: 14px;">
-            MCTSC সরকারি সংস্থা, উন্নয়ন সহযোগী, শিল্পপ্রতিষ্ঠান এবং জাতীয় ও আন্তর্জাতিক সংস্থার (যার মধ্যে <strong>ASSET, BRAC, UNDP, ILO, SOS Children's Villages</strong> এবং অন্যান্য অংশীদার অন্তর্ভুক্ত) সাথে যৌথভাবে কাজ করে। সংশ্লিষ্ট কারিগরি শিক্ষা ও দক্ষতা উন্নয়ন কর্তৃপক্ষের অধীন একটি অনুমোদিত ও স্বীকৃত প্রশিক্ষণ কেন্দ্র হিসেবে আমরা যোগ্যতাভিত্তিক প্রশিক্ষণ (CBT), পূর্ব অভিজ্ঞতার স্বীকৃতি (RPL) এবং বিভিন্ন কারিগরি ও বৃত্তিমূলক পেশায় স্বল্পমেয়াদী কোর্স পরিচালনা করি।
-          </p>
-          <p style="margin-bottom: 0;">
-            প্রশিক্ষণ প্রদানের পাশাপাশি গ্র্যাজুয়েটদের টেকসই জীবিকা গড়ে তুলতে আমরা কর্মসংস্থান সহায়তা, ক্যারিয়ার গাইডেন্স, উদ্যোক্তা উন্নয়ন সহায়তা এবং প্রশিক্ষণোত্তর নিয়মিত ফলোআপ প্রদান করি।
-          </p>
+        @if($isBn && !empty($settings['about_intro_body_bn']))
+          @foreach(explode("\n\n", str_replace("\r\n", "\n", $settings['about_intro_body_bn'])) as $p)
+            @if(trim($p))
+              <p style="margin-bottom: 14px;">{!! nl2br(e(trim($p))) !!}</p>
+            @endif
+          @endforeach
+        @elseif(!empty($settings['about_intro_body']))
+          @foreach(explode("\n\n", str_replace("\r\n", "\n", $settings['about_intro_body'])) as $p)
+            @if(trim($p))
+              <p style="margin-bottom: 14px;">{!! nl2br(e(trim($p))) !!}</p>
+            @endif
+          @endforeach
         @else
-          <p style="margin-bottom: 14px;">
-            <strong>Mahmudunnabi Chowdhury Technical School and College (MCTSC)</strong> is a vocational education and skills development institution managed by <strong>Impact Initiative-IMI</strong> and based in Sagorika, Chattogram, Bangladesh. Established in 2006, MCTSC is committed to empowering disadvantaged and unemployed youth, men, and women through inclusive, market-oriented technical and vocational education and training (TVET).
-          </p>
-          <p style="margin-bottom: 14px;">
-            With nearly 20 years of institutional experience, MCTSC has equipped more than 7,000 young people with practical skills across various occupations, helping them pursue wage employment, self-employment, and entrepreneurship. Our training approach emphasizes <strong>80% practical learning and 20% theoretical instruction</strong>, supported by real-work experience, industry engagement, and community-based training.
-          </p>
-          <p style="margin-bottom: 14px;">
-            MCTSC works in collaboration with government agencies, development partners, employers, and national and international organizations, including <strong>ASSET, BRAC, UNDP, ILO, SOS Children's Villages</strong>, and other stakeholders. As an affiliated and recognized training centre under relevant technical education and skills development authorities, we offer competency-based training, Recognition of Prior Learning (RPL), and short courses in diverse technical and vocational occupations.
-          </p>
-          <p style="margin-bottom: 0;">
-            Beyond training, we provide employment support, career guidance, entrepreneurship assistance, and post-employment follow-up to help graduates build sustainable livelihoods.
-          </p>
+          @if($isBn)
+            <p style="margin-bottom: 14px;">
+              <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> চট্টগ্রামের পাহাড়তলী থানাধীন সাগরিকা এলাকায় অবস্থিত একটি বৃত্তিমূলক শিক্ষা ও দক্ষতা উন্নয়ন প্রতিষ্ঠান, যা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative-IMI)</strong> কর্তৃক পরিচালিত। ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি অন্তর্ভুক্তি ও বাজার-চাহিদাভিত্তিক কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণের (TVET) মাধ্যমে সুবিধাবঞ্চিত ও বেকার তরুণ-তরুণী, পুরুষ ও নারীদের ক্ষমতায়নে প্রতিশ্রুতিবদ্ধ।
+            </p>
+            <p style="margin-bottom: 14px;">
+              প্রায় ২০ বছরের প্রাতিষ্ঠানিক অভিজ্ঞতার মাধ্যমে MCTSC বিভিন্ন পেশা ও ট্রেডে ৭,০০০-এরও বেশি তরুণ-তরুণীকে বাস্তবমুখী কারিগরি দক্ষতায় সজ্জিত করেছে, যা তাদেরকে বেতনভিত্তিক চাকরি, আত্মকর্মসংস্থান এবং উদ্যোক্তা হতে সহায়তা করেছে। আমাদের প্রশিক্ষণ পদ্ধতিতে <strong>৮০% ব্যবহারিক ও হাতে-কলমে শিক্ষা এবং ২০% তাত্ত্বিক নির্দেশনা</strong> প্রদান করা হয়, যা কর্মক্ষেত্রের বাস্তব অভিজ্ঞতা, শিল্পপ্রতিষ্ঠানের সাথে নিবিড় সংযোগ এবং সমাজভিত্তিক প্রশিক্ষণের মাধ্যমে পরিচালিত।
+            </p>
+            <p style="margin-bottom: 14px;">
+              MCTSC সরকারি সংস্থা, উন্নয়ন সহযোগী, শিল্পপ্রতিষ্ঠান এবং জাতীয় ও আন্তর্জাতিক সংস্থার (যার মধ্যে <strong>ASSET, BRAC, UNDP, ILO, SOS Children's Villages</strong> এবং অন্যান্য অংশীদার অন্তর্ভুক্ত) সাথে যৌথভাবে কাজ করে। সংশ্লিষ্ট কারিগরি শিক্ষা ও দক্ষতা উন্নয়ন কর্তৃপক্ষের অধীন একটি অনুমোদিত ও স্বীকৃত প্রশিক্ষণ কেন্দ্র হিসেবে আমরা যোগ্যতাভিত্তিক প্রশিক্ষণ (CBT), পূর্ব অভিজ্ঞতার স্বীকৃতি (RPL) এবং বিভিন্ন কারিগরি ও বৃত্তিমূলক পেশায় স্বল্পমেয়াদী কোর্স পরিচালনা করি।
+            </p>
+            <p style="margin-bottom: 0;">
+              প্রশিক্ষণ প্রদানের পাশাপাশি গ্র্যাজুয়েটদের টেকসই জীবিকা গড়ে তুলতে আমরা কর্মসংস্থান সহায়তা, ক্যারিয়ার গাইডেন্স, উদ্যোক্তা উন্নয়ন সহায়তা এবং প্রশিক্ষণোত্তর নিয়মিত ফলোআপ প্রদান করি।
+            </p>
+          @else
+            <p style="margin-bottom: 14px;">
+              <strong>Mahmudunnabi Chowdhury Technical School and College (MCTSC)</strong> is a vocational education and skills development institution managed by <strong>Impact Initiative-IMI</strong> and based in Sagorika, Chattogram, Bangladesh. Established in 2006, MCTSC is committed to empowering disadvantaged and unemployed youth, men, and women through inclusive, market-oriented technical and vocational education and training (TVET).
+            </p>
+            <p style="margin-bottom: 14px;">
+              With nearly 20 years of institutional experience, MCTSC has equipped more than 7,000 young people with practical skills across various occupations, helping them pursue wage employment, self-employment, and entrepreneurship. Our training approach emphasizes <strong>80% practical learning and 20% theoretical instruction</strong>, supported by real-work experience, industry engagement, and community-based training.
+            </p>
+            <p style="margin-bottom: 14px;">
+              MCTSC works in collaboration with government agencies, development partners, employers, and national and international organizations, including <strong>ASSET, BRAC, UNDP, ILO, SOS Children's Villages</strong>, and other stakeholders. As an affiliated and recognized training centre under relevant technical education and skills development authorities, we offer competency-based training, Recognition of Prior Learning (RPL), and short courses in diverse technical and vocational occupations.
+            </p>
+            <p style="margin-bottom: 0;">
+              Beyond training, we provide employment support, career guidance, entrepreneurship assistance, and post-employment follow-up to help graduates build sustainable livelihoods.
+            </p>
+          @endif
         @endif
       </div>
 
