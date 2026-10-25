@@ -480,4 +480,56 @@ class WebsiteCmsTest extends TestCase
         // Restore to slide mode
         \App\Models\SiteSetting::updateOrCreate(['key' => 'hero_slider_mode'], ['value' => 'slide']);
     }
+
+    public function test_infrastructure_page_and_header_nav_and_slider_interval(): void
+    {
+        // Ensure default interval
+        \App\Models\SiteSetting::where('key', 'hero_slider_interval')->delete();
+
+        // 1. Homepage navigation and slider interval verification
+        $home = $this->get(route('home'));
+        $home->assertOk();
+        $home->assertSee(route('infrastructure'));
+        $home->assertSee('Infrastructure');
+        $home->assertSee('Apply for Admission');
+        $home->assertDontSee('Apply Now');
+        $home->assertSee('const interval = 1000;', false);
+
+        // 2. Infrastructure English view has pure English without Bengali in parentheses
+        $infrEn = $this->withSession(['locale' => 'en'])->get(route('infrastructure'));
+        $infrEn->assertOk();
+        $infrEn->assertSee('Training Facilities');
+        $infrEn->assertSee('Theory Classrooms');
+        $infrEn->assertSee('Two-storey building');
+        $infrEn->assertDontSee('(অবস্থান)');
+        $infrEn->assertDontSee('(দুই তলা ভবন)');
+        $infrEn->assertDontSee('(Training Facilities)');
+
+        // 3. Infrastructure Bengali view has pure Bengali without English in parentheses
+        $infrBn = $this->withSession(['locale' => 'bn'])->get(route('infrastructure'));
+        $infrBn->assertOk();
+        $infrBn->assertSee('প্রশিক্ষণ সুবিধাসমূহ');
+        $infrBn->assertSee('তত্ত্বীয় শ্রেণীকক্ষ');
+        $infrBn->assertSee('দুই তলা ভবন');
+        $infrBn->assertDontSee('(Training Facilities)');
+        $infrBn->assertDontSee('(Theory Classrooms)');
+
+        // 4. Admin can change slider interval to 2000ms
+        $admin = User::firstOrCreate(
+            ['email' => 'admin_test_slider@mctsc.test'],
+            ['name' => 'Admin Slider', 'password' => bcrypt('password'), 'is_admin' => true]
+        );
+        $settingsResponse = $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'hero_slider_interval' => '2000',
+        ]);
+        $settingsResponse->assertRedirect();
+        $this->assertEquals('2000', \App\Models\SiteSetting::where('key', 'hero_slider_interval')->value('value'));
+
+        $homeUpdated = $this->get(route('home'));
+        $homeUpdated->assertOk();
+        $homeUpdated->assertSee('const interval = 2000;', false);
+
+        // Cleanup
+        \App\Models\SiteSetting::where('key', 'hero_slider_interval')->delete();
+    }
 }

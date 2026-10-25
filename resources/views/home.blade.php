@@ -60,25 +60,129 @@
     .button-gold { background: {{ $secondaryColor }} !important; color: #000 !important; }
     .button-gold:hover { background: {{ $secondaryHover }} !important; }
 
-    /* Header responsive & brand wrapping */
+    /* Header responsive & brand wrapping fix */
     .site-header {
       min-height: 78px !important;
       height: auto !important;
       padding: 6px 0 !important;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: #ffffff;
+      border-bottom: 1px solid #e2ebe6;
+    }
+    .site-header .container {
+      width: min(1440px, calc(100% - 32px)) !important;
+      max-width: 1440px !important;
     }
     .nav-wrap {
       min-height: 66px !important;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
     .brand {
-      max-width: 400px !important;
-      font-size: 15px !important;
+      flex-shrink: 0 !important;
+      max-width: none !important;
+      font-size: 14.5px !important;
       line-height: 1.25 !important;
       text-decoration: none !important;
+      white-space: nowrap !important;
+      display: flex !important;
+      align-items: center !important;
     }
-    @media (max-width: 1200px) {
+    .brand img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
+    .header-right-group {
+      display: flex;
+      align-items: center;
+      gap: clamp(10px, 1.2vw, 18px);
+      flex-shrink: 1;
+      min-width: 0;
+    }
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(8px, 1vw, 14px) !important;
+      font-weight: 700;
+      font-size: clamp(12px, 0.85vw, 13.5px) !important;
+    }
+    .main-nav a {
+      white-space: nowrap !important;
+      padding: 8px 4px !important;
+    }
+    .main-nav .nav-cta {
+      padding: 7px 14px !important;
+      white-space: nowrap !important;
+      font-size: 12.5px !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 4px;
+    }
+    @media (max-width: 1200px) and (min-width: 1025px) {
       .brand {
-        max-width: 320px !important;
-        font-size: 13.5px !important;
+        font-size: 13px !important;
+      }
+      .brand img {
+        width: 44px;
+        height: 44px;
+        margin-right: 8px;
+      }
+      .main-nav {
+        gap: 8px !important;
+        font-size: 12px !important;
+      }
+      .main-nav .nav-cta {
+        padding: 6px 10px !important;
+        font-size: 11.5px !important;
+      }
+    }
+    @media (max-width: 1024px) {
+      .main-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        padding: 16px 24px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0 !important;
+        border-top: 1px solid #edf1ef;
+      }
+      .main-nav.open {
+        display: flex !important;
+      }
+      .main-nav a {
+        padding: 12px 0 !important;
+        border-bottom: 1px solid #f1f5f3;
+        font-size: 14px !important;
+      }
+      .main-nav .nav-cta {
+        text-align: center;
+        margin-top: 10px;
+        padding: 10px !important;
+        font-size: 14px !important;
+      }
+      .menu-toggle {
+        display: block !important;
+      }
+    }
+    @media (max-width: 680px) {
+      .brand {
+        font-size: 12px !important;
+        white-space: normal !important;
+        max-width: 220px !important;
+        line-height: 1.2 !important;
       }
     }
 
@@ -727,26 +831,6 @@
     .toggle-slider-track.is-bn .toggle-slider-knob {
       transform: translateX(25px);
     }
-    .main-nav {
-      display: flex;
-      align-items: center;
-      gap: clamp(14px, 1.8vw, 24px) !important;
-      font-weight: 700;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-    .main-nav a {
-      white-space: nowrap !important;
-    }
-    @media (max-width: 1100px) and (min-width: 681px) {
-      .main-nav {
-        gap: 12px !important;
-        font-size: 13px !important;
-      }
-      .brand {
-        font-size: 14px !important;
-      }
-    }
     @media (max-width: 680px) {
       .header-right-group {
         gap: 8px;
@@ -784,13 +868,14 @@
       <nav class="main-nav" aria-label="Primary navigation">
         <a class="active" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
         <a href="{{ route('about') }}" style="white-space: nowrap;">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}</a>
+        <a class="{{ request()->routeIs('infrastructure') ? 'active' : '' }}" href="{{ route('infrastructure') }}" style="white-space: nowrap;">{{ $isBn ? 'অবকাঠামো' : 'Infrastructure' }}</a>
         <a href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
         <a href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
-        <a href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admission' }}</a>
+        <a href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>
         <a href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
         <a href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
         <a href="{{ route('contact') }}">{{ $isBn ? 'যোগাযোগ' : 'Contact' }}</a>
-        <a class="nav-cta" href="{{ route('apply') }}">{{ $isBn ? 'এপ্লাই নাও' : 'Apply Now' }}</a>
+        <a class="nav-cta" href="{{ route('apply') }}">{{ $isBn ? 'ভর্তি আবেদন' : 'Apply for Admission' }}</a>
       </nav>
       <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->
       <div class="lang-switch-box" title="{{ $isBn ? 'Switch to English' : 'বাংলা ভাষায় দেখুন' }}">
@@ -833,7 +918,7 @@
   @php
     $heroSliderMode = $settings->get('hero_slider_mode', 'slide'); // 'slide' or 'fixed'
     $heroFixedId = $settings->get('hero_slider_fixed_id');
-    $heroInterval = (int)($settings->get('hero_slider_interval') ?: 4500);
+    $heroInterval = (int)($settings->get('hero_slider_interval') ?: 1000);
 
     // Dynamic slides from database
     $dbSlides = ($heroSlides ?? collect());
@@ -1160,7 +1245,7 @@
 
     let current = 0;
     let timer = null;
-    const interval = {{ (int)($heroInterval ?: 4500) }};
+    const interval = {{ (int)($heroInterval ?: 1000) }};
 
     function goToSlide(idx) {
       slides[current].classList.remove('active');

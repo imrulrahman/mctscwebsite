@@ -67,51 +67,119 @@
       z-index: 50;
       box-shadow: 0 2px 10px rgba(0,0,0,0.04);
     }
+    .site-header .container {
+      width: min(1440px, calc(100% - 32px)) !important;
+      max-width: 1440px !important;
+    }
     .nav-wrap {
       min-height: 66px !important;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 16px;
     }
     .brand {
-      max-width: 400px !important;
-      font-size: 15px !important;
+      flex-shrink: 0 !important;
+      max-width: none !important;
+      font-size: 14.5px !important;
       line-height: 1.25 !important;
-      display: flex;
-      align-items: center;
-      text-decoration: none;
+      display: flex !important;
+      align-items: center !important;
+      text-decoration: none !important;
+      white-space: nowrap !important;
     }
     .brand img {
-      width: 52px;
-      height: 52px;
+      width: 50px;
+      height: 50px;
       object-fit: contain;
-      margin-right: 12px;
+      margin-right: 10px;
+      flex-shrink: 0;
     }
-    @media (max-width: 1200px) {
-      .brand {
-        max-width: 320px !important;
-        font-size: 13.5px !important;
-      }
+    .header-right-group {
+      display: flex;
+      align-items: center;
+      gap: clamp(10px, 1.2vw, 18px);
+      flex-shrink: 1;
+      min-width: 0;
     }
-
     .main-nav {
-      gap: 16px !important;
-      font-size: 13.5px !important;
+      display: flex;
+      align-items: center;
+      gap: clamp(8px, 1vw, 14px) !important;
+      font-weight: 700;
+      font-size: clamp(12px, 0.85vw, 13.5px) !important;
     }
-    @media (max-width: 1280px) {
-      .main-nav {
-        gap: 11px !important;
-        font-size: 12.5px !important;
-      }
-    }
-
-    .main-nav .nav-cta {
-      padding: 9px 16px !important;
+    .main-nav a {
       white-space: nowrap !important;
-      font-size: 13px !important;
+      padding: 8px 4px !important;
+    }
+    .main-nav .nav-cta {
+      padding: 7px 14px !important;
+      white-space: nowrap !important;
+      font-size: 12.5px !important;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      border-radius: 4px;
+    }
+    @media (max-width: 1200px) and (min-width: 1025px) {
+      .brand {
+        font-size: 13px !important;
+      }
+      .brand img {
+        width: 44px;
+        height: 44px;
+        margin-right: 8px;
+      }
+      .main-nav {
+        gap: 8px !important;
+        font-size: 12px !important;
+      }
+      .main-nav .nav-cta {
+        padding: 6px 10px !important;
+        font-size: 11.5px !important;
+      }
+    }
+    @media (max-width: 1024px) {
+      .main-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #ffffff;
+        padding: 16px 24px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0 !important;
+        border-top: 1px solid #edf1ef;
+      }
+      .main-nav.open {
+        display: flex !important;
+      }
+      .main-nav a {
+        padding: 12px 0 !important;
+        border-bottom: 1px solid #f1f5f3;
+        font-size: 14px !important;
+      }
+      .main-nav .nav-cta {
+        text-align: center;
+        margin-top: 10px;
+        padding: 10px !important;
+        font-size: 14px !important;
+      }
+      .menu-toggle {
+        display: block !important;
+      }
+    }
+    @media (max-width: 680px) {
+      .brand {
+        font-size: 12px !important;
+        white-space: normal !important;
+        max-width: 220px !important;
+        line-height: 1.2 !important;
+      }
     }
 
     /* Top Page Banner */
@@ -307,26 +375,6 @@
       color: rgba(255, 255, 255, 0.75);
     }
 
-    .main-nav {
-      display: flex;
-      align-items: center;
-      gap: clamp(14px, 1.8vw, 24px) !important;
-      font-weight: 700;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-    .main-nav a {
-      white-space: nowrap !important;
-    }
-    @media (max-width: 1100px) and (min-width: 681px) {
-      .main-nav {
-        gap: 12px !important;
-        font-size: 13px !important;
-      }
-      .brand {
-        font-size: 14px !important;
-      }
-    }
     @media (max-width: 900px) {
       .site-footer .footer-main {
         grid-template-columns: 1fr !important;
@@ -334,20 +382,6 @@
       }
     }
     @media (max-width: 680px) {
-      .main-nav {
-        display: none;
-        position: absolute;
-        top: 66px;
-        left: 0;
-        right: 0;
-        background: #fff;
-        padding: 14px 20px;
-        box-shadow: 0 8px 18px rgba(0,0,0,0.15);
-        flex-direction: column;
-        align-items: stretch;
-      }
-      .main-nav.open { display: flex; }
-      .menu-toggle { display: block; }
       .site-footer .footer-bottom {
         flex-direction: column;
         gap: 6px;

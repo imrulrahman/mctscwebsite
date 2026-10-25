@@ -1076,7 +1076,7 @@
               $heroMode = old('hero_slider_mode', $settings->get('hero_slider_mode', 'slide'));
               $heroSlidesList = \App\Models\SiteContent::where('section', 'hero_slides')->orderBy('sort_order')->get();
               $activeFixedId = old('hero_slider_fixed_id', $settings->get('hero_slider_fixed_id'));
-              $heroIntervalVal = old('hero_slider_interval', $settings->get('hero_slider_interval', '4500'));
+              $heroIntervalVal = old('hero_slider_interval', $settings->get('hero_slider_interval', '1000'));
             @endphp
 
             <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:14px;margin-top:10px;">
@@ -1123,10 +1123,14 @@
               <label style="margin:0;font-size:12.5px;color:#334155;font-weight:600;">
                 স্লাইড পরিবর্তনের গতি (Transition Speed):
                 <select name="hero_slider_interval" style="width:auto;margin-left:8px;font-size:12px;padding:4px 8px;">
-                  <option value="3000" {{ $heroIntervalVal == '3000' ? 'selected' : '' }}>৩ সেকেন্ড (দ্রুত / Fast)</option>
-                  <option value="4500" {{ $heroIntervalVal == '4500' ? 'selected' : '' }}>৪.৫ সেকেন্ড (প্রস্তাবিত স্বাভাবিক / Default)</option>
-                  <option value="6000" {{ $heroIntervalVal == '6000' ? 'selected' : '' }}>৬ সেকেন্ড (ধীর / Relaxed)</option>
-                  <option value="8000" {{ $heroIntervalVal == '8000' ? 'selected' : '' }}>৮ সেকেন্ড (খুব ধীর)</option>
+                  <option value="1000" {{ $heroIntervalVal == '1000' ? 'selected' : '' }}>১ সেকেন্ড (ডিফল্ট / 1s Default)</option>
+                  <option value="2000" {{ $heroIntervalVal == '2000' ? 'selected' : '' }}>২ সেকেন্ড (2s)</option>
+                  <option value="3000" {{ $heroIntervalVal == '3000' ? 'selected' : '' }}>৩ সেকেন্ড (3s)</option>
+                  <option value="4000" {{ $heroIntervalVal == '4000' ? 'selected' : '' }}>৪ সেকেন্ড (4s)</option>
+                  <option value="5000" {{ $heroIntervalVal == '5000' ? 'selected' : '' }}>৫ সেকেন্ড (5s)</option>
+                  <option value="6000" {{ $heroIntervalVal == '6000' ? 'selected' : '' }}>৬ সেকেন্ড (6s)</option>
+                  <option value="8000" {{ $heroIntervalVal == '8000' ? 'selected' : '' }}>৮ সেকেন্ড (8s)</option>
+                  <option value="10000" {{ $heroIntervalVal == '10000' ? 'selected' : '' }}>১০ সেকেন্ড (10s)</option>
                 </select>
               </label>
             </div>

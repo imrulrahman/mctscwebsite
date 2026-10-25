@@ -125,7 +125,7 @@
     <div style="margin-bottom: 50px;">
       <span class="section-kicker">{{ $isBn ? 'প্রশিক্ষণ অবকাঠামো' : 'FACILITIES' }}</span>
       <h2 style="font-family: var(--serif); font-size: 28px; color: var(--green); margin: 6px 0 6px 0;">
-        {{ $isBn ? 'প্রশিক্ষণ সুবিধাসমূহ (Training Facilities)' : 'Training Facilities' }}
+        {{ $isBn ? 'প্রশিক্ষণ সুবিধাসমূহ' : 'Training Facilities' }}
       </h2>
       <div class="gold-rule" style="width: 45px; height: 3px; background: var(--gold); margin: 0 0 20px 0;"></div>
 
@@ -139,7 +139,7 @@
             </svg>
           </div>
           <div>
-            <h4>{{ $isBn ? 'তত্ত্বীয় শ্রেণীকক্ষ (Theory Classrooms)' : 'Theory Classrooms' }}</h4>
+            <h4>{{ $isBn ? 'তত্ত্বীয় শ্রেণীকক্ষ' : 'Theory Classrooms' }}</h4>
             <p>{{ $isBn ? 'তাত্ত্বিক নির্দেশনা এবং মিথস্ক্রিয়ামূলক শিক্ষার জন্য সুনির্দিষ্ট স্থান।' : 'Dedicated spaces for theoretical instruction and interactive learning.' }}</p>
           </div>
         </div>
@@ -167,7 +167,7 @@
             </svg>
           </div>
           <div>
-            <h4>{{ $isBn ? 'কম্পিউটার ল্যাবরেটরি (Computer Laboratories)' : 'Computer Laboratories' }}</h4>
+            <h4>{{ $isBn ? 'কম্পিউটার ল্যাবরেটরি' : 'Computer Laboratories' }}</h4>
             <p>{{ $isBn ? 'ডিজিটাল দক্ষতা উন্নয়নে ইন্টারনেট সুবিধাসম্পন্ন কম্পিউটারভিত্তিক ল্যাব।' : 'Computer-based learning facilities with internet access to support digital skills development.' }}</p>
           </div>
         </div>
@@ -183,7 +183,7 @@
             </svg>
           </div>
           <div>
-            <h4>{{ $isBn ? 'সেমিনার ও সভাকক্ষ (Seminar and Meeting Room)' : 'Seminar and Meeting Room' }}</h4>
+            <h4>{{ $isBn ? 'সেমিনার ও সভাকক্ষ' : 'Seminar and Meeting Room' }}</h4>
             <p>{{ $isBn ? 'সেমিনার, কর্মশালা, সভা এবং অংশীজনদের সাথে আলোচনার জন্য নির্ধারিত স্থান।' : 'Space for seminars, workshops, meetings, and stakeholder engagement.' }}</p>
           </div>
         </div>
@@ -197,7 +197,7 @@
             </svg>
           </div>
           <div>
-            <h4>{{ $isBn ? 'লাইব্রেরি ও শিখন সম্পদ (Library and Learning Resources)' : 'Library and Learning Resources' }}</h4>
+            <h4>{{ $isBn ? 'লাইব্রেরি ও শিখন সম্পদ' : 'Library and Learning Resources' }}</h4>
             <p>{{ $isBn ? 'প্রশিক্ষণার্থীদের জ্ঞান ও পেশাগত উন্নয়নে সহায়ক শিখন উপকরণ।' : "Learning resources to support trainees' knowledge and professional development." }}</p>
           </div>
         </div>
@@ -229,7 +229,7 @@
             </svg>
           </div>
           <div>
-            <h4>{{ $isBn ? 'ছাত্র কমন রুম (Student Common Room)' : 'Student Common Room' }}</h4>
+            <h4>{{ $isBn ? 'ছাত্র কমন রুম' : 'Student Common Room' }}</h4>
             <p>{{ $isBn ? 'শিক্ষার্থীদের জন্য একটি উন্মুক্ত মিলন ও বিশ্রামস্থল।' : 'A shared space for trainees.' }}</p>
           </div>
         </div>
@@ -243,7 +243,7 @@
             </svg>
           </div>
           <div>
-            <h4>{{ $isBn ? 'প্রশাসনিক সুবিধাদি (Administrative Facilities)' : 'Administrative Facilities' }}</h4>
+            <h4>{{ $isBn ? 'প্রশাসনিক সুবিধাদি' : 'Administrative Facilities' }}</h4>
             <p>{{ $isBn ? 'প্রাতিষ্ঠানিক ব্যবস্থাপনা ও কর্মসূচি বাস্তবায়নে কর্মকর্তা ও দাপ্তরিক কক্ষ।' : 'Offices and operational spaces to support institutional management and programme delivery.' }}</p>
           </div>
         </div>
@@ -254,7 +254,7 @@
     <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid var(--gold); border-radius: 10px; padding: 32px 34px; margin-bottom: 50px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
       <span class="section-kicker" style="color: var(--gold);">{{ $isBn ? 'পরিসংখ্যান ও সক্ষমতা' : 'CAPACITY & SCOPE' }}</span>
       <h2 style="font-family: var(--serif); font-size: 26px; color: var(--green); margin: 6px 0 10px 0;">
-        {{ $isBn ? 'এক নজরে প্রশিক্ষণ সক্ষমতা (Training Capacity at a Glance)' : 'Training Capacity at a Glance' }}
+        {{ $isBn ? 'এক নজরে প্রশিক্ষণ সক্ষমতা' : 'Training Capacity at a Glance' }}
       </h2>
       <div class="gold-rule" style="width: 45px; height: 3px; background: var(--gold); margin-bottom: 20px;"></div>
 
@@ -268,32 +268,32 @@
           </thead>
           <tbody>
             <tr>
-              <td><strong>Location</strong> (অবস্থান)</td>
-              <td>Chadu Chowdhury Road, Sagorika, Pahartali, Chattogram, Bangladesh</td>
+              <td><strong>{{ $isBn ? 'অবস্থান' : 'Location' }}</strong></td>
+              <td>{{ $isBn ? 'চাঁদু চৌধুরী রোড, সাগরিকা, পাহাড়তলী, চট্টগ্রাম, বাংলাদেশ' : 'Chadu Chowdhury Road, Sagorika, Pahartali, Chattogram, Bangladesh' }}</td>
             </tr>
             <tr>
-              <td><strong>Total Reported Floor Area</strong> (মোট ফ্লোর এরিয়া)</td>
-              <td><span class="capacity-badge">Approximately 17,000 sq. ft.</span></td>
+              <td><strong>{{ $isBn ? 'মোট ফ্লোর এরিয়া' : 'Total Reported Floor Area' }}</strong></td>
+              <td><span class="capacity-badge">{{ $isBn ? 'আনুমানিক ১৭,০০০ বর্গফুট' : 'Approximately 17,000 sq. ft.' }}</span></td>
             </tr>
             <tr>
-              <td><strong>Building Structure</strong> (ভবনের কাঠামো)</td>
-              <td>Two-storey building (দুই তলা ভবন)</td>
+              <td><strong>{{ $isBn ? 'ভবনের কাঠামো' : 'Building Structure' }}</strong></td>
+              <td>{{ $isBn ? 'দুই তলা ভবন' : 'Two-storey building' }}</td>
             </tr>
             <tr>
-              <td><strong>Reported Classrooms and Laboratories</strong> (শ্রেণীকক্ষ ও ল্যাব)</td>
-              <td>Eight rooms on each floor (প্রতি তলায় ৮টি করে কক্ষ)</td>
+              <td><strong>{{ $isBn ? 'শ্রেণীকক্ষ ও ল্যাবরেটরি' : 'Reported Classrooms and Laboratories' }}</strong></td>
+              <td>{{ $isBn ? 'প্রতি তলায় ৮টি করে কক্ষ' : 'Eight rooms on each floor' }}</td>
             </tr>
             <tr>
-              <td><strong>Annual Training Capacity</strong> (বার্ষিক প্রশিক্ষণ সক্ষমতা)</td>
-              <td><span class="capacity-badge">Approximately 1,000 beneficiaries</span></td>
+              <td><strong>{{ $isBn ? 'বার্ষিক প্রশিক্ষণ সক্ষমতা' : 'Annual Training Capacity' }}</strong></td>
+              <td><span class="capacity-badge">{{ $isBn ? 'আনুমানিক ১,০০০ জন প্রশিক্ষণার্থী' : 'Approximately 1,000 beneficiaries' }}</span></td>
             </tr>
             <tr>
-              <td><strong>Training Occupations (affiliated)</strong> (অনুমোদিত ট্রেড)</td>
-              <td><span class="capacity-badge" style="background:#f1f5f9; color:#1e293b;">Fourteen (১৪টি)</span></td>
+              <td><strong>{{ $isBn ? 'অনুমোদিত অকুপেশন (ট্রেড)' : 'Training Occupations (affiliated)' }}</strong></td>
+              <td><span class="capacity-badge" style="background:#f1f5f9; color:#1e293b;">{{ $isBn ? '১৪টি' : 'Fourteen' }}</span></td>
             </tr>
             <tr>
-              <td><strong>Training Approach</strong> (প্রশিক্ষণ পদ্ধতি)</td>
-              <td>Practical, competency-based, and employment-oriented learning</td>
+              <td><strong>{{ $isBn ? 'প্রশিক্ষণ পদ্ধতি' : 'Training Approach' }}</strong></td>
+              <td>{{ $isBn ? 'ব্যবহারিক, দক্ষতাভিত্তিক ও কর্মসংস্থানমুখী শিখন' : 'Practical, competency-based, and employment-oriented learning' }}</td>
             </tr>
           </tbody>
         </table>
