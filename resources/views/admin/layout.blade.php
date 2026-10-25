@@ -27,6 +27,15 @@
       --gold: {{ $admAccent }};
       --gold-deep: {{ $admAccentHover }};
     }
+    html, body {
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
+    .admin-shell {
+      width: 100%;
+      max-width: 100vw;
+      overflow-x: hidden;
+    }
     .sidebar {
       background: {{ $admHover }};
       height: 100vh;
@@ -48,6 +57,8 @@
       border-radius: 4px;
     }
     .admin-main {
+      min-width: 0;
+      box-sizing: border-box;
       transition: margin-left 0.22s cubic-bezier(0.4, 0, 0.2, 1), width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .btn.gold { background: {{ $admAccent }}; }
@@ -131,6 +142,7 @@
     html.sidebar-is-collapsed .admin-main {
       margin-left: 68px !important;
       width: calc(100% - 68px) !important;
+      max-width: calc(100% - 68px) !important;
     }
     html.sidebar-is-collapsed .side-brand {
       padding: 12px 6px !important;

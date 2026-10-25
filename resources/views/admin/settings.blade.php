@@ -477,13 +477,13 @@
     gap: 16px;
   }
 
-  @media (max-width: 1024px) {
+  @media (max-width: 1200px) {
     .afm-grid-cols {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 860px) {
     .afm-grid-cols {
       display: flex;
       flex-direction: column;
@@ -970,7 +970,7 @@
               <span>🏛️</span> Institution Name on Hero Banner Display
             </div>
             <p style="font-size:12.5px;color:#15803d;margin:0 0 12px 0;">Configure whether and how the institution name appears at the top-left of the hero banner, including visibility and custom text color.</p>
-            <div class="field-grid" style="grid-template-columns: 1fr 1.6fr 1fr;">
+            <div class="field-grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));">
               <label>
                 <strong>Visibility on Banner:</strong>
                 <select name="hero_show_institution_name" style="background:#fff;font-weight:600;">
@@ -1017,7 +1017,7 @@
               <span>📢</span> Latest Notices Bar Background & Transparency
             </div>
             <p style="font-size:12.5px;color:#64748b;margin:0 0 12px 0;">Customize the background tint color, transparency level, and text color for the rolling notices bar underneath the hero section.</p>
-            <div class="field-grid" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div class="field-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
               <label>
                 <strong>Background Tint Color:</strong>
                 <div style="display:flex;align-items:center;gap:8px;margin-top:4px;">
@@ -1079,7 +1079,7 @@
               $heroIntervalVal = old('hero_slider_interval', $settings->get('hero_slider_interval', '4500'));
             @endphp
 
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(260px, 1fr));gap:14px;margin-top:10px;">
               <!-- Option 1: Slider Mode -->
               <label style="border:2px solid {{ $heroMode === 'slide' ? '#16a34a' : '#cbd5e1' }};padding:12px 14px;border-radius:8px;background:#ffffff;cursor:pointer;display:block;">
                 <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
@@ -1145,7 +1145,7 @@
                   $activeBannerVal = 'assets/banners/banner_robotics_lab.jpg';
               }
             @endphp
-            <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:14px;">
+            <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:14px;">
               <!-- Option 1 -->
               <label style="border:2px solid {{ $activeBannerVal === 'assets/banners/banner_robotics_lab.jpg' ? '#0f5132' : '#cbd5e1' }};padding:10px;border-radius:8px;cursor:pointer;background:#fff;display:block;transition:all 0.2s ease;">
                 <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
@@ -1383,8 +1383,6 @@
               <span>💾</span> Save Facilities Settings
             </button>
           </div>
-        </div>
-      </div>
         </div>
       </div>
 
