@@ -1356,8 +1356,7 @@
                     <th style="padding: 10px 14px; width: 45px; text-align: center; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'নং' : 'SN' }}</th>
                     <th style="padding: 10px 14px; min-width: 180px; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'নাম (Name)' : 'Name' }}</th>
                     <th style="padding: 10px 14px; min-width: 140px; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'পদবী (Position)' : 'Position' }}</th>
-                    <th style="padding: 10px 14px; min-width: 210px; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'শিক্ষাগত যোগ্যতা (Educational Qualification)' : 'Educational Qualification' }}</th>
-                    <th style="padding: 10px 14px; min-width: 230px;">{{ $isBn ? 'পেশাগত অভিজ্ঞতা (Professional Experience)' : 'Professional Experience (in years)' }}</th>
+                    <th style="padding: 10px 14px; min-width: 260px;">{{ $isBn ? 'শিক্ষাগত যোগ্যতা (Educational Qualification)' : 'Educational Qualification' }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1377,8 +1376,7 @@
                           {{ $mPos }}
                         </span>
                       </td>
-                      <td style="padding: 11px 14px; color: #334155; border-right: 1px solid #eef4f0;">{{ $mQual }}</td>
-                      <td style="padding: 11px 14px; color: #475569;">{{ $mExp }}</td>
+                      <td style="padding: 11px 14px; color: #334155;">{{ $mQual }}</td>
                     </tr>
                   @endfor
                 </tbody>

@@ -738,7 +738,8 @@ class WebsiteCmsTest extends TestCase
         $homeEn->assertSee('Chair');
         $homeEn->assertSee('Dr. Md Shaif Ullah Mansur');
         $homeEn->assertSee('Vice Chair');
-        $homeEn->assertSee('BGMEA Director');
+        $homeEn->assertSee('Ph.D. in the Bangladesh Constitution');
+        $homeEn->assertDontSee('Professional Experience (in years)');
         $homeEn->assertSee('Md. Mozammel Haque');
         $homeEn->assertSee('Member Secretary');
         $homeEn->assertSee('Shakh Nur Alam');
