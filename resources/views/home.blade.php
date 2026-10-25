@@ -590,6 +590,8 @@
       line-height: 1.75 !important;
       color: #2d3748 !important;
       margin: 0 !important;
+      text-align: justify !important;
+      text-justify: inter-word !important;
     }
     .vmo-objectives-list {
       list-style: none !important;
@@ -606,6 +608,8 @@
       font-size: 14.5px !important;
       line-height: 1.55 !important;
       color: #2d3748 !important;
+      text-align: justify !important;
+      text-justify: inter-word !important;
     }
     .vmo-objectives-list li span {
       display: inline-flex !important;
@@ -1254,7 +1258,7 @@
             </h3>
           </div>
         </div>
-        <div style="font-size: 15px; line-height: 1.8; color: #166534;">
+        <div style="font-size: 15px; line-height: 1.8; color: #166534; text-align: justify; text-justify: inter-word;">
           @php
             $hasSpBodyBn = $settings->has('strategic_partnership_body_bn');
             $hasSpBodyEn = $settings->has('strategic_partnership_body');
@@ -1270,7 +1274,7 @@
           @endphp
 
           @if(filled(trim(strip_tags($spBodyText ?? ''))))
-            <p style="margin-bottom: 12px;">{!! nl2br($spBodyText) !!}</p>
+            <p style="margin-bottom: 12px; text-align: justify; text-justify: inter-word;">{!! nl2br($spBodyText) !!}</p>
           @endif
 
           @php
@@ -1315,7 +1319,7 @@
               }
             @endphp
             @if(filled(trim($govIntroText ?? '')))
-              <p style="font-size: 14.5px; line-height: 1.65; color: #166534; margin: 0 0 16px 0;">
+              <p style="font-size: 14.5px; line-height: 1.65; color: #166534; margin: 0 0 16px 0; text-align: justify; text-justify: inter-word;">
                 {{ $govIntroText }}
               </p>
             @endif
@@ -1382,10 +1386,8 @@
                     <tr style="background: {{ $m % 2 === 0 ? '#f8fdfa' : '#ffffff' }}; border-bottom: 1px solid #e2ebe6;">
                       <td style="padding: 11px 14px; text-align: center; font-weight: 700; color: #166534; border-right: 1px solid #eef4f0;">{{ $m }}</td>
                       <td style="padding: 11px 14px; font-weight: 700; color: #1e293b; border-right: 1px solid #eef4f0;">{{ $mName }}</td>
-                      <td style="padding: 11px 14px; border-right: 1px solid #eef4f0;">
-                        <span style="font-weight: 700; color: #14532d; background: #dcfce7; padding: 3px 8px; border-radius: 4px; display: inline-block; font-size: 12.5px; border: 1px solid #bbf7d0;">
-                          {{ $mPos }}
-                        </span>
+                      <td style="padding: 11px 14px; border-right: 1px solid #eef4f0; font-weight: 600; color: #14532d;">
+                        {{ $mPos }}
                       </td>
                       <td style="padding: 11px 14px; color: #334155;">{{ $mQual }}</td>
                     </tr>
