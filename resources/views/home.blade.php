@@ -1217,6 +1217,42 @@
     </div>
   </section>
 
+  <!-- STRATEGIC PARTNERSHIP WITH IMPACT INITIATIVE (IMI) -->
+  <section class="section" style="padding-top: 10px; padding-bottom: 24px;">
+    <div class="container">
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 28px 34px; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.05);">
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
+          <span style="font-size: 28px;">🤝</span>
+          <div>
+            <span style="font-size: 12px; font-weight: 700; color: #166534; letter-spacing: 1.5px; text-transform: uppercase;">
+              {{ $isBn ? 'কৌশলগত অংশীদারিত্ব' : 'STRATEGIC PARTNERSHIP' }}
+            </span>
+            <h3 style="font-family: var(--serif); font-size: 22px; color: #14532d; margin: 2px 0 0 0;">
+              {{ $isBn ? 'ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative)-এর সাথে অংশীদারিত্ব' : 'Partnership with Impact Initiative' }}
+            </h3>
+          </div>
+        </div>
+        <div style="font-size: 15px; line-height: 1.8; color: #166534;">
+          @if($isBn)
+            <p style="margin-bottom: 12px;">
+              <strong>১৯৯৫ সালে</strong> প্রতিষ্ঠিত <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI)</strong> গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের প্রধানমন্ত্রীর কার্যালয়াধীন <strong>এনজিও বিষয়ক ব্যুরো (নিবন্ধন নং: ১২২৪)</strong> কর্তৃক নিবন্ধিত একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।
+            </p>
+            <p style="margin: 0; font-weight: 600;">
+              এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে।
+            </p>
+          @else
+            <p style="margin-bottom: 12px;">
+              Established in <strong>1995</strong>, <strong>Impact Initiative (IMI)</strong> is a national humanitarian and development organization in Bangladesh, registered with the <strong>NGO Affairs Bureau (Registration No: 1224)</strong> under the Prime Minister's Office. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.
+            </p>
+            <p style="margin: 0; font-weight: 600;">
+              Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.
+            </p>
+          @endif
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- 4. DEVELOPMENT PARTNERS (EXACT SLIDING MARQUEE AS ON IMPACTINI.ORG) -->
   <section id="development-partners" class="section partners-marquee-section">
     <div class="container">

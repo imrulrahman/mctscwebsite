@@ -530,16 +530,19 @@ class WebsiteCmsTest extends TestCase
         $settingsResponse->assertRedirect();
         $this->assertEquals('2000', \App\Models\SiteSetting::where('key', 'hero_slider_interval')->value('value'));
 
-        $homeUpdated = $this->get(route('home'));
+        $homeUpdated = $this->withSession(['locale' => 'en'])->get(route('home'));
         $homeUpdated->assertOk();
         $homeUpdated->assertSee('const interval = 2000;', false);
         $homeUpdated->assertSee('Custom Institute Story');
         $homeUpdated->assertSee('Specialized TVET Excellence with Mahmudunnabi Chowdhury.');
+        $homeUpdated->assertSee('Partnership with Impact Initiative');
 
-        $aboutPage = $this->get(route('about'));
+        $aboutPage = $this->withSession(['locale' => 'en'])->get(route('about'));
         $aboutPage->assertOk();
         $aboutPage->assertSee('About Page Custom Paragraph 1.');
         $aboutPage->assertSee('About Page Custom Paragraph 2.');
+        $aboutPage->assertDontSee('Partnership with Impact Initiative');
+        $aboutPage->assertSee('core-val-grid', false);
 
         // Cleanup
         \App\Models\SiteSetting::where('key', 'hero_slider_interval')->delete();

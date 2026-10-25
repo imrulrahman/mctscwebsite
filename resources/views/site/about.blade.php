@@ -38,28 +38,28 @@
 .core-val-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 18px;
-  margin-top: 20px;
+  gap: 12px;
+  margin-top: 16px;
 }
 .core-val-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-left: 4px solid var(--green);
   border-radius: 8px;
-  padding: 18px 20px;
+  padding: 13px 15px;
   display: flex;
-  gap: 16px;
+  gap: 12px;
   align-items: flex-start;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.02);
   transition: transform 0.2s, box-shadow 0.2s;
 }
 .core-val-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(15,81,50,0.08);
+  box-shadow: 0 5px 14px rgba(15,81,50,0.07);
 }
 .core-val-icon-box {
-  width: 42px;
-  height: 42px;
+  width: 38px;
+  height: 38px;
   border-radius: 8px;
   background: rgba(15, 81, 50, 0.08);
   color: var(--green);
@@ -70,22 +70,22 @@
 }
 .core-val-content h4 {
   font-family: var(--sans);
-  font-size: 15.5px;
+  font-size: 15px;
   font-weight: 700;
   color: #1e293b;
-  margin: 0 0 6px 0;
-  line-height: 1.35;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
 }
 .core-val-content p {
-  font-size: 13.8px;
-  line-height: 1.65;
+  font-size: 13.5px;
+  line-height: 1.55;
   color: #475569;
   margin: 0;
-  text-align: justify;
 }
 @media (max-width: 768px) {
   .core-val-grid {
     grid-template-columns: 1fr;
+    gap: 10px;
   }
 }
 
@@ -479,38 +479,6 @@
           <strong>Mahmudunnabi Chowdhury (1908–1995)</strong> was a prominent businessman and politician from Chattogram who served as a member of the East Pakistan Legislative Assembly and held ministerial responsibilities. The institution carries forward a commitment to human development and community progress in remembrance of his legacy.
         @endif
       </p>
-    </div>
-
-    <!-- 5. PARTNERSHIP WITH IMPACT INITIATIVE (IMI) -->
-    <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 32px 36px; margin-bottom: 48px;">
-      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
-        <span style="font-size: 28px;">🤝</span>
-        <div>
-          <span style="font-size: 12px; font-weight: 700; color: #166534; letter-spacing: 1.5px; text-transform: uppercase;">
-            {{ $isBn ? 'কৌশলগত অংশীদারিত্ব' : 'STRATEGIC PARTNERSHIP' }}
-          </span>
-          <h3 style="font-family: var(--serif); font-size: 22px; color: #14532d; margin: 2px 0 0 0;">
-            {{ $isBn ? 'ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative)-এর সাথে অংশীদারিত্ব' : 'Partnership with Impact Initiative' }}
-          </h3>
-        </div>
-      </div>
-      <div style="font-size: 15px; line-height: 1.8; color: #166534;">
-        @if($isBn)
-          <p style="margin-bottom: 12px;">
-            <strong>১৯৯৫ সালে</strong> প্রতিষ্ঠিত <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI)</strong> গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের প্রধানমন্ত্রীর কার্যালয়াধীন <strong>এনজিও বিষয়ক ব্যুরো (নিবন্ধন নং: ১২২৪)</strong> কর্তৃক নিবন্ধিত একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।
-          </p>
-          <p style="margin: 0; font-weight: 600;">
-            এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে।
-          </p>
-        @else
-          <p style="margin-bottom: 12px;">
-            Established in <strong>1995</strong>, <strong>Impact Initiative (IMI)</strong> is a national humanitarian and development organization in Bangladesh, registered with the <strong>NGO Affairs Bureau (Registration No: 1224)</strong> under the Prime Minister's Office. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.
-          </p>
-          <p style="margin: 0; font-weight: 600;">
-            Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.
-          </p>
-        @endif
-      </div>
     </div>
 
     <!-- 7. INDUSTRY PARTNERSHIPS FOR EMPLOYMENT AND CAREER DEVELOPMENT -->
