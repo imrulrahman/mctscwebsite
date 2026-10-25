@@ -197,7 +197,17 @@ class WebsiteCmsTest extends TestCase
 
     public function test_dedicated_site_pages_render_successfully(): void
     {
-        $this->get(route('about'))->assertOk()->assertSee('About');
+        $about = $this->get(route('about'))->assertOk()->assertSee('About');
+        $about->assertSee('Institute Core Values');
+        $about->assertSee('Integrity and Accountability');
+        $about->assertSee('Legal Status');
+        $about->assertSee('70102');
+        $about->assertSee('STP-CHA-000135');
+        $about->assertSee('Founding Vision');
+        $about->assertDontSee('Our Founding Vision');
+        $about->assertDontSee('Skills for a Better Tomorrow');
+        $about->assertSee('Apply for Admission');
+
         $this->get(route('courses'))->assertOk()->assertSee('Courses');
         $this->get(route('projects'))->assertOk()->assertSee('Projects');
         $this->get(route('notices'))->assertOk()->assertSee('Notice');

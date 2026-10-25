@@ -94,6 +94,15 @@
       }
     }
 
+    .main-nav .nav-cta {
+      padding: 10px 18px !important;
+      white-space: nowrap !important;
+      font-size: 13.5px !important;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
     /* Top Page Banner */
     .page-hero-banner {
       background: linear-gradient(135deg, {{ $primaryHover }} 0%, {{ $primaryColor }} 100%);
@@ -475,7 +484,7 @@
         <a class="{{ request()->routeIs('notices') ? 'active' : '' }}" href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
         <a class="{{ request()->routeIs('gallery') ? 'active' : '' }}" href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
         <a class="{{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">{{ $isBn ? 'যোগাযোগ' : 'Contact' }}</a>
-        <a class="nav-cta" href="{{ route('apply') }}">{{ $isBn ? 'এপ্লাই নাও' : 'Apply Now' }}</a>
+        <a class="nav-cta" href="{{ route('apply') }}">{{ $isBn ? 'ভর্তি আবেদন' : 'Apply for Admission' }}</a>
       </nav>
 
       <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->
