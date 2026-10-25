@@ -148,6 +148,58 @@
     font-size: 13px;
   }
 }
+
+/* Industry Partners Grid */
+.industry-partners-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin: 20px 0 24px 0;
+}
+.industry-partner-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+.industry-partner-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--green);
+  box-shadow: 0 6px 16px rgba(15,81,50,0.09);
+}
+.industry-partner-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: rgba(197, 155, 39, 0.12);
+  color: var(--gold-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.industry-partner-name {
+  font-family: var(--sans);
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.35;
+}
+@media (max-width: 900px) {
+  .industry-partners-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 500px) {
+  .industry-partners-grid {
+    grid-template-columns: 1fr;
+  }
+}
 </style>
 
 <section class="section" style="padding-top: 36px; padding-bottom: 50px;">
@@ -155,12 +207,12 @@
 
     <!-- 1. INTRO (HERITAGE & FOUNDATION) WITH WRAP-AROUND IMAGE -->
     <div style="margin-bottom: 54px;">
-      <span class="section-kicker">{{ $isBn ? 'আমাদের পরিচিতি' : 'ABOUT US' }}</span>
+      <span class="section-kicker">{{ $settings['about_intro_kicker'] ?? ($isBn ? 'ভূমিকা' : 'INTRODUCTION') }}</span>
       <h2 style="font-family: var(--serif); font-size: 30px; color: var(--green); margin: 6px 0 8px 0; line-height: 1.25;">
-        {{ $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Mahmudunnabi Chowdhury Technical School & College' }}
+        {{ $settings['about_intro_title'] ?? ($isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Mahmudunnabi Chowdhury Technical School & College') }}
       </h2>
       <p style="color: var(--gold); font-weight: 700; font-size: 15px; margin: 0 0 16px 0; letter-spacing: 0.3px;">
-        {{ $isBn ? 'দক্ষতা অর্জন · সুপ্ত সম্ভাবনার বিকাশ · ভবিষ্যৎ বিনির্মাণ' : 'Building Skills. Unlocking Potential. Shaping Futures.' }}
+        {{ $settings['about_intro_subtitle'] ?? ($isBn ? 'দক্ষতা অর্জন · সুপ্ত সম্ভাবনার বিকাশ · ভবিষ্যৎ বিনির্মাণ' : 'Building Skills. Unlocking Potential. Shaping Futures.') }}
       </p>
       <div class="gold-rule" style="width: 50px; height: 3px; background: var(--gold); margin-bottom: 22px;"></div>
 
@@ -337,9 +389,9 @@
       <!-- Institutional Commitment (without 'Our') -->
       <div style="background: rgba(15, 81, 50, 0.05); border-left: 4px solid var(--green); border-radius: 8px; padding: 18px 24px; margin-top: 26px; font-size: 15px; line-height: 1.7; color: #163d32; box-shadow: 0 2px 8px rgba(15,81,50,0.03);">
         <strong style="color: var(--green); font-size: 15.5px;">{{ $isBn ? 'অঙ্গীকার (Commitment):' : 'Commitment:' }}</strong>
-        {{ $isBn 
-          ? ' মানসম্মত, অন্তর্ভুক্তিমূলক এবং শিল্প-উপযোগী বৃত্তিমূলক শিক্ষার মাধ্যমে একটি দক্ষ কর্মীবাহিনী গড়ে তোলা, কর্মসংস্থানের সুযোগ সম্প্রসারণ করা, দারিদ্র্য হ্রাস করা এবং বাংলাদেশের টেকসই আর্থ-সামাজিক উন্নয়নে সক্রিয় অবদান রাখা।' 
-          : ' To develop a skilled workforce, expand employment opportunities, reduce poverty, and contribute to Bangladesh\'s sustainable socioeconomic development through quality, inclusive, and industry-responsive vocational education.' }}
+        {{ $settings['about_commitment'] ?? ($isBn 
+          ? 'মানসম্মত, অন্তর্ভুক্তিমূলক এবং শিল্প-উপযোগী বৃত্তিমূলক শিক্ষার মাধ্যমে একটি দক্ষ কর্মীবাহিনী গড়ে তোলা, কর্মসংস্থানের সুযোগ সম্প্রসারণ করা, দারিদ্র্য হ্রাস করা এবং বাংলাদেশের টেকসই আর্থ-সামাজিক উন্নয়নে সক্রিয় অবদান রাখা।' 
+          : 'To develop a skilled workforce, expand employment opportunities, reduce poverty, and contribute to Bangladesh\'s sustainable socioeconomic development through quality, inclusive, and industry-responsive vocational education.') }}
       </div>
     </div>
 
@@ -489,6 +541,62 @@
             Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.
           </p>
         @endif
+      </div>
+    </div>
+
+    <!-- 7. INDUSTRY PARTNERSHIPS FOR EMPLOYMENT AND CAREER DEVELOPMENT -->
+    @php
+      $indListRaw = $settings['industry_partners_list'] ?? "Alert Fashion Ltd.\nMellow Fashion Ltd.\nSalim & Brothers Ltd.\nAstech Ltd.\nHB Group\nHB Intimates Ltd.\nFashion of Wales Ltd.\nHotel New View";
+      $indPartners = array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $indListRaw))));
+    @endphp
+    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid var(--green); border-radius: 10px; padding: 34px 36px; margin-bottom: 48px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
+      <div style="margin-bottom: 18px;">
+        <span class="section-kicker" style="color: var(--gold);">{{ $settings['industry_partners_kicker'] ?? ($isBn ? 'শিল্প সংযোগ ও ক্যারিয়ার উন্নয়ন' : 'EMPLOYMENT & CAREER DEVELOPMENT') }}</span>
+        <h2 style="font-family: var(--serif); font-size: 26px; color: var(--green); margin: 6px 0 10px 0; line-height: 1.3;">
+          <em>{{ $settings['industry_partners_title'] ?? ($isBn ? 'কর্মসংস্থান ও ক্যারিয়ার উন্নয়নে শিল্প অংশীদারিত্ব' : 'Industry Partnerships for Employment and Career Development') }}</em>
+        </h2>
+        <div class="gold-rule" style="width: 45px; height: 3px; background: var(--gold); margin: 0 0 18px 0;"></div>
+      </div>
+
+      <div style="font-size: 15px; line-height: 1.8; color: #334155; text-align: justify; margin-bottom: 24px;">
+        <p style="margin-bottom: 14px;">
+          {{ $settings['industry_partners_intro_1'] ?? ($isBn 
+            ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) গ্র্যাজুয়েটদের কর্মসংস্থান যোগ্যতা বৃদ্ধি এবং টেকসই ক্যারিয়ারের সুযোগ সৃষ্টির লক্ষ্যে বিভিন্ন শিল্পপ্রতিষ্ঠান, নিয়োগকর্তা এবং সেবা খাতের সংস্থাগুলির সাথে কার্যকর সহযোগিতাপূর্ণ সম্পর্ক বজায় রাখে। এই অংশীদারিত্বের মাধ্যমে MCTSC চাকরি প্রাপ্তি, কর্মক্ষেত্রভিত্তিক শিক্ষা, শিল্প সংযোগ এবং বাজার-চাহিদাভিত্তিক দক্ষতা বিকাশে সহায়তা করে।' 
+            : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) maintains collaborative relationships with industries, employers, and service-sector organizations to enhance graduate employability and promote sustainable career opportunities. Through these partnerships, MCTSC supports job placement, workplace-based learning, industry exposure, and the development of market-relevant skills.') }}
+        </p>
+        <p style="margin: 0;">
+          {{ $settings['industry_partners_intro_2'] ?? ($isBn 
+            ? 'আমাদের শিল্প অংশীদারগণ বৃত্তিমূলক প্রশিক্ষণ এবং শ্রমবাজারের চাহিদার মধ্যকার ব্যবধান দূর করতে গুরুত্বপূর্ণ অবদান রাখছেন, যা গ্র্যাজুয়েটদের বেতনভিত্তিক চাকরি, আত্মকর্মসংস্থান এবং দীর্ঘমেয়াদী ক্যারিয়ার উন্নয়নে উত্তরণে সহায়তা করে।' 
+            : 'Our industry partners contribute to bridging the gap between vocational training and labour market demands, helping graduates transition into wage employment, self-employment, and long-term career development.') }}
+        </p>
+      </div>
+
+      <h3 style="font-family: var(--serif); font-size: 19px; color: var(--green); margin: 0 0 14px 0;">
+        {{ $settings['industry_partners_list_title'] ?? ($isBn ? 'শিল্প ও কর্মসংস্থান অংশীদারগণ' : 'Our Industry and Employment Partners') }}
+      </h3>
+
+      <div class="industry-partners-grid">
+        @foreach($indPartners as $partner)
+          <div class="industry-partner-card">
+            <div class="industry-partner-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+              </svg>
+            </div>
+            <div>
+              <div class="industry-partner-name">{{ $partner }}</div>
+              <small style="color: #64748b; font-size: 11.5px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">{{ $isBn ? 'শিল্প অংশীদার' : 'Industry Partner' }}</small>
+            </div>
+          </div>
+        @endforeach
+      </div>
+
+      <div style="background: rgba(15, 81, 50, 0.05); border-left: 4px solid var(--green); border-radius: 8px; padding: 18px 24px; margin-top: 22px; font-size: 15px; line-height: 1.7; color: #163d32; box-shadow: 0 2px 8px rgba(15,81,50,0.03);">
+        <strong style="color: var(--green); font-size: 15.5px;">{{ $isBn ? 'আমাদের অঙ্গীকার (Our Commitment):' : 'Our Commitment:' }}</strong>
+        {{ $settings['industry_partners_commitment'] ?? ($isBn 
+          ? 'শিল্প সংযোগ জোরদার করা, কর্মসংস্থানের সুযোগ সম্প্রসারণ করা এবং একটি উৎপাদনশীল ও টেকসই কর্মীবাহিনীর জন্য দক্ষ গ্র্যাজুয়েটদের নিয়োগকর্তাদের সাথে যুক্ত করা।' 
+          : 'To strengthen industry linkages, expand employment opportunities, and connect skilled graduates with employers for a productive and sustainable workforce.') }}
       </div>
     </div>
 

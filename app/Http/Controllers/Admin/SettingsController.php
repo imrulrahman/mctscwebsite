@@ -26,6 +26,13 @@ class SettingsController extends Controller
         'notice_bar_bg_color', 'notice_bar_opacity', 'notice_bar_text_color',
         // About
         'about_title', 'about', 'about_aside',
+        'about_intro_kicker', 'about_intro_title', 'about_intro_subtitle',
+        'about_commitment',
+        // Industry Partnerships
+        'industry_partners_kicker', 'industry_partners_title',
+        'industry_partners_intro_1', 'industry_partners_intro_2',
+        'industry_partners_list_title', 'industry_partners_list',
+        'industry_partners_commitment',
         // Facilities
         'facility_1_title', 'facility_2_title', 'facility_3_title', 'facility_4_title',
         // Quotes & Admission

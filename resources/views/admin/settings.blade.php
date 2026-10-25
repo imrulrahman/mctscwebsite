@@ -1235,6 +1235,77 @@
             <input name="about_aside" value="{{ old('about_aside', $settings->get('about_aside', 'Education / Skills / Opportunities / A Stronger Tomorrow')) }}">
           </label>
 
+          <!-- About Page Header & Introduction CMS Settings -->
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;padding:16px;border-radius:8px;margin-top:16px;">
+            <h4 style="margin:0 0 8px 0;color:#166534;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>📌</span> About Page Header & Introduction (এবাউট পেজ ভূমিকা ও পরিচিতি)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr;">
+              <label>
+                Intro Top Kicker (হেডার কিপশন)
+                <input name="about_intro_kicker" value="{{ old('about_intro_kicker', $settings->get('about_intro_kicker', 'INTRODUCTION')) }}" placeholder="INTRODUCTION">
+              </label>
+              <label>
+                Intro Main Title (প্রধান শিরোনাম)
+                <input name="about_intro_title" value="{{ old('about_intro_title', $settings->get('about_intro_title', 'Mahmudunnabi Chowdhury Technical School & College')) }}">
+              </label>
+            </div>
+            <label style="margin-top: 10px;">
+              Intro Subtitle / Tagline (সাবটাইটেল / স্লোগান)
+              <input name="about_intro_subtitle" value="{{ old('about_intro_subtitle', $settings->get('about_intro_subtitle', 'Building Skills. Unlocking Potential. Shaping Futures.')) }}">
+            </label>
+            <label style="margin-top: 10px;">
+              Institutional Commitment (প্রতিষ্ঠানিক অঙ্গীকার)
+              <textarea name="about_commitment" rows="2">{{ old('about_commitment', $settings->get('about_commitment', 'To develop a skilled workforce, expand employment opportunities, reduce poverty, and contribute to Bangladesh\'s sustainable socioeconomic development through quality, inclusive, and industry-responsive vocational education.')) }}</textarea>
+            </label>
+          </div>
+
+          <!-- Industry Partnerships CMS Settings -->
+          <div style="background:#fdfbf7;border:1px solid #f1e6d0;padding:16px;border-radius:8px;margin-top:16px;">
+            <h4 style="margin:0 0 8px 0;color:#92400e;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>🏭</span> Industry Partnerships for Employment & Career Development (ইন্ডাস্ট্রি পার্টনার ও ক্যারিয়ার উন্নয়ন)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr;">
+              <label>
+                Section Kicker
+                <input name="industry_partners_kicker" value="{{ old('industry_partners_kicker', $settings->get('industry_partners_kicker', 'EMPLOYMENT & CAREER DEVELOPMENT')) }}">
+              </label>
+              <label>
+                Section Title
+                <input name="industry_partners_title" value="{{ old('industry_partners_title', $settings->get('industry_partners_title', 'Industry Partnerships for Employment and Career Development')) }}">
+              </label>
+            </div>
+
+            <label style="margin-top: 10px;">
+              Intro Paragraph 1 (ভূমিকা প্যারাগ্রাফ ১)
+              <textarea name="industry_partners_intro_1" rows="3">{{ old('industry_partners_intro_1', $settings->get('industry_partners_intro_1', 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) maintains collaborative relationships with industries, employers, and service-sector organizations to enhance graduate employability and promote sustainable career opportunities. Through these partnerships, MCTSC supports job placement, workplace-based learning, industry exposure, and the development of market-relevant skills.')) }}</textarea>
+            </label>
+
+            <label style="margin-top: 10px;">
+              Intro Paragraph 2 (ভূমিকা প্যারাগ্রাফ ২)
+              <textarea name="industry_partners_intro_2" rows="2">{{ old('industry_partners_intro_2', $settings->get('industry_partners_intro_2', 'Our industry partners contribute to bridging the gap between vocational training and labour market demands, helping graduates transition into wage employment, self-employment, and long-term career development.')) }}</textarea>
+            </label>
+
+            <div class="field-grid" style="grid-template-columns: 1fr 1fr; margin-top: 10px;">
+              <label>
+                Partners List Heading
+                <input name="industry_partners_list_title" value="{{ old('industry_partners_list_title', $settings->get('industry_partners_list_title', 'Our Industry and Employment Partners')) }}">
+              </label>
+              <label>
+                Industry Commitment Heading / Text
+                <input name="industry_partners_commitment" value="{{ old('industry_partners_commitment', $settings->get('industry_partners_commitment', 'To strengthen industry linkages, expand employment opportunities, and connect skilled graduates with employers for a productive and sustainable workforce.')) }}">
+              </label>
+            </div>
+
+            <label style="margin-top: 10px;">
+              Industry & Employment Partners List (প্রতি লাইনে একটি করে পার্টনার কোম্পানির নাম লিখুন)
+              <textarea name="industry_partners_list" rows="8" style="font-family: monospace; font-size: 13.5px;">{{ old('industry_partners_list', $settings->get('industry_partners_list', "Alert Fashion Ltd.\nMellow Fashion Ltd.\nSalim & Brothers Ltd.\nAstech Ltd.\nHB Group\nHB Intimates Ltd.\nFashion of Wales Ltd.\nHotel New View")) }}</textarea>
+              <small style="color: #64748b; font-size: 12px; display: block; margin-top: 4px;">
+                💡 নতুন ইন্ডাস্ট্রি পার্টনার যোগ করতে নতুন লাইনে কোম্পানির নাম লিখুন, বাদ দিতে চাইলে লাইন মুছে দিন।
+              </small>
+            </label>
+          </div>
+
           <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin-top:14px;">
             <label>
               <strong>About Us & Institute Photograph (আমাদের পরিচিতি ও ইন্সটিটিউট ছবি)</strong>
