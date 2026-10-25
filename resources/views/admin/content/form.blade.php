@@ -72,7 +72,7 @@
           <strong>{{ $section === 'partners' ? 'Partner Logo / পার্টনার লোগো' : ($section === 'hero_slides' ? 'Banner Image / ব্যানার ছবি' : ($section === 'projects' ? 'Project Logo / Image' : 'Featured Image')) }}</strong> (JPG, PNG, WEBP, SVG; up to 5 MB)
           <input type="file" name="image" accept="image/*,.svg">
           <small style="color:#0369a1;background:#e0f2fe;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:600;display:inline-block;margin-top:4px;">
-            📐 Recommended: {{ $section === 'partners' ? '240 × 80 px (Transparent PNG or SVG vector)' : ($section === 'hero_slides' ? '1920 × 350 px (Fixed 350px Height, Ultra-wide JPG/WEBP)' : ($section === 'gallery' ? '1200 × 800 px or 1920 × 1080 px (Landscape)' : ($section === 'projects' ? '300 × 300 px (Square PNG)' : '800 × 500 px (16:10 Ratio)'))) }}
+            📐 Recommended: {{ $section === 'partners' ? '240 × 80 px (Transparent PNG or SVG vector)' : ($section === 'hero_slides' ? '1920 × 720 px (1920x720 Aspect Ratio, High-res JPG/WEBP)' : ($section === 'gallery' ? '1200 × 800 px or 1920 × 1080 px (Landscape)' : ($section === 'projects' ? '300 × 300 px (Square PNG)' : '800 × 500 px (16:10 Ratio)'))) }}
           </small>
           @if($item->image)
             <div style="margin-top:10px;display:flex;align-items:center;gap:12px;">

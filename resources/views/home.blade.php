@@ -82,12 +82,13 @@
       }
     }
 
-    /* Hero Image Carousel Slider (Fixed Height & Non-Cropping) */
+    /* Hero Image Carousel Slider (1920x720 Resolution Aspect Ratio & Non-Squishing) */
     .hero-slider-wrap {
       position: relative;
       width: 100%;
-      height: 350px !important;
-      max-height: 350px !important;
+      height: clamp(220px, 37.5vw, 720px) !important;
+      max-height: 720px !important;
+      aspect-ratio: 1920 / 720;
       overflow: hidden;
       background-color: #0b3d30;
       user-select: none;
@@ -116,7 +117,7 @@
       width: 100% !important;
       height: 100% !important;
       display: block !important;
-      object-fit: fill !important;
+      object-fit: cover !important;
     }
     /* Slider Prev/Next Controls */
     .hero-slider-btn {
@@ -183,10 +184,6 @@
       border-radius: 10px;
     }
     @media (max-width: 992px) {
-      .hero-slider-wrap {
-        height: 250px !important;
-        max-height: 250px !important;
-      }
       .hero-slider-btn {
         width: 36px;
         height: 36px;
@@ -196,10 +193,6 @@
       .hero-slider-next { right: 10px; }
     }
     @media (max-width: 600px) {
-      .hero-slider-wrap {
-        height: 190px !important;
-        max-height: 190px !important;
-      }
       .hero-slider-btn {
         width: 30px;
         height: 30px;

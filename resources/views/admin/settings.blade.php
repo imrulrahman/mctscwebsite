@@ -1182,7 +1182,7 @@
             <label>
               <strong>Upload Custom Hero Banner File</strong> — (Formats: JPG, PNG, WEBP)
               <small style="color:#0369a1;background:#e0f2fe;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:600;display:inline-block;margin:4px 0 6px 0;">
-                📐 Recommended Resolution: 1920 × 350 px (Fixed 350px Height). The banner height remains fixed; taller images fit cleanly without being cropped.
+                📐 Recommended Resolution: 1920 × 720 px (1920x720 Aspect Ratio). The banner maintains this proportion across screens without squishing.
               </small>
               <input type="file" name="hero_banner" accept="image/*">
               @php

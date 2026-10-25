@@ -233,8 +233,8 @@ class WebsiteCmsTest extends TestCase
         $homeResponse = $this->get(route('home'));
         $homeResponse->assertOk();
         $homeResponse->assertSee('hero-slider-wrap');
-        $homeResponse->assertSee('height: 350px !important;');
-        $homeResponse->assertSee('object-fit: fill !important;');
+        $homeResponse->assertSee('aspect-ratio: 1920 / 720;');
+        $homeResponse->assertSee('object-fit: cover !important;');
         $homeResponse->assertSee('Institute Background');
         $homeResponse->assertSee('About us');
         $homeResponse->assertDontSee('class="section-kicker">ABOUT US');
@@ -246,7 +246,7 @@ class WebsiteCmsTest extends TestCase
         // 4. Verify Admin Settings page displays recommended resolution badges
         $settingsResponse = $this->actingAs($admin)->get(route('admin.settings'));
         $settingsResponse->assertOk();
-        $settingsResponse->assertSee('📐 Recommended Resolution: 1920 × 350 px');
+        $settingsResponse->assertSee('📐 Recommended Resolution: 1920 × 720 px');
         $settingsResponse->assertSee('📐 Recommended Resolution: 1000 × 650 px');
         $settingsResponse->assertSee('📐 Recommended: 800 × 500 px');
     }
@@ -392,7 +392,7 @@ class WebsiteCmsTest extends TestCase
         $indexResponse->assertSee('＋ Add Slide');
 
         // 2. Add a new 4th slide
-        $fakeBanner = \Illuminate\Http\UploadedFile::fake()->image('custom_smart_lab.jpg', 1920, 350);
+        $fakeBanner = \Illuminate\Http\UploadedFile::fake()->image('custom_smart_lab.jpg', 1920, 720);
         $createResponse = $this->actingAs($admin)->post(route('admin.content.store', 'hero_slides'), [
             'title' => 'Smart Industry 4.0 Lab',
             'category' => 'High Tech',
