@@ -673,4 +673,55 @@ class WebsiteCmsTest extends TestCase
         $contact->assertOk();
         $contact->assertSee('Dynamic Connect With Our Team');
     }
+
+    public function test_user_password_change_by_admin_allows_successful_login(): void
+    {
+        $this->seed();
+
+        $superAdmin = User::firstOrCreate(
+            ['email' => 'admin_super@mctsc.test'],
+            ['name' => 'Super Admin', 'password' => 'Passw0rd!123', 'is_admin' => true]
+        );
+
+        $role = \App\Models\Role::firstOrCreate(
+            ['slug' => 'institute-head'],
+            ['name' => 'Head of Institute', 'description' => 'Institute Head', 'is_system' => false, 'permissions' => []]
+        );
+
+        // 1. Create a user with non-system-admin role
+        $staffUser = User::create([
+            'name' => 'Amran Hossain',
+            'email' => 'imran.test@mctsc.test',
+            'password' => 'OldPass123!',
+            'role_id' => $role->id,
+            'is_admin' => false,
+            'status' => 'active',
+        ]);
+
+        // 2. Admin updates the user's password via UserController@update
+        $updateResponse = $this->actingAs($superAdmin)->put(route('admin.users.update', $staffUser), [
+            'name' => 'Amran Hossain',
+            'email' => 'imran.test@mctsc.test',
+            'role_id' => $role->id,
+            'status' => 'active',
+            'password' => 'NewSecurePass2026!',
+        ]);
+        $updateResponse->assertRedirect(route('admin.users.index'));
+
+        // Refresh model from DB
+        $staffUser->refresh();
+        $this->assertTrue(\Illuminate\Support\Facades\Hash::check('NewSecurePass2026!', $staffUser->password));
+        $this->assertTrue($staffUser->canAccessAdmin());
+
+        // 3. User attempts to login via AuthController@store with the new password
+        $this->post(route('admin.logout'));
+
+        $loginResponse = $this->post(route('admin.login.store'), [
+            'email' => 'imran.test@mctsc.test',
+            'password' => 'NewSecurePass2026!',
+        ]);
+
+        $loginResponse->assertRedirect(route('admin.dashboard'));
+        $this->assertAuthenticatedAs($staffUser);
+    }
 }

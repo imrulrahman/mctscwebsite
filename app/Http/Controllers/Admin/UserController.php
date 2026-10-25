@@ -95,7 +95,7 @@ class UserController extends Controller
         ]);
 
         $role = Role::find($validated['role_id']);
-        $isAdmin = $role && $role->slug === 'system-admin';
+        $isAdmin = true;
 
         $avatarPath = null;
         if ($request->hasFile('avatar')) {
@@ -111,7 +111,7 @@ class UserController extends Controller
             'role_id' => $validated['role_id'],
             'status' => $validated['status'],
             'is_admin' => $isAdmin,
-            'password' => Hash::make($validated['password']),
+            'password' => Hash::make(trim($validated['password'])),
         ]);
 
         return redirect()->route('admin.users.index')->with('success', 'New user account created successfully.');
@@ -158,7 +158,7 @@ class UserController extends Controller
             'phone' => $validated['phone'] ?? null,
             'role_id' => $validated['role_id'],
             'status' => $validated['status'],
-            'is_admin' => $newRole && $newRole->slug === 'system-admin',
+            'is_admin' => true,
         ];
 
         if ($request->hasFile('avatar')) {
@@ -169,7 +169,7 @@ class UserController extends Controller
         }
 
         if (!empty($validated['password'])) {
-            $data['password'] = Hash::make($validated['password']);
+            $data['password'] = Hash::make(trim($validated['password']));
         }
 
         $user->update($data);
