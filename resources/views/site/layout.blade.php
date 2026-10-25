@@ -287,6 +287,26 @@
       color: rgba(255, 255, 255, 0.75);
     }
 
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(14px, 1.8vw, 24px) !important;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .main-nav a {
+      white-space: nowrap !important;
+    }
+    @media (max-width: 1100px) and (min-width: 681px) {
+      .main-nav {
+        gap: 12px !important;
+        font-size: 13px !important;
+      }
+      .brand {
+        font-size: 14px !important;
+      }
+    }
     @media (max-width: 900px) {
       .site-footer .footer-main {
         grid-template-columns: 1fr !important;
@@ -448,7 +468,7 @@
       <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
       <nav class="main-nav" aria-label="Primary navigation">
         <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
-        <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}</a>
+        <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}" style="white-space: nowrap;">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}</a>
         <a class="{{ request()->routeIs('courses') ? 'active' : '' }}" href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
         <a class="{{ request()->routeIs('projects') ? 'active' : '' }}" href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
         <a class="{{ request()->routeIs('apply') ? 'active' : '' }}" href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>

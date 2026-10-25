@@ -26,6 +26,7 @@ class PermissionManager
                 'permissions' => [
                     'courses.manage' => 'Manage Courses',
                     'projects.manage' => 'Manage Projects',
+                    'partners.manage' => 'Manage Development Partners',
                 ],
             ],
             'notices_events' => [
@@ -111,6 +112,7 @@ class PermissionManager
                 'admissions.print',
                 'courses.manage',
                 'projects.manage',
+                'partners.manage',
                 'notices.manage',
                 'events.manage',
                 'gallery.manage',
@@ -131,6 +133,7 @@ class PermissionManager
             'content-editor' => [
                 'courses.manage',
                 'projects.manage',
+                'partners.manage',
                 'notices.manage',
                 'events.manage',
                 'gallery.manage',

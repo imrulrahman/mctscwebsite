@@ -716,6 +716,26 @@
     .toggle-slider-track.is-bn .toggle-slider-knob {
       transform: translateX(25px);
     }
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(14px, 1.8vw, 24px) !important;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .main-nav a {
+      white-space: nowrap !important;
+    }
+    @media (max-width: 1100px) and (min-width: 681px) {
+      .main-nav {
+        gap: 12px !important;
+        font-size: 13px !important;
+      }
+      .brand {
+        font-size: 14px !important;
+      }
+    }
     @media (max-width: 680px) {
       .header-right-group {
         gap: 8px;
@@ -752,7 +772,7 @@
       <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
       <nav class="main-nav" aria-label="Primary navigation">
         <a class="active" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
-        <a href="{{ route('about') }}">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}</a>
+        <a href="{{ route('about') }}" style="white-space: nowrap;">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}</a>
         <a href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
         <a href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
         <a href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>
@@ -951,30 +971,55 @@
       </div>
     </div>
 
+    @php
+      $activePartners = ($partners ?? collect())->isNotEmpty() ? $partners->map(function($p) {
+          return [
+              'title' => $p->title,
+              'category' => $p->category,
+              'image' => storage_asset($p->image, 'assets/partners/asset_project.svg'),
+              'url' => $p->excerpt ?: null,
+          ];
+      }) : collect([
+          ['title' => 'ASSET Project', 'category' => 'DTE / World Bank', 'image' => asset('assets/partners/asset_project.svg'), 'url' => null],
+          ['title' => 'BRAC', 'category' => 'POWER_kfw-BRAC', 'image' => asset('assets/partners/brac.png'), 'url' => null],
+          ['title' => 'UNDP', 'category' => 'UPPR - UNDP', 'image' => asset('assets/partners/undp.png'), 'url' => null],
+          ['title' => 'ILO', 'category' => 'International Labour Organization', 'image' => asset('assets/partners/ilo.svg'), 'url' => null],
+          ['title' => 'ECHO', 'category' => 'European Civil Protection & Humanitarian Aid Operations', 'image' => asset('assets/partners/echo.png'), 'url' => null],
+          ['title' => 'MAA International', 'category' => 'MAA International', 'image' => asset('assets/partners/maa_international.png'), 'url' => null],
+          ['title' => 'SOS Children\'s Villages', 'category' => 'SOS Children\'s Villages', 'image' => asset('assets/partners/sos.svg'), 'url' => null],
+          ['title' => 'PAA', 'category' => 'PAA', 'image' => asset('assets/partners/paa.png'), 'url' => null],
+          ['title' => 'KfW Development Bank', 'category' => 'KfW', 'image' => asset('assets/partners/partner_kfw.png'), 'url' => null],
+      ]);
+    @endphp
+
     <!-- Infinite Scrolling Partner Cards (Exact CSS & Structure as impactini.org) -->
     <div class="imi-lmq" aria-label="Development Partners Carousel">
       <div class="imi-lmq-in">
         <!-- Set 1: Partner Logos -->
-        <div class="imi-lcard" title="ASSET Project (DTE / World Bank)"><img src="{{ asset('assets/partners/asset_project.svg') }}" alt="ASSET Project"></div>
-        <div class="imi-lcard" title="BRAC / POWER_kfw-BRAC"><img src="{{ asset('assets/partners/brac.png') }}" alt="BRAC"></div>
-        <div class="imi-lcard" title="UPPR - UNDP"><img src="{{ asset('assets/partners/undp.png') }}" alt="UNDP"></div>
-        <div class="imi-lcard" title="ILO - International Labour Organization"><img src="{{ asset('assets/partners/ilo.svg') }}" alt="ILO"></div>
-        <div class="imi-lcard" title="ECHO - European Civil Protection & Humanitarian Aid Operations"><img src="{{ asset('assets/partners/echo.png') }}" alt="ECHO"></div>
-        <div class="imi-lcard" title="MAA International"><img src="{{ asset('assets/partners/maa_international.png') }}" alt="MAA International"></div>
-        <div class="imi-lcard" title="SOS Children's Villages"><img src="{{ asset('assets/partners/sos.svg') }}" alt="SOS Children's Villages"></div>
-        <div class="imi-lcard" title="PAA"><img src="{{ asset('assets/partners/paa.png') }}" alt="PAA"></div>
-        <div class="imi-lcard" title="KfW Development Bank"><img src="{{ asset('assets/partners/partner_kfw.png') }}" alt="KfW"></div>
+        @foreach($activePartners as $p)
+          <div class="imi-lcard" title="{{ $p['title'] }}{{ !empty($p['category']) ? ' (' . $p['category'] . ')' : '' }}">
+            @if(!empty($p['url']))
+              <a href="{{ $p['url'] }}" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+                <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}">
+              </a>
+            @else
+              <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}">
+            @endif
+          </div>
+        @endforeach
 
         <!-- Set 2: Duplicate Set for Seamless Continuous Sliding Loop -->
-        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/asset_project.svg') }}" alt="ASSET Project"></div>
-        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/brac.png') }}" alt="BRAC"></div>
-        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/undp.png') }}" alt="UNDP"></div>
-        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/ilo.svg') }}" alt="ILO"></div>
-        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/echo.png') }}" alt="ECHO"></div>
-        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/maa_international.png') }}" alt="MAA International"></div>
-        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/sos.svg') }}" alt="SOS Children's Villages"></div>
-        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/paa.png') }}" alt="PAA"></div>
-        <div class="imi-lcard" aria-hidden="true"><img src="{{ asset('assets/partners/partner_kfw.png') }}" alt="KfW"></div>
+        @foreach($activePartners as $p)
+          <div class="imi-lcard" aria-hidden="true">
+            @if(!empty($p['url']))
+              <a href="{{ $p['url'] }}" target="_blank" rel="noopener noreferrer" tabindex="-1" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+                <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}">
+              </a>
+            @else
+              <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}">
+            @endif
+          </div>
+        @endforeach
       </div>
     </div>
   </section>

@@ -13,12 +13,22 @@ use Illuminate\View\View;
 
 class ContentController extends Controller
 {
-    public const SECTIONS = ['courses', 'projects', 'notices', 'events', 'gallery'];
-    public const LABELS = ['courses' => 'Courses', 'projects' => 'Projects', 'notices' => 'Notices', 'events' => 'Events', 'gallery' => 'Gallery'];
+    public const SECTIONS = ['courses', 'projects', 'notices', 'events', 'gallery', 'partners'];
+    public const LABELS = ['courses' => 'Courses', 'projects' => 'Projects', 'notices' => 'Notices', 'events' => 'Events', 'gallery' => 'Gallery', 'partners' => 'Development Partners'];
 
     private function check(string $section): void
     {
         abort_unless(in_array($section, self::SECTIONS, true), 404);
+
+        if ($section === 'partners') {
+            $user = auth()->user();
+            $canAccess = $user?->is_admin
+                || $user?->can('partners.manage')
+                || $user?->can('projects.manage')
+                || $user?->can('settings.manage');
+            abort_unless($canAccess, 403, 'এই সেকশনে এক্সেস করার অনুমতি আপনার অ্যাকাউন্টে নেই।');
+            return;
+        }
 
         $permission = match ($section) {
             'courses' => 'courses.manage',
@@ -57,6 +67,7 @@ class ContentController extends Controller
         $data['section'] = $section;
         $data['slug'] = $this->uniqueSlug($data['title']);
         SiteContent::create($data);
+        $this->clearCaches();
         return redirect()->route('admin.content.index', $section)->with('success', 'নতুন কনটেন্ট সংরক্ষিত হয়েছে।');
     }
 
@@ -83,6 +94,7 @@ class ContentController extends Controller
         }
         $data['slug'] = $this->uniqueSlug($data['title'], $content->id);
         $content->update($data);
+        $this->clearCaches();
         return redirect()->route('admin.content.index', $section)->with('success', 'পরিবর্তন সংরক্ষিত হয়েছে।');
     }
 
@@ -96,7 +108,18 @@ class ContentController extends Controller
             if (file_exists($oldPub)) @unlink($oldPub);
         }
         $content->delete();
+        $this->clearCaches();
         return back()->with('success', 'কনটেন্ট মুছে ফেলা হয়েছে।');
+    }
+
+    private function clearCaches(): void
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('view:clear');
+            \Illuminate\Support\Facades\Artisan::call('cache:clear');
+        } catch (\Throwable $e) {
+            // Ignore if artisan calls fail
+        }
     }
 
     private function mirrorToPublic(string $path): void
@@ -132,7 +155,7 @@ class ContentController extends Controller
             'sort_order' => ['nullable', 'integer', 'min:0', 'max:9999'],
             'starts_at' => ['nullable', 'date'],
             'ends_at' => ['nullable', 'date', 'after_or_equal:starts_at'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:5120'],
         ]) + ['sort_order' => $request->integer('sort_order', 0)];
     }
 

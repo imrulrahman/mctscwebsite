@@ -20,15 +20,15 @@
 
     <div class="field-grid">
       <label>
-        Title <span>*</span>
-        <input name="title" required maxlength="180" value="{{ old('title', $item->title) }}" placeholder="Enter title">
+        {{ $section === 'partners' ? 'Partner Name / উন্নয়ন সহযোগীর নাম' : 'Title' }} <span>*</span>
+        <input name="title" required maxlength="180" value="{{ old('title', $item->title) }}" placeholder="{{ $section === 'partners' ? 'e.g. BRAC, UNDP, ILO, ASSET Project' : 'Enter title' }}">
         @error('title')
           <small class="field-error">{{ $message }}</small>
         @enderror
       </label>
       <label>
-        Category / Type
-        <input name="category" maxlength="120" value="{{ old('category', $item->category) }}" placeholder="e.g. Training Initiative, IT & Computer">
+        {{ $section === 'partners' ? 'Affiliation / Program Subtitle (কর্মসূচি/অংশীদারিত্ব)' : 'Category / Type' }}
+        <input name="category" maxlength="120" value="{{ old('category', $item->category) }}" placeholder="{{ $section === 'partners' ? 'e.g. POWER_kfw-BRAC, UPPR - UNDP, DTE / World Bank' : 'e.g. Training Initiative, IT & Computer' }}">
       </label>
     </div>
 
@@ -44,31 +44,38 @@
       </div>
     @endif
 
-    <label>
-      Short Description / Excerpt
-      <textarea name="excerpt" rows="3" maxlength="1000" placeholder="Brief summary for cards...">{{ old('excerpt', $item->excerpt) }}</textarea>
-    </label>
+    @if($section === 'partners')
+      <label>
+        Partner Website / Program Link (ওয়েবসাইট লিঙ্ক - ঐচ্ছিক)
+        <input type="url" name="excerpt" maxlength="1000" value="{{ old('excerpt', $item->excerpt) }}" placeholder="https://www.brac.net (লোগোতে ক্লিক করলে এই ঠিকানায় যাবে)">
+      </label>
+    @else
+      <label>
+        Short Description / Excerpt
+        <textarea name="excerpt" rows="3" maxlength="1000" placeholder="Brief summary for cards...">{{ old('excerpt', $item->excerpt) }}</textarea>
+      </label>
 
-    <label>
-      Details / Full Body Content
-      <textarea name="body" rows="6" placeholder="Full details, syllabus or info...">{{ old('body', $item->body) }}</textarea>
-    </label>
+      <label>
+        Details / Full Body Content
+        <textarea name="body" rows="6" placeholder="Full details, syllabus or info...">{{ old('body', $item->body) }}</textarea>
+      </label>
+    @endif
 
-    @if(in_array($section, ['courses', 'gallery', 'projects']))
+    @if(in_array($section, ['courses', 'gallery', 'projects', 'partners']))
       <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin:10px 0;">
         <label>
-          <strong>{{ $section === 'projects' ? 'Project Logo / Image' : 'Featured Image' }}</strong> (JPG, PNG, WEBP, SVG; up to 4 MB)
-          <input type="file" name="image" accept="image/*">
+          <strong>{{ $section === 'partners' ? 'Partner Logo / পার্টনার লোগো' : ($section === 'projects' ? 'Project Logo / Image' : 'Featured Image') }}</strong> (PNG, SVG, JPG, WEBP; up to 5 MB)
+          <input type="file" name="image" accept="image/*,.svg">
           <small style="color:#0369a1;background:#e0f2fe;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:600;display:inline-block;margin-top:4px;">
-            📐 Recommended Resolution: {{ $section === 'gallery' ? '1200 × 800 px or 1920 × 1080 px (Landscape)' : ($section === 'projects' ? '300 × 300 px (Square PNG)' : '800 × 500 px (16:10 Ratio)') }}
+            📐 Recommended: {{ $section === 'partners' ? '240 × 80 px (Transparent PNG or SVG vector)' : ($section === 'gallery' ? '1200 × 800 px or 1920 × 1080 px (Landscape)' : ($section === 'projects' ? '300 × 300 px (Square PNG)' : '800 × 500 px (16:10 Ratio)')) }}
           </small>
           @if($item->image)
             <div style="margin-top:10px;display:flex;align-items:center;gap:12px;">
               @php
                 $imgSrc = storage_asset($item->image);
               @endphp
-              <img src="{{ $imgSrc }}" alt="Current" style="height:55px;max-width:120px;object-fit:contain;border:1px solid #ccd;background:#fff;padding:3px;border-radius:4px;">
-              <small class="subline" style="color:#555;">Current image: {{ basename($item->image) }}</small>
+              <img src="{{ $imgSrc }}" alt="Current" style="height:55px;max-width:140px;object-fit:contain;border:1px solid #ccd;background:#fff;padding:4px 8px;border-radius:4px;">
+              <small class="subline" style="color:#555;">Current: {{ basename($item->image) }}</small>
             </div>
           @endif
           @error('image')

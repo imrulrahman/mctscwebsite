@@ -287,4 +287,88 @@ class WebsiteCmsTest extends TestCase
         $homeResponse->assertOk();
         $homeResponse->assertSee($savedPath);
     }
+
+    public function test_about_us_nav_link_is_single_line_with_nowrap(): void
+    {
+        $homeResponse = $this->get(route('home'));
+        $homeResponse->assertOk();
+        $homeResponse->assertSee('style="white-space: nowrap;"', false);
+        $homeResponse->assertSee('white-space: nowrap !important;', false);
+
+        $aboutResponse = $this->get(route('about'));
+        $aboutResponse->assertOk();
+        $aboutResponse->assertSee('style="white-space: nowrap;"', false);
+        $aboutResponse->assertSee('white-space: nowrap !important;', false);
+    }
+
+    public function test_admin_can_manage_development_partners_full_crud(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $admin = User::first() ?? User::create([
+            'name' => 'Partners Admin',
+            'email' => 'partners_admin@test.local',
+            'password' => 'Passw0rd!123',
+            'is_admin' => true,
+            'is_system_admin' => true,
+            'is_active' => true,
+        ]);
+
+        // 1. View partners index
+        $indexResponse = $this->actingAs($admin)->get(route('admin.content.index', 'partners'));
+        $indexResponse->assertOk();
+        $indexResponse->assertSee('Development Partners');
+        $indexResponse->assertSee('＋ Add Partner');
+
+        // 2. Create a new partner
+        $fakeLogo = \Illuminate\Http\UploadedFile::fake()->image('global_aid_logo.png', 240, 80);
+        $createResponse = $this->actingAs($admin)->post(route('admin.content.store', 'partners'), [
+            'title' => 'Global Aid Alliance',
+            'category' => 'Youth Vocational Skills',
+            'excerpt' => 'https://globalaid.org',
+            'image' => $fakeLogo,
+            'sort_order' => 12,
+            'status' => 'published',
+        ]);
+        $createResponse->assertRedirect(route('admin.content.index', 'partners'));
+        $createResponse->assertSessionHas('success');
+
+        $this->assertDatabaseHas('site_contents', [
+            'section' => 'partners',
+            'title' => 'Global Aid Alliance',
+            'category' => 'Youth Vocational Skills',
+        ]);
+
+        $createdPartner = \App\Models\SiteContent::where('section', 'partners')->where('title', 'Global Aid Alliance')->first();
+        $this->assertNotNull($createdPartner);
+
+        // 3. Verify it shows on homepage marquee
+        $homeResponse = $this->get(route('home'));
+        $homeResponse->assertOk();
+        $homeResponse->assertSee('Global Aid Alliance');
+        $homeResponse->assertSee('https://globalaid.org');
+
+        // 4. Edit the partner
+        $editResponse = $this->actingAs($admin)->put(route('admin.content.update', ['section' => 'partners', 'content' => $createdPartner]), [
+            'title' => 'Global Aid Alliance International',
+            'category' => 'TVET Empowerment Project',
+            'excerpt' => 'https://globalaid.org/tvet',
+            'sort_order' => 15,
+            'status' => 'published',
+        ]);
+        $editResponse->assertRedirect(route('admin.content.index', 'partners'));
+        $this->assertDatabaseHas('site_contents', [
+            'section' => 'partners',
+            'title' => 'Global Aid Alliance International',
+            'category' => 'TVET Empowerment Project',
+        ]);
+
+        // 5. Delete the partner
+        $deleteResponse = $this->actingAs($admin)->delete(route('admin.content.destroy', ['section' => 'partners', 'content' => $createdPartner]));
+        $deleteResponse->assertRedirect();
+        $this->assertDatabaseMissing('site_contents', [
+            'section' => 'partners',
+            'title' => 'Global Aid Alliance International',
+        ]);
+    }
 }

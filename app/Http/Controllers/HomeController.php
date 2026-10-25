@@ -16,6 +16,7 @@ class HomeController extends Controller
         return view('home', [
             'courses' => $published('courses', 4),
             'projects' => $published('projects', 6),
+            'partners' => $published('partners', 50),
             'notices' => $published('notices', 8),
             'events' => $published('events', 3),
             'gallery' => $published('gallery', 12),
