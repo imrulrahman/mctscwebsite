@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', HomeController::class)->name('home');
 Route::get('/about', [SitePageController::class, 'about'])->name('about');
+Route::get('/infrastructure', [SitePageController::class, 'infrastructure'])->name('infrastructure');
 Route::get('/courses', [SitePageController::class, 'courses'])->name('courses');
 Route::get('/projects', [SitePageController::class, 'projects'])->name('projects');
 Route::get('/notices', [SitePageController::class, 'notices'])->name('notices');
@@ -75,6 +76,7 @@ Route::get('/deploy-update', function () {
 Route::prefix('MNCTSC')->group(function () {
     Route::get('/', HomeController::class);
     Route::get('/about', [SitePageController::class, 'about']);
+    Route::get('/infrastructure', [SitePageController::class, 'infrastructure']);
     Route::get('/courses', [SitePageController::class, 'courses']);
     Route::get('/projects', [SitePageController::class, 'projects']);
     Route::get('/notices', [SitePageController::class, 'notices']);

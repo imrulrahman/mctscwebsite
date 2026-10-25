@@ -204,13 +204,23 @@ class WebsiteCmsTest extends TestCase
         $about->assertSee('Legal Status');
         $about->assertSee('70102');
         $about->assertSee('STP-CHA-000135');
-        $about->assertSee('Founding Vision');
-        $about->assertDontSee('Our Founding Vision');
+        $about->assertDontSee('Founding Vision');
+        $about->assertDontSee('Vision for the Future');
+        $about->assertDontSee('Building Skills. Unlocking Potential. Shaping Futures.');
+        $about->assertDontSee('Institutional Registration and Identification');
         $about->assertDontSee('Skills for a Better Tomorrow');
         $about->assertSee('Apply for Admission');
         $about->assertSee('Industry Partnerships for Employment and Career Development');
         $about->assertSee('Alert Fashion Ltd.');
         $about->assertSee('Hotel New View');
+        $about->assertSee('1224');
+
+        $infr = $this->get(route('infrastructure'))->assertOk();
+        $infr->assertSee('Infrastructure');
+        $infr->assertSee('Training Facilities');
+        $infr->assertSee('Theory Classrooms');
+        $infr->assertSee('Training Capacity at a Glance');
+        $infr->assertSee('17,000 sq. ft.');
 
         $this->get(route('courses'))->assertOk()->assertSee('Courses');
         $this->get(route('projects'))->assertOk()->assertSee('Projects');

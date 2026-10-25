@@ -21,6 +21,12 @@ class SitePageController extends Controller
         return view('site.about', compact('settings', 'gallery'));
     }
 
+    public function infrastructure(): View
+    {
+        $settings = $this->getSettings();
+        return view('site.infrastructure', compact('settings'));
+    }
+
     public function courses(): View
     {
         $settings = $this->getSettings();

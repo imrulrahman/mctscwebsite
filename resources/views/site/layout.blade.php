@@ -94,10 +94,21 @@
       }
     }
 
-    .main-nav .nav-cta {
-      padding: 10px 18px !important;
-      white-space: nowrap !important;
+    .main-nav {
+      gap: 16px !important;
       font-size: 13.5px !important;
+    }
+    @media (max-width: 1280px) {
+      .main-nav {
+        gap: 11px !important;
+        font-size: 12.5px !important;
+      }
+    }
+
+    .main-nav .nav-cta {
+      padding: 9px 16px !important;
+      white-space: nowrap !important;
+      font-size: 13px !important;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -478,6 +489,7 @@
       <nav class="main-nav" aria-label="Primary navigation">
         <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
         <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}" style="white-space: nowrap;">{{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }}</a>
+        <a class="{{ request()->routeIs('infrastructure') ? 'active' : '' }}" href="{{ route('infrastructure') }}" style="white-space: nowrap;">{{ $isBn ? 'অবকাঠামো' : 'Infrastructure' }}</a>
         <a class="{{ request()->routeIs('courses') ? 'active' : '' }}" href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
         <a class="{{ request()->routeIs('projects') ? 'active' : '' }}" href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
         <a class="{{ request()->routeIs('apply') ? 'active' : '' }}" href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>

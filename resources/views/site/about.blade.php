@@ -5,7 +5,6 @@
 
 @section('title', $isBn ? 'আমাদের সম্পর্কে · এমসি টেকনিক্যাল স্কুল এন্ড কলেজ' : 'About Us · MC Technical School & College')
 @section('page_title', $isBn ? 'এমসি টেকনিক্যাল স্কুল এন্ড কলেজ পরিচিতি' : 'About MC Technical School & College')
-@section('page_subtitle', $isBn ? 'দক্ষতা অর্জন · সুপ্ত সম্ভাবনার বিকাশ · ভবিষ্যৎ বিনির্মাণ' : 'Building Skills. Unlocking Potential. Shaping Futures.')
 
 @section('content')
 @php
@@ -208,12 +207,9 @@
     <!-- 1. INTRO (HERITAGE & FOUNDATION) WITH WRAP-AROUND IMAGE -->
     <div style="margin-bottom: 54px;">
       <span class="section-kicker">{{ $settings['about_intro_kicker'] ?? ($isBn ? 'ভূমিকা' : 'INTRODUCTION') }}</span>
-      <h2 style="font-family: var(--serif); font-size: 30px; color: var(--green); margin: 6px 0 8px 0; line-height: 1.25;">
+      <h2 style="font-family: var(--serif); font-size: 30px; color: var(--green); margin: 6px 0 16px 0; line-height: 1.25;">
         {{ $settings['about_intro_title'] ?? ($isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Mahmudunnabi Chowdhury Technical School & College') }}
       </h2>
-      <p style="color: var(--gold); font-weight: 700; font-size: 15px; margin: 0 0 16px 0; letter-spacing: 0.3px;">
-        {{ $settings['about_intro_subtitle'] ?? ($isBn ? 'দক্ষতা অর্জন · সুপ্ত সম্ভাবনার বিকাশ · ভবিষ্যৎ বিনির্মাণ' : 'Building Skills. Unlocking Potential. Shaping Futures.') }}
-      </p>
       <div class="gold-rule" style="width: 50px; height: 3px; background: var(--gold); margin-bottom: 22px;"></div>
 
       <!-- Floated Image (Text wraps around it and expands full width below) -->
@@ -409,10 +405,6 @@
           : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) operates within the relevant regulatory and institutional framework for technical education and skills development in Bangladesh. The institution maintains registration, identification, and accreditation records with the relevant authorities to support its educational, training, and administrative activities.' }}
       </p>
 
-      <h3 style="font-family: var(--serif); font-size: 19px; color: var(--green); margin: 0 0 14px 0;">
-        {{ $isBn ? 'প্রাতিষ্ঠানিক নিবন্ধন ও পরিচিতি' : 'Institutional Registration and Identification' }}
-      </h3>
-
       <div style="overflow-x: auto; margin-bottom: 20px;">
         <table class="legal-table">
           <thead>
@@ -441,10 +433,6 @@
             <tr>
               <td><strong>Business Identification Number (BIN/VAT)</strong></td>
               <td><span class="legal-badge" style="background:#f1f5f9; color:#1e293b;">001583568</span></td>
-            </tr>
-            <tr>
-              <td><strong>NGO Affairs Bureau</strong> – Impact Initiative</td>
-              <td><span class="legal-badge" style="background:#f1f5f9; color:#1e293b;">1224</span></td>
             </tr>
           </tbody>
         </table>
@@ -479,40 +467,7 @@
       </p>
     </div>
 
-    <!-- 5. DUAL VISION CARDS (FOUNDING VISION & FUTURE VISION) -->
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-bottom: 48px;">
-      <!-- Founding Vision -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid var(--green); border-radius: 10px; padding: 30px; box-shadow: 0 4px 14px rgba(0,0,0,0.04);">
-        <div style="font-size: 32px; margin-bottom: 12px;">🎯</div>
-        <h3 style="font-family: var(--serif); font-size: 21px; color: var(--green); margin: 0 0 12px 0;">
-          {{ $isBn ? 'প্রতিষ্ঠাকালীন লক্ষ্য ও দর্শন' : 'Founding Vision' }}
-        </h3>
-        <p style="font-size: 15px; color: #475569; line-height: 1.75; margin: 0;">
-          @if($isBn)
-            আমরা বিশ্বাস করি যে মানসম্মত কারিগরি শিক্ষা মানুষের জীবন বদলে দিতে পারে। তরুণ সমাজকে বাস্তব জ্ঞান ও শিল্প-উপযোগী দক্ষতায় দক্ষ করে তোলার মাধ্যমে আমাদের লক্ষ্য তাদেরকে অর্থবহ ও সম্মানজনক কর্মসংস্থান খুঁজে পেতে, আত্মনির্ভরশীলতা অর্জন করতে এবং বাংলাদেশের সামগ্রিক আর্থ-সামাজিক উন্নয়নে সক্রিয় অবদান রাখতে সহায়তা করা।
-          @else
-            We believe that quality technical education can transform lives. By equipping young people with practical knowledge and industry-relevant skills, we aim to help them pursue meaningful employment, achieve greater self-reliance and contribute to the socioeconomic development of Bangladesh.
-          @endif
-        </p>
-      </div>
-
-      <!-- Vision for the Future -->
-      <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid var(--gold); border-radius: 10px; padding: 30px; box-shadow: 0 4px 14px rgba(0,0,0,0.04);">
-        <div style="font-size: 32px; margin-bottom: 12px;">🚀</div>
-        <h3 style="font-family: var(--serif); font-size: 21px; color: var(--green); margin: 0 0 12px 0;">
-          {{ $isBn ? 'ভবিষ্যতের রূপকল্প ও প্রত্যয়' : 'Vision for the Future' }}
-        </h3>
-        <p style="font-size: 15px; color: #475569; line-height: 1.75; margin: 0;">
-          @if($isBn)
-            আমরা মানসম্মত কারিগরি প্রশিক্ষণের সুযোগকে আরও বিস্তৃত করতে চাই, যাতে শিক্ষার্থীরা বাস্তবমুখী দক্ষতায় সমৃদ্ধ হয়ে টেকসই জীবিকা গড়ে তুলতে পারে। আমাদের চূড়ান্ত লক্ষ্য এমন এক দক্ষ কর্মীবাহিনী গড়ে তোলা যা সমাজকে শক্তিশালী করবে এবং সমৃদ্ধ বাংলাদেশের অগ্রযাত্রাকে বেগবান রাখবে।
-          @else
-            We aspire to expand access to quality skills training, empower learners with practical competencies and help them build sustainable livelihoods. Our goal is to contribute to a skilled workforce that can strengthen communities and support the continued development of Bangladesh.
-          @endif
-        </p>
-      </div>
-    </div>
-
-    <!-- 6. PARTNERSHIP WITH IMPACT INITIATIVE (IMI) -->
+    <!-- 5. PARTNERSHIP WITH IMPACT INITIATIVE (IMI) -->
     <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 32px 36px; margin-bottom: 48px;">
       <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
         <span style="font-size: 28px;">🤝</span>
@@ -528,14 +483,14 @@
       <div style="font-size: 15px; line-height: 1.8; color: #166534;">
         @if($isBn)
           <p style="margin-bottom: 12px;">
-            <strong>১৯৯৫ সালে</strong> প্রতিষ্ঠিত <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI)</strong> বাংলাদেশের একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।
+            <strong>১৯৯৫ সালে</strong> প্রতিষ্ঠিত <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI)</strong> গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের প্রধানমন্ত্রীর কার্যালয়াধীন <strong>এনজিও বিষয়ক ব্যুরো (নিবন্ধন নং: ১২২৪)</strong> কর্তৃক নিবন্ধিত একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।
           </p>
           <p style="margin: 0; font-weight: 600;">
             এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে।
           </p>
         @else
           <p style="margin-bottom: 12px;">
-            Established in <strong>1995</strong>, <strong>Impact Initiative (IMI)</strong> is a national humanitarian and development organization in Bangladesh. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.
+            Established in <strong>1995</strong>, <strong>Impact Initiative (IMI)</strong> is a national humanitarian and development organization in Bangladesh, registered with the <strong>NGO Affairs Bureau (Registration No: 1224)</strong> under the Prime Minister's Office. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.
           </p>
           <p style="margin: 0; font-weight: 600;">
             Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.
