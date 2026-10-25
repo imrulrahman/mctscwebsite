@@ -46,9 +46,6 @@
         <div style="background: #ffffff; border: 1px solid #d8e4dc; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.05); display: flex; flex-direction: column; transition: transform 0.2s, box-shadow 0.2s;">
           <div style="position: relative; overflow: hidden;">
             <img src="{{ $cImg }}" alt="{{ $cTitle }}" style="width: 100%; height: 180px; object-fit: cover; display: block;">
-            <span style="position: absolute; top: 12px; right: 12px; background: rgba(15, 81, 50, 0.9); color: #fff; font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 4px; letter-spacing: 0.5px;">
-              BTEB / NSDA
-            </span>
           </div>
 
           <div style="padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
