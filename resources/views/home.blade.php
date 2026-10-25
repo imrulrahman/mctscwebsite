@@ -1278,14 +1278,113 @@
           @else
             @if($isBn)
               <p style="margin: 0; font-weight: 600;">
-                এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে।
+                এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে। প্রতিষ্ঠানের কোয়ালিটি এস্যুরেন্স (গুণগত মান নিশ্চিতকরণ)-এর জন্য নিম্নোক্ত ম্যানেজমেন্ট কমিটি গঠন করা হয়েছে।
               </p>
             @else
               <p style="margin: 0; font-weight: 600;">
-                Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.
+                Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training. For Quality Assurance of the institute, the following Management Committee has been formed.
               </p>
             @endif
           @endif
+
+          <!-- Governance / Management Committee for Quality Assurance (CMS Powered & Fully Editable) -->
+          <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed #86efac;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+              <h4 style="font-family: var(--serif); font-size: 20px; color: #14532d; margin: 0; display: flex; align-items: center; gap: 8px;">
+                <span>👥</span> <em>{{ $settings->get('gov_committee_title') ?: ($isBn ? 'পরিচালনা ও ব্যবস্থাপনা কমিটি (Governance / Management Committee)' : 'Governance / Management Committee') }}</em>
+              </h4>
+              <span style="font-size: 12px; font-weight: 700; color: #166534; background: #dcfce7; padding: 4px 10px; border-radius: 4px; border: 1px solid #bbf7d0; text-transform: uppercase; letter-spacing: 0.5px;">
+                {{ $isBn ? 'কোয়ালিটি এস্যুরেন্স বডি' : 'Quality Assurance' }}
+              </span>
+            </div>
+            <p style="font-size: 14.5px; line-height: 1.65; color: #166534; margin: 0 0 16px 0;">
+              @if($isBn && !empty($settings->get('gov_committee_intro_bn')))
+                {{ $settings->get('gov_committee_intro_bn') }}
+              @elseif(!empty($settings->get('gov_committee_intro')))
+                {{ $settings->get('gov_committee_intro') }}
+              @else
+                {{ $isBn 
+                  ? 'MCTSC-এর একটি ইনস্টিটিউট ম্যানেজমেন্ট কমিটি রয়েছে। এই কমিটি ৫ জন সদস্যের সমন্বয়ে গঠিত। এই ম্যানেজমেন্ট কমিটি (MC) প্রতিষ্ঠানের কোয়ালিটি এস্যুরেন্স (গুণগত মান নিশ্চিতকরণ)-এর দায়িত্ব পালন করে। নিম্নোক্ত ব্যক্তিবর্গ এই কমিটির সম্মানিত সদস্য:' 
+                  : 'MCTSC has an Institute Management Committee. This Committee is comprised of 5 members. This Management Committee (MC) is responsible for Quality Assurance of the Institute. The following people are the members of the committee:' }}
+              @endif
+            </p>
+
+            @php
+              $defaultCommittee = [
+                1 => [
+                  'name' => 'Md. Enayet Hossain',
+                  'position' => 'Chair',
+                  'position_bn' => 'চেয়ারম্যান / সভাপতি (Chair)',
+                  'qualification' => 'M.Sc. in Psychology',
+                  'experience' => '27 years in Education and TVET management',
+                ],
+                2 => [
+                  'name' => 'Dr. Md Shaif Ullah Mansur',
+                  'position' => 'Vice Chair',
+                  'position_bn' => 'ভাইস চেয়ারম্যান (Vice Chair)',
+                  'qualification' => 'Ph.D. in the Bangladesh Constitution, M.Com in Finance',
+                  'experience' => 'BGMEA Director',
+                ],
+                3 => [
+                  'name' => 'Md. Mozammel Haque',
+                  'position' => 'Member Secretary',
+                  'position_bn' => 'সদস্য সচিব (Member Secretary)',
+                  'qualification' => 'BA Hons MA',
+                  'experience' => '28 years of experience working in Social work',
+                ],
+                4 => [
+                  'name' => 'Shakh Nur Alam',
+                  'position' => 'Treasurer',
+                  'position_bn' => 'কোষাধ্যক্ষ (Treasurer)',
+                  'qualification' => 'B. Com Hons, M. Com',
+                  'experience' => "20 years' social work experience",
+                ],
+                5 => [
+                  'name' => 'Md. Mosarrof Hossain',
+                  'position' => 'Member',
+                  'position_bn' => 'সদস্য (Member)',
+                  'qualification' => 'MSS',
+                  'experience' => '20 years of working experience in community development, 2 years in TVET',
+                ],
+              ];
+            @endphp
+
+            <div style="overflow-x: auto; background: #ffffff; border-radius: 8px; border: 1px solid #bbf7d0; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.04);">
+              <table style="width: 100%; border-collapse: collapse; font-size: 13.5px; text-align: left;">
+                <thead>
+                  <tr style="background: #14532d; color: #ffffff;">
+                    <th style="padding: 10px 14px; width: 45px; text-align: center; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'নং' : 'SN' }}</th>
+                    <th style="padding: 10px 14px; min-width: 180px; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'নাম (Name)' : 'Name' }}</th>
+                    <th style="padding: 10px 14px; min-width: 140px; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'পদবী (Position)' : 'Position' }}</th>
+                    <th style="padding: 10px 14px; min-width: 210px; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'শিক্ষাগত যোগ্যতা (Educational Qualification)' : 'Educational Qualification' }}</th>
+                    <th style="padding: 10px 14px; min-width: 230px;">{{ $isBn ? 'পেশাগত অভিজ্ঞতা (Professional Experience)' : 'Professional Experience (in years)' }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for($m = 1; $m <= 5; $m++)
+                    @php
+                      $def = $defaultCommittee[$m];
+                      $mName = $settings->get('gov_member_' . $m . '_name', $def['name']);
+                      $mPos = $settings->get('gov_member_' . $m . '_position', ($isBn ? $def['position_bn'] : $def['position']));
+                      $mQual = $settings->get('gov_member_' . $m . '_qualification', $def['qualification']);
+                      $mExp = $settings->get('gov_member_' . $m . '_experience', $def['experience']);
+                    @endphp
+                    <tr style="background: {{ $m % 2 === 0 ? '#f8fdfa' : '#ffffff' }}; border-bottom: 1px solid #e2ebe6;">
+                      <td style="padding: 11px 14px; text-align: center; font-weight: 700; color: #166534; border-right: 1px solid #eef4f0;">{{ $m }}</td>
+                      <td style="padding: 11px 14px; font-weight: 700; color: #1e293b; border-right: 1px solid #eef4f0;">{{ $mName }}</td>
+                      <td style="padding: 11px 14px; border-right: 1px solid #eef4f0;">
+                        <span style="font-weight: 700; color: #14532d; background: #dcfce7; padding: 3px 8px; border-radius: 4px; display: inline-block; font-size: 12.5px; border: 1px solid #bbf7d0;">
+                          {{ $mPos }}
+                        </span>
+                      </td>
+                      <td style="padding: 11px 14px; color: #334155; border-right: 1px solid #eef4f0;">{{ $mQual }}</td>
+                      <td style="padding: 11px 14px; color: #475569;">{{ $mExp }}</td>
+                    </tr>
+                  @endfor
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>

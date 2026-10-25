@@ -724,4 +724,59 @@ class WebsiteCmsTest extends TestCase
         $loginResponse->assertRedirect(route('admin.dashboard'));
         $this->assertAuthenticatedAs($staffUser);
     }
+
+    public function test_governance_management_committee_renders_and_is_editable(): void
+    {
+        $this->seed();
+
+        // 1. Verify default rendering on homepage
+        $homeEn = $this->withSession(['locale' => 'en'])->get(route('home'));
+        $homeEn->assertOk();
+        $homeEn->assertSee('Governance / Management Committee');
+        $homeEn->assertSee('Quality Assurance');
+        $homeEn->assertSee('Md. Enayet Hossain');
+        $homeEn->assertSee('Chair');
+        $homeEn->assertSee('Dr. Md Shaif Ullah Mansur');
+        $homeEn->assertSee('Vice Chair');
+        $homeEn->assertSee('BGMEA Director');
+        $homeEn->assertSee('Md. Mozammel Haque');
+        $homeEn->assertSee('Member Secretary');
+        $homeEn->assertSee('Shakh Nur Alam');
+        $homeEn->assertSee('Treasurer');
+        $homeEn->assertSee('Md. Mosarrof Hossain');
+        $homeEn->assertSee('Member');
+
+        // 2. Admin can edit committee members
+        $admin = User::firstOrCreate(
+            ['email' => 'admin_gov_test@mctsc.test'],
+            ['name' => 'Admin Gov', 'password' => 'Passw0rd!123', 'is_admin' => true]
+        );
+
+        $response = $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'gov_committee_title' => 'Executive Quality Assurance Council',
+            'gov_member_1_name' => 'Prof. Md. Enayet Hossain',
+            'gov_member_1_position' => 'Committee Chairperson',
+        ]);
+        $response->assertRedirect();
+
+        $this->assertDatabaseHas('site_settings', [
+            'key' => 'gov_committee_title',
+            'value' => 'Executive Quality Assurance Council',
+        ]);
+        $this->assertDatabaseHas('site_settings', [
+            'key' => 'gov_member_1_name',
+            'value' => 'Prof. Md. Enayet Hossain',
+        ]);
+
+        $homeUpdated = $this->withSession(['locale' => 'en'])->get(route('home'));
+        $homeUpdated->assertOk();
+        $homeUpdated->assertSee('Executive Quality Assurance Council');
+        $homeUpdated->assertSee('Prof. Md. Enayet Hossain');
+        $homeUpdated->assertSee('Committee Chairperson');
+
+        // Clean up
+        \App\Models\SiteSetting::where('key', 'gov_committee_title')->delete();
+        \App\Models\SiteSetting::where('key', 'gov_member_1_name')->delete();
+        \App\Models\SiteSetting::where('key', 'gov_member_1_position')->delete();
+    }
 }

@@ -1246,8 +1246,64 @@
             </label>
             <label style="margin-top: 10px;">
               Partnership Footer / Closing Note (সমাপনী বাক্য)
-              <input name="strategic_partnership_footer" value="{{ old('strategic_partnership_footer', $settings->get('strategic_partnership_footer', 'Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.')) }}">
+              <input name="strategic_partnership_footer" value="{{ old('strategic_partnership_footer', $settings->get('strategic_partnership_footer', 'Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training. For Quality Assurance of the institute, the following Management Committee has been formed.')) }}">
             </label>
+          </div>
+
+          <!-- Governance / Management Committee (Quality Assurance Body) -->
+          <div style="background:#f0fdf4;border:1px solid #86efac;padding:16px;border-radius:8px;margin-bottom:18px;">
+            <h4 style="margin:0 0 10px 0;color:#14532d;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>👥</span> Governance / Management Committee (পরিচালনা ও ব্যবস্থাপনা কমিটি - কোয়ালিটি এস্যুরেন্স)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr;">
+              <label>
+                Committee Section Title (কমিটি সেকশন শিরোনাম)
+                <input name="gov_committee_title" value="{{ old('gov_committee_title', $settings->get('gov_committee_title', 'Governance / Management Committee')) }}">
+              </label>
+              <label>
+                Committee Intro Text (ভূমিকা বক্তব্য)
+                <input name="gov_committee_intro" value="{{ old('gov_committee_intro', $settings->get('gov_committee_intro', 'MCTSC has an Institute Management Committee. This Committee is comprised of 5 members. This Management Committee (MC) is responsible for Quality Assurance of the Institute. The following people are the members of the committee:')) }}">
+              </label>
+            </div>
+
+            <p style="font-weight:700;color:#14532d;margin:14px 0 8px 0;font-size:13.5px;">কমিটির সম্মানিত ৫ জন সদস্যের বিবরণ (Committee Members):</p>
+
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              @php
+                $defaultGovMembers = [
+                  1 => ['name' => 'Md. Enayet Hossain', 'pos' => 'Chair', 'qual' => 'M.Sc. in Psychology', 'exp' => '27 years in Education and TVET management'],
+                  2 => ['name' => 'Dr. Md Shaif Ullah Mansur', 'pos' => 'Vice Chair', 'qual' => 'Ph.D. in the Bangladesh Constitution, M.Com in Finance', 'exp' => 'BGMEA Director'],
+                  3 => ['name' => 'Md. Mozammel Haque', 'pos' => 'Member Secretary', 'qual' => 'BA Hons MA', 'exp' => '28 years of experience working in Social work'],
+                  4 => ['name' => 'Shakh Nur Alam', 'pos' => 'Treasurer', 'qual' => 'B. Com Hons, M. Com', 'exp' => "20 years' social work experience"],
+                  5 => ['name' => 'Md. Mosarrof Hossain', 'pos' => 'Member', 'qual' => 'MSS', 'exp' => '20 years of working experience in community development, 2 years in TVET'],
+                ];
+              @endphp
+
+              @for($gm = 1; $gm <= 5; $gm++)
+                @php $mDef = $defaultGovMembers[$gm]; @endphp
+                <div style="background:#ffffff;border:1px solid #bbf7d0;padding:12px;border-radius:6px;">
+                  <strong style="color:#14532d;font-size:13.5px;display:block;margin-bottom:8px;">Member #{{ $gm }} (সদস্য {{ $gm }})</strong>
+                  <div class="field-grid" style="grid-template-columns: 1.5fr 1fr 1.5fr 2fr;">
+                    <label>
+                      Name (নাম)
+                      <input name="gov_member_{{ $gm }}_name" value="{{ old('gov_member_' . $gm . '_name', $settings->get('gov_member_' . $gm . '_name', $mDef['name'])) }}">
+                    </label>
+                    <label>
+                      Position (পদবী)
+                      <input name="gov_member_{{ $gm }}_position" value="{{ old('gov_member_' . $gm . '_position', $settings->get('gov_member_' . $gm . '_position', $mDef['pos'])) }}">
+                    </label>
+                    <label>
+                      Educational Qualification (শিক্ষাগত যোগ্যতা)
+                      <input name="gov_member_{{ $gm }}_qualification" value="{{ old('gov_member_' . $gm . '_qualification', $settings->get('gov_member_' . $gm . '_qualification', $mDef['qual'])) }}">
+                    </label>
+                    <label>
+                      Professional Experience (পেশাগত অভিজ্ঞতা)
+                      <input name="gov_member_{{ $gm }}_experience" value="{{ old('gov_member_' . $gm . '_experience', $settings->get('gov_member_' . $gm . '_experience', $mDef['exp'])) }}">
+                    </label>
+                  </div>
+                </div>
+              @endfor
+            </div>
           </div>
 
           <!-- Vision, Mission & Objectives -->
