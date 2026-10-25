@@ -213,7 +213,7 @@ class WebsiteCmsTest extends TestCase
         $about->assertSee('Industry Partnerships for Employment and Career Development');
         $about->assertSee('Alert Fashion Ltd.');
         $about->assertSee('Hotel New View');
-        $about->assertSee('1224');
+        $this->get(route('home'))->assertOk()->assertSee('1224');
 
         $infr = $this->get(route('infrastructure'))->assertOk();
         $infr->assertSee('Infrastructure');
@@ -549,5 +549,128 @@ class WebsiteCmsTest extends TestCase
         \App\Models\SiteSetting::where('key', 'about_title')->delete();
         \App\Models\SiteSetting::where('key', 'about')->delete();
         \App\Models\SiteSetting::where('key', 'about_intro_body')->delete();
+    }
+
+    public function test_admin_can_edit_all_website_elements_dynamically_across_all_pages(): void
+    {
+        $admin = User::firstOrCreate(
+            ['email' => 'admin_super_cms@mctsc.test'],
+            ['name' => 'Admin Super CMS', 'password' => bcrypt('password'), 'is_admin' => true]
+        );
+
+        $payload = [
+            // Homepage CMS
+            'strategic_partnership_kicker' => 'DYNAMIC ALLIANCE KICKER',
+            'strategic_partnership_title' => 'Dynamic Strategic Alliance with IMI',
+            'strategic_partnership_body' => 'Dynamic body text for IMI collaboration in TVET.',
+            'strategic_partnership_footer' => 'Dynamic footer partnership pledge.',
+            'vmo_vision_pill' => 'Dynamic Vision Pill',
+            'vmo_vision_text' => 'Dynamic vision statement for the college.',
+            'vmo_mission_pill' => 'Dynamic Mission Pill',
+            'vmo_mission_text' => 'Dynamic mission statement for the college.',
+            'vmo_objectives_pill' => 'Dynamic Objectives Pill',
+            'vmo_objectives_text' => "Dynamic Goal 1\nDynamic Goal 2\nDynamic Goal 3",
+            'dev_partners_kicker' => 'DYNAMIC DONORS KICKER',
+            'dev_partners_title' => 'Dynamic Global Development Donors',
+            'dev_partners_text' => 'Dynamic introductory note for all partner organizations.',
+
+            // About Us CMS
+            'core_values_kicker' => 'DYNAMIC PRINCIPLES',
+            'core_values_title' => 'Dynamic Institutional Tenets',
+            'core_values_subtitle' => 'Dynamic Subtitle MCTSC',
+            'core_val_1_title' => 'Dynamic Absolute Integrity',
+            'core_val_1_desc' => 'Dynamic honesty and governance description.',
+            'core_val_2_title' => 'Dynamic Superb Excellence',
+            'core_val_2_desc' => 'Dynamic commitment to highest TVET quality.',
+            'legal_status_kicker' => 'DYNAMIC REGULATORY COMPLIANCE',
+            'legal_status_title' => 'Dynamic Legal Status Summary',
+            'legal_status_bteb' => 'BTEB-70102-CUSTOM',
+            'legal_status_nsda' => 'NSDA-CHA-9999',
+            'patron_kicker' => 'DYNAMIC PATRON KICKER',
+            'patron_title' => 'Dynamic Mahmudunnabi Memorial Heritage',
+            'patron_text' => 'Dynamic biography details of the founding patron.',
+            'pillars_kicker' => 'DYNAMIC PILLARS KICKER',
+            'pillars_title' => 'Dynamic What We Do Overview',
+            'pillar_1_title' => 'Dynamic Master TVET Training',
+            'pillar_1_desc' => 'Dynamic description of vocational skills training.',
+
+            // Infrastructure CMS
+            'infr_page_title' => 'Dynamic Campus Architecture & Labs',
+            'infr_page_subtitle' => 'Dynamic state of the art workshops and classrooms.',
+            'infr_overview_kicker' => 'DYNAMIC CAMPUS DISCOVERY',
+            'infr_overview_title' => 'Dynamic Multi-Storey Facility Overview',
+            'infr_overview_desc' => 'Dynamic description of the modern two-storey premises.',
+            'infr_facilities_title' => 'Dynamic Workshop Directory',
+            'infr_fac_1_title' => 'Dynamic Smart Lecture Hall',
+            'infr_fac_1_desc' => 'Dynamic multimedia smart theoretical classroom.',
+            'infr_capacity_title' => 'Dynamic Institutional Scale at a Glance',
+            'infr_cap_location' => 'Dynamic Sagorika Campus Avenue, Chattogram',
+            'infr_cap_area' => 'Dynamic 25,000 sq. ft.',
+            'infr_cap_annual' => 'Dynamic 2,500 trainees per year',
+
+            // Secondary Pages CMS
+            'courses_page_title' => 'Dynamic Vocational Trades Catalogue',
+            'projects_page_title' => 'Dynamic Development Grant Projects',
+            'gallery_page_title' => 'Dynamic Campus Photo Showcase',
+            'notices_page_title' => 'Dynamic Official Circulars Board',
+            'contact_page_title' => 'Dynamic Connect With Our Team',
+        ];
+
+        $response = $this->actingAs($admin)->put(route('admin.settings.update'), $payload);
+        $response->assertRedirect();
+
+        // 1. Verify in DB
+        foreach ($payload as $k => $v) {
+            $this->assertDatabaseHas('site_settings', ['key' => $k, 'value' => $v]);
+        }
+
+        // 2. Verify Homepage
+        $home = $this->withSession(['locale' => 'en'])->get(route('home'));
+        $home->assertOk();
+        $home->assertSee('Dynamic Strategic Alliance with IMI');
+        $home->assertSee('Dynamic Vision Pill');
+        $home->assertSee('Dynamic Goal 1');
+        $home->assertSee('Dynamic Goal 2');
+        $home->assertSee('Dynamic Global Development Donors');
+
+        // 3. Verify About Us Page
+        $about = $this->withSession(['locale' => 'en'])->get(route('about'));
+        $about->assertOk();
+        $about->assertSee('Dynamic Institutional Tenets');
+        $about->assertSee('Dynamic Absolute Integrity');
+        $about->assertSee('BTEB-70102-CUSTOM');
+        $about->assertSee('NSDA-CHA-9999');
+        $about->assertSee('Dynamic Mahmudunnabi Memorial Heritage');
+        $about->assertSee('Dynamic Master TVET Training');
+
+        // 4. Verify Infrastructure Page
+        $infr = $this->withSession(['locale' => 'en'])->get(route('infrastructure'));
+        $infr->assertOk();
+        $infr->assertSee('Dynamic Campus Architecture & Labs');
+        $infr->assertSee('Dynamic Multi-Storey Facility Overview');
+        $infr->assertSee('Dynamic Smart Lecture Hall');
+        $infr->assertSee('Dynamic 25,000 sq. ft.');
+        $infr->assertSee('Dynamic 2,500 trainees per year');
+
+        // 5. Verify Secondary Pages
+        $courses = $this->withSession(['locale' => 'en'])->get(route('courses'));
+        $courses->assertOk();
+        $courses->assertSee('Dynamic Vocational Trades Catalogue');
+
+        $projects = $this->withSession(['locale' => 'en'])->get(route('projects'));
+        $projects->assertOk();
+        $projects->assertSee('Dynamic Development Grant Projects');
+
+        $gallery = $this->withSession(['locale' => 'en'])->get(route('gallery'));
+        $gallery->assertOk();
+        $gallery->assertSee('Dynamic Campus Photo Showcase');
+
+        $notices = $this->withSession(['locale' => 'en'])->get(route('notices'));
+        $notices->assertOk();
+        $notices->assertSee('Dynamic Official Circulars Board');
+
+        $contact = $this->withSession(['locale' => 'en'])->get(route('contact'));
+        $contact->assertOk();
+        $contact->assertSee('Dynamic Connect With Our Team');
     }
 }

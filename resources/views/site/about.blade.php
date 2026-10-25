@@ -266,14 +266,14 @@
       <div style="clear: both;"></div>
     </div>
 
-    <!-- 2. CORE VALUES -->
+    <!-- 2. CORE VALUES (CMS POWERED & 100% EDITABLE) -->
     <div style="margin-bottom: 48px;">
-      <span class="section-kicker">{{ $isBn ? 'মূল্যবোধ ও দিকনির্দেশক আদর্শ' : 'GUIDING PRINCIPLES' }}</span>
+      <span class="section-kicker">{{ $settings['core_values_kicker'] ?? ($isBn ? 'মূল্যবোধ ও দিকনির্দেশক আদর্শ' : 'GUIDING PRINCIPLES') }}</span>
       <h2 style="font-family: var(--serif); font-size: 28px; color: var(--green); margin: 6px 0 4px 0;">
-        {{ $isBn ? 'ইনস্টিটিউট কোর ভ্যালুস (Institute Core Values)' : 'Institute Core Values' }}
+        {{ $settings['core_values_title'] ?? ($isBn ? 'ইনস্টিটিউট কোর ভ্যালুস (Institute Core Values)' : 'Institute Core Values') }}
       </h2>
       <p style="color: var(--gold); font-weight: 700; font-size: 14.5px; margin: 0 0 14px 0;">
-        {{ $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)' : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC)' }}
+        {{ $settings['core_values_subtitle'] ?? ($isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)' : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC)') }}
       </p>
       <div class="gold-rule" style="width: 48px; height: 3px; background: var(--gold); margin: 0 0 22px 0;"></div>
 
@@ -287,8 +287,8 @@
             </svg>
           </div>
           <div class="core-val-content">
-            <h4>1. {{ $isBn ? 'সততা ও জবাবদিহিতা (Integrity and Accountability)' : 'Integrity and Accountability' }}</h4>
-            <p>{{ $isBn ? 'আমরা আমাদের সকল প্রাতিষ্ঠানিক কার্যক্রম, আর্থিক ব্যবস্থাপনা এবং অংশীজনদের সাথে সম্পর্কে সততা, স্বচ্ছতা, নৈতিক আচরণ ও জবাবদিহিতা বজায় রাখি।' : 'We uphold honesty, transparency, ethical conduct, and accountability in all our institutional activities, financial management, and stakeholder relationships.' }}</p>
+            <h4>1. {{ $settings['core_val_1_title'] ?? ($isBn ? 'সততা ও জবাবদিহিতা (Integrity and Accountability)' : 'Integrity and Accountability') }}</h4>
+            <p>{{ $settings['core_val_1_desc'] ?? ($isBn ? 'আমরা আমাদের সকল প্রাতিষ্ঠানিক কার্যক্রম, আর্থিক ব্যবস্থাপনা এবং অংশীজনদের সাথে সম্পর্কে সততা, স্বচ্ছতা, নৈতিক আচরণ ও জবাবদিহিতা বজায় রাখি।' : 'We uphold honesty, transparency, ethical conduct, and accountability in all our institutional activities, financial management, and stakeholder relationships.') }}</p>
           </div>
         </div>
 
@@ -301,8 +301,8 @@
             </svg>
           </div>
           <div class="core-val-content">
-            <h4>2. {{ $isBn ? 'মান ও উৎকর্ষতা (Quality and Excellence)' : 'Quality and Excellence' }}</h4>
-            <p>{{ $isBn ? 'আমরা মানসম্পন্ন, যোগ্যতাভিত্তিক কারিগরি ও বৃত্তিমূলক শিক্ষা প্রদানে প্রতিশ্রুতিবদ্ধ যা জাতীয় মানদণ্ড এবং শিল্পের পরিবর্তিত চাহিদার সাথে সামঞ্জস্যপূর্ণ।' : 'We are committed to delivering high-quality, competency-based technical and vocational education that meets national standards and evolving industry requirements.' }}</p>
+            <h4>2. {{ $settings['core_val_2_title'] ?? ($isBn ? 'মান ও উৎকর্ষতা (Quality and Excellence)' : 'Quality and Excellence') }}</h4>
+            <p>{{ $settings['core_val_2_desc'] ?? ($isBn ? 'আমরা মানসম্পন্ন, যোগ্যতাভিত্তিক কারিগরি ও বৃত্তিমূলক শিক্ষা প্রদানে প্রতিশ্রুতিবদ্ধ যা জাতীয় মানদণ্ড এবং শিল্পের পরিবর্তিত চাহিদার সাথে সামঞ্জস্যপূর্ণ।' : 'We are committed to delivering high-quality, competency-based technical and vocational education that meets national standards and evolving industry requirements.') }}</p>
           </div>
         </div>
 
@@ -314,8 +314,8 @@
             </svg>
           </div>
           <div class="core-val-content">
-            <h4>3. {{ $isBn ? 'অন্তর্ভুক্তি ও সমান সুযোগ (Inclusion and Equal Opportunity)' : 'Inclusion and Equal Opportunity' }}</h4>
-            <p>{{ $isBn ? 'আমরা সুবিধাবঞ্চিত, বেকার, অদক্ষ, এতিম ও ঝুঁকিপূর্ণ তরুণ-তরুণীদের জন্য লিঙ্গ বা আর্থ-সামাজিক পটভূমি নির্বিশেষে দক্ষতা প্রশিক্ষণে সমান সুযোগ নিশ্চিত করি।' : 'We promote equal access to skills training for disadvantaged, unemployed, unskilled, orphaned, and vulnerable youth, regardless of gender or socioeconomic background.' }}</p>
+            <h4>3. {{ $settings['core_val_3_title'] ?? ($isBn ? 'অন্তর্ভুক্তি ও সমান সুযোগ (Inclusion and Equal Opportunity)' : 'Inclusion and Equal Opportunity') }}</h4>
+            <p>{{ $settings['core_val_3_desc'] ?? ($isBn ? 'আমরা সুবিধাবঞ্চিত, বেকার, অদক্ষ, এতিম ও ঝুঁকিপূর্ণ তরুণ-তরুণীদের জন্য লিঙ্গ বা আর্থ-সামাজিক পটভূমি নির্বিশেষে দক্ষতা প্রশিক্ষণে সমান সুযোগ নিশ্চিত করি।' : 'We promote equal access to skills training for disadvantaged, unemployed, unskilled, orphaned, and vulnerable youth, regardless of gender or socioeconomic background.') }}</p>
           </div>
         </div>
 
@@ -328,8 +328,8 @@
             </svg>
           </div>
           <div class="core-val-content">
-            <h4>4. {{ $isBn ? 'কর্মসংস্থান যোগ্যতা ও উদ্যোক্তা উন্নয়ন (Employability and Entrepreneurship)' : 'Employability and Entrepreneurship' }}</h4>
-            <p>{{ $isBn ? 'আমরা গ্র্যাজুয়েটদের চাকরি প্রাপ্তি, ব্যবসা প্রতিষ্ঠা এবং টেকসই জীবিকা অর্জনে সক্ষম করতে বাস্তবমুখী দক্ষতা, পেশাগত যোগ্যতা এবং উদ্যোক্তা সক্ষমতা বিকাশ করি।' : 'We develop practical skills, professional competencies, and entrepreneurial capabilities to enable graduates to secure employment, establish businesses, and achieve sustainable livelihoods.' }}</p>
+            <h4>4. {{ $settings['core_val_4_title'] ?? ($isBn ? 'কর্মসংস্থান যোগ্যতা ও উদ্যোক্তা উন্নয়ন (Employability and Entrepreneurship)' : 'Employability and Entrepreneurship') }}</h4>
+            <p>{{ $settings['core_val_4_desc'] ?? ($isBn ? 'আমরা গ্র্যাজুয়েটদের চাকরি প্রাপ্তি, ব্যবসা প্রতিষ্ঠা এবং টেকসই জীবিকা অর্জনে সক্ষম করতে বাস্তবমুখী দক্ষতা, পেশাগত যোগ্যতা এবং উদ্যোক্তা সক্ষমতা বিকাশ করি।' : 'We develop practical skills, professional competencies, and entrepreneurial capabilities to enable graduates to secure employment, establish businesses, and achieve sustainable livelihoods.') }}</p>
           </div>
         </div>
 
@@ -343,8 +343,8 @@
             </svg>
           </div>
           <div class="core-val-content">
-            <h4>5. {{ $isBn ? 'সহযোগিতা ও অংশীদারিত্ব (Collaboration and Partnership)' : 'Collaboration and Partnership' }}</h4>
-            <p>{{ $isBn ? 'আমরা প্রশিক্ষণের মান ও কর্মসংস্থানের ফলাফল উন্নয়নে সরকারি সংস্থা, নিয়োগকারী প্রতিষ্ঠান, উন্নয়ন সংস্থা, শিল্পপ্রতিষ্ঠান এবং সমাজের সাথে অংশীদারিত্ব জোরদার করি।' : 'We strengthen partnerships with government agencies, employers, development organizations, industries, and communities to improve training quality and employment outcomes.' }}</p>
+            <h4>5. {{ $settings['core_val_5_title'] ?? ($isBn ? 'সহযোগিতা ও অংশীদারিত্ব (Collaboration and Partnership)' : 'Collaboration and Partnership') }}</h4>
+            <p>{{ $settings['core_val_5_desc'] ?? ($isBn ? 'আমরা প্রশিক্ষণের মান ও কর্মসংস্থানের ফলাফল উন্নয়নে সরকারি সংস্থা, নিয়োগকারী প্রতিষ্ঠান, উন্নয়ন সংস্থা, শিল্পপ্রতিষ্ঠান এবং সমাজের সাথে অংশীদারিত্ব জোরদার করি।' : 'We strengthen partnerships with government agencies, employers, development organizations, industries, and communities to improve training quality and employment outcomes.') }}</p>
           </div>
         </div>
 
@@ -358,8 +358,8 @@
             </svg>
           </div>
           <div class="core-val-content">
-            <h4>6. {{ $isBn ? 'উদ্ভাবন ও ধারাবাহিক শিক্ষা (Innovation and Continuous Learning)' : 'Innovation and Continuous Learning' }}</h4>
-            <p>{{ $isBn ? 'আমরা উদ্ভাবনী শিক্ষাদান পদ্ধতি, ব্যবহারিক শিক্ষা, প্রশিক্ষক উন্নয়ন, পূর্ব অভিজ্ঞতার স্বীকৃতি (RPL) এবং দক্ষতা উন্নয়নে ধারাবাহিক উৎকর্ষ সাধনে উৎসাহিত করি।' : 'We encourage innovative teaching methods, practical learning, trainer development, Recognition of Prior Learning (RPL), and continuous improvement in skills development.' }}</p>
+            <h4>6. {{ $settings['core_val_6_title'] ?? ($isBn ? 'উদ্ভাবন ও ধারাবাহিক শিক্ষা (Innovation and Continuous Learning)' : 'Innovation and Continuous Learning') }}</h4>
+            <p>{{ $settings['core_val_6_desc'] ?? ($isBn ? 'আমরা উদ্ভাবনী শিক্ষাদান পদ্ধতি, ব্যবহারিক শিক্ষা, প্রশিক্ষক উন্নয়ন, পূর্ব অভিজ্ঞতার স্বীকৃতি (RPL) এবং দক্ষতা উন্নয়নে ধারাবাহিক উৎকর্ষ সাধনে উৎসাহিত করি।' : 'We encourage innovative teaching methods, practical learning, trainer development, Recognition of Prior Learning (RPL), and continuous improvement in skills development.') }}</p>
           </div>
         </div>
 
@@ -374,8 +374,8 @@
             </svg>
           </div>
           <div class="core-val-content">
-            <h4>7. {{ $isBn ? 'শ্রদ্ধা, মর্যাদা ও সুরক্ষা (Respect, Dignity and Safeguarding)' : 'Respect, Dignity and Safeguarding' }}</h4>
-            <p>{{ $isBn ? 'আমরা একটি নিরাপদ, সম্মানজনক, অন্তর্ভুক্তিমূলক ও সহায়ক শিক্ষার পরিবেশ বজায় রাখি যা সকল প্রশিক্ষণার্থী ও কর্মীদের মর্যাদা, অধিকার ও কল্যাণ নিশ্চিত করে।' : 'We foster a safe, respectful, inclusive, and supportive learning environment that protects the dignity, rights, and well-being of all trainees and staff.' }}</p>
+            <h4>7. {{ $settings['core_val_7_title'] ?? ($isBn ? 'শ্রদ্ধা, মর্যাদা ও সুরক্ষা (Respect, Dignity and Safeguarding)' : 'Respect, Dignity and Safeguarding') }}</h4>
+            <p>{{ $settings['core_val_7_desc'] ?? ($isBn ? 'আমরা একটি নিরাপদ, সম্মানজনক, অন্তর্ভুক্তিমূলক ও সহায়ক শিক্ষার পরিবেশ বজায় রাখি যা সকল প্রশিক্ষণার্থী ও কর্মীদের মর্যাদা, অধিকার ও কল্যাণ নিশ্চিত করে।' : 'We foster a safe, respectful, inclusive, and supportive learning environment that protects the dignity, rights, and well-being of all trainees and staff.') }}</p>
           </div>
         </div>
 
@@ -390,13 +390,13 @@
             </svg>
           </div>
           <div class="core-val-content">
-            <h4>8. {{ $isBn ? 'সামাজিক দায়বদ্ধতা ও টেকসই উন্নয়ন (Social Responsibility and Sustainable Development)' : 'Social Responsibility and Sustainable Development' }}</h4>
-            <p>{{ $isBn ? 'আমরা দক্ষতা প্রশিক্ষণ ও কর্মসংস্থান সহায়তার মাধ্যমে দারিদ্র্য হ্রাস, তরুণদের ক্ষমতায়ন, সামাজিক উন্নয়ন এবং টেকসই আর্থ-সামাজিক প্রবৃদ্ধিতে অবদান রাখি।' : 'We contribute to poverty reduction, youth empowerment, community development, and sustainable socioeconomic growth through skills training and employment support.' }}</p>
+            <h4>8. {{ $settings['core_val_8_title'] ?? ($isBn ? 'সামাজিক দায়বদ্ধতা ও টেকসই উন্নয়ন (Social Responsibility and Sustainable Development)' : 'Social Responsibility and Sustainable Development') }}</h4>
+            <p>{{ $settings['core_val_8_desc'] ?? ($isBn ? 'আমরা দক্ষতা প্রশিক্ষণ ও কর্মসংস্থান সহায়তার মাধ্যমে দারিদ্র্য হ্রাস, তরুণদের ক্ষমতায়ন, সামাজিক উন্নয়ন এবং টেকসই আর্থ-সামাজিক প্রবৃদ্ধিতে অবদান রাখি।' : 'We contribute to poverty reduction, youth empowerment, community development, and sustainable socioeconomic growth through skills training and employment support.') }}</p>
           </div>
         </div>
       </div>
 
-      <!-- Institutional Commitment (without 'Our') -->
+      <!-- Institutional Commitment -->
       <div style="background: rgba(15, 81, 50, 0.05); border-left: 4px solid var(--green); border-radius: 8px; padding: 18px 24px; margin-top: 26px; font-size: 15px; line-height: 1.7; color: #163d32; box-shadow: 0 2px 8px rgba(15,81,50,0.03);">
         <strong style="color: var(--green); font-size: 15.5px;">{{ $isBn ? 'অঙ্গীকার (Commitment):' : 'Commitment:' }}</strong>
         {{ $settings['about_commitment'] ?? ($isBn 
@@ -405,18 +405,24 @@
       </div>
     </div>
 
-    <!-- 3. LEGAL STATUS -->
+    <!-- 3. LEGAL STATUS (CMS POWERED & 100% EDITABLE) -->
     <div class="legal-status-box">
-      <span class="section-kicker">{{ $isBn ? 'আইনি ও প্রাতিষ্ঠানিক তথ্য' : 'ACCREDITATION & COMPLIANCE' }}</span>
+      <span class="section-kicker">{{ $settings['legal_status_kicker'] ?? ($isBn ? 'আইনি ও প্রাতিষ্ঠানিক তথ্য' : 'ACCREDITATION & COMPLIANCE') }}</span>
       <h2 style="font-family: var(--serif); font-size: 27px; color: var(--green); margin: 6px 0 10px 0;">
-        {{ $isBn ? 'আইনি স্বীকৃতি ও স্থিতি (Legal Status)' : 'Legal Status' }}
+        {{ $settings['legal_status_title'] ?? ($isBn ? 'আইনি স্বীকৃতি ও স্থিতি (Legal Status)' : 'Legal Status') }}
       </h2>
       <div class="gold-rule" style="width: 45px; height: 3px; background: var(--gold); margin-bottom: 20px;"></div>
 
       <p style="font-size: 15px; line-height: 1.8; color: #334155; margin-bottom: 22px; text-align: justify;">
-        {{ $isBn 
-          ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) বাংলাদেশে কারিগরি শিক্ষা ও দক্ষতা উন্নয়নের জন্য প্রাসঙ্গিক আইনি ও প্রাতিষ্ঠানিক কাঠামোর মধ্যে পরিচালিত হয়। প্রতিষ্ঠানটি তার শিক্ষা, প্রশিক্ষণ ও প্রশাসনিক কার্যক্রম পরিচালনার জন্য যথাযথ কর্তৃপক্ষের নিবন্ধন, পরিচিতি ও স্বীকৃতির রেকর্ড সংরক্ষণ করে।' 
-          : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) operates within the relevant regulatory and institutional framework for technical education and skills development in Bangladesh. The institution maintains registration, identification, and accreditation records with the relevant authorities to support its educational, training, and administrative activities.' }}
+        @if($isBn && !empty($settings['legal_status_intro_bn']))
+          {{ $settings['legal_status_intro_bn'] }}
+        @elseif(!empty($settings['legal_status_intro']))
+          {{ $settings['legal_status_intro'] }}
+        @else
+          {{ $isBn 
+            ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) বাংলাদেশে কারিগরি শিক্ষা ও দক্ষতা উন্নয়নের জন্য প্রাসঙ্গিক আইনি ও প্রাতিষ্ঠানিক কাঠামোর মধ্যে পরিচালিত হয়। প্রতিষ্ঠানটি তার শিক্ষা, প্রশিক্ষণ ও প্রশাসনিক কার্যক্রম পরিচালনার জন্য যথাযথ কর্তৃপক্ষের নিবন্ধন, পরিচিতি ও স্বীকৃতির রেকর্ড সংরক্ষণ করে।' 
+            : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) operates within the relevant regulatory and institutional framework for technical education and skills development in Bangladesh. The institution maintains registration, identification, and accreditation records with the relevant authorities to support its educational, training, and administrative activities.' }}
+        @endif
       </p>
 
       <div style="overflow-x: auto; margin-bottom: 20px;">
@@ -430,53 +436,65 @@
           <tbody>
             <tr>
               <td><strong>Bangladesh Technical Education Board (BTEB)</strong> – Institute Code</td>
-              <td><span class="legal-badge">70102</span></td>
+              <td><span class="legal-badge">{{ $settings['legal_status_bteb'] ?? '70102' }}</span></td>
             </tr>
             <tr>
               <td><strong>National Skills Development Authority (NSDA)</strong> – STP Registration</td>
-              <td><span class="legal-badge">STP-CHA-000135</span></td>
+              <td><span class="legal-badge">{{ $settings['legal_status_nsda'] ?? 'STP-CHA-000135' }}</span></td>
             </tr>
             <tr>
               <td><strong>Trade Licence</strong> (Chattogram City Corporation)</td>
-              <td><span class="legal-badge" style="background:#f1f5f9; color:#1e293b;">68883</span></td>
+              <td><span class="legal-badge" style="background:#f1f5f9; color:#1e293b;">{{ $settings['legal_status_trade'] ?? '68883' }}</span></td>
             </tr>
             <tr>
               <td><strong>Tax Identification Number (TIN)</strong></td>
-              <td><span class="legal-badge" style="background:#f1f5f9; color:#1e293b;">433576326443</span></td>
+              <td><span class="legal-badge" style="background:#f1f5f9; color:#1e293b;">{{ $settings['legal_status_tin'] ?? '433576326443' }}</span></td>
             </tr>
             <tr>
               <td><strong>Business Identification Number (BIN/VAT)</strong></td>
-              <td><span class="legal-badge" style="background:#f1f5f9; color:#1e293b;">001583568</span></td>
+              <td><span class="legal-badge" style="background:#f1f5f9; color:#1e293b;">{{ $settings['legal_status_bin'] ?? '001583568' }}</span></td>
             </tr>
           </tbody>
         </table>
       </div>
 
       <p style="font-size: 14.5px; line-height: 1.7; color: #475569; margin: 0; font-style: italic;">
-        {{ $isBn 
-          ? 'MCTSC তার কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ কর্মসূচিতে আইনি সম্মতি, প্রাতিষ্ঠানিক জবাবদিহিতা, স্বচ্ছতা এবং গুণগত মান বজায় রাখতে প্রতিশ্রুতিবদ্ধ।' 
-          : 'MCTSC is committed to maintaining regulatory compliance, institutional accountability, transparency, and quality assurance in its technical and vocational education and training programmes.' }}
+        @if($isBn && !empty($settings['legal_status_footer_bn']))
+          {{ $settings['legal_status_footer_bn'] }}
+        @elseif(!empty($settings['legal_status_footer']))
+          {{ $settings['legal_status_footer'] }}
+        @else
+          {{ $isBn 
+            ? 'MCTSC তার কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ কর্মসূচিতে আইনি সম্মতি, প্রাতিষ্ঠানিক জবাবদিহিতা, স্বচ্ছতা এবং গুণগত মান বজায় রাখতে প্রতিশ্রুতিবদ্ধ।' 
+            : 'MCTSC is committed to maintaining regulatory compliance, institutional accountability, transparency, and quality assurance in its technical and vocational education and training programmes.' }}
+        @endif
       </p>
     </div>
 
-    <!-- 4. HONOURING THE LEGACY OF MAHMUDUNNABI CHOWDHURY -->
+    <!-- 4. HONOURING THE LEGACY OF MAHMUDUNNABI CHOWDHURY (CMS POWERED & 100% EDITABLE) -->
     <div style="background: #fdfbf7; border: 1px solid #f1e6d0; border-left: 5px solid var(--gold); border-radius: 10px; padding: 32px 36px; margin-bottom: 48px; box-shadow: 0 4px 18px rgba(197, 155, 39, 0.08);">
       <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
         <span style="font-size: 28px;">🏛️</span>
         <div>
           <span style="font-size: 12px; font-weight: 700; color: var(--gold); letter-spacing: 1.5px; text-transform: uppercase;">
-            {{ $isBn ? 'স্মৃতি ও ঐতিহ্য' : 'INSPIRATION & HERITAGE' }}
+            {{ $settings['patron_kicker'] ?? ($isBn ? 'স্মৃতি ও ঐতিহ্য' : 'INSPIRATION & HERITAGE') }}
           </span>
           <h3 style="font-family: var(--serif); font-size: 23px; color: var(--green); margin: 2px 0 0 0;">
-            {{ $isBn ? 'মরহুম মাহমুদুন্নবী চৌধুরীর অমর স্মৃতি ও সামাজিক অবদান' : 'Honouring the Legacy of Mahmudunnabi Chowdhury' }}
+            {{ $settings['patron_title'] ?? ($isBn ? 'মরহুম মাহমুদুন্নবী চৌধুরীর অমর স্মৃতি ও সামাজিক অবদান' : 'Honouring the Legacy of Mahmudunnabi Chowdhury') }}
           </h3>
         </div>
       </div>
       <p style="font-size: 15.5px; line-height: 1.8; color: #475569; margin: 0;">
-        @if($isBn)
-          <strong>মাহমুদুন্নবী চৌধুরী (১৯০৮–১৯৯৫)</strong> ছিলেন চট্টগ্রামের একজন প্রখ্যাত শিল্পপতি, দানবীর ও রাজনীতিবিদ। তিনি তৎকালীন পূর্ব পাকিস্তান প্রাদেশিক পরিষদের সম্মানিত সদস্য হিসেবে দায়িত্ব পালন করেন এবং প্রাদেশিক সরকারের মন্ত্রী হিসেবে গুরুত্বপূর্ণ ভূমিকা রেখেছিলেন। তাঁর জনকল্যাণমুখী চিন্তা, শিক্ষা বিস্তার এবং সমাজ প্রগতির আজীবন অঙ্গীকারকে ধারণ করেই এ প্রতিষ্ঠানটি নতুন প্রজন্মের জন্য বাস্তবমুখী দক্ষতা বিনির্মাণে নিরলস কাজ করে যাচ্ছে।
+        @if($isBn && !empty($settings['patron_text_bn']))
+          {!! nl2br(e($settings['patron_text_bn'])) !!}
+        @elseif(!empty($settings['patron_text']))
+          {!! nl2br(e($settings['patron_text'])) !!}
         @else
-          <strong>Mahmudunnabi Chowdhury (1908–1995)</strong> was a prominent businessman and politician from Chattogram who served as a member of the East Pakistan Legislative Assembly and held ministerial responsibilities. The institution carries forward a commitment to human development and community progress in remembrance of his legacy.
+          @if($isBn)
+            <strong>মাহমুদুন্নবী চৌধুরী (১৯০৮–১৯৯৫)</strong> ছিলেন চট্টগ্রামের একজন প্রখ্যাত শিল্পপতি, দানবীর ও রাজনীতিবিদ। তিনি তৎকালীন পূর্ব পাকিস্তান প্রাদেশিক পরিষদের সম্মানিত সদস্য হিসেবে দায়িত্ব পালন করেন এবং প্রাদেশিক সরকারের মন্ত্রী হিসেবে গুরুত্বপূর্ণ ভূমিকা রেখেছিলেন। তাঁর জনকল্যাণমুখী চিন্তা, শিক্ষা বিস্তার এবং সমাজ প্রগতির আজীবন অঙ্গীকারকে ধারণ করেই এ প্রতিষ্ঠানটি নতুন প্রজন্মের জন্য বাস্তবমুখী দক্ষতা বিনির্মাণে নিরলস কাজ করে যাচ্ছে।
+          @else
+            <strong>Mahmudunnabi Chowdhury (1908–1995)</strong> was a prominent businessman and politician from Chattogram who served as a member of the East Pakistan Legislative Assembly and held ministerial responsibilities. The institution carries forward a commitment to human development and community progress in remembrance of his legacy.
+          @endif
         @endif
       </p>
     </div>
@@ -537,12 +555,12 @@
       </div>
     </div>
 
-    <!-- 7. WHAT WE DO (CORE PILLARS) -->
+    <!-- 7. WHAT WE DO (CORE PILLARS - CMS POWERED & 100% EDITABLE) -->
     <div style="margin-bottom: 50px;">
       <div style="text-align: center; margin-bottom: 30px;">
-        <span class="section-kicker">{{ $isBn ? 'কার্যক্রম ও সেবাসমূহ' : 'CORE PILLARS' }}</span>
+        <span class="section-kicker">{{ $settings['pillars_kicker'] ?? ($isBn ? 'কার্যক্রম ও সেবাসমূহ' : 'CORE PILLARS') }}</span>
         <h2 style="font-family: var(--serif); font-size: 28px; color: var(--green); margin: 6px 0;">
-          {{ $isBn ? 'মূল কার্যক্রম (What We Do)' : 'What We Do' }}
+          {{ $settings['pillars_title'] ?? ($isBn ? 'মূল কার্যক্রম (What We Do)' : 'What We Do') }}
         </h2>
         <div class="gold-rule" style="margin: 10px auto 0 auto; width: 45px; height: 3px; background: var(--gold);"></div>
       </div>
@@ -552,10 +570,10 @@
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column;">
           <div style="font-size: 32px; margin-bottom: 14px;">🛠️</div>
           <h4 style="font-family: var(--serif); font-size: 17px; color: var(--green); margin: 0 0 8px 0; line-height: 1.3;">
-            {{ $isBn ? 'কারিগরি ও বৃত্তিমূলক প্রশিক্ষণ' : 'Technical & Vocational Training' }}
+            {{ $settings['pillar_1_title'] ?? ($isBn ? 'কারিগরি ও বৃত্তিমূলক প্রশিক্ষণ' : 'Technical & Vocational Training') }}
           </h4>
           <p style="font-size: 13.5px; color: #64748b; line-height: 1.6; margin: 0;">
-            {{ $isBn ? 'বাস্তবমুখী ও পেশাভিত্তিক ব্যবহারিক দক্ষতা উন্নয়ন।' : 'Practical, occupation-focused skills development.' }}
+            {{ $settings['pillar_1_desc'] ?? ($isBn ? 'বাস্তবমুখী ও পেশাভিত্তিক ব্যবহারিক দক্ষতা উন্নয়ন।' : 'Practical, occupation-focused skills development.') }}
           </p>
         </div>
 
@@ -563,10 +581,10 @@
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column;">
           <div style="font-size: 32px; margin-bottom: 14px;">📋</div>
           <h4 style="font-family: var(--serif); font-size: 17px; color: var(--green); margin: 0 0 8px 0; line-height: 1.3;">
-            {{ $isBn ? 'প্রকল্পভিত্তিক প্রশিক্ষণ' : 'Project-Based Training' }}
+            {{ $settings['pillar_2_title'] ?? ($isBn ? 'প্রকল্পভিত্তিক প্রশিক্ষণ' : 'Project-Based Training') }}
           </h4>
           <p style="font-size: 13.5px; color: #64748b; line-height: 1.6; margin: 0;">
-            {{ $isBn ? 'জাতীয় ও আন্তর্জাতিক উন্নয়ন প্রকল্পের আওতায় প্রশিক্ষণ প্রদান।' : 'Skills training delivered under relevant development projects.' }}
+            {{ $settings['pillar_2_desc'] ?? ($isBn ? 'জাতীয় ও আন্তর্জাতিক উন্নয়ন প্রকল্পের আওতায় প্রশিক্ষণ প্রদান।' : 'Skills training delivered under relevant development projects.') }}
           </p>
         </div>
 
@@ -574,10 +592,10 @@
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column;">
           <div style="font-size: 32px; margin-bottom: 14px;">🎖️</div>
           <h4 style="font-family: var(--serif); font-size: 17px; color: var(--green); margin: 0 0 8px 0; line-height: 1.3;">
-            {{ $isBn ? 'মূল্যায়ন ও সনদপত্র' : 'Assessment & Certification' }}
+            {{ $settings['pillar_3_title'] ?? ($isBn ? 'মূল্যায়ন ও সনদপত্র' : 'Assessment & Certification') }}
           </h4>
           <p style="font-size: 13.5px; color: #64748b; line-height: 1.6; margin: 0;">
-            {{ $isBn ? 'জাতীয় ও কারিগরি শিক্ষা বোর্ডের মানদণ্ড অনুযায়ী মূল্যায়ন ও স্বীকৃতি।' : 'Skills assessment and certification opportunities in accordance with applicable requirements.' }}
+            {{ $settings['pillar_3_desc'] ?? ($isBn ? 'জাতীয় ও কারিগরি শিক্ষা বোর্ডের মানদণ্ড অনুযায়ী মূল্যায়ন ও স্বীকৃতি।' : 'Skills assessment and certification opportunities in accordance with applicable requirements.') }}
           </p>
         </div>
 
@@ -585,10 +603,10 @@
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column;">
           <div style="font-size: 32px; margin-bottom: 14px;">💼</div>
           <h4 style="font-family: var(--serif); font-size: 17px; color: var(--green); margin: 0 0 8px 0; line-height: 1.3;">
-            {{ $isBn ? 'কর্মসংস্থান সংযোগ' : 'Employment Linkages' }}
+            {{ $settings['pillar_4_title'] ?? ($isBn ? 'কর্মসংস্থান সংযোগ' : 'Employment Linkages') }}
           </h4>
           <p style="font-size: 13.5px; color: #64748b; line-height: 1.6; margin: 0;">
-            {{ $isBn ? 'অর্জিত দক্ষতাকে সরাসরি কার্যকর কর্মসংস্থানের সুযোগের সাথে যুক্ত করা।' : 'Supporting trainees in connecting their acquired skills with employment opportunities.' }}
+            {{ $settings['pillar_4_desc'] ?? ($isBn ? 'অর্জিত দক্ষতাকে সরাসরি কার্যকর কর্মসংস্থানের সুযোগের সাথে যুক্ত করা।' : 'Supporting trainees in connecting their acquired skills with employment opportunities.') }}
           </p>
         </div>
       </div>

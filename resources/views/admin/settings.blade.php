@@ -1208,6 +1208,122 @@
       </div>
 
       <!-- =====================================================================
+           SECTION 4.1: HOMEPAGE CMS CONTENT & PARTNERSHIPS
+           ===================================================================== -->
+      <div class="accordion-item" id="sec-homepage-cms">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+          <div class="accordion-title-wrap">
+            <span class="accordion-icon">🌐</span>
+            <div class="accordion-title-text">
+              <h2 class="accordion-title">4.1 Homepage CMS Content (Strategic Partnership, Vision/Mission, Partners)</h2>
+              <p class="accordion-subtitle">Customize Strategic Partnership (IMI), Vision, Mission, Objectives, and Development Partners texts.</p>
+            </div>
+          </div>
+          <div class="accordion-meta">
+            <span class="accordion-chevron">▼</span>
+          </div>
+        </div>
+        <div class="accordion-body">
+
+          <!-- Strategic Partnership with Impact Initiative -->
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;padding:16px;border-radius:8px;margin-bottom:18px;">
+            <h4 style="margin:0 0 10px 0;color:#166534;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>🤝</span> Strategic Partnership with Impact Initiative (কৌশলগত অংশীদারিত্ব)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr;">
+              <label>
+                Section Kicker (ছোট হেডার)
+                <input name="strategic_partnership_kicker" value="{{ old('strategic_partnership_kicker', $settings->get('strategic_partnership_kicker', 'STRATEGIC PARTNERSHIP')) }}">
+              </label>
+              <label>
+                Section Main Title (শিরোনাম)
+                <input name="strategic_partnership_title" value="{{ old('strategic_partnership_title', $settings->get('strategic_partnership_title', 'Partnership with Impact Initiative')) }}">
+              </label>
+            </div>
+            <label style="margin-top: 10px;">
+              Partnership Description Body 1 (মূল বিবরণ প্যারাগ্রাফ)
+              <textarea name="strategic_partnership_body" rows="4">{{ old('strategic_partnership_body', $settings->get('strategic_partnership_body', "Established in 1995, Impact Initiative (IMI) is a national humanitarian and development organization in Bangladesh, registered with the NGO Affairs Bureau (Registration No: 1224) under the Prime Minister's Office. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.")) }}</textarea>
+            </label>
+            <label style="margin-top: 10px;">
+              Partnership Footer / Closing Note (সমাপনী বাক্য)
+              <input name="strategic_partnership_footer" value="{{ old('strategic_partnership_footer', $settings->get('strategic_partnership_footer', 'Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.')) }}">
+            </label>
+          </div>
+
+          <!-- Vision, Mission & Objectives -->
+          <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:16px;border-radius:8px;margin-bottom:18px;">
+            <h4 style="margin:0 0 10px 0;color:#1e293b;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>🎯</span> Vision, Mission & Objectives (রূপকল্প, লক্ষ্য ও উদ্দেশ্যসমূহ)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 12px;">
+              <div>
+                <label>
+                  Vision Pill Label
+                  <input name="vmo_vision_pill" value="{{ old('vmo_vision_pill', $settings->get('vmo_vision_pill', 'Vision')) }}">
+                </label>
+                <label style="margin-top: 8px;">
+                  Vision Statement (রূপকল্প)
+                  <textarea name="vmo_vision_text" rows="4">{{ old('vmo_vision_text', $settings->get('vmo_vision_text', "Mahmudunnabi Chowdhury Technical School and College (MCTSC) envisions employing socially disadvantaged youth, men, and women, and encourages them to participate in the country's mainstream development initiatives.")) }}</textarea>
+                </label>
+              </div>
+              <div>
+                <label>
+                  Mission Pill Label
+                  <input name="vmo_mission_pill" value="{{ old('vmo_mission_pill', $settings->get('vmo_mission_pill', 'Mission')) }}">
+                </label>
+                <label style="margin-top: 8px;">
+                  Mission Statement (লক্ষ্য)
+                  <textarea name="vmo_mission_text" rows="4">{{ old('vmo_mission_text', $settings->get('vmo_mission_text', "Mahmudunnabi Chowdhury Technical School and College (MCTSC) is to promote the production of skilled/semi-skilled technical and professional manpower, to revitalize and sustain the national economy, reduce unemployment and poverty through the setting and maintenance of high standards, provision of current and reliable information for planning and decision making, sourcing and disbursing of funds, and adequate linkages with industry.")) }}</textarea>
+                </label>
+              </div>
+            </div>
+
+            <div>
+              <div class="field-grid" style="grid-template-columns: 1fr 2fr;">
+                <label>
+                  Objectives Pill Label
+                  <input name="vmo_objectives_pill" value="{{ old('vmo_objectives_pill', $settings->get('vmo_objectives_pill', 'Objectives')) }}">
+                </label>
+                <div></div>
+              </div>
+              <label style="margin-top: 8px;">
+                Objectives Points (প্রতি লাইনে একটি করে উদ্দেশ্য পয়েন্ট লিখুন)
+                <textarea name="vmo_objectives_text" rows="6" style="font-family: monospace; font-size: 13.5px;">{{ old('vmo_objectives_text', $settings->get('vmo_objectives_text', "To provide accessible, practical, and employment-oriented technical and vocational education and training.\nTo develop the technical, professional, and life skills of disadvantaged and unemployed youth.\nTo promote self-employment and facilitate access to suitable employment and entrepreneurship development opportunities.\nTo strengthen collaboration with industries and employers to improve training relevance and job placement.\nTo contribute to reducing unemployment and poverty through skills development and sustainable livelihoods.\nTo support trainees through post-training employment assistance and follow-up.")) }}</textarea>
+                <small style="color:#64748b;font-size:12px;">💡 নতুন পয়েন্ট যোগ করতে নতুন লাইন লিখুন। টিকচিহ্ন স্বয়ংক্রিয়ভাবে দেখাবে।</small>
+              </label>
+            </div>
+          </div>
+
+          <!-- Development Partners Marquee Intro -->
+          <div style="background:#fdfbf7;border:1px solid #f1e6d0;padding:16px;border-radius:8px;">
+            <h4 style="margin:0 0 10px 0;color:#92400e;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>🏢</span> Development Partners Intro (উন্নয়ন অংশীদার পরিচিতি)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr;">
+              <label>
+                Partners Kicker
+                <input name="dev_partners_kicker" value="{{ old('dev_partners_kicker', $settings->get('dev_partners_kicker', 'COLLABORATION & PARTNERSHIPS')) }}">
+              </label>
+              <label>
+                Partners Main Title
+                <input name="dev_partners_title" value="{{ old('dev_partners_title', $settings->get('dev_partners_title', 'Development Partners')) }}">
+              </label>
+            </div>
+            <label style="margin-top: 10px;">
+              Partners Introduction Paragraph
+              <textarea name="dev_partners_text" rows="3">{{ old('dev_partners_text', $settings->get('dev_partners_text', "MCTSC's institutional profile records collaboration with development organisations and programmes including ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO, and MAA International, among others. These partnerships reflect the institution's experience in delivering skills development and employment-oriented training initiatives.")) }}</textarea>
+            </label>
+          </div>
+
+          <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+            <button type="submit" style="background: #0f5132; color: #ffffff; border: none; padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(15,81,50,0.25);">
+              <span>💾</span> Save Homepage CMS Content
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- =====================================================================
            SECTION 5: ABOUT INSTITUTION & CAMPUS PHOTO
            ===================================================================== -->
       <div class="accordion-item" id="sec-about">
@@ -1335,7 +1451,166 @@
           </div>
 
           <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
-            <button type="submit" style="background: #0f5132; color: #ffffff; border: none; padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(15,81,50,0.25);">
+            <!-- ================= CORE VALUES (8 POINTS) ================= -->
+          <div style="background:#f8fafc;border:1px solid #cbd5e1;padding:16px;border-radius:8px;margin-top:16px;">
+            <h4 style="margin:0 0 10px 0;color:#0f5132;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>⭐</span> Institute Core Values (কোর ভ্যালুস - ৮টি পয়েন্ট)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr 2fr; margin-bottom: 12px;">
+              <label>
+                Core Values Kicker
+                <input name="core_values_kicker" value="{{ old('core_values_kicker', $settings->get('core_values_kicker', 'GUIDING PRINCIPLES')) }}">
+              </label>
+              <label>
+                Core Values Title
+                <input name="core_values_title" value="{{ old('core_values_title', $settings->get('core_values_title', 'Institute Core Values')) }}">
+              </label>
+              <label>
+                Core Values Subtitle
+                <input name="core_values_subtitle" value="{{ old('core_values_subtitle', $settings->get('core_values_subtitle', 'Mahmudunnabi Chowdhury Technical School and College (MCTSC)')) }}">
+              </label>
+            </div>
+
+            <!-- 8 Value Points -->
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              @php
+                $defaultValues = [
+                  1 => ['title' => 'Integrity and Accountability', 'desc' => 'We uphold honesty, transparency, ethical conduct, and accountability in all our institutional activities, financial management, and stakeholder relationships.'],
+                  2 => ['title' => 'Quality and Excellence', 'desc' => 'We are committed to delivering high-quality, competency-based technical and vocational education that meets national standards and evolving industry requirements.'],
+                  3 => ['title' => 'Inclusion and Equal Opportunity', 'desc' => 'We promote equal access to skills training for disadvantaged, unemployed, unskilled, orphaned, and vulnerable youth, regardless of gender or socioeconomic background.'],
+                  4 => ['title' => 'Employability and Entrepreneurship', 'desc' => 'We develop practical skills, professional competencies, and entrepreneurial capabilities to enable graduates to secure employment, establish businesses, and achieve sustainable livelihoods.'],
+                  5 => ['title' => 'Collaboration and Partnership', 'desc' => 'We strengthen partnerships with government agencies, employers, development organizations, industries, and communities to improve training quality and employment outcomes.'],
+                  6 => ['title' => 'Innovation and Continuous Learning', 'desc' => 'We encourage innovative teaching methods, practical learning, trainer development, Recognition of Prior Learning (RPL), and continuous improvement in skills development.'],
+                  7 => ['title' => 'Respect, Dignity and Safeguarding', 'desc' => 'We foster a safe, respectful, inclusive, and supportive learning environment that protects the dignity, rights, and well-being of all trainees and staff.'],
+                  8 => ['title' => 'Social Responsibility and Sustainable Development', 'desc' => 'We contribute to poverty reduction, youth empowerment, community development, and sustainable socioeconomic growth through skills training and employment support.'],
+                ];
+              @endphp
+
+              @for($v = 1; $v <= 8; $v++)
+                <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;">
+                  <label style="font-weight:700;color:#1e293b;">
+                    Value #{{ $v }} Title
+                    <input name="core_val_{{ $v }}_title" value="{{ old('core_val_' . $v . '_title', $settings->get('core_val_' . $v . '_title', $defaultValues[$v]['title'])) }}">
+                  </label>
+                  <label style="margin-top:6px;">
+                    Value #{{ $v }} Description
+                    <textarea name="core_val_{{ $v }}_desc" rows="3">{{ old('core_val_' . $v . '_desc', $settings->get('core_val_' . $v . '_desc', $defaultValues[$v]['desc'])) }}</textarea>
+                  </label>
+                </div>
+              @endfor
+            </div>
+          </div>
+
+          <!-- ================= LEGAL STATUS CMS ================= -->
+          <div style="background:#fffbeb;border:1px solid #fde68a;padding:16px;border-radius:8px;margin-top:16px;">
+            <h4 style="margin:0 0 10px 0;color:#92400e;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>📜</span> Legal Status & Identification Records (আইনি স্বীকৃতি ও লাইসেন্স তথ্য)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr;">
+              <label>
+                Legal Status Kicker
+                <input name="legal_status_kicker" value="{{ old('legal_status_kicker', $settings->get('legal_status_kicker', 'ACCREDITATION & COMPLIANCE')) }}">
+              </label>
+              <label>
+                Legal Status Title
+                <input name="legal_status_title" value="{{ old('legal_status_title', $settings->get('legal_status_title', 'Legal Status')) }}">
+              </label>
+            </div>
+            <label style="margin-top: 10px;">
+              Legal Status Introduction Text
+              <textarea name="legal_status_intro" rows="3">{{ old('legal_status_intro', $settings->get('legal_status_intro', 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) operates within the relevant regulatory and institutional framework for technical education and skills development in Bangladesh. The institution maintains registration, identification, and accreditation records with the relevant authorities to support its educational, training, and administrative activities.')) }}</textarea>
+            </label>
+
+            <div class="field-grid" style="grid-template-columns: repeat(3, 1fr); margin-top: 12px;">
+              <label>
+                BTEB Institute Code
+                <input name="legal_status_bteb" value="{{ old('legal_status_bteb', $settings->get('legal_status_bteb', '70102')) }}">
+              </label>
+              <label>
+                NSDA STP Registration Number
+                <input name="legal_status_nsda" value="{{ old('legal_status_nsda', $settings->get('legal_status_nsda', 'STP-CHA-000135')) }}">
+              </label>
+              <label>
+                Trade Licence (CCC)
+                <input name="legal_status_trade" value="{{ old('legal_status_trade', $settings->get('legal_status_trade', '68883')) }}">
+              </label>
+            </div>
+
+            <div class="field-grid" style="grid-template-columns: 1fr 1fr; margin-top: 10px;">
+              <label>
+                Tax Identification Number (TIN)
+                <input name="legal_status_tin" value="{{ old('legal_status_tin', $settings->get('legal_status_tin', '433576326443')) }}">
+              </label>
+              <label>
+                Business Identification Number (BIN/VAT)
+                <input name="legal_status_bin" value="{{ old('legal_status_bin', $settings->get('legal_status_bin', '001583568')) }}">
+              </label>
+            </div>
+
+            <label style="margin-top: 10px;">
+              Legal Status Footer Assurance Note
+              <input name="legal_status_footer" value="{{ old('legal_status_footer', $settings->get('legal_status_footer', 'MCTSC is committed to maintaining regulatory compliance, institutional accountability, transparency, and quality assurance in its technical and vocational education and training programmes.')) }}">
+            </label>
+          </div>
+
+          <!-- ================= HONOURING THE LEGACY OF MAHMUDUNNABI CHOWDHURY ================= -->
+          <div style="background:#fdfbf7;border:1px solid #f1e6d0;padding:16px;border-radius:8px;margin-top:16px;">
+            <h4 style="margin:0 0 10px 0;color:#92400e;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>🏛️</span> Honouring the Legacy of Mahmudunnabi Chowdhury (স্মৃতি ও ঐতিহ্য)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr;">
+              <label>
+                Patron Section Kicker
+                <input name="patron_kicker" value="{{ old('patron_kicker', $settings->get('patron_kicker', 'INSPIRATION & HERITAGE')) }}">
+              </label>
+              <label>
+                Patron Section Title
+                <input name="patron_title" value="{{ old('patron_title', $settings->get('patron_title', 'Honouring the Legacy of Mahmudunnabi Chowdhury')) }}">
+              </label>
+            </div>
+            <label style="margin-top: 10px;">
+              Patron Legacy Description / Biography Text
+              <textarea name="patron_text" rows="4">{{ old('patron_text', $settings->get('patron_text', 'Mahmudunnabi Chowdhury (1908–1995) was a prominent businessman and politician from Chattogram who served as a member of the East Pakistan Legislative Assembly and held ministerial responsibilities. The institution carries forward a commitment to human development and community progress in remembrance of his legacy.')) }}</textarea>
+            </label>
+          </div>
+
+          <!-- ================= 4 TRAINING PILLARS (WHAT WE DO) ================= -->
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;padding:16px;border-radius:8px;margin-top:16px;">
+            <h4 style="margin:0 0 10px 0;color:#166534;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>💼</span> Core Pillars - What We Do (মূল কার্যক্রমের ৪টি পিলার)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr; margin-bottom: 12px;">
+              <label>
+                Pillars Kicker
+                <input name="pillars_kicker" value="{{ old('pillars_kicker', $settings->get('pillars_kicker', 'CORE PILLARS')) }}">
+              </label>
+              <label>
+                Pillars Main Title
+                <input name="pillars_title" value="{{ old('pillars_title', $settings->get('pillars_title', 'What We Do')) }}">
+              </label>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;">
+                <label><strong>Pillar 1 Title</strong><input name="pillar_1_title" value="{{ old('pillar_1_title', $settings->get('pillar_1_title', 'Technical & Vocational Training')) }}"></label>
+                <label style="margin-top:6px;">Pillar 1 Description<textarea name="pillar_1_desc" rows="2">{{ old('pillar_1_desc', $settings->get('pillar_1_desc', 'Practical, occupation-focused skills development.')) }}</textarea></label>
+              </div>
+              <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;">
+                <label><strong>Pillar 2 Title</strong><input name="pillar_2_title" value="{{ old('pillar_2_title', $settings->get('pillar_2_title', 'Project-Based Training')) }}"></label>
+                <label style="margin-top:6px;">Pillar 2 Description<textarea name="pillar_2_desc" rows="2">{{ old('pillar_2_desc', $settings->get('pillar_2_desc', 'Skills training delivered under relevant development projects.')) }}</textarea></label>
+              </div>
+              <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;">
+                <label><strong>Pillar 3 Title</strong><input name="pillar_3_title" value="{{ old('pillar_3_title', $settings->get('pillar_3_title', 'Assessment & Certification')) }}"></label>
+                <label style="margin-top:6px;">Pillar 3 Description<textarea name="pillar_3_desc" rows="2">{{ old('pillar_3_desc', $settings->get('pillar_3_desc', 'Skills assessment and certification opportunities in accordance with applicable requirements.')) }}</textarea></label>
+              </div>
+              <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;">
+                <label><strong>Pillar 4 Title</strong><input name="pillar_4_title" value="{{ old('pillar_4_title', $settings->get('pillar_4_title', 'Employment Linkages')) }}"></label>
+                <label style="margin-top:6px;">Pillar 4 Description<textarea name="pillar_4_desc" rows="2">{{ old('pillar_4_desc', $settings->get('pillar_4_desc', 'Supporting trainees in connecting their acquired skills with employment opportunities.')) }}</textarea></label>
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" style="background: #0f5132; color: #ffffff; border: none; padding: 10px 22px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 6px rgba(15,81,50,0.25);">
               <span>💾</span> Save About Section Settings
             </button>
           </div>
@@ -1350,7 +1625,7 @@
           <div class="accordion-title-wrap">
             <span class="accordion-icon">🔬</span>
             <div class="accordion-title-text">
-              <h2 class="accordion-title">6. Campus Facilities & Practical Workshops</h2>
+              <h2 class="accordion-title">6. Infrastructure Page & Practical Workshops CMS</h2>
               <p class="accordion-subtitle">Showcase 4 laboratory facilities, equipment workshops, and hands-on training setups.</p>
             </div>
           </div>
@@ -1359,6 +1634,138 @@
           </div>
         </div>
         <div class="accordion-body">
+          <!-- Infrastructure Page Overview & 8 Facilities -->
+          <div style="background:#fdfbf7;border:1px solid #f1e6d0;padding:16px;border-radius:8px;margin-bottom:18px;">
+            <h4 style="margin:0 0 10px 0;color:#92400e;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>🏢</span> Infrastructure Page Overview & Header (অবকাঠামো পেজ পরিচিতি)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 10px;">
+              <label>
+                Infrastructure Page Title
+                <input name="infr_page_title" value="{{ old('infr_page_title', $settings->get('infr_page_title', 'Campus Infrastructure & Facilities')) }}">
+              </label>
+              <label>
+                Infrastructure Page Subtitle
+                <input name="infr_page_subtitle" value="{{ old('infr_page_subtitle', $settings->get('infr_page_subtitle', 'Comprehensive facilities for classroom instruction, practical training, and learner support.')) }}">
+              </label>
+            </div>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr;">
+              <label>
+                Campus Overview Kicker
+                <input name="infr_overview_kicker" value="{{ old('infr_overview_kicker', $settings->get('infr_overview_kicker', 'CAMPUS OVERVIEW')) }}">
+              </label>
+              <label>
+                Campus Overview Title
+                <input name="infr_overview_title" value="{{ old('infr_overview_title', $settings->get('infr_overview_title', 'Two-Storey Campus Infrastructure')) }}">
+              </label>
+            </div>
+            <label style="margin-top: 10px;">
+              Campus Overview Description
+              <textarea name="infr_overview_desc" rows="3">{{ old('infr_overview_desc', $settings->get('infr_overview_desc', 'MCTSC operates from a two-storey building with facilities for classroom instruction, practical training, administration, and learner support.')) }}</textarea>
+            </label>
+          </div>
+
+          <!-- Training Facilities (8 Items) -->
+          <div style="background:#f8fafc;border:1px solid #cbd5e1;padding:16px;border-radius:8px;margin-bottom:18px;">
+            <h4 style="margin:0 0 10px 0;color:#0f5132;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>🛠️</span> 8 Training Facilities on Infrastructure Page (প্রশিক্ষণ সুবিধাসমূহ)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr; margin-bottom: 12px;">
+              <label>
+                Facilities Section Kicker
+                <input name="infr_facilities_kicker" value="{{ old('infr_facilities_kicker', $settings->get('infr_facilities_kicker', 'FACILITIES')) }}">
+              </label>
+              <label>
+                Facilities Main Title
+                <input name="infr_facilities_title" value="{{ old('infr_facilities_title', $settings->get('infr_facilities_title', 'Training Facilities')) }}">
+              </label>
+            </div>
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              @php
+                $defaultInfrFac = [
+                  1 => ['title' => 'Theory Classrooms', 'desc' => 'Dedicated spaces for theoretical instruction and interactive learning.'],
+                  2 => ['title' => 'Technical Training Workshops and Laboratories', 'desc' => 'Facilities for practical skills development across relevant technical and vocational occupations.'],
+                  3 => ['title' => 'Computer Laboratories', 'desc' => 'Computer-based learning facilities with internet access to support digital skills development.'],
+                  4 => ['title' => 'Seminar and Meeting Room', 'desc' => 'Space for seminars, workshops, meetings, and stakeholder engagement.'],
+                  5 => ['title' => 'Library and Learning Resources', 'desc' => 'Learning resources to support trainees\' knowledge and professional development.'],
+                  6 => ['title' => 'Student Counselling and Information Desk', 'desc' => 'Support for trainee enquiries, guidance, and access to institutional services.'],
+                  7 => ['title' => 'Student Common Room', 'desc' => 'A shared space for trainees.'],
+                  8 => ['title' => 'Administrative Facilities', 'desc' => 'Offices and operational spaces to support institutional management and programme delivery.'],
+                ];
+              @endphp
+
+              @for($f = 1; $f <= 8; $f++)
+                <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;">
+                  <label style="font-weight:700;color:#1e293b;">
+                    Facility #{{ $f }} Title
+                    <input name="infr_fac_{{ $f }}_title" value="{{ old('infr_fac_' . $f . '_title', $settings->get('infr_fac_' . $f . '_title', $defaultInfrFac[$f]['title'])) }}">
+                  </label>
+                  <label style="margin-top:6px;">
+                    Facility #{{ $f }} Description
+                    <textarea name="infr_fac_{{ $f }}_desc" rows="2">{{ old('infr_fac_' . $f . '_desc', $settings->get('infr_fac_' . $f . '_desc', $defaultInfrFac[$f]['desc'])) }}</textarea>
+                  </label>
+                </div>
+              @endfor
+            </div>
+          </div>
+
+          <!-- Training Capacity at a Glance (7 Metrics) -->
+          <div style="background:#fffbeb;border:1px solid #fde68a;padding:16px;border-radius:8px;margin-bottom:18px;">
+            <h4 style="margin:0 0 10px 0;color:#92400e;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>📊</span> Training Capacity at a Glance (এক নজরে প্রশিক্ষণ সক্ষমতার ৭টি প্যারামিটার)
+            </h4>
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr; margin-bottom: 12px;">
+              <label>
+                Capacity Section Kicker
+                <input name="infr_capacity_kicker" value="{{ old('infr_capacity_kicker', $settings->get('infr_capacity_kicker', 'CAPACITY & SCOPE')) }}">
+              </label>
+              <label>
+                Capacity Main Title
+                <input name="infr_capacity_title" value="{{ old('infr_capacity_title', $settings->get('infr_capacity_title', 'Training Capacity at a Glance')) }}">
+              </label>
+            </div>
+
+            <div class="field-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 10px;">
+              <label>
+                1. Campus Location
+                <input name="infr_cap_location" value="{{ old('infr_cap_location', $settings->get('infr_cap_location', 'Chadu Chowdhury Road, Sagorika, Pahartali, Chattogram, Bangladesh')) }}">
+              </label>
+              <label>
+                2. Total Reported Floor Area
+                <input name="infr_cap_area" value="{{ old('infr_cap_area', $settings->get('infr_cap_area', 'Approximately 17,000 sq. ft.')) }}">
+              </label>
+            </div>
+
+            <div class="field-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 10px;">
+              <label>
+                3. Building Structure
+                <input name="infr_cap_structure" value="{{ old('infr_cap_structure', $settings->get('infr_cap_structure', 'Two-storey building')) }}">
+              </label>
+              <label>
+                4. Classrooms & Laboratories
+                <input name="infr_cap_rooms" value="{{ old('infr_cap_rooms', $settings->get('infr_cap_rooms', 'Eight rooms on each floor')) }}">
+              </label>
+            </div>
+
+            <div class="field-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 10px;">
+              <label>
+                5. Annual Training Capacity
+                <input name="infr_cap_annual" value="{{ old('infr_cap_annual', $settings->get('infr_cap_annual', 'Approximately 1,000 beneficiaries')) }}">
+              </label>
+              <label>
+                6. Training Occupations (affiliated)
+                <input name="infr_cap_occupations" value="{{ old('infr_cap_occupations', $settings->get('infr_cap_occupations', 'Fourteen')) }}">
+              </label>
+            </div>
+
+            <label>
+              7. Training Approach & Pedagogy
+              <input name="infr_cap_approach" value="{{ old('infr_cap_approach', $settings->get('infr_cap_approach', 'Practical, competency-based, and employment-oriented learning')) }}">
+            </label>
+          </div>
+
+          <h4 style="margin:20px 0 10px 0;color:#0f5132;font-size:15px;">🔬 4 Featured Homepage Labs & Workshops (৪টি প্রধান প্র্যাকটিক্যাল ল্যাব ছবি ও শিরোনাম)</h4>
           <p style="color: var(--muted); margin: 0 0 14px; font-size: 13px;">Configure images and titles for the 4 featured training workshops on the homepage.</p>
 
           <!-- Facility 1 -->
@@ -1502,6 +1909,58 @@
               Footer Highlight Tagline
               <input name="footer_tag" value="{{ old('footer_tag', $settings->get('footer_tag', 'A Brighter Tomorrow Through Skills')) }}">
             </label>
+          </div>
+
+          <!-- Secondary Pages Headers CMS -->
+          <div style="background:#f8fafc;border:1px solid #cbd5e1;padding:16px;border-radius:8px;margin-top:16px;">
+            <h4 style="margin:0 0 10px 0;color:#0f5132;font-size:15px;display:flex;align-items:center;gap:6px;">
+              <span>📑</span> Other Pages CMS Headers (কোর্স, প্রজেক্ট, গ্যালারি, নোটিশ ও যোগাযোগ পেজের শিরোনাম)
+            </h4>
+
+            <!-- Courses Page -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;margin-bottom:10px;">
+              <strong style="color:#0f5132;font-size:14px;display:block;margin-bottom:6px;">🎓 Courses Page (কোর্স পেজ)</strong>
+              <div class="field-grid" style="grid-template-columns:1fr 2fr;">
+                <label>Page Title<input name="courses_page_title" value="{{ old('courses_page_title', $settings->get('courses_page_title', 'Our Technical & Vocational Courses')) }}"></label>
+                <label>Page Subtitle<input name="courses_page_subtitle" value="{{ old('courses_page_subtitle', $settings->get('courses_page_subtitle', 'Market-relevant, hands-on trade training aligned with BTEB curriculum and industry workplace demands.')) }}"></label>
+              </div>
+            </div>
+
+            <!-- Projects Page -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;margin-bottom:10px;">
+              <strong style="color:#0f5132;font-size:14px;display:block;margin-bottom:6px;">🚀 Projects Page (প্রজেক্ট পেজ)</strong>
+              <div class="field-grid" style="grid-template-columns:1fr 2fr;">
+                <label>Page Title<input name="projects_page_title" value="{{ old('projects_page_title', $settings->get('projects_page_title', 'Projects & Development Initiatives')) }}"></label>
+                <label>Page Subtitle<input name="projects_page_subtitle" value="{{ old('projects_page_subtitle', $settings->get('projects_page_subtitle', 'Collaborative training programs supported by government ministries and international development partners.')) }}"></label>
+              </div>
+            </div>
+
+            <!-- Gallery Page -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;margin-bottom:10px;">
+              <strong style="color:#0f5132;font-size:14px;display:block;margin-bottom:6px;">🖼️ Gallery Page (গ্যালারি পেজ)</strong>
+              <div class="field-grid" style="grid-template-columns:1fr 2fr;">
+                <label>Page Title<input name="gallery_page_title" value="{{ old('gallery_page_title', $settings->get('gallery_page_title', 'Campus Life & Workshop Gallery')) }}"></label>
+                <label>Page Subtitle<input name="gallery_page_subtitle" value="{{ old('gallery_page_subtitle', $settings->get('gallery_page_subtitle', 'A visual glance into our modern technical workshops, student practical sessions, and campus events.')) }}"></label>
+              </div>
+            </div>
+
+            <!-- Notice Board Page -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;margin-bottom:10px;">
+              <strong style="color:#0f5132;font-size:14px;display:block;margin-bottom:6px;">📌 Notice Board Page (নোটিশ পেজ)</strong>
+              <div class="field-grid" style="grid-template-columns:1fr 2fr;">
+                <label>Page Title<input name="notices_page_title" value="{{ old('notices_page_title', $settings->get('notices_page_title', 'Official Notice Board')) }}"></label>
+                <label>Page Subtitle<input name="notices_page_subtitle" value="{{ old('notices_page_subtitle', $settings->get('notices_page_subtitle', 'Official announcements, admission circulars, class routines, and exam schedules.')) }}"></label>
+              </div>
+            </div>
+
+            <!-- Contact Us Page -->
+            <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;">
+              <strong style="color:#0f5132;font-size:14px;display:block;margin-bottom:6px;">📞 Contact Page (যোগাযোগ পেজ)</strong>
+              <div class="field-grid" style="grid-template-columns:1fr 2fr;">
+                <label>Page Title<input name="contact_page_title" value="{{ old('contact_page_title', $settings->get('contact_page_title', 'Contact Our Campus')) }}"></label>
+                <label>Page Subtitle<input name="contact_page_subtitle" value="{{ old('contact_page_subtitle', $settings->get('contact_page_subtitle', 'Get in touch with our admissions office for course inquiries, campus visits, or general assistance.')) }}"></label>
+              </div>
+            </div>
           </div>
         </div>
       </div>

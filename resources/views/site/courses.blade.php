@@ -3,9 +3,9 @@
 @endphp
 @extends('site.layout')
 
-@section('title', $isBn ? 'কোর্সসমূহ' : 'Our Training Courses')
-@section('page_title', $isBn ? 'আমাদের কারিগরি প্রশিক্ষণ কোর্সসমূহ' : 'Our Technical & Vocational Courses')
-@section('page_subtitle', $isBn ? 'বাস্তবমুখী ও স্কিল-ভিত্তিক প্র্যাকটিক্যাল ট্রেইনিং। বাংলাদেশ কারিগরি শিক্ষা বোর্ড (BTEB) স্বীকৃত ও মানসম্মত কারিকুলাম।' : 'Market-relevant, hands-on trade training aligned with BTEB curriculum and industry workplace demands.')
+@section('title', $settings['courses_tab_title'] ?? ($isBn ? 'কোর্সসমূহ · এমসি টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Our Training Courses · MC Technical School & College'))
+@section('page_title', $settings['courses_page_title'] ?? ($isBn ? 'আমাদের কারিগরি প্রশিক্ষণ কোর্সসমূহ' : 'Our Technical & Vocational Courses'))
+@section('page_subtitle', $settings['courses_page_subtitle'] ?? ($isBn ? 'বাস্তবমুখী ও স্কিল-ভিত্তিক প্র্যাকটিক্যাল ট্রেইনিং। বাংলাদেশ কারিগরি শিক্ষা বোর্ড (BTEB) স্বীকৃত ও মানসম্মত কারিকুলাম।' : 'Market-relevant, hands-on trade training aligned with BTEB curriculum and industry workplace demands.'))
 
 @section('content')
 @php

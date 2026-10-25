@@ -3,9 +3,9 @@
 @endphp
 @extends('site.layout')
 
-@section('title', $isBn ? 'যোগাযোগ' : 'Contact Us')
-@section('page_title', $isBn ? 'আমাদের সাথে যোগাযোগ' : 'Contact Our Campus')
-@section('page_subtitle', $isBn ? 'ভর্তি তথ্য, কোর্স বিবরণ অথবা যেকোনো প্রয়োজনে সরাসরি আমাদের ক্যাম্পাসে আসুন অথবা বার্তা পাঠান।' : 'Get in touch with our admissions office for course inquiries, campus visits, or general assistance.')
+@section('title', $settings['contact_tab_title'] ?? ($isBn ? 'যোগাযোগ' : 'Contact Us'))
+@section('page_title', $settings['contact_page_title'] ?? ($isBn ? 'আমাদের সাথে যোগাযোগ' : 'Contact Our Campus'))
+@section('page_subtitle', $settings['contact_page_subtitle'] ?? ($isBn ? 'ভর্তি তথ্য, কোর্স বিবরণ অথবা যেকোনো প্রয়োজনে সরাসরি আমাদের ক্যাম্পাসে আসুন অথবা বার্তা পাঠান।' : 'Get in touch with our admissions office for course inquiries, campus visits, or general assistance.'))
 
 @section('content')
 <section class="section" style="padding: 40px 0 60px 0;">

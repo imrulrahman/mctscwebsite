@@ -1165,24 +1165,36 @@
         <div class="vmo-col vmo-col-left">
           <!-- Vision Card -->
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-vision">{{ $isBn ? 'রূপকল্প' : 'Vision' }}</div>
+            <div class="vmo-pill pill-vision">{{ $settings->get('vmo_vision_pill') ?: ($isBn ? 'রূপকল্প' : 'Vision') }}</div>
             <div class="vmo-box">
               <p>
-                {{ $isBn 
-                  ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) সুবিধাবঞ্চিত যুবক, পুরুষ ও নারীদের কর্মসংস্থানের সুযোগ সৃষ্টি করতে এবং দেশের মূলধারার উন্নয়নমূলক কর্মকাণ্ডে তাদের অংশগ্রহণে উদ্বুদ্ধ করতে কাজ করে।' 
-                  : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) envisions employing socially disadvantaged youth, men, and women, and encourages them to participate in the country\'s mainstream development initiatives.' }}
+                @if($isBn && !empty($settings->get('vmo_vision_text_bn')))
+                  {{ $settings->get('vmo_vision_text_bn') }}
+                @elseif(!empty($settings->get('vmo_vision_text')))
+                  {{ $settings->get('vmo_vision_text') }}
+                @else
+                  {{ $isBn 
+                    ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) সুবিধাবঞ্চিত যুবক, পুরুষ ও নারীদের কর্মসংস্থানের সুযোগ সৃষ্টি করতে এবং দেশের মূলধারার উন্নয়নমূলক কর্মকাণ্ডে তাদের অংশগ্রহণে উদ্বুদ্ধ করতে কাজ করে।' 
+                    : "Mahmudunnabi Chowdhury Technical School and College (MCTSC) envisions employing socially disadvantaged youth, men, and women, and encourages them to participate in the country's mainstream development initiatives." }}
+                @endif
               </p>
             </div>
           </div>
 
           <!-- Mission Card -->
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-mission">{{ $isBn ? 'লক্ষ্য' : 'Mission' }}</div>
+            <div class="vmo-pill pill-mission">{{ $settings->get('vmo_mission_pill') ?: ($isBn ? 'লক্ষ্য' : 'Mission') }}</div>
             <div class="vmo-box">
               <p>
-                {{ $isBn 
-                  ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)-এর মূল লক্ষ্য হলো উচ্চমান বজায় রাখা, পরিকল্পনা ও সিদ্ধান্ত গ্রহণের জন্য নির্ভরযোগ্য তথ্য নিশ্চিতকরণ, তহবিল সংগ্রহ ও সঠিক বণ্টন এবং শিল্পের সাথে কার্যকর সংযোগ স্থাপনের মাধ্যমে দক্ষ ও আধা-দক্ষ কারিগরি ও পেশাদার জনশক্তি তৈরি করে জাতীয় অর্থনীতিকে পুনরুজ্জীবিত ও টেকসই করা এবং বেকারত্ব ও দারিদ্র্য হ্রাস করা।' 
-                  : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) is to promote the production of skilled/semi-skilled technical and professional manpower, to revitalize and sustain the national economy, reduce unemployment and poverty through the setting and maintenance of high standards, provision of current and reliable information for planning and decision making, sourcing and disbursing of funds, and adequate linkages with industry.' }}
+                @if($isBn && !empty($settings->get('vmo_mission_text_bn')))
+                  {{ $settings->get('vmo_mission_text_bn') }}
+                @elseif(!empty($settings->get('vmo_mission_text')))
+                  {{ $settings->get('vmo_mission_text') }}
+                @else
+                  {{ $isBn 
+                    ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)-এর মূল লক্ষ্য হলো উচ্চমান বজায় রাখা, পরিকল্পনা ও সিদ্ধান্ত গ্রহণের জন্য নির্ভরযোগ্য তথ্য নিশ্চিতকরণ, তহবিল সংগ্রহ ও সঠিক বণ্টন এবং শিল্পের সাথে কার্যকর সংযোগ স্থাপনের মাধ্যমে দক্ষ ও আধা-দক্ষ কারিগরি ও পেশাদার জনশক্তি তৈরি করে জাতীয় অর্থনীতিকে পুনরুজ্জীবিত ও টেকসই করা এবং বেকারত্ব ও দারিদ্র্য হ্রাস করা।' 
+                    : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) is to promote the production of skilled/semi-skilled technical and professional manpower, to revitalize and sustain the national economy, reduce unemployment and poverty through the setting and maintenance of high standards, provision of current and reliable information for planning and decision making, sourcing and disbursing of funds, and adequate linkages with industry.' }}
+                @endif
               </p>
             </div>
           </div>
@@ -1191,23 +1203,33 @@
         <!-- Right Column: Objectives Card -->
         <div class="vmo-col vmo-col-right">
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-objectives">{{ $isBn ? 'উদ্দেশ্যসমূহ' : 'Objectives' }}</div>
+            <div class="vmo-pill pill-objectives">{{ $settings->get('vmo_objectives_pill') ?: ($isBn ? 'উদ্দেশ্যসমূহ' : 'Objectives') }}</div>
             <div class="vmo-box">
               <ul class="vmo-objectives-list">
-                @if($isBn)
-                  <li><span>✓</span> <div>সহজলভ্য, বাস্তবমুখী ও কর্মসংস্থানমুখী কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ প্রদান।</div></li>
-                  <li><span>✓</span> <div>সুবিধাবঞ্চিত ও বেকার যুবসমাজের কারিগরি, পেশাগত ও জীবন দক্ষতার বিকাশ সাধন।</div></li>
-                  <li><span>✓</span> <div>আত্মকর্মসংস্থান উৎসাহিত করা এবং উপযুক্ত কর্মসংস্থান ও উদ্যোক্তা তৈরির সুযোগ সৃষ্টি।</div></li>
-                  <li><span>✓</span> <div>শিল্পপ্রতিষ্ঠান ও নিয়োগকারীদের সাথে অংশীদারিত্ব জোরদার করে প্রশিক্ষণের উপযোগিতা ও চাকরি প্রাপ্তি নিশ্চিত করা।</div></li>
-                  <li><span>✓</span> <div>দক্ষতা উন্নয়ন ও টেকসই জীবিকার মাধ্যমে বেকারত্ব ও দারিদ্র্য হ্রাসকরণে অবদান রাখা।</div></li>
-                  <li><span>✓</span> <div>প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তা এবং নিয়মিত ফলোআপের মাধ্যমে ট্রেইনিদের সহায়তা প্রদান।</div></li>
+                @php
+                  $customObjs = $settings->get($isBn ? 'vmo_objectives_text_bn' : 'vmo_objectives_text') ?: $settings->get('vmo_objectives_text');
+                  $objsList = $customObjs ? array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $customObjs)))) : null;
+                @endphp
+                @if(!empty($objsList))
+                  @foreach($objsList as $objItem)
+                    <li><span>✓</span> <div>{{ $objItem }}</div></li>
+                  @endforeach
                 @else
-                  <li><span>✓</span> <div>To provide accessible, practical, and employment-oriented technical and vocational education and training.</div></li>
-                  <li><span>✓</span> <div>To develop the technical, professional, and life skills of disadvantaged and unemployed youth.</div></li>
-                  <li><span>✓</span> <div>To promote self-employment and facilitate access to suitable employment and entrepreneurship development opportunities.</div></li>
-                  <li><span>✓</span> <div>To strengthen collaboration with industries and employers to improve training relevance and job placement.</div></li>
-                  <li><span>✓</span> <div>To contribute to reducing unemployment and poverty through skills development and sustainable livelihoods.</div></li>
-                  <li><span>✓</span> <div>To support trainees through post-training employment assistance and follow-up.</div></li>
+                  @if($isBn)
+                    <li><span>✓</span> <div>সহজলভ্য, বাস্তবমুখী ও কর্মসংস্থানমুখী কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ প্রদান।</div></li>
+                    <li><span>✓</span> <div>সুবিধাবঞ্চিত ও বেকার যুবসমাজের কারিগরি, পেশাগত ও জীবন দক্ষতার বিকাশ সাধন।</div></li>
+                    <li><span>✓</span> <div>আত্মকর্মসংস্থান উৎসাহিত করা এবং উপযুক্ত কর্মসংস্থান ও উদ্যোক্তা তৈরির সুযোগ সৃষ্টি।</div></li>
+                    <li><span>✓</span> <div>শিল্পপ্রতিষ্ঠান ও নিয়োগকারীদের সাথে অংশীদারিত্ব জোরদার করে প্রশিক্ষণের উপযোগিতা ও চাকরি প্রাপ্তি নিশ্চিত করা।</div></li>
+                    <li><span>✓</span> <div>দক্ষতা উন্নয়ন ও টেকসই জীবিকার মাধ্যমে বেকারত্ব ও দারিদ্র্য হ্রাসকরণে অবদান রাখা।</div></li>
+                    <li><span>✓</span> <div>প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তা এবং নিয়মিত ফলোআপের মাধ্যমে ট্রেইনিদের সহায়তা প্রদান।</div></li>
+                  @else
+                    <li><span>✓</span> <div>To provide accessible, practical, and employment-oriented technical and vocational education and training.</div></li>
+                    <li><span>✓</span> <div>To develop the technical, professional, and life skills of disadvantaged and unemployed youth.</div></li>
+                    <li><span>✓</span> <div>To promote self-employment and facilitate access to suitable employment and entrepreneurship development opportunities.</div></li>
+                    <li><span>✓</span> <div>To strengthen collaboration with industries and employers to improve training relevance and job placement.</div></li>
+                    <li><span>✓</span> <div>To contribute to reducing unemployment and poverty through skills development and sustainable livelihoods.</div></li>
+                    <li><span>✓</span> <div>To support trainees through post-training employment assistance and follow-up.</div></li>
+                  @endif
                 @endif
               </ul>
             </div>
@@ -1217,7 +1239,7 @@
     </div>
   </section>
 
-  <!-- STRATEGIC PARTNERSHIP WITH IMPACT INITIATIVE (IMI) -->
+  <!-- STRATEGIC PARTNERSHIP WITH IMPACT INITIATIVE (IMI) - CMS POWERED & 100% EDITABLE -->
   <section class="section" style="padding-top: 10px; padding-bottom: 24px;">
     <div class="container">
       <div style="background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 28px 34px; box-shadow: 0 4px 16px rgba(16, 185, 129, 0.05);">
@@ -1225,28 +1247,44 @@
           <span style="font-size: 28px;">🤝</span>
           <div>
             <span style="font-size: 12px; font-weight: 700; color: #166534; letter-spacing: 1.5px; text-transform: uppercase;">
-              {{ $isBn ? 'কৌশলগত অংশীদারিত্ব' : 'STRATEGIC PARTNERSHIP' }}
+              {{ $settings->get('strategic_partnership_kicker') ?: ($isBn ? 'কৌশলগত অংশীদারিত্ব' : 'STRATEGIC PARTNERSHIP') }}
             </span>
             <h3 style="font-family: var(--serif); font-size: 22px; color: #14532d; margin: 2px 0 0 0;">
-              {{ $isBn ? 'ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative)-এর সাথে অংশীদারিত্ব' : 'Partnership with Impact Initiative' }}
+              {{ $settings->get('strategic_partnership_title') ?: ($isBn ? 'ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative)-এর সাথে অংশীদারিত্ব' : 'Partnership with Impact Initiative') }}
             </h3>
           </div>
         </div>
         <div style="font-size: 15px; line-height: 1.8; color: #166534;">
-          @if($isBn)
-            <p style="margin-bottom: 12px;">
-              <strong>১৯৯৫ সালে</strong> প্রতিষ্ঠিত <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI)</strong> গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের প্রধানমন্ত্রীর কার্যালয়াধীন <strong>এনজিও বিষয়ক ব্যুরো (নিবন্ধন নং: ১২২৪)</strong> কর্তৃক নিবন্ধিত একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।
-            </p>
-            <p style="margin: 0; font-weight: 600;">
-              এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে।
-            </p>
+          @if($isBn && !empty($settings->get('strategic_partnership_body_bn')))
+            <p style="margin-bottom: 12px;">{!! nl2br(e($settings->get('strategic_partnership_body_bn'))) !!}</p>
+          @elseif(!empty($settings->get('strategic_partnership_body')))
+            <p style="margin-bottom: 12px;">{!! nl2br(e($settings->get('strategic_partnership_body'))) !!}</p>
           @else
-            <p style="margin-bottom: 12px;">
-              Established in <strong>1995</strong>, <strong>Impact Initiative (IMI)</strong> is a national humanitarian and development organization in Bangladesh, registered with the <strong>NGO Affairs Bureau (Registration No: 1224)</strong> under the Prime Minister's Office. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.
-            </p>
-            <p style="margin: 0; font-weight: 600;">
-              Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.
-            </p>
+            @if($isBn)
+              <p style="margin-bottom: 12px;">
+                <strong>১৯৯৫ সালে</strong> প্রতিষ্ঠিত <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI)</strong> গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের প্রধানমন্ত্রীর কার্যালয়াধীন <strong>এনজিও বিষয়ক ব্যুরো (নিবন্ধন নং: ১২২৪)</strong> কর্তৃক নিবন্ধিত একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।
+              </p>
+            @else
+              <p style="margin-bottom: 12px;">
+                Established in <strong>1995</strong>, <strong>Impact Initiative (IMI)</strong> is a national humanitarian and development organization in Bangladesh, registered with the <strong>NGO Affairs Bureau (Registration No: 1224)</strong> under the Prime Minister\'s Office. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.
+              </p>
+            @endif
+          @endif
+
+          @if($isBn && !empty($settings->get('strategic_partnership_footer_bn')))
+            <p style="margin: 0; font-weight: 600;">{{ $settings->get('strategic_partnership_footer_bn') }}</p>
+          @elseif(!empty($settings->get('strategic_partnership_footer')))
+            <p style="margin: 0; font-weight: 600;">{{ $settings->get('strategic_partnership_footer') }}</p>
+          @else
+            @if($isBn)
+              <p style="margin: 0; font-weight: 600;">
+                এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে।
+              </p>
+            @else
+              <p style="margin: 0; font-weight: 600;">
+                Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.
+              </p>
+            @endif
           @endif
         </div>
       </div>
@@ -1257,13 +1295,21 @@
   <section id="development-partners" class="section partners-marquee-section">
     <div class="container">
       <div class="partners-intro">
-        <p class="section-kicker" style="justify-content: center;">{{ $isBn ? 'অংশীদারিত্ব ও কোলাবোরেশন' : 'COLLABORATION & PARTNERSHIPS' }}</p>
-        <h2>{{ $isBn ? 'উন্নয়ন অংশীদারগণ' : 'Development Partners' }}</h2>
+        <p class="section-kicker" style="justify-content: center;">{{ $settings->get('dev_partners_kicker') ?: ($isBn ? 'অংশীদারিত্ব ও কোলাবোরেশন' : 'COLLABORATION & PARTNERSHIPS') }}</p>
+        <h2>{{ $settings->get('dev_partners_title') ?: ($isBn ? 'উন্নয়ন অংশীদারগণ' : 'Development Partners') }}</h2>
         <div class="gold-rule" style="margin: 0 auto 16px auto;"></div>
         <p>
-          {{ $isBn 
-            ? "MCTSC-এর প্রাতিষ্ঠানিক পথচলায় বিভিন্ন শীর্ষস্থানীয় উন্নয়ন সংস্থা ও কর্মসূচির সাথে যৌথভাবে কাজ করার অভিজ্ঞতা রয়েছে, যার মধ্যে ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO এবং MAA International অন্যতম। এই অংশীদারিত্বগুলো দক্ষ জনশক্তি গড়ে তোলা ও কর্মসংস্থানমুখী প্রশিক্ষণ কার্যক্রম পরিচালনায় প্রতিষ্ঠানের অভিজ্ঞতা ও সফলতার প্রতিফলন।" 
-            : "MCTSC's institutional profile records collaboration with development organisations and programmes including ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO, and MAA International, among others. These partnerships reflect the institution's experience in delivering skills development and employment-oriented training initiatives." }}
+          @if($isBn && !empty($settings->get('dev_partners_text_bn')))
+            {{ $settings->get('dev_partners_text_bn') }}
+          @elseif(!empty($settings->get('dev_partners_text')))
+            {{ $settings->get('dev_partners_text') }}
+          @else
+            @if($isBn)
+              MCTSC-এর প্রাতিষ্ঠানিক পথচলায় বিভিন্ন শীর্ষস্থানীয় উন্নয়ন সংস্থা ও কর্মসূচির সাথে যৌথভাবে কাজ করার অভিজ্ঞতা রয়েছে, যার মধ্যে ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO এবং MAA International অন্যতম। এই অংশীদারিত্বগুলো দক্ষ জনশক্তি গড়ে তোলা ও কর্মসংস্থানমুখী প্রশিক্ষণ কার্যক্রম পরিচালনায় প্রতিষ্ঠানের অভিজ্ঞতা ও সফলতার প্রতিফলন।
+            @else
+              MCTSC's institutional profile records collaboration with development organisations and programmes including ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO, and MAA International, among others. These partnerships reflect the institution's experience in delivering skills development and employment-oriented training initiatives.
+            @endif
+          @endif
         </p>
       </div>
     </div>

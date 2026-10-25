@@ -3,9 +3,9 @@
 @endphp
 @extends('site.layout')
 
-@section('title', $isBn ? 'ফটো গ্যালারি' : 'Campus Photo Gallery')
-@section('page_title', $isBn ? 'ইনস্টিটিউট ফটো গ্যালারি' : 'Campus Life & Workshop Gallery')
-@section('page_subtitle', $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজের প্র্যাকটিক্যাল ল্যাব, প্রশিক্ষণ কার্যক্রম ও ক্যাম্পাস জীবনের মুহূর্তসমূহ।' : 'A visual glance into our modern technical workshops, student practical sessions, and campus events.')
+@section('title', $settings['gallery_tab_title'] ?? ($isBn ? 'ফটো গ্যালারি' : 'Campus Photo Gallery'))
+@section('page_title', $settings['gallery_page_title'] ?? ($isBn ? 'ইনস্টিটিউট ফটো গ্যালারি' : 'Campus Life & Workshop Gallery'))
+@section('page_subtitle', $settings['gallery_page_subtitle'] ?? ($isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজের প্র্যাকটিক্যাল ল্যাব, প্রশিক্ষণ কার্যক্রম ও ক্যাম্পাস জীবনের মুহূর্তসমূহ।' : 'A visual glance into our modern technical workshops, student practical sessions, and campus events.'))
 
 @section('content')
 <section class="section" style="padding: 40px 0 60px 0;">

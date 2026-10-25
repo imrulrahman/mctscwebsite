@@ -3,9 +3,9 @@
 @endphp
 @extends('site.layout')
 
-@section('title', $isBn ? 'প্রজেক্টস ও পার্টনারশিপ' : 'Projects & Training Initiatives')
-@section('page_title', $isBn ? 'প্রজেক্টস ও উন্নয়নমূলক প্রশিক্ষণ কর্মসূচি' : 'Projects & Development Initiatives')
-@section('page_subtitle', $isBn ? 'সরকারি ও আন্তর্জাতিক উন্নয়ন সহযোগীদের অর্থায়নে বিনামূল্যে কর্মমুখী কারিগরি প্রশিক্ষণ ও বৃত্তি কার্যক্রম।' : 'Collaborative training programs supported by government ministries and international development partners.')
+@section('title', $settings['projects_tab_title'] ?? ($isBn ? 'প্রজেক্টস ও পার্টনারশিপ' : 'Projects & Training Initiatives'))
+@section('page_title', $settings['projects_page_title'] ?? ($isBn ? 'প্রজেক্টস ও উন্নয়নমূলক প্রশিক্ষণ কর্মসূচি' : 'Projects & Development Initiatives'))
+@section('page_subtitle', $settings['projects_page_subtitle'] ?? ($isBn ? 'সরকারি ও আন্তর্জাতিক উন্নয়ন সহযোগীদের অর্থায়নে বিনামূল্যে কর্মমুখী কারিগরি প্রশিক্ষণ ও বৃত্তি কার্যক্রম।' : 'Collaborative training programs supported by government ministries and international development partners.'))
 
 @section('content')
 <section class="section" style="padding: 40px 0 60px 0;">

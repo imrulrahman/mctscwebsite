@@ -3,9 +3,9 @@
 @endphp
 @extends('site.layout')
 
-@section('title', $isBn ? 'নোটিশ বোর্ড' : 'Notice Board')
-@section('page_title', $isBn ? 'ইনস্টিটিউট নোটিশ বোর্ড' : 'Official Notice Board')
-@section('page_subtitle', $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজের ভর্তি, ক্লাস ও পরীক্ষার যাবতীয় অফিশিয়াল নোটিশ।' : 'Official announcements, admission circulars, class routines, and exam schedules.')
+@section('title', $settings['notices_tab_title'] ?? ($isBn ? 'নোটিশ বোর্ড' : 'Notice Board'))
+@section('page_title', $settings['notices_page_title'] ?? ($isBn ? 'ইনস্টিটিউট নোটিশ বোর্ড' : 'Official Notice Board'))
+@section('page_subtitle', $settings['notices_page_subtitle'] ?? ($isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজের ভর্তি, ক্লাস ও পরীক্ষার যাবতীয় অফিশিয়াল নোটিশ।' : 'Official announcements, admission circulars, class routines, and exam schedules.'))
 
 @section('content')
 <section class="section" style="padding: 40px 0 60px 0;">

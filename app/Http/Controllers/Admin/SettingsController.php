@@ -60,28 +60,33 @@ class SettingsController extends Controller
     public function update(Request $request): RedirectResponse
     {
         abort_unless(auth()->user()?->can('settings.manage'), 403, 'সাইট সেটিংস পরিবর্তনের অনুমতি আপনার অ্যাকাউন্টে নেই।');
-        $rules = [];
-        foreach (self::TEXT_FIELDS as $field) {
-            $rules[$field] = ['nullable', 'string', 'max:5000'];
-        }
-        foreach (self::IMAGE_FIELDS as $field) {
-            $rules[$field] = ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,svg,webp,ico', 'max:5120']; // up to 5MB
-        }
 
-        $request->validate($rules);
+        // Excluded request parameters that are not site_settings keys
+        $excluded = [
+            '_token', '_method', 'action', 'preset_banner',
+            'admission_fields_config_submitted', 'admission_required_fields'
+        ];
 
-        // Update text fields
-        foreach (self::TEXT_FIELDS as $field) {
-            if ($request->has($field)) {
-                $val = $request->input($field) ?? '';
-                if ($field === 'notice_bar_opacity') {
-                    $rawOp = floatval($val);
-                    $cleanOp = $rawOp <= 1.0 && $rawOp > 0 ? (int)round($rawOp * 100) : (int)$rawOp;
-                    if ($cleanOp <= 0) $cleanOp = 10;
-                    $val = (string)$cleanOp;
-                }
-                SiteSetting::updateOrCreate(['key' => $field], ['value' => $val]);
+        // Process all submitted text inputs dynamically so every element can be edited
+        foreach ($request->except($excluded) as $field => $val) {
+            if ($request->hasFile($field)) {
+                continue;
             }
+
+            if (is_array($val)) {
+                $cleanVal = json_encode($val);
+            } else {
+                $cleanVal = (string)($val ?? '');
+            }
+
+            if ($field === 'notice_bar_opacity') {
+                $rawOp = floatval($cleanVal);
+                $cleanOp = $rawOp <= 1.0 && $rawOp > 0 ? (int)round($rawOp * 100) : (int)$rawOp;
+                if ($cleanOp <= 0) $cleanOp = 10;
+                $cleanVal = (string)$cleanOp;
+            }
+
+            SiteSetting::updateOrCreate(['key' => $field], ['value' => $cleanVal]);
         }
 
         // Update Admission Form required fields configuration
