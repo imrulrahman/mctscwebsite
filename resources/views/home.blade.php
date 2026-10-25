@@ -479,26 +479,41 @@
       margin-right: 22px;
       background: #ffffff;
       border-radius: 18px;
-      display: grid;
-      place-items: center;
-      padding: 18px 24px;
       box-shadow: 0 8px 24px rgba(0, 26, 117, 0.06);
       border: 1px solid rgba(0, 0, 0, 0.07);
       transition: transform 0.35s ease, box-shadow 0.35s ease, border-color 0.35s ease;
       box-sizing: border-box;
+      overflow: hidden;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
     .imi-lcard:hover {
       transform: translateY(-6px);
       box-shadow: 0 18px 40px rgba(15, 81, 50, 0.14);
       border-color: rgba(15, 81, 50, 0.3);
     }
+    .imi-lcard-link {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: 16px 22px !important;
+      box-sizing: border-box !important;
+      text-decoration: none !important;
+    }
     .imi-lcard img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
+      max-width: 100% !important;
+      max-height: 100% !important;
+      width: auto !important;
+      height: auto !important;
+      object-fit: contain !important;
+      margin: auto !important;
+      display: block !important;
       filter: grayscale(15%);
       transition: filter 0.3s ease, transform 0.3s ease;
-      display: block;
     }
     .imi-lcard:hover img {
       filter: grayscale(0%);
@@ -509,8 +524,11 @@
         width: 175px;
         height: 94px;
         margin-right: 14px;
-        padding: 14px 18px;
+        padding: 0 !important;
         border-radius: 14px;
+      }
+      .imi-lcard-link {
+        padding: 12px 16px !important;
       }
     }
 
@@ -930,7 +948,7 @@
         <div class="vmo-col vmo-col-left">
           <!-- Vision Card -->
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-vision">{{ $isBn ? 'আমাদের রূপকল্প' : 'Vision' }}</div>
+            <div class="vmo-pill pill-vision">{{ $isBn ? 'আমাদের রূপকল্প' : 'Our Vision' }}</div>
             <div class="vmo-box">
               <p>
                 {{ $isBn 
@@ -942,7 +960,7 @@
 
           <!-- Mission Card -->
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-mission">{{ $isBn ? 'আমাদের লক্ষ্য' : 'Mission' }}</div>
+            <div class="vmo-pill pill-mission">{{ $isBn ? 'আমাদের লক্ষ্য' : 'Our Mission' }}</div>
             <div class="vmo-box">
               <p>
                 {{ $isBn 
@@ -956,7 +974,7 @@
         <!-- Right Column: Objectives Card -->
         <div class="vmo-col vmo-col-right">
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-objectives">{{ $isBn ? 'আমাদের উদ্দেশ্যসমূহ' : 'Objectives' }}</div>
+            <div class="vmo-pill pill-objectives">{{ $isBn ? 'আমাদের উদ্দেশ্যসমূহ' : 'Our Objectives' }}</div>
             <div class="vmo-box">
               <ul class="vmo-objectives-list">
                 @if($isBn)
@@ -987,7 +1005,7 @@
     <div class="container">
       <div class="partners-intro">
         <p class="section-kicker" style="justify-content: center;">{{ $isBn ? 'অংশীদারিত্ব ও কোলাবোরেশন' : 'COLLABORATION & PARTNERSHIPS' }}</p>
-        <h2>{{ $isBn ? 'আমাদের উন্নয়ন অংশীদারগণ' : 'Development Partners' }}</h2>
+        <h2>{{ $isBn ? 'আমাদের উন্নয়ন অংশীদারগণ' : 'Our Development Partners' }}</h2>
         <div class="gold-rule" style="margin: 0 auto 16px auto;"></div>
         <p>
           {{ $isBn 
@@ -1025,11 +1043,13 @@
         @foreach($activePartners as $p)
           <div class="imi-lcard" title="{{ $p['title'] }}{{ !empty($p['category']) ? ' (' . $p['category'] . ')' : '' }}">
             @if(!empty($p['url']))
-              <a href="{{ $p['url'] }}" target="_blank" rel="noopener noreferrer" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+              <a href="{{ $p['url'] }}" target="_blank" rel="noopener noreferrer" class="imi-lcard-link">
                 <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}">
               </a>
             @else
-              <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}">
+              <div class="imi-lcard-link">
+                <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}">
+              </div>
             @endif
           </div>
         @endforeach
@@ -1038,11 +1058,13 @@
         @foreach($activePartners as $p)
           <div class="imi-lcard" aria-hidden="true">
             @if(!empty($p['url']))
-              <a href="{{ $p['url'] }}" target="_blank" rel="noopener noreferrer" tabindex="-1" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+              <a href="{{ $p['url'] }}" target="_blank" rel="noopener noreferrer" tabindex="-1" class="imi-lcard-link">
                 <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}">
               </a>
             @else
-              <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}">
+              <div class="imi-lcard-link">
+                <img src="{{ $p['image'] }}" alt="{{ $p['title'] }}">
+              </div>
             @endif
           </div>
         @endforeach
