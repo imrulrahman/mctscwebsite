@@ -1246,7 +1246,7 @@
             </label>
             <label style="margin-top: 10px;">
               Partnership Footer / Closing Note (সমাপনী বাক্য)
-              <input name="strategic_partnership_footer" value="{{ old('strategic_partnership_footer', $settings->get('strategic_partnership_footer', 'Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training. For Quality Assurance of the institute, the following Management Committee has been formed.')) }}">
+              <input name="strategic_partnership_footer" value="{{ old('strategic_partnership_footer', $settings->has('strategic_partnership_footer') ? $settings->get('strategic_partnership_footer') : 'Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training. For Quality Assurance of the institute, the following Management Committee has been formed.') }}" placeholder="Through this partnership, MC Technical School & College continues to support skills development...">
             </label>
           </div>
 

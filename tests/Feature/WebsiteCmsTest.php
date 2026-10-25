@@ -780,4 +780,32 @@ class WebsiteCmsTest extends TestCase
         \App\Models\SiteSetting::where('key', 'gov_member_1_name')->delete();
         \App\Models\SiteSetting::where('key', 'gov_member_1_position')->delete();
     }
+
+    public function test_strategic_partnership_footer_can_be_cleared_and_hidden(): void
+    {
+        $this->seed();
+
+        $admin = User::firstOrCreate(
+            ['email' => 'admin_footer_test@mctsc.test'],
+            ['name' => 'Admin Footer', 'password' => 'Passw0rd!123', 'is_admin' => true]
+        );
+
+        // When cleared by admin, the closing note should not be displayed on homepage
+        $response = $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'strategic_partnership_footer' => '',
+        ]);
+        $response->assertRedirect();
+
+        $home = $this->withSession(['locale' => 'en'])->get(route('home'));
+        $home->assertOk();
+        $home->assertDontSee('Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.');
+
+        // When updated with custom text, it shows that custom text
+        $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'strategic_partnership_footer' => 'Custom Partnership Closing Note MCTSC 2026',
+        ]);
+        $homeCustom = $this->withSession(['locale' => 'en'])->get(route('home'));
+        $homeCustom->assertOk();
+        $homeCustom->assertSee('Custom Partnership Closing Note MCTSC 2026');
+    }
 }

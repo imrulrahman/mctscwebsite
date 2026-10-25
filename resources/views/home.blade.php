@@ -1255,36 +1255,40 @@
           </div>
         </div>
         <div style="font-size: 15px; line-height: 1.8; color: #166534;">
-          @if($isBn && !empty($settings->get('strategic_partnership_body_bn')))
-            <p style="margin-bottom: 12px;">{!! nl2br(e($settings->get('strategic_partnership_body_bn'))) !!}</p>
-          @elseif(!empty($settings->get('strategic_partnership_body')))
-            <p style="margin-bottom: 12px;">{!! nl2br(e($settings->get('strategic_partnership_body'))) !!}</p>
-          @else
-            @if($isBn)
-              <p style="margin-bottom: 12px;">
-                <strong>১৯৯৫ সালে</strong> প্রতিষ্ঠিত <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI)</strong> গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের প্রধানমন্ত্রীর কার্যালয়াধীন <strong>এনজিও বিষয়ক ব্যুরো (নিবন্ধন নং: ১২২৪)</strong> কর্তৃক নিবন্ধিত একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।
-              </p>
-            @else
-              <p style="margin-bottom: 12px;">
-                Established in <strong>1995</strong>, <strong>Impact Initiative (IMI)</strong> is a national humanitarian and development organization in Bangladesh, registered with the <strong>NGO Affairs Bureau (Registration No: 1224)</strong> under the Prime Minister\'s Office. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.
-              </p>
-            @endif
+          @php
+            $hasSpBodyBn = $settings->has('strategic_partnership_body_bn');
+            $hasSpBodyEn = $settings->has('strategic_partnership_body');
+            if ($isBn && $hasSpBodyBn) {
+                $spBodyText = $settings->get('strategic_partnership_body_bn');
+            } elseif ($hasSpBodyEn) {
+                $spBodyText = $settings->get('strategic_partnership_body');
+            } elseif ($isBn) {
+                $spBodyText = '<strong>১৯৯৫ সালে</strong> প্রতিষ্ঠিত <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI)</strong> গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের প্রধানমন্ত্রীর কার্যালয়াধীন <strong>এনজিও বিষয়ক ব্যুরো (নিবন্ধন নং: ১২২৪)</strong> কর্তৃক নিবন্ধিত একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।';
+            } else {
+                $spBodyText = "Established in <strong>1995</strong>, <strong>Impact Initiative (IMI)</strong> is a national humanitarian and development organization in Bangladesh, registered with the <strong>NGO Affairs Bureau (Registration No: 1224)</strong> under the Prime Minister's Office. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.";
+            }
+          @endphp
+
+          @if(filled(trim(strip_tags($spBodyText ?? ''))))
+            <p style="margin-bottom: 12px;">{!! nl2br($spBodyText) !!}</p>
           @endif
 
-          @if($isBn && !empty($settings->get('strategic_partnership_footer_bn')))
-            <p style="margin: 0; font-weight: 600;">{{ $settings->get('strategic_partnership_footer_bn') }}</p>
-          @elseif(!empty($settings->get('strategic_partnership_footer')))
-            <p style="margin: 0; font-weight: 600;">{{ $settings->get('strategic_partnership_footer') }}</p>
-          @else
-            @if($isBn)
-              <p style="margin: 0; font-weight: 600;">
-                এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে। প্রতিষ্ঠানের কোয়ালিটি এস্যুরেন্স (গুণগত মান নিশ্চিতকরণ)-এর জন্য নিম্নোক্ত ম্যানেজমেন্ট কমিটি গঠন করা হয়েছে।
-              </p>
-            @else
-              <p style="margin: 0; font-weight: 600;">
-                Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training. For Quality Assurance of the institute, the following Management Committee has been formed.
-              </p>
-            @endif
+          @php
+            $hasSpFootBn = $settings->has('strategic_partnership_footer_bn');
+            $hasSpFootEn = $settings->has('strategic_partnership_footer');
+            if ($isBn && $hasSpFootBn) {
+                $spFootText = $settings->get('strategic_partnership_footer_bn');
+            } elseif ($hasSpFootEn) {
+                $spFootText = $settings->get('strategic_partnership_footer');
+            } elseif ($isBn) {
+                $spFootText = 'এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে। প্রতিষ্ঠানের কোয়ালিটি এস্যুরেন্স (গুণগত মান নিশ্চিতকরণ)-এর জন্য নিম্নোক্ত ম্যানেজমেন্ট কমিটি গঠন করা হয়েছে।';
+            } else {
+                $spFootText = 'Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training. For Quality Assurance of the institute, the following Management Committee has been formed.';
+            }
+          @endphp
+
+          @if(filled(trim($spFootText ?? '')))
+            <p style="margin: 0; font-weight: 600;">{{ $spFootText }}</p>
           @endif
 
           <!-- Governance / Management Committee for Quality Assurance (CMS Powered & Fully Editable) -->
@@ -1297,17 +1301,24 @@
                 {{ $isBn ? 'কোয়ালিটি এস্যুরেন্স বডি' : 'Quality Assurance' }}
               </span>
             </div>
-            <p style="font-size: 14.5px; line-height: 1.65; color: #166534; margin: 0 0 16px 0;">
-              @if($isBn && !empty($settings->get('gov_committee_intro_bn')))
-                {{ $settings->get('gov_committee_intro_bn') }}
-              @elseif(!empty($settings->get('gov_committee_intro')))
-                {{ $settings->get('gov_committee_intro') }}
-              @else
-                {{ $isBn 
-                  ? 'MCTSC-এর একটি ইনস্টিটিউট ম্যানেজমেন্ট কমিটি রয়েছে। এই কমিটি ৫ জন সদস্যের সমন্বয়ে গঠিত। এই ম্যানেজমেন্ট কমিটি (MC) প্রতিষ্ঠানের কোয়ালিটি এস্যুরেন্স (গুণগত মান নিশ্চিতকরণ)-এর দায়িত্ব পালন করে। নিম্নোক্ত ব্যক্তিবর্গ এই কমিটির সম্মানিত সদস্য:' 
-                  : 'MCTSC has an Institute Management Committee. This Committee is comprised of 5 members. This Management Committee (MC) is responsible for Quality Assurance of the Institute. The following people are the members of the committee:' }}
-              @endif
-            </p>
+            @php
+              $hasGovIntroBn = $settings->has('gov_committee_intro_bn');
+              $hasGovIntroEn = $settings->has('gov_committee_intro');
+              if ($isBn && $hasGovIntroBn) {
+                  $govIntroText = $settings->get('gov_committee_intro_bn');
+              } elseif ($hasGovIntroEn) {
+                  $govIntroText = $settings->get('gov_committee_intro');
+              } elseif ($isBn) {
+                  $govIntroText = 'MCTSC-এর একটি ইনস্টিটিউট ম্যানেজমেন্ট কমিটি রয়েছে। এই কমিটি ৫ জন সদস্যের সমন্বয়ে গঠিত। এই ম্যানেজমেন্ট কমিটি (MC) প্রতিষ্ঠানের কোয়ালিটি এস্যুরেন্স (গুণগত মান নিশ্চিতকরণ)-এর দায়িত্ব পালন করে। নিম্নোক্ত ব্যক্তিবর্গ এই কমিটির সম্মানিত সদস্য:';
+              } else {
+                  $govIntroText = 'MCTSC has an Institute Management Committee. This Committee is comprised of 5 members. This Management Committee (MC) is responsible for Quality Assurance of the Institute. The following people are the members of the committee:';
+              }
+            @endphp
+            @if(filled(trim($govIntroText ?? '')))
+              <p style="font-size: 14.5px; line-height: 1.65; color: #166534; margin: 0 0 16px 0;">
+                {{ $govIntroText }}
+              </p>
+            @endif
 
             @php
               $defaultCommittee = [
