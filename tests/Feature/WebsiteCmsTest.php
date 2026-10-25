@@ -371,4 +371,89 @@ class WebsiteCmsTest extends TestCase
             'title' => 'Global Aid Alliance International',
         ]);
     }
+
+    public function test_admin_can_manage_hero_slides_full_crud_and_fixed_mode(): void
+    {
+        \Illuminate\Support\Facades\Storage::fake('public');
+
+        $admin = User::first() ?? User::create([
+            'name' => 'Slider Admin',
+            'email' => 'slider_admin@test.local',
+            'password' => 'Passw0rd!123',
+            'is_admin' => true,
+            'is_system_admin' => true,
+            'is_active' => true,
+        ]);
+
+        // 1. View hero slides index
+        $indexResponse = $this->actingAs($admin)->get(route('admin.content.index', 'hero_slides'));
+        $indexResponse->assertOk();
+        $indexResponse->assertSee('Hero Slider Banners');
+        $indexResponse->assertSee('＋ Add Slide');
+
+        // 2. Add a new 4th slide
+        $fakeBanner = \Illuminate\Http\UploadedFile::fake()->image('custom_smart_lab.jpg', 1920, 350);
+        $createResponse = $this->actingAs($admin)->post(route('admin.content.store', 'hero_slides'), [
+            'title' => 'Smart Industry 4.0 Lab',
+            'category' => 'High Tech',
+            'image' => $fakeBanner,
+            'sort_order' => 4,
+            'status' => 'published',
+        ]);
+        $createResponse->assertRedirect(route('admin.content.index', 'hero_slides'));
+        $createResponse->assertSessionHas('success');
+
+        $this->assertDatabaseHas('site_contents', [
+            'section' => 'hero_slides',
+            'title' => 'Smart Industry 4.0 Lab',
+        ]);
+
+        $createdSlide = \App\Models\SiteContent::where('section', 'hero_slides')->where('title', 'Smart Industry 4.0 Lab')->first();
+        $this->assertNotNull($createdSlide);
+
+        // 3. Verify it shows on homepage
+        $homeResponse = $this->get(route('home'));
+        $homeResponse->assertOk();
+        $homeResponse->assertSee('Smart Industry 4.0 Lab');
+        $homeResponse->assertSee('class="hero-slider-btn hero-slider-prev"', false);
+
+        // 4. Edit slide
+        $editResponse = $this->actingAs($admin)->put(route('admin.content.update', ['section' => 'hero_slides', 'content' => $createdSlide]), [
+            'title' => 'Advanced Robotics Innovation Suite',
+            'category' => 'Specialized Lab',
+            'sort_order' => 1,
+            'status' => 'published',
+        ]);
+        $editResponse->assertRedirect(route('admin.content.index', 'hero_slides'));
+        $this->assertDatabaseHas('site_contents', [
+            'section' => 'hero_slides',
+            'title' => 'Advanced Robotics Innovation Suite',
+        ]);
+
+        // 5. Test Fixed Mode: Admin sets hero_slider_mode = 'fixed'
+        $settingsResponse = $this->actingAs($admin)->put(route('admin.settings.update'), [
+            'hero_slider_mode' => 'fixed',
+            'hero_slider_fixed_id' => (string)$createdSlide->id,
+        ]);
+        $settingsResponse->assertRedirect();
+        $this->assertEquals('fixed', \App\Models\SiteSetting::where('key', 'hero_slider_mode')->value('value'));
+
+        // Verify Homepage now renders only the fixed slide and NO slider controls
+        $fixedHomeResponse = $this->get(route('home'));
+        $fixedHomeResponse->assertOk();
+        $fixedHomeResponse->assertSee('Advanced Robotics Innovation Suite');
+        $fixedHomeResponse->assertDontSee('class="hero-slider-btn hero-slider-prev"', false);
+        $fixedHomeResponse->assertDontSee('class="hero-slider-dots"', false);
+
+        // 6. Delete slide and restore slide mode
+        $deleteResponse = $this->actingAs($admin)->delete(route('admin.content.destroy', ['section' => 'hero_slides', 'content' => $createdSlide]));
+        $deleteResponse->assertRedirect();
+        $this->assertDatabaseMissing('site_contents', [
+            'section' => 'hero_slides',
+            'title' => 'Advanced Robotics Innovation Suite',
+        ]);
+
+        // Restore to slide mode
+        \App\Models\SiteSetting::updateOrCreate(['key' => 'hero_slider_mode'], ['value' => 'slide']);
+    }
 }

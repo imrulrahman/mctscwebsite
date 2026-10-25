@@ -9,9 +9,20 @@
     <p>Manage {{ strtolower($label) }} displayed on the public website.</p>
   </div>
   <a class="btn gold" href="{{ route('admin.content.create', $section) }}">
-    ＋ Add {{ $section === 'partners' ? 'Partner' : rtrim($label, 's') }}
+    ＋ Add {{ $section === 'partners' ? 'Partner' : ($section === 'hero_slides' ? 'Slide' : rtrim($label, 's')) }}
   </a>
 </div>
+
+@if($section === 'hero_slides')
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;padding:14px 18px;border-radius:6px;margin-bottom:18px;">
+    <strong style="color:#166534;font-size:14px;display:flex;align-items:center;gap:6px;">
+      <span>💡</span> হিরো স্লাইডার ব্যানার নির্দেশনা
+    </strong>
+    <p style="margin:4px 0 0 0;font-size:13px;color:#15803d;line-height:1.6;">
+      হোমপেইজের হিরো ব্যানারে এখানে থাকা সমস্ত 'Published' ছবি পর্যায়ক্রমে স্লাইড হতে থাকবে। আপনি ইচ্ছামতো ছবি পরিবর্তন, নতুন ছবি যোগ বা অপ্রয়োজনীয় ছবি মুছে ফেলতে পারেন। ২ টি ছবি দিলে ২টিই স্লাইড হবে, ১০টি দিলে ১০টিই স্লাইড হবে। আবার চাইলে স্লাইডিং অফ রেখে কোনো একটি ছবি স্থির (Fixed) করতে পারেন — এজন্য <a href="{{ route('admin.settings') }}#sec-hero" style="font-weight:700;text-decoration:underline;">Settings → Hero Section</a> এ যান।
+    </p>
+  </div>
+@endif
 
 <section class="panel">
   <div class="table-wrap">
@@ -22,6 +33,11 @@
             <th style="width: 130px;">Logo</th>
             <th>Partner Name</th>
             <th>Affiliation / Program</th>
+            <th style="width: 100px;">Sort Order</th>
+          @elseif($section === 'hero_slides')
+            <th style="width: 160px;">Banner Preview</th>
+            <th>Slide Title</th>
+            <th>Category / Tag</th>
             <th style="width: 100px;">Sort Order</th>
           @else
             <th>Title</th>
@@ -58,6 +74,19 @@
               <td>
                 <span style="display: inline-block; padding: 2px 8px; background: #f1f5f9; border-radius: 4px; font-weight: 600; font-size: 12px;">#{{ $item->sort_order }}</span>
               </td>
+            @elseif($section === 'hero_slides')
+              <td>
+                @if($item->image)
+                  <img src="{{ storage_asset($item->image) }}" alt="{{ $item->title }}" style="height: 44px; width: 140px; object-fit: cover; border-radius: 4px; border: 1px solid #cbd5e1; display: block;">
+                @else
+                  <span style="font-size: 11px; color: #94a3b8; font-style: italic;">No Image</span>
+                @endif
+              </td>
+              <td><strong>{{ $item->title }}</strong></td>
+              <td>{{ $item->category ?: '—' }}</td>
+              <td>
+                <span style="display: inline-block; padding: 2px 8px; background: #f1f5f9; border-radius: 4px; font-weight: 600; font-size: 12px;">#{{ $item->sort_order }}</span>
+              </td>
             @else
               <td>
                 <strong>{{ $item->title }}</strong>
@@ -74,7 +103,7 @@
             <td>{{ $item->updated_at->format('d M Y') }}</td>
             <td class="actions">
               <a class="edit-link" href="{{ route('admin.content.edit', ['section' => $section, 'content' => $item]) }}">Edit</a>
-              <form method="post" action="{{ route('admin.content.destroy', ['section' => $section, 'content' => $item]) }}" onsubmit="return confirm('Delete this {{ $section === 'partners' ? 'partner' : 'item' }}?')">
+              <form method="post" action="{{ route('admin.content.destroy', ['section' => $section, 'content' => $item]) }}" onsubmit="return confirm('Delete this {{ $section === 'partners' ? 'partner' : ($section === 'hero_slides' ? 'slide' : 'item') }}?')">
                 @csrf
                 @method('DELETE')
                 <button class="delete-link">Delete</button>
@@ -83,7 +112,7 @@
           </tr>
         @empty
           <tr>
-            <td colspan="{{ $section === 'projects' ? 6 : ($section === 'partners' ? 6 : 5) }}" class="empty">
+            <td colspan="{{ $section === 'projects' ? 6 : (in_array($section, ['partners', 'hero_slides']) ? 6 : 5) }}" class="empty">
               No {{ strtolower($label) }} have been added yet.
             </td>
           </tr>

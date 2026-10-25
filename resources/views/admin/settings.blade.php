@@ -1056,6 +1056,82 @@
             </div>
           </div>
 
+          <!-- HERO BANNER DISPLAY MODE & SLIDER CONTROLS -->
+          <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;padding:16px;border-radius:8px;margin-top:14px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px;">
+              <div>
+                <strong style="color:#166534;font-size:15px;display:flex;align-items:center;gap:6px;">
+                  <span>🖼️</span> Hero Banner Display Mode (হিরো ব্যানার স্লাইডার কন্ট্রোল)
+                </strong>
+                <small style="color:#15803d;display:block;margin-top:2px;">
+                  হোমপেইজের শীর্ষে ছবিগুলো স্লাইডার হিসেবে চলবে নাকি স্লাইডিং অফ রেখে যেকোনো একটি ছবি স্থির থাকবে তা নির্ধারণ করুন।
+                </small>
+              </div>
+              <a href="{{ route('admin.content.index', 'hero_slides') }}" class="btn gold" style="padding:6px 14px;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:6px;">
+                <span>➕</span> Manage Slider Images (ছবি যোগ/এডিট/ডিলেট)
+              </a>
+            </div>
+
+            @php
+              $heroMode = old('hero_slider_mode', $settings->get('hero_slider_mode', 'slide'));
+              $heroSlidesList = \App\Models\SiteContent::where('section', 'hero_slides')->orderBy('sort_order')->get();
+              $activeFixedId = old('hero_slider_fixed_id', $settings->get('hero_slider_fixed_id'));
+              $heroIntervalVal = old('hero_slider_interval', $settings->get('hero_slider_interval', '4500'));
+            @endphp
+
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;">
+              <!-- Option 1: Slider Mode -->
+              <label style="border:2px solid {{ $heroMode === 'slide' ? '#16a34a' : '#cbd5e1' }};padding:12px 14px;border-radius:8px;background:#ffffff;cursor:pointer;display:block;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                  <input type="radio" name="hero_slider_mode" value="slide" {{ $heroMode === 'slide' ? 'checked' : '' }} onchange="document.getElementById('fixedSlideSelect').style.display='none';">
+                  <strong style="color:#15803d;font-size:13.5px;">🔄 Auto Sliding Mode (স্লাইডিং চালু)</strong>
+                </div>
+                <small style="color:#64748b;display:block;font-size:11.5px;line-height:1.4;">
+                  এখানে থাকা সমস্ত সক্রিয় ছবি পর্যায়ক্রমে স্লাইড হবে। ২টি ছবি থাকলে ২টি, ১০টি থাকলে ১০টি স্লাইড হবে।
+                </small>
+              </label>
+
+              <!-- Option 2: Fixed Banner Mode -->
+              <label style="border:2px solid {{ $heroMode === 'fixed' ? '#16a34a' : '#cbd5e1' }};padding:12px 14px;border-radius:8px;background:#ffffff;cursor:pointer;display:block;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                  <input type="radio" name="hero_slider_mode" value="fixed" {{ $heroMode === 'fixed' ? 'checked' : '' }} onchange="document.getElementById('fixedSlideSelect').style.display='block';">
+                  <strong style="color:#15803d;font-size:13.5px;">📌 Fixed Single Banner (স্লাইডিং অফ / স্থির ছবি)</strong>
+                </div>
+                <small style="color:#64748b;display:block;font-size:11.5px;line-height:1.4;">
+                  স্লাইডিং বন্ধ থাকবে। তীর ও ডট হাইড থাকবে। শুধুমাত্র নির্বাচিত একটি ছবি স্থিরভাবে প্রদর্শিত হবে।
+                </small>
+              </label>
+            </div>
+
+            <!-- Slide Selection for Fixed Mode -->
+            <div id="fixedSlideSelect" style="margin-top:12px;background:#ffffff;padding:12px;border:1px solid #cbd5e1;border-radius:6px;display:{{ $heroMode === 'fixed' ? 'block' : 'none' }};">
+              <label style="margin:0;font-size:13px;font-weight:600;color:#1e293b;">
+                স্থির রাখার জন্য ছবি নির্বাচন করুন (Select Slide to Keep Fixed):
+                <select name="hero_slider_fixed_id" style="margin-top:6px;font-weight:500;">
+                  <option value="0">-- প্রথম সক্রিয় ছবি প্রদর্শন করুন (Default First Slide) --</option>
+                  @foreach($heroSlidesList as $sl)
+                    <option value="{{ $sl->id }}" {{ $activeFixedId == $sl->id ? 'selected' : '' }}>
+                      Slide #{{ $sl->sort_order }}: {{ $sl->title }} ({{ $sl->status === 'published' ? 'Active' : 'Draft' }})
+                    </option>
+                  @endforeach
+                </select>
+              </label>
+            </div>
+
+            <!-- Slider Speed / Interval -->
+            <div style="margin-top:12px;display:flex;align-items:center;gap:12px;">
+              <label style="margin:0;font-size:12.5px;color:#334155;font-weight:600;">
+                স্লাইড পরিবর্তনের গতি (Transition Speed):
+                <select name="hero_slider_interval" style="width:auto;margin-left:8px;font-size:12px;padding:4px 8px;">
+                  <option value="3000" {{ $heroIntervalVal == '3000' ? 'selected' : '' }}>৩ সেকেন্ড (দ্রুত / Fast)</option>
+                  <option value="4500" {{ $heroIntervalVal == '4500' ? 'selected' : '' }}>৪.৫ সেকেন্ড (প্রস্তাবিত স্বাভাবিক / Default)</option>
+                  <option value="6000" {{ $heroIntervalVal == '6000' ? 'selected' : '' }}>৬ সেকেন্ড (ধীর / Relaxed)</option>
+                  <option value="8000" {{ $heroIntervalVal == '8000' ? 'selected' : '' }}>৮ সেকেন্ড (খুব ধীর)</option>
+                </select>
+              </label>
+            </div>
+          </div>
+
           <!-- PRE-DESIGNED INSTITUTIONAL BANNERS SELECTOR -->
           <div style="background:#f8fafc;border:1px solid #e2e8f0;padding:16px;border-radius:8px;margin-top:14px;">
             <div style="font-weight:700;color:#0f5132;margin-bottom:6px;font-size:14px;display:flex;align-items:center;gap:6px;">

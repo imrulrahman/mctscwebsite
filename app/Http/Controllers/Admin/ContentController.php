@@ -13,19 +13,20 @@ use Illuminate\View\View;
 
 class ContentController extends Controller
 {
-    public const SECTIONS = ['courses', 'projects', 'notices', 'events', 'gallery', 'partners'];
-    public const LABELS = ['courses' => 'Courses', 'projects' => 'Projects', 'notices' => 'Notices', 'events' => 'Events', 'gallery' => 'Gallery', 'partners' => 'Development Partners'];
+    public const SECTIONS = ['courses', 'projects', 'notices', 'events', 'gallery', 'partners', 'hero_slides'];
+    public const LABELS = ['courses' => 'Courses', 'projects' => 'Projects', 'notices' => 'Notices', 'events' => 'Events', 'gallery' => 'Gallery', 'partners' => 'Development Partners', 'hero_slides' => 'Hero Slider Banners'];
 
     private function check(string $section): void
     {
         abort_unless(in_array($section, self::SECTIONS, true), 404);
 
-        if ($section === 'partners') {
+        if (in_array($section, ['partners', 'hero_slides'], true)) {
             $user = auth()->user();
             $canAccess = $user?->is_admin
-                || $user?->can('partners.manage')
+                || $user?->can('settings.manage')
                 || $user?->can('projects.manage')
-                || $user?->can('settings.manage');
+                || $user?->can('partners.manage')
+                || $user?->can('hero_slides.manage');
             abort_unless($canAccess, 403, 'এই সেকশনে এক্সেস করার অনুমতি আপনার অ্যাকাউন্টে নেই।');
             return;
         }

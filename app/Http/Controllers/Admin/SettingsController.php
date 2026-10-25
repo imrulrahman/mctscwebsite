@@ -21,6 +21,7 @@ class SettingsController extends Controller
         'hero_eyebrow', 'hero_title', 'hero_subtitle', 'hero_btn_text',
         'hero_show_institution_name', 'hero_institution_name',
         'hero_text_color', 'hero_show_overlay', 'hero_fit_mode',
+        'hero_slider_mode', 'hero_slider_fixed_id', 'hero_slider_interval',
         // Notice Bar
         'notice_bar_bg_color', 'notice_bar_opacity', 'notice_bar_text_color',
         // About

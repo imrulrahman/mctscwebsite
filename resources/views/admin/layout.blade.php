@@ -226,6 +226,15 @@
         </a>
       @endif
 
+      @if(auth()->user()?->can('hero_slides.manage') || auth()->user()?->can('settings.manage') || auth()->user()?->can('projects.manage') || auth()->user()?->is_admin)
+        <a class="{{ request()->is('admin/content/hero_slides*') ? 'active' : '' }}" href="{{ route('admin.content.index','hero_slides') }}" title="Hero Slider Banners">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+          </span>
+          <span class="nav-text">Hero Slider</span>
+        </a>
+      @endif
+
       @can('notices.manage')
         <a class="{{ request()->is('admin/content/notices*') ? 'active' : '' }}" href="{{ route('admin.content.index','notices') }}" title="Notices">
           <span class="nav-icon">

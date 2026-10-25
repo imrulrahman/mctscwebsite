@@ -818,37 +818,63 @@
 </header>
 
 <main>
-  <!-- 1. HERO SLIDER SECTION (NO TEXT OVERLAY, MULTIPLE SLIDING IMAGES) -->
+  <!-- 1. HERO SLIDER SECTION (DYNAMIC SLIDES, MULTIPLE IMAGES OR FIXED BANNER) -->
   @php
-    $sliderImages = [
-      asset('assets/banners/banner_robotics_lab.jpg'),
-      asset('assets/banners/banner_innovation_hub.jpg'),
-      asset('assets/banners/banner_electrical_lab.jpg'),
-    ];
-    $customBanner = $settings->get('hero_banner');
-    if ($customBanner && !str_contains($customBanner, 'banner_robotics_lab.jpg') && !str_contains($customBanner, 'mc Banner.jpg')) {
-      array_unshift($sliderImages, storage_asset($customBanner));
+    $heroSliderMode = $settings->get('hero_slider_mode', 'slide'); // 'slide' or 'fixed'
+    $heroFixedId = $settings->get('hero_slider_fixed_id');
+    $heroInterval = (int)($settings->get('hero_slider_interval') ?: 4500);
+
+    // Dynamic slides from database
+    $dbSlides = ($heroSlides ?? collect());
+
+    if ($dbSlides->isEmpty()) {
+      // Fallback default slides if none in DB
+      $dbSlides = collect([
+        (object)['id' => 1, 'title' => 'Robotics & Automation Lab', 'image' => 'assets/banners/banner_robotics_lab.jpg', 'excerpt' => null],
+        (object)['id' => 2, 'title' => 'Modern Innovation Hub', 'image' => 'assets/banners/banner_innovation_hub.jpg', 'excerpt' => null],
+        (object)['id' => 3, 'title' => 'Electrical & Advanced Workshop', 'image' => 'assets/banners/banner_electrical_lab.jpg', 'excerpt' => null],
+      ]);
+    }
+
+    if ($heroSliderMode === 'fixed') {
+      // Single Fixed Banner Mode - pick chosen slide or the first published slide
+      $fixedSlide = $dbSlides->firstWhere('id', (int)$heroFixedId) ?? $dbSlides->first();
+      $activeSlides = collect([$fixedSlide]);
+    } else {
+      // Auto Sliding Mode - all published slides (whether 2, 5, 10 or more)
+      $activeSlides = $dbSlides;
     }
   @endphp
-  <section id="home" class="hero-slider-wrap" aria-label="Campus Hero Image Slideshow">
+  <section id="home" class="hero-slider-wrap" aria-label="Campus Hero Banner">
     <div class="hero-slides-container">
-      @foreach($sliderImages as $idx => $imgUrl)
+      @foreach($activeSlides as $idx => $slide)
+        @php
+          $slideImg = storage_asset($slide->image, 'assets/banners/banner_robotics_lab.jpg');
+        @endphp
         <div class="hero-slide {{ $idx === 0 ? 'active' : '' }}" data-slide="{{ $idx }}">
-          <img src="{{ $imgUrl }}" alt="MCTSC Technical Campus Banner {{ $idx + 1 }}" loading="{{ $idx === 0 ? 'eager' : 'lazy' }}">
+          @if(!empty($slide->excerpt))
+            <a href="{{ $slide->excerpt }}" style="display:block;width:100%;height:100%;">
+              <img src="{{ $slideImg }}" alt="{{ $slide->title ?? ('MCTSC Technical Campus Banner ' . ($idx + 1)) }}" loading="{{ $idx === 0 ? 'eager' : 'lazy' }}">
+            </a>
+          @else
+            <img src="{{ $slideImg }}" alt="{{ $slide->title ?? ('MCTSC Technical Campus Banner ' . ($idx + 1)) }}" loading="{{ $idx === 0 ? 'eager' : 'lazy' }}">
+          @endif
         </div>
       @endforeach
     </div>
 
-    <!-- Controls -->
-    <button class="hero-slider-btn hero-slider-prev" type="button" aria-label="Previous Slide">❮</button>
-    <button class="hero-slider-btn hero-slider-next" type="button" aria-label="Next Slide">❯</button>
+    @if($activeSlides->count() > 1 && $heroSliderMode !== 'fixed')
+      <!-- Controls -->
+      <button class="hero-slider-btn hero-slider-prev" type="button" aria-label="Previous Slide">❮</button>
+      <button class="hero-slider-btn hero-slider-next" type="button" aria-label="Next Slide">❯</button>
 
-    <!-- Indicators -->
-    <div class="hero-slider-dots">
-      @foreach($sliderImages as $idx => $imgUrl)
-        <button class="hero-dot {{ $idx === 0 ? 'active' : '' }}" type="button" data-index="{{ $idx }}" aria-label="Go to Slide {{ $idx + 1 }}"></button>
-      @endforeach
-    </div>
+      <!-- Indicators -->
+      <div class="hero-slider-dots">
+        @foreach($activeSlides as $idx => $slide)
+          <button class="hero-dot {{ $idx === 0 ? 'active' : '' }}" type="button" data-index="{{ $idx }}" aria-label="Go to Slide {{ $idx + 1 }}"></button>
+        @endforeach
+      </div>
+    @endif
   </section>
 
   <!-- 2. ABOUT SECTION: Institute Background (Directly below Hero Slider, No Notice Bar) -->
@@ -1119,7 +1145,7 @@
 
     let current = 0;
     let timer = null;
-    const interval = 4500;
+    const interval = {{ (int)($heroInterval ?: 4500) }};
 
     function goToSlide(idx) {
       slides[current].classList.remove('active');

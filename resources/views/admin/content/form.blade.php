@@ -20,15 +20,15 @@
 
     <div class="field-grid">
       <label>
-        {{ $section === 'partners' ? 'Partner Name / উন্নয়ন সহযোগীর নাম' : 'Title' }} <span>*</span>
-        <input name="title" required maxlength="180" value="{{ old('title', $item->title) }}" placeholder="{{ $section === 'partners' ? 'e.g. BRAC, UNDP, ILO, ASSET Project' : 'Enter title' }}">
+        {{ $section === 'partners' ? 'Partner Name / উন্নয়ন সহযোগীর নাম' : ($section === 'hero_slides' ? 'Slide Title / ব্যানারের নাম' : 'Title') }} <span>*</span>
+        <input name="title" required maxlength="180" value="{{ old('title', $item->title) }}" placeholder="{{ $section === 'partners' ? 'e.g. BRAC, UNDP, ILO, ASSET Project' : ($section === 'hero_slides' ? 'e.g. Robotics & Automation Lab' : 'Enter title') }}">
         @error('title')
           <small class="field-error">{{ $message }}</small>
         @enderror
       </label>
       <label>
-        {{ $section === 'partners' ? 'Affiliation / Program Subtitle (কর্মসূচি/অংশীদারিত্ব)' : 'Category / Type' }}
-        <input name="category" maxlength="120" value="{{ old('category', $item->category) }}" placeholder="{{ $section === 'partners' ? 'e.g. POWER_kfw-BRAC, UPPR - UNDP, DTE / World Bank' : 'e.g. Training Initiative, IT & Computer' }}">
+        {{ $section === 'partners' ? 'Affiliation / Program Subtitle (কর্মসূচি/অংশীদারিত্ব)' : ($section === 'hero_slides' ? 'Category / Tag (ট্যাগ/ক্যাটেগরি)' : 'Category / Type') }}
+        <input name="category" maxlength="120" value="{{ old('category', $item->category) }}" placeholder="{{ $section === 'partners' ? 'e.g. POWER_kfw-BRAC, UPPR - UNDP, DTE / World Bank' : ($section === 'hero_slides' ? 'e.g. Campus Lab, Workshop' : 'e.g. Training Initiative, IT & Computer') }}">
       </label>
     </div>
 
@@ -49,6 +49,11 @@
         Partner Website / Program Link (ওয়েবসাইট লিঙ্ক - ঐচ্ছিক)
         <input type="url" name="excerpt" maxlength="1000" value="{{ old('excerpt', $item->excerpt) }}" placeholder="https://www.brac.net (লোগোতে ক্লিক করলে এই ঠিকানায় যাবে)">
       </label>
+    @elseif($section === 'hero_slides')
+      <label>
+        Slide Link / Target URL (ঐচ্ছিক - ক্লিকেবল লিংক যুক্ত করতে চাইলে)
+        <input type="url" name="excerpt" maxlength="1000" value="{{ old('excerpt', $item->excerpt) }}" placeholder="https://mctsc.edu.bd/courses (ঐচ্ছিক)">
+      </label>
     @else
       <label>
         Short Description / Excerpt
@@ -61,20 +66,20 @@
       </label>
     @endif
 
-    @if(in_array($section, ['courses', 'gallery', 'projects', 'partners']))
+    @if(in_array($section, ['courses', 'gallery', 'projects', 'partners', 'hero_slides']))
       <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin:10px 0;">
         <label>
-          <strong>{{ $section === 'partners' ? 'Partner Logo / পার্টনার লোগো' : ($section === 'projects' ? 'Project Logo / Image' : 'Featured Image') }}</strong> (PNG, SVG, JPG, WEBP; up to 5 MB)
+          <strong>{{ $section === 'partners' ? 'Partner Logo / পার্টনার লোগো' : ($section === 'hero_slides' ? 'Banner Image / ব্যানার ছবি' : ($section === 'projects' ? 'Project Logo / Image' : 'Featured Image')) }}</strong> (JPG, PNG, WEBP, SVG; up to 5 MB)
           <input type="file" name="image" accept="image/*,.svg">
           <small style="color:#0369a1;background:#e0f2fe;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:600;display:inline-block;margin-top:4px;">
-            📐 Recommended: {{ $section === 'partners' ? '240 × 80 px (Transparent PNG or SVG vector)' : ($section === 'gallery' ? '1200 × 800 px or 1920 × 1080 px (Landscape)' : ($section === 'projects' ? '300 × 300 px (Square PNG)' : '800 × 500 px (16:10 Ratio)')) }}
+            📐 Recommended: {{ $section === 'partners' ? '240 × 80 px (Transparent PNG or SVG vector)' : ($section === 'hero_slides' ? '1920 × 350 px (Fixed 350px Height, Ultra-wide JPG/WEBP)' : ($section === 'gallery' ? '1200 × 800 px or 1920 × 1080 px (Landscape)' : ($section === 'projects' ? '300 × 300 px (Square PNG)' : '800 × 500 px (16:10 Ratio)'))) }}
           </small>
           @if($item->image)
             <div style="margin-top:10px;display:flex;align-items:center;gap:12px;">
               @php
                 $imgSrc = storage_asset($item->image);
               @endphp
-              <img src="{{ $imgSrc }}" alt="Current" style="height:55px;max-width:140px;object-fit:contain;border:1px solid #ccd;background:#fff;padding:4px 8px;border-radius:4px;">
+              <img src="{{ $imgSrc }}" alt="Current" style="height:55px;{{ $section === 'hero_slides' ? 'max-width:220px;object-fit:cover;' : 'max-width:140px;object-fit:contain;' }}border:1px solid #ccd;background:#fff;padding:4px 8px;border-radius:4px;">
               <small class="subline" style="color:#555;">Current: {{ basename($item->image) }}</small>
             </div>
           @endif

@@ -154,5 +154,28 @@ class DatabaseSeeder extends Seeder
                 ]
             );
         }
+
+        // 5. Seed Hero Banner Slides
+        $heroSlides = [
+            ['Robotics & Automation Lab', 'Campus Lab', 'assets/banners/banner_robotics_lab.jpg', 1],
+            ['Modern Innovation Hub', 'Innovation', 'assets/banners/banner_innovation_hub.jpg', 2],
+            ['Electrical & Advanced Workshop', 'Workshop', 'assets/banners/banner_electrical_lab.jpg', 3],
+        ];
+
+        foreach ($heroSlides as [$title, $category, $image, $sort]) {
+            SiteContent::firstOrCreate(
+                ['section' => 'hero_slides', 'title' => $title],
+                [
+                    'slug' => Str::slug('hero-slide-' . $title),
+                    'category' => $category,
+                    'image' => $image,
+                    'status' => 'published',
+                    'sort_order' => $sort,
+                ]
+            );
+        }
+
+        SiteSetting::firstOrCreate(['key' => 'hero_slider_mode'], ['value' => 'slide']);
+        SiteSetting::firstOrCreate(['key' => 'hero_slider_interval'], ['value' => '4500']);
     }
 }

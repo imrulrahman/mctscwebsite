@@ -27,6 +27,7 @@ class PermissionManager
                     'courses.manage' => 'Manage Courses',
                     'projects.manage' => 'Manage Projects',
                     'partners.manage' => 'Manage Development Partners',
+                    'hero_slides.manage' => 'Manage Hero Slider Banners',
                 ],
             ],
             'notices_events' => [
@@ -113,6 +114,7 @@ class PermissionManager
                 'courses.manage',
                 'projects.manage',
                 'partners.manage',
+                'hero_slides.manage',
                 'notices.manage',
                 'events.manage',
                 'gallery.manage',
@@ -134,6 +136,7 @@ class PermissionManager
                 'courses.manage',
                 'projects.manage',
                 'partners.manage',
+                'hero_slides.manage',
                 'notices.manage',
                 'events.manage',
                 'gallery.manage',
