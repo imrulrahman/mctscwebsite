@@ -941,7 +941,7 @@
         <div class="vmo-col vmo-col-left">
           <!-- Vision Card -->
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-vision">{{ $isBn ? 'আমাদের রূপকল্প' : 'Our Vision' }}</div>
+            <div class="vmo-pill pill-vision">{{ $isBn ? 'রূপকল্প' : 'Vision' }}</div>
             <div class="vmo-box">
               <p>
                 {{ $isBn 
@@ -953,7 +953,7 @@
 
           <!-- Mission Card -->
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-mission">{{ $isBn ? 'আমাদের লক্ষ্য' : 'Our Mission' }}</div>
+            <div class="vmo-pill pill-mission">{{ $isBn ? 'লক্ষ্য' : 'Mission' }}</div>
             <div class="vmo-box">
               <p>
                 {{ $isBn 
@@ -967,7 +967,7 @@
         <!-- Right Column: Objectives Card -->
         <div class="vmo-col vmo-col-right">
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-objectives">{{ $isBn ? 'আমাদের উদ্দেশ্যসমূহ' : 'Our Objectives' }}</div>
+            <div class="vmo-pill pill-objectives">{{ $isBn ? 'উদ্দেশ্যসমূহ' : 'Objectives' }}</div>
             <div class="vmo-box">
               <ul class="vmo-objectives-list">
                 @if($isBn)
@@ -998,7 +998,7 @@
     <div class="container">
       <div class="partners-intro">
         <p class="section-kicker" style="justify-content: center;">{{ $isBn ? 'অংশীদারিত্ব ও কোলাবোরেশন' : 'COLLABORATION & PARTNERSHIPS' }}</p>
-        <h2>{{ $isBn ? 'আমাদের উন্নয়ন অংশীদারগণ' : 'Our Development Partners' }}</h2>
+        <h2>{{ $isBn ? 'উন্নয়ন অংশীদারগণ' : 'Development Partners' }}</h2>
         <div class="gold-rule" style="margin: 0 auto 16px auto;"></div>
         <p>
           {{ $isBn 

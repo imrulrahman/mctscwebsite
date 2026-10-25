@@ -16,10 +16,10 @@ class WebsiteCmsTest extends TestCase
         $this->seed();
         // Homepage now features Hero Slider, About, Vision/Mission/Objectives, and Partners
         $this->get('/')->assertOk()
-            ->assertSee('Our Vision')
-            ->assertSee('Our Mission')
-            ->assertSee('Our Objectives')
-            ->assertSee('Our Development Partners');
+            ->assertSee('Vision')
+            ->assertSee('Mission')
+            ->assertSee('Objectives')
+            ->assertSee('Development Partners');
 
         // Dedicated sub-pages host Courses and Projects
         $this->get('/courses')->assertOk()->assertSee('Our Training Courses')->assertSee('Computer Operation');
@@ -80,10 +80,10 @@ class WebsiteCmsTest extends TestCase
         $this->seed();
         $response = $this->get('/');
         $response->assertOk();
-        $response->assertSee('Our Vision');
-        $response->assertSee('Our Mission');
-        $response->assertSee('Our Objectives');
-        $response->assertSee('Our Development Partners');
+        $response->assertSee('Vision');
+        $response->assertSee('Mission');
+        $response->assertSee('Objectives');
+        $response->assertSee('Development Partners');
         $response->assertSee('EN</a>', false);
     }
 
@@ -92,10 +92,10 @@ class WebsiteCmsTest extends TestCase
         $this->seed();
         $response = $this->get('/?lang=bn');
         $response->assertOk();
-        $response->assertSee('আমাদের রূপকল্প');
-        $response->assertSee('আমাদের লক্ষ্য');
-        $response->assertSee('আমাদের উদ্দেশ্যসমূহ');
-        $response->assertSee('আমাদের উন্নয়ন অংশীদারগণ');
+        $response->assertSee('রূপকল্প');
+        $response->assertSee('লক্ষ্য');
+        $response->assertSee('উদ্দেশ্যসমূহ');
+        $response->assertSee('উন্নয়ন অংশীদারগণ');
         $response->assertSee('বাং</a>', false);
     }
 
@@ -107,9 +107,9 @@ class WebsiteCmsTest extends TestCase
 
         $homeResponse = $this->withSession(['locale' => 'bn'])->get('/');
         $homeResponse->assertOk();
-        $homeResponse->assertSee('আমাদের রূপকল্প');
-        $homeResponse->assertSee('আমাদের লক্ষ্য');
-        $homeResponse->assertSee('আমাদের উদ্দেশ্যসমূহ');
+        $homeResponse->assertSee('রূপকল্প');
+        $homeResponse->assertSee('লক্ষ্য');
+        $homeResponse->assertSee('উদ্দেশ্যসমূহ');
     }
 
     public function test_admission_approval_workflow_assigns_project_and_calculates_fees(): void
