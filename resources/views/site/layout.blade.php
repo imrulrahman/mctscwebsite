@@ -104,11 +104,11 @@
       white-space: nowrap !important;
     }
     .brand-line-2 {
-      font-family: var(--sans, 'Source Sans 3', sans-serif) !important;
+      font-family: var(--serif, 'Libre Baskerville', Georgia, serif) !important;
       font-size: 13px !important;
       font-weight: 700 !important;
-      color: #374151 !important;
-      letter-spacing: -0.1px !important;
+      color: {{ $primaryColor }} !important;
+      letter-spacing: -0.2px !important;
       white-space: nowrap !important;
     }
 
