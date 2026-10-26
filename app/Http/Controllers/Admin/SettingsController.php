@@ -35,7 +35,9 @@ class SettingsController extends Controller
         'industry_partners_list_title', 'industry_partners_list',
         'industry_partners_commitment',
         // Facilities
+        'infr_labs_kicker', 'infr_labs_title', 'infr_labs_subtitle',
         'facility_1_title', 'facility_2_title', 'facility_3_title', 'facility_4_title',
+        'facility_1_desc', 'facility_2_desc', 'facility_3_desc', 'facility_4_desc',
         // Quotes & Admission
         'quote_title', 'footer_tag',
         'admission_title', 'admission_subtitle'

@@ -608,6 +608,10 @@ class WebsiteCmsTest extends TestCase
             'infr_cap_location' => 'Dynamic Sagorika Campus Avenue, Chattogram',
             'infr_cap_area' => 'Dynamic 25,000 sq. ft.',
             'infr_cap_annual' => 'Dynamic 2,500 trainees per year',
+            'infr_labs_kicker' => 'DYNAMIC WORKSHOPS KICKER',
+            'infr_labs_title' => 'Dynamic Practical Labs and Innovation Hub',
+            'infr_labs_subtitle' => 'Dynamic description for practical industrial workshops.',
+            'facility_1_desc' => 'Dynamic description for high speed workstation hub.',
 
             // Secondary Pages CMS
             'courses_page_title' => 'Dynamic Vocational Trades Catalogue',
@@ -643,6 +647,8 @@ class WebsiteCmsTest extends TestCase
         $about->assertSee('NSDA-CHA-9999');
         $about->assertSee('Dynamic Mahmudunnabi Memorial Heritage');
         $about->assertSee('Dynamic Master TVET Training');
+        $about->assertSee('Dynamic Practical Labs and Innovation Hub');
+        $about->assertSee('Dynamic description for high speed workstation hub.');
 
         // 4. Verify Infrastructure Page
         $infr = $this->withSession(['locale' => 'en'])->get(route('infrastructure'));
@@ -652,6 +658,8 @@ class WebsiteCmsTest extends TestCase
         $infr->assertSee('Dynamic Smart Lecture Hall');
         $infr->assertSee('Dynamic 25,000 sq. ft.');
         $infr->assertSee('Dynamic 2,500 trainees per year');
+        $infr->assertSee('Dynamic Practical Labs and Innovation Hub');
+        $infr->assertSee('Dynamic description for high speed workstation hub.');
 
         // 5. Verify Secondary Pages
         $courses = $this->withSession(['locale' => 'en'])->get(route('courses'));

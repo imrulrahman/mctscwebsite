@@ -42,47 +42,55 @@
 .core-val-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  gap: 10px;
   margin-top: 16px;
+  align-items: stretch;
 }
 .core-val-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-left: 4px solid var(--green);
   border-radius: 8px;
-  padding: 13px 15px;
+  padding: 10px 14px;
   display: flex;
   gap: 12px;
   align-items: flex-start;
   box-shadow: 0 2px 5px rgba(0,0,0,0.02);
   transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+  box-sizing: border-box;
 }
 .core-val-card:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 14px rgba(15,81,50,0.07);
 }
 .core-val-icon-box {
-  width: 38px;
-  height: 38px;
-  border-radius: 8px;
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
   background: rgba(15, 81, 50, 0.08);
   color: var(--green);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  margin-top: 2px;
+}
+.core-val-content {
+  flex: 1;
+  min-width: 0;
 }
 .core-val-content h4 {
   font-family: var(--sans);
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 700;
   color: #1e293b;
-  margin: 0 0 4px 0;
+  margin: 0 0 3px 0;
   line-height: 1.3;
 }
 .core-val-content p {
-  font-size: 13.5px;
-  line-height: 1.55;
+  font-size: 13px;
+  line-height: 1.45;
   color: #475569;
   margin: 0;
 }
@@ -616,48 +624,48 @@
       </div>
     </div>
 
-    <!-- 8. CAMPUS WORKSHOP & FACILITIES -->
+    <!-- 8. CAMPUS WORKSHOP & FACILITIES (CMS POWERED & 100% EDITABLE) -->
     <div>
       <div style="text-align: center; margin-bottom: 30px;">
-        <span class="section-kicker">{{ $isBn ? 'আধুনিক অবকাঠামো' : 'INFRASTRUCTURE' }}</span>
+        <span class="section-kicker">{{ $settings['infr_labs_kicker'] ?? ($isBn ? 'আধুনিক অবকাঠামো' : 'INFRASTRUCTURE') }}</span>
         <h2 style="font-family: var(--serif); font-size: 26px; color: var(--green); margin: 6px 0;">
-          {{ $isBn ? 'অত্যাধুনিক প্র্যাকটিক্যাল ল্যাব ও ওয়ার্কশপ' : 'Modern Labs & Practical Workshops' }}
+          {{ $settings['infr_labs_title'] ?? ($isBn ? 'অত্যাধুনিক প্র্যাকটিক্যাল ল্যাব ও ওয়ার্কশপ' : 'Modern Labs & Practical Workshops') }}
         </h2>
         <p style="font-size: 14px; color: #64748b; max-width: 600px; margin: 0 auto;">
-          {{ $isBn ? 'প্রতিটি কোর্সের জন্য রয়েছে সুসজ্জিত আধুনিক ল্যাব যন্ত্রপাতি ও নিরাপদ কাজের পরিবেশ।' : 'Equipped with real-world machinery and industrial tools to ensure immediate job readiness.' }}
+          {{ $settings['infr_labs_subtitle'] ?? ($isBn ? 'প্রতিটি কোর্সের জন্য রয়েছে সুসজ্জিত আধুনিক ল্যাব যন্ত্রপাতি ও নিরাপদ কাজের পরিবেশ।' : 'Equipped with real-world machinery and industrial tools to ensure immediate job readiness.') }}
         </p>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-          <img src="{{ $f1_img }}" alt="Computer Lab" style="width: 100%; height: 160px; object-fit: cover; display: block;">
-          <div style="padding: 14px 16px;">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: stretch;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+          <img src="{{ $f1_img }}" alt="{{ $settings['facility_1_title'] ?? 'Computer Lab' }}" style="width: 100%; height: 160px; object-fit: cover; display: block;">
+          <div style="padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column;">
             <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">{{ $settings['facility_1_title'] ?? ($isBn ? 'কম্পিউটার ল্যাব' : 'Computer Lab') }}</strong>
-            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.4;">{{ $isBn ? 'হাই-স্পিড ব্রডব্যান্ড ইন্টারনেট এবং আধুনিক পিসি সমৃদ্ধ আইটি ল্যাব।' : 'High-speed broadband network & modern workstations.' }}</small>
+            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.45;">{{ $settings['facility_1_desc'] ?? ($isBn ? 'হাই-স্পিড ব্রডব্যান্ড ইন্টারনেট এবং আধুনিক পিসি সমৃদ্ধ আইটি ল্যাব।' : 'High-speed broadband network & modern workstations.') }}</small>
           </div>
         </div>
 
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-          <img src="{{ $f2_img }}" alt="RAC Lab" style="width: 100%; height: 160px; object-fit: cover; display: block;">
-          <div style="padding: 14px 16px;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+          <img src="{{ $f2_img }}" alt="{{ $settings['facility_2_title'] ?? 'RAC Workshop' }}" style="width: 100%; height: 160px; object-fit: cover; display: block;">
+          <div style="padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column;">
             <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">{{ $settings['facility_2_title'] ?? ($isBn ? 'রেফ্রিজারেশন ও এসি ল্যাব' : 'RAC Workshop') }}</strong>
-            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.4;">{{ $isBn ? 'ইনভার্টার এসি ও ফ্রিজ মেরামত, গ্যাস চার্জিং এর পূর্ণাঙ্গ সেটআপ।' : 'Full HVAC test stations and refrigerant charging gear.' }}</small>
+            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.45;">{{ $settings['facility_2_desc'] ?? ($isBn ? 'ইনভার্টার এসি ও ফ্রিজ মেরামত, গ্যাস চার্জিং এর পূর্ণাঙ্গ সেটআপ।' : 'Full HVAC test stations and refrigerant charging gear.') }}</small>
           </div>
         </div>
 
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-          <img src="{{ $f3_img }}" alt="Plumbing Workshop" style="width: 100%; height: 160px; object-fit: cover; display: block;">
-          <div style="padding: 14px 16px;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+          <img src="{{ $f3_img }}" alt="{{ $settings['facility_3_title'] ?? 'Plumbing Workshop' }}" style="width: 100%; height: 160px; object-fit: cover; display: block;">
+          <div style="padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column;">
             <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">{{ $settings['facility_3_title'] ?? ($isBn ? 'প্লাম্বিং ওয়ার্কশপ' : 'Plumbing Workshop') }}</strong>
-            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.4;">{{ $isBn ? 'স্যানিটারি ফিটিংস, থ্রেডিং মেশিন ও আধুনিক পাইপলাইন ট্রেইনিং।' : 'PPR, PVC and sanitary installations equipment.' }}</small>
+            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.45;">{{ $settings['facility_3_desc'] ?? ($isBn ? 'স্যানিটারি ফিটিংস, থ্রেডিং মেশিন ও আধুনিক পাইপলাইন ট্রেইনিং।' : 'PPR, PVC and sanitary installations equipment.') }}</small>
           </div>
         </div>
 
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-          <img src="{{ $f4_img }}" alt="SMO Workshop" style="width: 100%; height: 160px; object-fit: cover; display: block;">
-          <div style="padding: 14px 16px;">
+        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
+          <img src="{{ $f4_img }}" alt="{{ $settings['facility_4_title'] ?? 'Sewing Machine Lab' }}" style="width: 100%; height: 160px; object-fit: cover; display: block;">
+          <div style="padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column;">
             <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">{{ $settings['facility_4_title'] ?? ($isBn ? 'স্যুইং ও টেইলারিং ল্যাব' : 'Sewing Machine Lab') }}</strong>
-            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.4;">{{ $isBn ? 'ইন্ডাস্ট্রিয়াল প্লেইন লকস্টিচ ও ওভারলক মেশিনে প্র্যাকটিক্যাল কাজ।' : 'Industrial lockstitch and overlock sewing stations.' }}</small>
+            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.45;">{{ $settings['facility_4_desc'] ?? ($isBn ? 'ইন্ডাস্ট্রিয়াল প্লেইন লকস্টিচ ও ওভারলক মেশিনে প্র্যাকটিক্যাল কাজ।' : 'Industrial lockstitch and overlock sewing stations.') }}</small>
           </div>
         </div>
       </div>

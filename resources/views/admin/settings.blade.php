@@ -1832,15 +1832,35 @@
             </label>
           </div>
 
-          <h4 style="margin:20px 0 10px 0;color:#0f5132;font-size:15px;">🔬 4 Featured Homepage Labs & Workshops (৪টি প্রধান প্র্যাকটিক্যাল ল্যাব ছবি ও শিরোনাম)</h4>
-          <p style="color: var(--muted); margin: 0 0 14px; font-size: 13px;">Configure images and titles for the 4 featured training workshops on the homepage.</p>
+          <h4 style="margin:20px 0 10px 0;color:#0f5132;font-size:15px;display:flex;align-items:center;gap:6px;">
+            <span>🔬</span> Practical Laboratories & Workshops (প্র্যাকটিক্যাল ল্যাব ও ওয়ার্কশপ - ৪টি আইটেম)
+          </h4>
+          <p style="color: var(--muted); margin: 0 0 14px; font-size: 13px;">Configure main heading, description, and the 4 featured training workshops/labs (titles, descriptions, and photos).</p>
+
+          <!-- Section Headings -->
+          <div style="background:#f8fafc;border:1px solid #cbd5e1;padding:14px;border-radius:6px;margin-bottom:14px;">
+            <div class="field-grid" style="grid-template-columns: 1fr 2fr; margin-bottom: 10px;">
+              <label>
+                Section Kicker
+                <input name="infr_labs_kicker" value="{{ old('infr_labs_kicker', $settings->get('infr_labs_kicker', 'HANDS-ON WORKSHOPS')) }}">
+              </label>
+              <label>
+                Section Title
+                <input name="infr_labs_title" value="{{ old('infr_labs_title', $settings->get('infr_labs_title', 'Practical Laboratories & Workshops')) }}">
+              </label>
+            </div>
+            <label>
+              Section Subtitle / Description
+              <textarea name="infr_labs_subtitle" rows="2">{{ old('infr_labs_subtitle', $settings->get('infr_labs_subtitle', 'Equipped with real-world machinery and industrial tools to ensure immediate job readiness.')) }}</textarea>
+            </label>
+          </div>
 
           <!-- Facility 1 -->
           <div style="background:#fdfdfd;border:1px solid #e2ebe6;padding:12px;border-radius:6px;margin-bottom:12px;">
             <div class="field-grid">
               <label>
                 Facility 1 Title
-                <input name="facility_1_title" value="{{ old('facility_1_title', $settings->get('facility_1_title', 'Computer Lab')) }}">
+                <input name="facility_1_title" value="{{ old('facility_1_title', $settings->get('facility_1_title', 'Entrance')) }}">
               </label>
               <label>
                 Facility 1 Image
@@ -1850,12 +1870,16 @@
                 <input type="file" name="facility_1_image" accept="image/*">
               </label>
             </div>
+            <label style="margin-top:8px;display:block;">
+              Facility 1 Description
+              <textarea name="facility_1_desc" rows="2">{{ old('facility_1_desc', $settings->get('facility_1_desc', 'High-speed broadband network & modern workstations.')) }}</textarea>
+            </label>
             @php
               $f1 = storage_asset($settings->get('facility_1_image'), 'assets/Computer Lab r.jpg');
             @endphp
             <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
               <img src="{{ $f1 }}" style="height:45px;width:75px;object-fit:cover;border-radius:4px;border:1px solid #ccc;">
-              <small style="color:#666;">Current photo: {{ $settings->get('facility_1_title', 'Computer Lab') }}</small>
+              <small style="color:#666;">Current photo: {{ $settings->get('facility_1_title', 'Entrance') }}</small>
             </div>
           </div>
 
@@ -1864,7 +1888,7 @@
             <div class="field-grid">
               <label>
                 Facility 2 Title
-                <input name="facility_2_title" value="{{ old('facility_2_title', $settings->get('facility_2_title', 'Refrigeration and AC Workshop')) }}">
+                <input name="facility_2_title" value="{{ old('facility_2_title', $settings->get('facility_2_title', 'Laboratories')) }}">
               </label>
               <label>
                 Facility 2 Image
@@ -1874,12 +1898,16 @@
                 <input type="file" name="facility_2_image" accept="image/*">
               </label>
             </div>
+            <label style="margin-top:8px;display:block;">
+              Facility 2 Description
+              <textarea name="facility_2_desc" rows="2">{{ old('facility_2_desc', $settings->get('facility_2_desc', 'Full HVAC test stations and refrigerant charging gear.')) }}</textarea>
+            </label>
             @php
               $f2 = storage_asset($settings->get('facility_2_image'), 'assets/RAC Lab.jpg');
             @endphp
             <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
               <img src="{{ $f2 }}" style="height:45px;width:75px;object-fit:cover;border-radius:4px;border:1px solid #ccc;">
-              <small style="color:#666;">Current photo: {{ $settings->get('facility_2_title', 'Refrigeration and AC Workshop') }}</small>
+              <small style="color:#666;">Current photo: {{ $settings->get('facility_2_title', 'Laboratories') }}</small>
             </div>
           </div>
 
@@ -1888,7 +1916,7 @@
             <div class="field-grid">
               <label>
                 Facility 3 Title
-                <input name="facility_3_title" value="{{ old('facility_3_title', $settings->get('facility_3_title', 'Plumbing Workshop')) }}">
+                <input name="facility_3_title" value="{{ old('facility_3_title', $settings->get('facility_3_title', 'Workshop')) }}">
               </label>
               <label>
                 Facility 3 Image
@@ -1898,12 +1926,16 @@
                 <input type="file" name="facility_3_image" accept="image/*">
               </label>
             </div>
+            <label style="margin-top:8px;display:block;">
+              Facility 3 Description
+              <textarea name="facility_3_desc" rows="2">{{ old('facility_3_desc', $settings->get('facility_3_desc', 'PPR, PVC and sanitary installations equipment.')) }}</textarea>
+            </label>
             @php
               $f3 = storage_asset($settings->get('facility_3_image'), 'assets/Plumbing Class.jpg');
             @endphp
             <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
               <img src="{{ $f3 }}" style="height:45px;width:75px;object-fit:cover;border-radius:4px;border:1px solid #ccc;">
-              <small style="color:#666;">Current photo: {{ $settings->get('facility_3_title', 'Plumbing Workshop') }}</small>
+              <small style="color:#666;">Current photo: {{ $settings->get('facility_3_title', 'Workshop') }}</small>
             </div>
           </div>
 
@@ -1912,7 +1944,7 @@
             <div class="field-grid">
               <label>
                 Facility 4 Title
-                <input name="facility_4_title" value="{{ old('facility_4_title', $settings->get('facility_4_title', 'Tailoring and Sewing Workshop')) }}">
+                <input name="facility_4_title" value="{{ old('facility_4_title', $settings->get('facility_4_title', 'Library')) }}">
               </label>
               <label>
                 Facility 4 Image
@@ -1922,12 +1954,16 @@
                 <input type="file" name="facility_4_image" accept="image/*">
               </label>
             </div>
+            <label style="margin-top:8px;display:block;">
+              Facility 4 Description
+              <textarea name="facility_4_desc" rows="2">{{ old('facility_4_desc', $settings->get('facility_4_desc', 'Industrial lockstitch and overlock sewing stations.')) }}</textarea>
+            </label>
             @php
               $f4 = storage_asset($settings->get('facility_4_image'), 'assets/SMO Lab.jpg');
             @endphp
             <div style="margin-top:8px;display:flex;align-items:center;gap:10px;">
               <img src="{{ $f4 }}" style="height:45px;width:75px;object-fit:cover;border-radius:4px;border:1px solid #ccc;">
-              <small style="color:#666;">Current photo: {{ $settings->get('facility_4_title', 'Tailoring and Sewing Workshop') }}</small>
+              <small style="color:#666;">Current photo: {{ $settings->get('facility_4_title', 'Library') }}</small>
             </div>
           </div>
 
