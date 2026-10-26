@@ -16,10 +16,6 @@
   if (empty($settings['about_image']) || $settings['about_image'] === 'assets/MC Building Photo.jpg') {
       $aboutImg = asset('assets/about_mahmudunnabi_legacy.jpg');
   }
-  $f1_img = storage_asset($settings['facility_1_image'] ?? null, 'assets/Computer Lab r.jpg');
-  $f2_img = storage_asset($settings['facility_2_image'] ?? null, 'assets/RAC Lab.jpg');
-  $f3_img = storage_asset($settings['facility_3_image'] ?? null, 'assets/Plumbing Class.jpg');
-  $f4_img = storage_asset($settings['facility_4_image'] ?? null, 'assets/SMO Lab.jpg');
 @endphp
 
 <style>
@@ -624,52 +620,7 @@
       </div>
     </div>
 
-    <!-- 8. CAMPUS WORKSHOP & FACILITIES (CMS POWERED & 100% EDITABLE) -->
-    <div>
-      <div style="text-align: center; margin-bottom: 30px;">
-        <span class="section-kicker">{{ $settings['infr_labs_kicker'] ?? ($isBn ? 'আধুনিক অবকাঠামো' : 'INFRASTRUCTURE') }}</span>
-        <h2 style="font-family: var(--serif); font-size: 26px; color: var(--green); margin: 6px 0;">
-          {{ $settings['infr_labs_title'] ?? ($isBn ? 'অত্যাধুনিক প্র্যাকটিক্যাল ল্যাব ও ওয়ার্কশপ' : 'Modern Labs & Practical Workshops') }}
-        </h2>
-        <p style="font-size: 14px; color: #64748b; max-width: 600px; margin: 0 auto;">
-          {{ $settings['infr_labs_subtitle'] ?? ($isBn ? 'প্রতিটি কোর্সের জন্য রয়েছে সুসজ্জিত আধুনিক ল্যাব যন্ত্রপাতি ও নিরাপদ কাজের পরিবেশ।' : 'Equipped with real-world machinery and industrial tools to ensure immediate job readiness.') }}
-        </p>
-      </div>
 
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: stretch;">
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
-          <img src="{{ $f1_img }}" alt="{{ $settings['facility_1_title'] ?? 'Computer Lab' }}" style="width: 100%; height: 160px; object-fit: cover; display: block;">
-          <div style="padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column;">
-            <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">{{ $settings['facility_1_title'] ?? ($isBn ? 'কম্পিউটার ল্যাব' : 'Computer Lab') }}</strong>
-            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.45;">{{ $settings['facility_1_desc'] ?? ($isBn ? 'হাই-স্পিড ব্রডব্যান্ড ইন্টারনেট এবং আধুনিক পিসি সমৃদ্ধ আইটি ল্যাব।' : 'High-speed broadband network & modern workstations.') }}</small>
-          </div>
-        </div>
-
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
-          <img src="{{ $f2_img }}" alt="{{ $settings['facility_2_title'] ?? 'RAC Workshop' }}" style="width: 100%; height: 160px; object-fit: cover; display: block;">
-          <div style="padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column;">
-            <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">{{ $settings['facility_2_title'] ?? ($isBn ? 'রেফ্রিজারেশন ও এসি ল্যাব' : 'RAC Workshop') }}</strong>
-            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.45;">{{ $settings['facility_2_desc'] ?? ($isBn ? 'ইনভার্টার এসি ও ফ্রিজ মেরামত, গ্যাস চার্জিং এর পূর্ণাঙ্গ সেটআপ।' : 'Full HVAC test stations and refrigerant charging gear.') }}</small>
-          </div>
-        </div>
-
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
-          <img src="{{ $f3_img }}" alt="{{ $settings['facility_3_title'] ?? 'Plumbing Workshop' }}" style="width: 100%; height: 160px; object-fit: cover; display: block;">
-          <div style="padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column;">
-            <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">{{ $settings['facility_3_title'] ?? ($isBn ? 'প্লাম্বিং ওয়ার্কশপ' : 'Plumbing Workshop') }}</strong>
-            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.45;">{{ $settings['facility_3_desc'] ?? ($isBn ? 'স্যানিটারি ফিটিংস, থ্রেডিং মেশিন ও আধুনিক পাইপলাইন ট্রেইনিং।' : 'PPR, PVC and sanitary installations equipment.') }}</small>
-          </div>
-        </div>
-
-        <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column; height: 100%; box-sizing: border-box;">
-          <img src="{{ $f4_img }}" alt="{{ $settings['facility_4_title'] ?? 'Sewing Machine Lab' }}" style="width: 100%; height: 160px; object-fit: cover; display: block;">
-          <div style="padding: 12px 14px; flex-grow: 1; display: flex; flex-direction: column;">
-            <strong style="font-size: 15px; color: #1e293b; display: block; margin-bottom: 4px;">{{ $settings['facility_4_title'] ?? ($isBn ? 'স্যুইং ও টেইলারিং ল্যাব' : 'Sewing Machine Lab') }}</strong>
-            <small style="color: #64748b; font-size: 12px; display: block; line-height: 1.45;">{{ $settings['facility_4_desc'] ?? ($isBn ? 'ইন্ডাস্ট্রিয়াল প্লেইন লকস্টিচ ও ওভারলক মেশিনে প্র্যাকটিক্যাল কাজ।' : 'Industrial lockstitch and overlock sewing stations.') }}</small>
-          </div>
-        </div>
-      </div>
-    </div>
 
   </div>
 </section>

@@ -647,8 +647,7 @@ class WebsiteCmsTest extends TestCase
         $about->assertSee('NSDA-CHA-9999');
         $about->assertSee('Dynamic Mahmudunnabi Memorial Heritage');
         $about->assertSee('Dynamic Master TVET Training');
-        $about->assertSee('Dynamic Practical Labs and Innovation Hub');
-        $about->assertSee('Dynamic description for high speed workstation hub.');
+        $about->assertDontSee('Dynamic Practical Labs and Innovation Hub');
 
         // 4. Verify Infrastructure Page
         $infr = $this->withSession(['locale' => 'en'])->get(route('infrastructure'));
