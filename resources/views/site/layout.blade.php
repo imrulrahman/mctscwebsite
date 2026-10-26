@@ -370,32 +370,33 @@
     .page-hero-banner {
       background: linear-gradient(135deg, {{ $primaryHover }} 0%, {{ $primaryColor }} 100%);
       color: #ffffff;
-      padding: 38px 0 34px 0;
+      padding: 16px 0 14px 0 !important;
       position: relative;
-      border-bottom: 4px solid {{ $secondaryColor }};
-      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border-bottom: 3px solid {{ $secondaryColor }};
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
     }
     .page-hero-banner h1 {
-      margin: 0 0 8px 0;
-      font-family: var(--serif);
-      font-size: 32px;
+      margin: 0 0 4px 0 !important;
+      font-family: var(--serif, 'Libre Baskerville', Georgia, serif);
+      font-size: 24px !important;
       font-weight: 700;
       letter-spacing: -0.2px;
+      line-height: 1.25 !important;
     }
     .page-hero-banner p {
-      margin: 0;
-      font-size: 15px;
-      color: rgba(255, 255, 255, 0.88);
-      max-width: 720px;
-      line-height: 1.5;
+      margin: 2px 0 0 0 !important;
+      font-size: 13.5px !important;
+      color: rgba(255, 255, 255, 0.9);
+      max-width: 820px;
+      line-height: 1.45 !important;
     }
     .page-breadcrumbs {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 13px;
+      gap: 6px;
+      font-size: 12px !important;
       color: rgba(255, 255, 255, 0.75);
-      margin-top: 14px;
+      margin-top: 8px !important;
     }
     .page-breadcrumbs a {
       color: #ffffff;

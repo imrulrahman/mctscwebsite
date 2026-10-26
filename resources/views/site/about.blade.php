@@ -6,6 +6,10 @@
 @section('title', $isBn ? 'আমাদের সম্পর্কে · মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'About Us · Mahmudunnabi Chowdhury Technical School and College')
 @section('page_title', $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ পরিচিতি' : 'About Mahmudunnabi Chowdhury Technical School and College')
 
+@section('header')
+  <div class="about-slim-accent" style="height: 12px; background: linear-gradient(135deg, var(--green-deep, #093722) 0%, var(--green, #0f5132) 100%); border-bottom: 3px solid var(--gold, #c59b27); box-shadow: 0 2px 6px rgba(0,0,0,0.06);"></div>
+@endsection
+
 @section('content')
 @php
   $aboutImg = storage_asset($settings['about_image'] ?? null, 'assets/about_mahmudunnabi_legacy.jpg');
