@@ -5,7 +5,13 @@
 
 @section('title', $settings['courses_tab_title'] ?? ($isBn ? 'কোর্সসমূহ · মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Our Training Courses · Mahmudunnabi Chowdhury Technical School and College'))
 @section('page_title', $settings['courses_page_title'] ?? ($isBn ? 'আমাদের কারিগরি প্রশিক্ষণ কোর্সসমূহ' : 'Our Technical & Vocational Courses'))
-@section('page_subtitle', $settings['courses_page_subtitle'] ?? ($isBn ? 'বাস্তবমুখী ও স্কিল-ভিত্তিক প্র্যাকটিক্যাল ট্রেইনিং। বাংলাদেশ কারিগরি শিক্ষা বোর্ড (BTEB) স্বীকৃত ও মানসম্মত কারিকুলাম।' : 'Market-relevant, hands-on trade training aligned with BTEB curriculum and industry workplace demands.'))
+@php
+  $coursesSub = $settings['courses_page_subtitle'] ?? null;
+  if ($coursesSub === 'Market-relevant, hands-on trade training aligned with BTEB curriculum and industry workplace demands.') {
+      $coursesSub = 'Market-relevant, hands-on technical training aligned with NSDA / BTEB curriculum and industry workplace demands.';
+  }
+@endphp
+@section('page_subtitle', $coursesSub ?? ($isBn ? 'বাস্তবমুখী ও স্কিল-ভিত্তিক প্র্যাকটিক্যাল টেকনিক্যাল ট্রেইনিং। এনএসডিএ (NSDA) / বাংলাদেশ কারিগরি শিক্ষা বোর্ড (BTEB) স্বীকৃত ও মানসম্মত কারিকুলাম।' : 'Market-relevant, hands-on technical training aligned with NSDA / BTEB curriculum and industry workplace demands.'))
 
 @section('content')
 @php

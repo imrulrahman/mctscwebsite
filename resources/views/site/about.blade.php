@@ -577,8 +577,14 @@
         <!-- Pillar 1 -->
         <div style="background: #ffffff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); display: flex; flex-direction: column;">
           <div style="font-size: 32px; margin-bottom: 14px;">🛠️</div>
+          @php
+            $p1 = $settings['pillar_1_title'] ?? null;
+            if ($p1 === 'Technical & Vocational Training') {
+                $p1 = 'Technical & Vocational Education and Training (TVET)';
+            }
+          @endphp
           <h4 style="font-family: var(--serif); font-size: 17px; color: var(--green); margin: 0 0 8px 0; line-height: 1.3;">
-            {{ $settings['pillar_1_title'] ?? ($isBn ? 'কারিগরি ও বৃত্তিমূলক প্রশিক্ষণ' : 'Technical & Vocational Training') }}
+            {{ $p1 ?? ($isBn ? 'কারিগরি ও বৃত্তিমূলক শিক্ষা এবং প্রশিক্ষণ (TVET)' : 'Technical & Vocational Education and Training (TVET)') }}
           </h4>
           <p style="font-size: 13.5px; color: #64748b; line-height: 1.6; margin: 0;">
             {{ $settings['pillar_1_desc'] ?? ($isBn ? 'বাস্তবমুখী ও পেশাভিত্তিক ব্যবহারিক দক্ষতা উন্নয়ন।' : 'Practical, occupation-focused skills development.') }}

@@ -1659,7 +1659,7 @@
 
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
               <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;">
-                <label><strong>Pillar 1 Title</strong><input name="pillar_1_title" value="{{ old('pillar_1_title', $settings->get('pillar_1_title', 'Technical & Vocational Training')) }}"></label>
+                <label><strong>Pillar 1 Title</strong><input name="pillar_1_title" value="{{ old('pillar_1_title', ($settings->get('pillar_1_title') === 'Technical & Vocational Training' ? null : $settings->get('pillar_1_title')) ?? 'Technical & Vocational Education and Training (TVET)') }}"></label>
                 <label style="margin-top:6px;">Pillar 1 Description<textarea name="pillar_1_desc" rows="2">{{ old('pillar_1_desc', $settings->get('pillar_1_desc', 'Practical, occupation-focused skills development.')) }}</textarea></label>
               </div>
               <div style="background:#ffffff;border:1px solid #e2e8f0;padding:12px;border-radius:6px;">
@@ -2025,7 +2025,7 @@
               <strong style="color:#0f5132;font-size:14px;display:block;margin-bottom:6px;">🎓 Courses Page (কোর্স পেজ)</strong>
               <div class="field-grid" style="grid-template-columns:1fr 2fr;">
                 <label>Page Title<input name="courses_page_title" value="{{ old('courses_page_title', $settings->get('courses_page_title', 'Our Technical & Vocational Courses')) }}"></label>
-                <label>Page Subtitle<input name="courses_page_subtitle" value="{{ old('courses_page_subtitle', $settings->get('courses_page_subtitle', 'Market-relevant, hands-on trade training aligned with BTEB curriculum and industry workplace demands.')) }}"></label>
+                <label>Page Subtitle<input name="courses_page_subtitle" value="{{ old('courses_page_subtitle', ($settings->get('courses_page_subtitle') === 'Market-relevant, hands-on trade training aligned with BTEB curriculum and industry workplace demands.' ? null : $settings->get('courses_page_subtitle')) ?? 'Market-relevant, hands-on technical training aligned with NSDA / BTEB curriculum and industry workplace demands.') }}"></label>
               </div>
             </div>
 
