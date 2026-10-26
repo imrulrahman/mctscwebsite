@@ -3,8 +3,8 @@
 @endphp
 @extends('site.layout')
 
-@section('title', $isBn ? 'আমাদের সম্পর্কে · এমসি টেকনিক্যাল স্কুল এন্ড কলেজ' : 'About Us · MC Technical School & College')
-@section('page_title', $isBn ? 'এমসি টেকনিক্যাল স্কুল এন্ড কলেজ পরিচিতি' : 'About MC Technical School & College')
+@section('title', $isBn ? 'আমাদের সম্পর্কে · মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'About Us · Mahmudunnabi Chowdhury Technical School and College')
+@section('page_title', $isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ পরিচিতি' : 'About Mahmudunnabi Chowdhury Technical School and College')
 
 @section('content')
 @php
@@ -208,7 +208,7 @@
     <div style="margin-bottom: 54px;">
       <span class="section-kicker">{{ $settings['about_intro_kicker'] ?? ($isBn ? 'ভূমিকা' : 'INTRODUCTION') }}</span>
       <h2 style="font-family: var(--serif); font-size: 30px; color: var(--green); margin: 6px 0 16px 0; line-height: 1.25;">
-        {{ $settings['about_intro_title'] ?? ($isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Mahmudunnabi Chowdhury Technical School & College') }}
+        {{ $settings['about_intro_title'] ?? ($isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Mahmudunnabi Chowdhury Technical School and College') }}
       </h2>
       <div class="gold-rule" style="width: 50px; height: 3px; background: var(--gold); margin-bottom: 22px;"></div>
 

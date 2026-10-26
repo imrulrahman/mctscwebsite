@@ -11,7 +11,7 @@
 @endphp
 @extends('site.layout')
 
-@section('title', $settings['infr_tab_title'] ?? ($isBn ? 'ক্যাম্পাস অবকাঠামো · এমসি টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Infrastructure · MC Technical School & College'))
+@section('title', $settings['infr_tab_title'] ?? ($isBn ? 'ক্যাম্পাস অবকাঠামো · মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Infrastructure · Mahmudunnabi Chowdhury Technical School and College'))
 @section('page_title', $settings['infr_page_title'] ?? ($isBn ? 'ক্যাম্পাস অবকাঠামো ও সুবিধাসমূহ' : 'Campus Infrastructure & Facilities'))
 @section('page_subtitle', $settings['infr_page_subtitle'] ?? ($isBn ? 'ব্যবহারিক প্রশিক্ষণ, আধুনিক ল্যাবরেটরি ও সহায়ক শিখন পরিবেশ' : 'Comprehensive facilities for classroom instruction, practical training, and learner support.'))
 

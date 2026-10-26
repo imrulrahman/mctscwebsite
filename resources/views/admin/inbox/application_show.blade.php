@@ -826,8 +826,8 @@
       {{-- Header Center --}}
       <div class="header-center-info">
         <div class="bismillah-text">বিসমিল্লাহির রাহমানির রাহিম</div>
-        <h1 class="header-inst-bn">{{ $settings->get('institution_name', 'এম সি টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</h1>
-        <div class="header-inst-en">MC Technical School & College</div>
+        <h1 class="header-inst-bn">{{ $settings->get('institution_name_bn', 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</h1>
+        <div class="header-inst-en">Mahmudunnabi Chowdhury Technical School and College</div>
         <div class="header-inst-sub">
           বাংলাদেশ কারিগরি শিক্ষা বোর্ড (BTEB) অনুমোদিত প্রশিক্ষণ কেন্দ্র &nbsp;|&nbsp;
           <span class="header-inst-code">প্রতিষ্ঠান কোড : ৭০১০২</span>
@@ -1097,7 +1097,7 @@
         <div class="bill-company-info">
           <h3>{{ $settings->get('institution_name', 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</h3>
           <p>
-            <strong>MC Technical School & College</strong> (BTEB Code: 70102)<br>
+            <strong>Mahmudunnabi Chowdhury Technical School and College</strong> (BTEB Code: 70102)<br>
             Chodu Chowdhury Road, Sagarika, Pahartali, Chattogram - 4219, Bangladesh<br>
             Tel: 01880-919275 &nbsp;|&nbsp; Email: info@mctsc.edu.bd &nbsp;|&nbsp; Web: www.mctsc.edu.bd
           </p>

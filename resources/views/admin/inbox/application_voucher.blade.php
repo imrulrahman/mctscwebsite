@@ -504,8 +504,8 @@
         <div class="v-head-left">
           <img src="{{ asset('assets/MC Logo.png') }}" alt="MC Logo">
           <div>
-            <div class="v-inst-en">MC Technical School & College</div>
-            <div class="v-inst-bn">{{ $settings->get('institution_name', 'এম সি টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</div>
+            <div class="v-inst-en">Mahmudunnabi Chowdhury Technical School and College</div>
+            <div class="v-inst-bn">{{ $settings->get('institution_name_bn', 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</div>
             <div class="v-inst-slogan">দক্ষতা &nbsp;|&nbsp; কর্মসংস্থান &nbsp;|&nbsp; উজ্জ্বল আগামী</div>
           </div>
         </div>
@@ -698,7 +698,7 @@
 
       {{-- Bottom Audit Footer --}}
       <div class="v-footer-strip">
-        <div>MC Technical School & College • Official payment record • Please verify all details before payment.</div>
+        <div>Mahmudunnabi Chowdhury Technical School and College • Official payment record • Please verify all details before payment.</div>
         <div>
           Received By: <strong style="color:#005953;">{{ $verifiedOfficer }}</strong> &nbsp;|&nbsp;
           Printed By: <strong>{{ $printedBy }}</strong> ({{ now()->format('d/m/Y h:i A') }})
@@ -729,8 +729,8 @@
         <div class="v-head-left">
           <img src="{{ asset('assets/MC Logo.png') }}" alt="MC Logo">
           <div>
-            <div class="v-inst-en">MC Technical School & College</div>
-            <div class="v-inst-bn">{{ $settings->get('institution_name', 'এম সি টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</div>
+            <div class="v-inst-en">Mahmudunnabi Chowdhury Technical School and College</div>
+            <div class="v-inst-bn">{{ $settings->get('institution_name_bn', 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</div>
             <div class="v-inst-slogan">দক্ষতা &nbsp;|&nbsp; কর্মসংস্থান &nbsp;|&nbsp; উজ্জ্বল আগামী</div>
           </div>
         </div>
@@ -923,7 +923,7 @@
 
       {{-- Bottom Audit Footer --}}
       <div class="v-footer-strip">
-        <div>MC Technical School & College • Official payment record • Please verify all details before payment.</div>
+        <div>Mahmudunnabi Chowdhury Technical School and College • Official payment record • Please verify all details before payment.</div>
         <div>
           Received By: <strong style="color:#005953;">{{ $verifiedOfficer }}</strong> &nbsp;|&nbsp;
           Printed By: <strong>{{ $printedBy }}</strong> ({{ now()->format('d/m/Y h:i A') }})

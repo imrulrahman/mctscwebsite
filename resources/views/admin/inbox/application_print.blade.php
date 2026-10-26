@@ -480,8 +480,8 @@
 
       {{-- Header Center: Institutional Titles & Slogan --}}
       <div class="header-center">
-        <h1 class="inst-name-bn">{{ $settings->get('institution_name', 'এম সি টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</h1>
-        <div class="inst-name-en">MC Technical School & College</div>
+        <h1 class="inst-name-bn">{{ $settings->get('institution_name_bn', 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল অ্যান্ড কলেজ') }}</h1>
+        <div class="inst-name-en">Mahmudunnabi Chowdhury Technical School and College</div>
         <div class="inst-slogan">দক্ষতা &nbsp;|&nbsp; কর্মসংস্থান &nbsp;|&nbsp; উন্নত আগামী</div>
       </div>
 

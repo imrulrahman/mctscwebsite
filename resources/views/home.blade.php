@@ -1287,7 +1287,7 @@
             } elseif ($isBn) {
                 $spFootText = 'এই অংশীদারিত্বের মধ্য দিয়ে মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ যুবসমাজের দক্ষতা উন্নয়ন ও কর্মসংস্থানমূলক প্রশিক্ষণ কার্যক্রম নিরবচ্ছিন্নভাবে পরিচালনা করছে। প্রতিষ্ঠানের কোয়ালিটি এস্যুরেন্স (গুণগত মান নিশ্চিতকরণ)-এর জন্য নিম্নোক্ত ম্যানেজমেন্ট কমিটি গঠন করা হয়েছে।';
             } else {
-                $spFootText = 'Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training. For Quality Assurance of the institute, the following Management Committee has been formed.';
+                $spFootText = 'Through this partnership, Mahmudunnabi Chowdhury Technical School and College continues to support skills development and employment-oriented training. For Quality Assurance of the institute, the following Management Committee has been formed.';
             }
           @endphp
 

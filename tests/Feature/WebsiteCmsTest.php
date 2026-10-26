@@ -798,7 +798,7 @@ class WebsiteCmsTest extends TestCase
 
         $home = $this->withSession(['locale' => 'en'])->get(route('home'));
         $home->assertOk();
-        $home->assertDontSee('Through this partnership, MC Technical School & College continues to support skills development and employment-oriented training.');
+        $home->assertDontSee('Through this partnership, Mahmudunnabi Chowdhury Technical School and College continues to support skills development and employment-oriented training.');
 
         // When updated with custom text, it shows that custom text
         $this->actingAs($admin)->put(route('admin.settings.update'), [
