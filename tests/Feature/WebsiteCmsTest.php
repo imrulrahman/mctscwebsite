@@ -493,7 +493,8 @@ class WebsiteCmsTest extends TestCase
         $home->assertSee('Infrastructure');
         $home->assertSee('nav-item-dropdown', false);
         $home->assertSee('Contact Us');
-        $home->assertSee('<span>Apply for</span><span>Admission</span>', false);
+        $home->assertSee('Apply for Admission');
+        $home->assertDontSee('>Admissions<', false);
         $home->assertDontSee('Apply Now');
         $home->assertSee('const interval = 1000;', false);
 

@@ -1118,21 +1118,36 @@
               </label>
             </div>
 
-            <!-- Slider Speed / Interval -->
-            <div style="margin-top:12px;display:flex;align-items:center;gap:12px;">
-              <label style="margin:0;font-size:12.5px;color:#334155;font-weight:600;">
-                স্লাইড পরিবর্তনের গতি (Transition Speed):
-                <select name="hero_slider_interval" style="width:auto;margin-left:8px;font-size:12px;padding:4px 8px;">
-                  <option value="1000" {{ $heroIntervalVal == '1000' ? 'selected' : '' }}>১ সেকেন্ড (ডিফল্ট / 1s Default)</option>
-                  <option value="2000" {{ $heroIntervalVal == '2000' ? 'selected' : '' }}>২ সেকেন্ড (2s)</option>
-                  <option value="3000" {{ $heroIntervalVal == '3000' ? 'selected' : '' }}>৩ সেকেন্ড (3s)</option>
-                  <option value="4000" {{ $heroIntervalVal == '4000' ? 'selected' : '' }}>৪ সেকেন্ড (4s)</option>
-                  <option value="5000" {{ $heroIntervalVal == '5000' ? 'selected' : '' }}>৫ সেকেন্ড (5s)</option>
-                  <option value="6000" {{ $heroIntervalVal == '6000' ? 'selected' : '' }}>৬ সেকেন্ড (6s)</option>
-                  <option value="8000" {{ $heroIntervalVal == '8000' ? 'selected' : '' }}>৮ সেকেন্ড (8s)</option>
-                  <option value="10000" {{ $heroIntervalVal == '10000' ? 'selected' : '' }}>১০ সেকেন্ড (10s)</option>
-                </select>
-              </label>
+            <!-- Slider Speed & Animation Controls -->
+            <div style="margin-top:14px;display:flex;align-items:center;flex-wrap:wrap;gap:18px;background:#ffffff;padding:12px 14px;border-radius:6px;border:1px solid #bbf7d0;">
+              <div>
+                <label style="margin:0;font-size:12.5px;color:#14532d;font-weight:600;">
+                  স্লাইড পরিবর্তনের গতি (Transition Speed):
+                  <select name="hero_slider_interval" style="width:auto;margin-left:8px;font-size:12px;padding:4px 8px;">
+                    <option value="1000" {{ $heroIntervalVal == '1000' ? 'selected' : '' }}>১ সেকেন্ড (ডিফল্ট / 1s Default)</option>
+                    <option value="2000" {{ $heroIntervalVal == '2000' ? 'selected' : '' }}>২ সেকেন্ড (2s)</option>
+                    <option value="3000" {{ $heroIntervalVal == '3000' ? 'selected' : '' }}>৩ সেকেন্ড (3s)</option>
+                    <option value="4000" {{ $heroIntervalVal == '4000' ? 'selected' : '' }}>৪ সেকেন্ড (4s)</option>
+                    <option value="5000" {{ $heroIntervalVal == '5000' ? 'selected' : '' }}>৫ সেকেন্ড (5s)</option>
+                    <option value="6000" {{ $heroIntervalVal == '6000' ? 'selected' : '' }}>৬ সেকেন্ড (6s)</option>
+                    <option value="8000" {{ $heroIntervalVal == '8000' ? 'selected' : '' }}>৮ সেকেন্ড (8s)</option>
+                    <option value="10000" {{ $heroIntervalVal == '10000' ? 'selected' : '' }}>১০ সেকেন্ড (10s)</option>
+                  </select>
+                </label>
+              </div>
+
+              @php
+                $heroAnimVal = old('hero_slider_animation', $settings->get('hero_slider_animation', 'zoom'));
+              @endphp
+              <div>
+                <label style="margin:0;font-size:12.5px;color:#14532d;font-weight:600;">
+                  স্লাইড ইমেজ অ্যানিমেশন (Ken Burns Zoom Animation):
+                  <select name="hero_slider_animation" style="width:auto;margin-left:8px;font-size:12px;padding:4px 8px;">
+                    <option value="zoom" {{ $heroAnimVal === 'zoom' ? 'selected' : '' }}>হালকা জুম ইন/আউট অ্যানিমেশন সক্রিয় (Subtle Zoom Animation Enabled)</option>
+                    <option value="none" {{ $heroAnimVal === 'none' ? 'selected' : '' }}>অ্যানিমেশন বন্ধ (Animation Disabled / Off)</option>
+                  </select>
+                </label>
+              </div>
             </div>
           </div>
 

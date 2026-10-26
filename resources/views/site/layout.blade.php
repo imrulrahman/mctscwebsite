@@ -55,6 +55,86 @@
     .button-gold { background: {{ $secondaryColor }} !important; color: #000 !important; }
     .button-gold:hover { background: {{ $secondaryHover }} !important; }
 
+    /* Hide scrollbars across browsers */
+    html {
+      overflow-x: hidden !important;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+    body {
+      overflow-x: hidden !important;
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+
+    /* Brand 2-Line Header (Logo centered vertically) */
+    .brand {
+      flex-shrink: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      text-decoration: none !important;
+      gap: 12px !important;
+      white-space: normal !important;
+    }
+    .brand img {
+      width: 48px !important;
+      height: 48px !important;
+      object-fit: contain !important;
+      margin: 0 !important;
+      flex-shrink: 0 !important;
+    }
+    .brand-text {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: center !important;
+      line-height: 1.25 !important;
+    }
+    .brand-line-1 {
+      font-family: var(--serif, 'Libre Baskerville', Georgia, serif) !important;
+      font-size: 15.5px !important;
+      font-weight: 700 !important;
+      color: {{ $primaryColor }} !important;
+      letter-spacing: -0.2px !important;
+      white-space: nowrap !important;
+    }
+    .brand-line-2 {
+      font-family: var(--sans, 'Source Sans 3', sans-serif) !important;
+      font-size: 13px !important;
+      font-weight: 700 !important;
+      color: #374151 !important;
+      letter-spacing: -0.1px !important;
+      white-space: nowrap !important;
+    }
+
+    /* Larger, clearer Navigation Links */
+    .main-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(12px, 1.5vw, 22px) !important;
+      font-weight: 700;
+      font-size: 15.5px !important;
+    }
+    .main-nav a {
+      white-space: nowrap !important;
+      padding: 8px 4px !important;
+      color: #252d2a;
+      text-decoration: none;
+      font-size: 15.5px !important;
+    }
+    .nav-item-dropdown .dropdown-menu {
+      min-width: 195px !important;
+    }
+    .nav-item-dropdown .dropdown-menu a {
+      font-size: 14.5px !important;
+      padding: 10px 18px !important;
+    }
+
     /* Header responsive & brand wrapping fix */
     .site-header {
       min-height: 78px !important;
@@ -620,7 +700,10 @@
   <div class="container nav-wrap">
     <a class="brand" href="{{ route('home') }}">
       <img src="{{ $siteLogo }}" alt="{{ $instName }} logo">
-      <span>{{ $instName }}</span>
+      <div class="brand-text">
+        <span class="brand-line-1">{{ $isBn ? 'মাহমুদুন্নবী চৌধুরী' : 'Mahmudunnabi Chowdhury' }}</span>
+        <span class="brand-line-2">{{ $isBn ? 'টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Technical School and College' }}</span>
+      </div>
     </a>
     <div class="header-right-group">
       <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
@@ -640,18 +723,22 @@
           </div>
         </div>
         <a class="{{ request()->routeIs('infrastructure') ? 'active' : '' }}" href="{{ route('infrastructure') }}" style="white-space: nowrap;">{{ $isBn ? 'অবকাঠামো' : 'Infrastructure' }}</a>
-        <a class="{{ request()->routeIs('courses') ? 'active' : '' }}" href="{{ route('courses') }}">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
+        <div class="nav-item-dropdown">
+          <a class="nav-link-parent {{ request()->routeIs('courses') || request()->routeIs('apply') ? 'active' : '' }}" href="{{ route('courses') }}">
+            {{ $isBn ? 'কোর্সসমূহ' : 'Courses' }} <span class="dropdown-caret">▾</span>
+          </a>
+          <div class="dropdown-menu">
+            <a class="{{ request()->routeIs('courses') ? 'active' : '' }}" href="{{ route('courses') }}">
+              {{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}
+            </a>
+            <a class="{{ request()->routeIs('apply') ? 'active' : '' }}" href="{{ route('apply') }}">
+              {{ $isBn ? 'ভর্তি আবেদন' : 'Apply for Admission' }}
+            </a>
+          </div>
+        </div>
         <a class="{{ request()->routeIs('projects') ? 'active' : '' }}" href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
-        <a class="{{ request()->routeIs('apply') ? 'active' : '' }}" href="{{ route('apply') }}">{{ $isBn ? 'এডমিশন' : 'Admissions' }}</a>
         <a class="{{ request()->routeIs('notices') ? 'active' : '' }}" href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
         <a class="{{ request()->routeIs('gallery') ? 'active' : '' }}" href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
-        <a class="nav-cta" href="{{ route('apply') }}">
-          @if($isBn)
-            <span>ভর্তি</span><span>আবেদন</span>
-          @else
-            <span>Apply for</span><span>Admission</span>
-          @endif
-        </a>
       </nav>
 
       <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->
