@@ -66,7 +66,7 @@
       </label>
     @endif
 
-    @if(in_array($section, ['courses', 'gallery', 'projects', 'partners', 'hero_slides']))
+    @if(in_array($section, ['courses', 'gallery', 'projects', 'partners', 'hero_slides', 'career']))
       <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin:10px 0;">
         <label>
           <strong>{{ $section === 'partners' ? 'Partner Logo / পার্টনার লোগো' : ($section === 'hero_slides' ? 'Banner Image / ব্যানার ছবি' : ($section === 'projects' ? 'Project Logo / Image' : 'Featured Image')) }}</strong> (JPG, PNG, WEBP, SVG; up to 5 MB)
@@ -90,7 +90,7 @@
       </div>
     @endif
 
-    @if(in_array($section, ['events', 'notices']))
+    @if(in_array($section, ['events', 'notices', 'career']))
       <div class="field-grid">
         <label>
           Start / Publish Date

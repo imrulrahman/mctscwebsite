@@ -62,12 +62,12 @@
 
     /* Hide scrollbars across browsers */
     html {
-      overflow-x: hidden !important;
+      overflow-x: clip !important;
       scrollbar-width: none !important;
       -ms-overflow-style: none !important;
     }
     body {
-      overflow-x: hidden !important;
+      overflow-x: clip !important;
       scrollbar-width: none !important;
       -ms-overflow-style: none !important;
     }
@@ -169,12 +169,13 @@
       min-height: 78px !important;
       height: auto !important;
       padding: 6px 0 !important;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: #ffffff;
-      border-bottom: 1px solid #e2ebe6;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      background: #ffffff !important;
+      border-bottom: 1px solid #e2ebe6 !important;
+      position: -webkit-sticky !important;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 1000 !important;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
     }
     .site-header .container {
       width: min(1440px, calc(100% - 32px)) !important;
@@ -524,7 +525,7 @@
 
     /* Global Symmetrical Container */
     body {
-      overflow-x: hidden !important;
+      overflow-x: clip !important;
     }
     .container {
       width: min(1140px, calc(100% - 64px)) !important;
@@ -1110,9 +1111,9 @@
             </a>
           </div>
         </div>
-        <a href="{{ route('projects') }}">{{ $isBn ? 'প্রজেক্টস' : 'Projects' }}</a>
         <a href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
         <a href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
+        <a class="{{ request()->routeIs('career*') ? 'active' : '' }}" href="{{ route('career') }}">{{ $isBn ? 'ক্যারিয়ার' : 'Career' }}</a>
       </nav>
       <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->
       <div class="lang-switch-box" title="{{ $isBn ? 'Switch to English' : 'বাংলা ভাষায় দেখুন' }}">

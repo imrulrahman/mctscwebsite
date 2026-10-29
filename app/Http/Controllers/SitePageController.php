@@ -78,6 +78,19 @@ class SitePageController extends Controller
         return view('site.gallery', compact('settings', 'gallery'));
     }
 
+    public function career(): View
+    {
+        $settings = $this->getSettings();
+        $circulars = SiteContent::query()
+            ->published()
+            ->where('section', 'career')
+            ->orderBy('sort_order')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('site.career', compact('settings', 'circulars'));
+    }
+
     public function contact(): View
     {
         $settings = $this->getSettings();

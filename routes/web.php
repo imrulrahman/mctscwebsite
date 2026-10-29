@@ -20,6 +20,7 @@ Route::get('/courses', [SitePageController::class, 'courses'])->name('courses');
 Route::get('/projects', [SitePageController::class, 'projects'])->name('projects');
 Route::get('/notices', [SitePageController::class, 'notices'])->name('notices');
 Route::get('/gallery', [SitePageController::class, 'gallery'])->name('gallery');
+Route::get('/career', [SitePageController::class, 'career'])->name('career');
 Route::get('/contact', [SitePageController::class, 'contact'])->name('contact');
 Route::get('/admissions', function () {
     return redirect()->route('apply');
@@ -137,12 +138,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', DashboardController::class)->name('dashboard');
-        Route::get('/content/{section}', [ContentController::class, 'index'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides')->name('content.index');
-        Route::get('/content/{section}/create', [ContentController::class, 'create'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides')->name('content.create');
-        Route::post('/content/{section}', [ContentController::class, 'store'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides')->name('content.store');
-        Route::get('/content/{section}/{content}/edit', [ContentController::class, 'edit'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides')->name('content.edit');
-        Route::put('/content/{section}/{content}', [ContentController::class, 'update'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides')->name('content.update');
-        Route::delete('/content/{section}/{content}', [ContentController::class, 'destroy'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides')->name('content.destroy');
+        Route::get('/content/{section}', [ContentController::class, 'index'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides|career')->name('content.index');
+        Route::get('/content/{section}/create', [ContentController::class, 'create'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides|career')->name('content.create');
+        Route::post('/content/{section}', [ContentController::class, 'store'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides|career')->name('content.store');
+        Route::get('/content/{section}/{content}/edit', [ContentController::class, 'edit'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides|career')->name('content.edit');
+        Route::put('/content/{section}/{content}', [ContentController::class, 'update'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides|career')->name('content.update');
+        Route::delete('/content/{section}/{content}', [ContentController::class, 'destroy'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides|career')->name('content.destroy');
         // Trainee Admissions Management
         Route::get('/applications', [InboxController::class, 'applications'])->name('applications');
         Route::get('/applications/create', [InboxController::class, 'createApplication'])->name('applications.create');

@@ -256,6 +256,15 @@
         </a>
       @endcan
 
+      @if(auth()->user()?->can('career.manage') || auth()->user()?->can('notices.manage') || auth()->user()?->is_admin)
+        <a class="{{ request()->is('admin/content/career*') ? 'active' : '' }}" href="{{ route('admin.content.index','career') }}" title="Career / Job Circulars">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+          </span>
+          <span class="nav-text">Career / Jobs</span>
+        </a>
+      @endif
+
       @can('admissions.view')
         <a class="{{ request()->routeIs('admin.applications*') ? 'active' : '' }}" href="{{ route('admin.applications') }}" title="Admissions">
           <span class="nav-icon">

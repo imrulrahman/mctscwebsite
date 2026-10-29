@@ -226,6 +226,7 @@ class WebsiteCmsTest extends TestCase
         $this->get(route('projects'))->assertOk()->assertSee('Projects');
         $this->get(route('notices'))->assertOk()->assertSee('Notice');
         $this->get(route('gallery'))->assertOk()->assertSee('Gallery');
+        $this->get(route('career'))->assertOk()->assertSee('Career');
         $this->get(route('contact'))->assertOk()->assertSee('Contact');
         $this->get(route('admissions'))->assertRedirect(route('apply'));
     }
@@ -815,5 +816,32 @@ class WebsiteCmsTest extends TestCase
         $homeCustom = $this->withSession(['locale' => 'en'])->get(route('home'));
         $homeCustom->assertOk();
         $homeCustom->assertSee('Custom Partnership Closing Note MCTSC 2026');
+    }
+    public function test_career_page_and_admin_management(): void
+    {
+        $this->seed();
+
+        $admin = User::firstOrCreate(
+            ['email' => 'career_admin_test@mctsc.test'],
+            ['name' => 'Career Admin', 'password' => 'Passw0rd!123', 'is_admin' => true]
+        );
+
+        // 1. Verify Career page renders with dummy circular
+        $response = $this->get(route('career'));
+        $response->assertOk();
+        $response->assertSee('Career Opportunities');
+        $response->assertSee('Junior Instructor');
+        $response->assertSee('Apply Now');
+
+        // 2. Verify admin can manage career section
+        $adminResp = $this->actingAs($admin)->get(route('admin.content.index', 'career'));
+        $adminResp->assertOk();
+        $adminResp->assertSee('Junior Instructor');
+
+        // 3. When all circulars deleted, empty state renders
+        \App\Models\SiteContent::where('section', 'career')->delete();
+        $emptyResp = $this->get(route('career'));
+        $emptyResp->assertOk();
+        $emptyResp->assertSee('No recruitment circular is available');
     }
 }
