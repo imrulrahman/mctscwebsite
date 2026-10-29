@@ -46,7 +46,7 @@
             </div>
             <div>
               <strong style="display: block; font-size: 14px; color: #1e293b; margin-bottom: 3px;">{{ $isBn ? 'হেল্পলাইন ও ফোন নম্বর' : 'Admissions Helpline' }}</strong>
-              <span style="font-size: 13.5px; color: #475569;">
+              <span data-live-edit data-live-key="phone" data-live-type="text" data-live-title="অফিসিয়াল হেল্পলাইন ফোন নম্বর" data-live-location="Contact পেজ - হেল্পলাইন" style="font-size: 13.5px; color: #475569;">
                 {{ $settings['phone'] ?? '+8801880919275' }}
               </span>
             </div>
@@ -58,7 +58,7 @@
             </div>
             <div>
               <strong style="display: block; font-size: 14px; color: #1e293b; margin-bottom: 3px;">{{ $isBn ? 'ইমেইল এড্রেস' : 'Email Address' }}</strong>
-              <span style="font-size: 13.5px; color: #475569;">
+              <span data-live-edit data-live-key="email" data-live-type="text" data-live-title="অফিসিয়াল ইমেইল এড্রেস" data-live-location="Contact পেজ - ইমেইল" style="font-size: 13.5px; color: #475569;">
                 {{ $settings['email'] ?? 'mnctsc@gmail.com' }}
               </span>
             </div>

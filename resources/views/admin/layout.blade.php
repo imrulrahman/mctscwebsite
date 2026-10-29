@@ -69,6 +69,18 @@
       gap: 3px;
       flex: 1 0 auto;
     }
+    .nav-group-heading {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: rgba(255, 255, 255, 0.45);
+      padding: 14px 16px 4px;
+      text-transform: uppercase;
+      user-select: none;
+    }
+    html.sidebar-is-collapsed .nav-group-heading {
+      display: none !important;
+    }
     .sidebar nav a {
       display: flex;
       align-items: center;
@@ -204,12 +216,30 @@
       <strong>{{ !empty($settings) && $settings->get('institution_name') ? $settings->get('institution_name') : 'MCTSC Admin' }}</strong>
     </a>
     <nav>
+      {{-- GROUP 1: MAIN / ওভারভিউ ও প্রধান কার্যক্রম --}}
+      <div class="nav-group-heading">MAIN / প্রধান</div>
+
       <a class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}" title="Dashboard">
         <span class="nav-icon">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         </span>
         <span class="nav-text">Dashboard</span>
       </a>
+
+      @can('admissions.view')
+        <a class="{{ request()->routeIs('admin.applications*') ? 'active' : '' }}" href="{{ route('admin.applications') }}" title="Admissions">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+          </span>
+          <span class="nav-text">Admissions</span>
+          @if(($pendingAdmissionsCount ?? 0) > 0)
+            <span style="background:#e11d48;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:auto;font-weight:700;">{{ $pendingAdmissionsCount }}</span>
+          @endif
+        </a>
+      @endcan
+
+      {{-- GROUP 2: ACADEMIC & PROJECTS / শিক্ষা ও ট্রেনিং --}}
+      <div class="nav-group-heading">ACADEMIC & PROJECTS</div>
 
       @can('courses.manage')
         <a class="{{ request()->is('admin/content/courses*') ? 'active' : '' }}" href="{{ route('admin.content.index','courses') }}" title="Courses">
@@ -238,6 +268,9 @@
         </a>
       @endif
 
+      {{-- GROUP 3: WEBSITE CMS & MEDIA / ওয়েবসাইট কনটেন্ট --}}
+      <div class="nav-group-heading">WEBSITE CMS & MEDIA</div>
+
       @if(auth()->user()?->can('hero_slides.manage') || auth()->user()?->can('settings.manage') || auth()->user()?->can('projects.manage') || auth()->user()?->is_admin)
         <a class="{{ request()->is('admin/content/hero_slides*') ? 'active' : '' }}" href="{{ route('admin.content.index','hero_slides') }}" title="Hero Slider Banners">
           <span class="nav-icon">
@@ -265,18 +298,6 @@
         </a>
       @endif
 
-      @can('admissions.view')
-        <a class="{{ request()->routeIs('admin.applications*') ? 'active' : '' }}" href="{{ route('admin.applications') }}" title="Admissions">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
-          </span>
-          <span class="nav-text">Admissions</span>
-          @if(($pendingAdmissionsCount ?? 0) > 0)
-            <span style="background:#e11d48;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:auto;font-weight:700;">{{ $pendingAdmissionsCount }}</span>
-          @endif
-        </a>
-      @endcan
-
       @can('gallery.manage')
         <a class="{{ request()->is('admin/content/gallery*') ? 'active' : '' }}" href="{{ route('admin.content.index','gallery') }}" title="Gallery">
           <span class="nav-icon">
@@ -295,12 +316,24 @@
         </a>
       @endcan
 
+      {{-- GROUP 4: SYSTEM & ACCESS / সিস্টেম ও সেটিংস --}}
+      <div class="nav-group-heading">SYSTEM & SETTINGS</div>
+
       @can('messages.view')
         <a class="{{ request()->routeIs('admin.messages*') ? 'active' : '' }}" href="{{ route('admin.messages') }}" title="Messages">
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
           </span>
           <span class="nav-text">Messages</span>
+        </a>
+      @endcan
+
+      @can('settings.manage')
+        <a class="{{ request()->routeIs('admin.settings*') ? 'active' : '' }}" href="{{ route('admin.settings') }}" title="Site Settings">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </span>
+          <span class="nav-text">Site Settings</span>
         </a>
       @endcan
 
@@ -319,15 +352,6 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
           </span>
           <span class="nav-text">Roles</span>
-        </a>
-      @endcan
-
-      @can('settings.manage')
-        <a class="{{ request()->routeIs('admin.settings*') ? 'active' : '' }}" href="{{ route('admin.settings') }}" title="Site Settings">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-          </span>
-          <span class="nav-text">Site Settings</span>
         </a>
       @endcan
 

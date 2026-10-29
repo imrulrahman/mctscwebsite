@@ -119,10 +119,10 @@
     <!-- 1. OVERVIEW (CMS POWERED & 100% EDITABLE) -->
     <div style="background: #fdfbf7; border: 1px solid #f1e6d0; border-left: 5px solid var(--gold); border-radius: 10px; padding: 28px 32px; margin-bottom: 46px; box-shadow: 0 4px 18px rgba(197, 155, 39, 0.06);">
       <span class="section-kicker" style="color: var(--gold);">{{ $settings['infr_overview_kicker'] ?? ($isBn ? 'ক্যাম্পাস পরিচিতি' : 'CAMPUS OVERVIEW') }}</span>
-      <h2 style="font-family: var(--serif); font-size: 26px; color: var(--green); margin: 4px 0 12px 0;">
+      <h2 data-live-edit data-live-key="infr_overview_title" data-live-type="text" data-live-title="অবকাঠামো পরিচিতি শিরোনাম" data-live-location="Infrastructure পেজ - পরিচিতি" style="font-family: var(--serif); font-size: 26px; color: var(--green); margin: 4px 0 12px 0;">
         {{ $settings['infr_overview_title'] ?? ($isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ ভবন ও সুবিধাসমূহ' : 'Two-Storey Campus Infrastructure') }}
       </h2>
-      <p style="font-size: 16px; line-height: 1.8; color: #334155; margin: 0;">
+      <p data-live-edit data-live-key="{{ $isBn ? 'infr_overview_desc_bn' : 'infr_overview_desc' }}" data-live-type="textarea" data-live-title="অবকাঠামো পরিচিতি বিবরণ" data-live-location="Infrastructure পেজ - পরিচিতি" style="font-size: 16px; line-height: 1.8; color: #334155; margin: 0;">
         @if($isBn && !empty($settings['infr_overview_desc_bn']))
           {{ $settings['infr_overview_desc_bn'] }}
         @elseif(!empty($settings['infr_overview_desc']))

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InboxController;
+use App\Http\Controllers\Admin\LiveEditController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingsController;
@@ -165,6 +166,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Site Settings
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings');
         Route::put('/settings', [SettingsController::class, 'update'])->name('settings.update');
+
+        // Front-end Live In-Page Editor API
+        Route::post('/live-edit/save-setting', [LiveEditController::class, 'saveSetting'])->name('live-edit.setting');
+        Route::post('/live-edit/save-content', [LiveEditController::class, 'saveContent'])->name('live-edit.content');
 
         // User Management
         Route::get('/users', [UserController::class, 'index'])->name('users.index');

@@ -844,4 +844,42 @@ class WebsiteCmsTest extends TestCase
         $emptyResp->assertOk();
         $emptyResp->assertSee('No recruitment circular is available');
     }
+
+    public function test_live_edit_api_saves_setting_and_content_for_admin(): void
+    {
+        $this->seed();
+
+        $admin = User::firstOrCreate(
+            ['email' => 'live_editor_admin@mctsc.test'],
+            ['name' => 'Live Editor Admin', 'password' => 'Passw0rd!123', 'is_admin' => true]
+        );
+
+        // 1. Live edit save setting
+        $resp = $this->actingAs($admin)->postJson(route('admin.live-edit.setting'), [
+            'key' => 'phone',
+            'value' => '+8801880999999',
+        ]);
+        $resp->assertOk()->assertJson(['success' => true, 'key' => 'phone']);
+        $this->assertEquals('+8801880999999', \App\Models\SiteSetting::get('phone'));
+
+        // 2. Live edit save content
+        $course = \App\Models\SiteContent::where('section', 'courses')->first();
+        if ($course) {
+            $cResp = $this->actingAs($admin)->postJson(route('admin.live-edit.content'), [
+                'id' => $course->id,
+                'field' => 'title',
+                'value' => 'Advanced Robotics Live Edit',
+            ]);
+            $cResp->assertOk()->assertJson(['success' => true]);
+            $this->assertEquals('Advanced Robotics Live Edit', $course->fresh()->title);
+        }
+
+        // 3. Guest cannot access live edit API
+        auth()->logout();
+        $guestResp = $this->postJson(route('admin.live-edit.setting'), [
+            'key' => 'phone',
+            'value' => '+8800000000000',
+        ]);
+        $guestResp->assertUnauthorized();
+    }
 }

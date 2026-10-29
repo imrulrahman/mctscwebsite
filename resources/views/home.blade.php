@@ -1074,7 +1074,7 @@
 <header class="site-header">
   <div class="container nav-wrap">
     <a class="brand" href="{{ route('home') }}">
-      <img src="{{ $siteLogo }}" alt="{{ $settings->get('institution_name', 'MCTSC') }} logo">
+      <img src="{{ $siteLogo }}" alt="{{ $settings->get('institution_name', 'MCTSC') }} logo" data-live-edit data-live-key="site_logo" data-live-type="image" data-live-title="অফিসিয়াল মনোগ্রাম / লোগো" data-live-location="হেডার (Header)">
       <div class="brand-text">
         <span class="brand-line-1">{{ $isBn ? 'মাহমুদুন্নবী চৌধুরী' : 'Mahmudunnabi Chowdhury' }}</span>
         <span class="brand-line-2">{{ $isBn ? 'টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Technical School and College' }}</span>
@@ -1219,9 +1219,9 @@
     <div class="container">
       <div class="about-grid">
         <div class="about-copy">
-          <h2>{{ $settings->get('about_title') ?: ($isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background') }}</h2>
+          <h2 data-live-edit data-live-key="about_title" data-live-type="text" data-live-title="ইনস্টিটিউটের পটভূমি শিরোনাম" data-live-location="হোমপেজ - পটভূমি">{{ $settings->get('about_title') ?: ($isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background') }}</h2>
           <div class="gold-rule"></div>
-          <div class="about-summary-text" style="font-size: 15px; line-height: 1.75; color: #334d44; margin-bottom: 24px; text-align: justify; text-justify: inter-word;">
+          <div class="about-summary-text" data-live-edit data-live-key="{{ $isBn ? 'about_bn' : 'about' }}" data-live-type="textarea" data-live-title="ইনস্টিটিউটের পটভূমি বিবরণ" data-live-location="হোমপেজ - পটভূমি" style="font-size: 15px; line-height: 1.75; color: #334d44; margin-bottom: 24px; text-align: justify; text-justify: inter-word;">
             @php
               $customAbout = $settings->get('about');
             @endphp
@@ -1270,7 +1270,7 @@
                 $aboutImgSrc = asset('assets/about_mahmudunnabi_legacy.jpg');
             }
           @endphp
-          <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus">
+          <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus" data-live-edit data-live-key="about_image" data-live-type="image" data-live-title="ক্যাম্পাস ও পটভূমি ছবি" data-live-location="হোমপেজ - পটভূমি">
         </div>
       </div>
     </div>
@@ -1368,12 +1368,12 @@
             <span style="font-size: 12px; font-weight: 700; color: #166534; letter-spacing: 1.5px; text-transform: uppercase;">
               {{ $settings->get('strategic_partnership_kicker') ?: ($isBn ? 'কৌশলগত অংশীদারিত্ব' : 'STRATEGIC PARTNERSHIP') }}
             </span>
-            <h3 style="font-family: var(--serif); font-size: 22px; color: #14532d; margin: 2px 0 0 0;">
+            <h3 data-live-edit data-live-key="strategic_partnership_title" data-live-type="text" data-live-title="কৌশলগত অংশীদারিত্ব শিরোনাম" data-live-location="হোমপেজ - পার্টনারশিপ" style="font-family: var(--serif); font-size: 22px; color: #14532d; margin: 2px 0 0 0;">
               {{ $settings->get('strategic_partnership_title') ?: ($isBn ? 'ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative)-এর সাথে অংশীদারিত্ব' : 'Partnership with Impact Initiative') }}
             </h3>
           </div>
         </div>
-        <div style="font-size: 15px; line-height: 1.8; color: #166534; text-align: justify; text-justify: inter-word;">
+        <div data-live-edit data-live-key="{{ $isBn ? 'strategic_partnership_body_bn' : 'strategic_partnership_body' }}" data-live-type="textarea" data-live-title="কৌশলগত অংশীদারিত্ব বিবরণ" data-live-location="হোমপেজ - পার্টনারশিপ" style="font-size: 15px; line-height: 1.8; color: #166534; text-align: justify; text-justify: inter-word;">
           @php
             $hasSpBodyBn = $settings->has('strategic_partnership_body_bn');
             $hasSpBodyEn = $settings->has('strategic_partnership_body');
@@ -1752,5 +1752,6 @@
     startTimer();
   });
 </script>
+@include('partials.live_editor')
 </body>
 </html>

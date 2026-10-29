@@ -215,7 +215,7 @@
     <!-- 1. INTRO (HERITAGE & FOUNDATION) WITH WRAP-AROUND IMAGE -->
     <div style="margin-bottom: 54px;">
       <span class="section-kicker">{{ $settings['about_intro_kicker'] ?? ($isBn ? 'ভূমিকা' : 'INTRODUCTION') }}</span>
-      <h2 style="font-family: var(--serif); font-size: 30px; color: var(--green); margin: 6px 0 16px 0; line-height: 1.25;">
+      <h2 data-live-edit data-live-key="about_intro_title" data-live-type="text" data-live-title="এবাউট পেজ ভূমিকা শিরোনাম" data-live-location="About পেজ - পরিচিতি" style="font-family: var(--serif); font-size: 30px; color: var(--green); margin: 6px 0 16px 0; line-height: 1.25;">
         {{ $settings['about_intro_title'] ?? ($isBn ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Mahmudunnabi Chowdhury Technical School and College') }}
       </h2>
       <div class="gold-rule" style="width: 50px; height: 3px; background: var(--gold); margin-bottom: 22px;"></div>
@@ -223,11 +223,11 @@
       <!-- Floated Image (Text wraps around it and expands full width below) -->
       <div class="about-float-media">
         <div style="border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(15,81,50,0.12); border: 1px solid #e2e8f0; background: #ffffff; padding: 6px;">
-          <img src="{{ $aboutImg }}" alt="Mahmudunnabi Chowdhury Legacy & College Campus" style="width: 100%; height: auto; display: block; object-fit: contain; border-radius: 8px;">
+          <img src="{{ $aboutImg }}" alt="Mahmudunnabi Chowdhury Legacy & College Campus" data-live-edit data-live-key="about_image" data-live-type="image" data-live-title="ক্যাম্পাস ও পটভূমি ছবি" data-live-location="About পেজ - মূল ছবি" style="width: 100%; height: auto; display: block; object-fit: contain; border-radius: 8px;">
         </div>
       </div>
 
-      <div style="font-size: 15px; line-height: 1.8; color: #334155; text-align: justify; text-justify: inter-word;">
+      <div data-live-edit data-live-key="{{ $isBn ? 'about_intro_body_bn' : 'about_intro_body' }}" data-live-type="textarea" data-live-title="এবাউট পেজ ভূমিকা বিবরণ" data-live-location="About পেজ - পরিচিতি" style="font-size: 15px; line-height: 1.8; color: #334155; text-align: justify; text-justify: inter-word;">
         @if($isBn && !empty($settings['about_intro_body_bn']))
           @foreach(explode("\n\n", str_replace("\r\n", "\n", $settings['about_intro_body_bn'])) as $p)
             @if(trim($p))

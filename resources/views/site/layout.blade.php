@@ -701,7 +701,7 @@
 <header class="site-header">
   <div class="container nav-wrap">
     <a class="brand" href="{{ route('home') }}">
-      <img src="{{ $siteLogo }}" alt="{{ $instName }} logo">
+      <img src="{{ $siteLogo }}" alt="{{ $instName }} logo" data-live-edit data-live-key="site_logo" data-live-type="image" data-live-title="অফিসিয়াল মনোগ্রাম / লোগো" data-live-location="হেডার (Header)">
       <div class="brand-text">
         <span class="brand-line-1">{{ $isBn ? 'মাহমুদুন্নবী চৌধুরী' : 'Mahmudunnabi Chowdhury' }}</span>
         <span class="brand-line-2">{{ $isBn ? 'টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Technical School and College' }}</span>
@@ -816,7 +816,7 @@
         </svg>
         <div>
           <small>{{ $isBn ? 'আমাদের ঠিকানা' : 'Our address' }}</small>
-          <strong>{{ $getSetting('address', '273/A/520, Chodu Chowdhury Road, Sagorika, Pahartali, Chattogram') }}</strong>
+          <strong data-live-edit data-live-key="address" data-live-type="textarea" data-live-title="প্রতিষ্ঠানের পূর্ণাঙ্গ ঠিকানা" data-live-location="ফুটার - ঠিকানা">{{ $getSetting('address', '273/A/520, Chodu Chowdhury Road, Sagorika, Pahartali, Chattogram') }}</strong>
         </div>
       </div>
 
@@ -827,7 +827,7 @@
           </svg>
           <div>
             <small>{{ $isBn ? 'ফোন নম্বর' : 'Phone number' }}</small>
-            <strong>{{ $getSetting('phone', '+8801880919275') }}</strong>
+            <strong data-live-edit data-live-key="phone" data-live-type="text" data-live-title="অফিসিয়াল হেল্পলাইন ফোন নম্বর" data-live-location="ফুটার - হেল্পলাইন">{{ $getSetting('phone', '+8801880919275') }}</strong>
           </div>
         </div>
 
@@ -838,7 +838,7 @@
           </svg>
           <div>
             <small>{{ $isBn ? 'ইমেইল এড্রেস' : 'Email address' }}</small>
-            <strong>{{ $getSetting('email', 'mnctsc@gmail.com') }}</strong>
+            <strong data-live-edit data-live-key="email" data-live-type="text" data-live-title="অফিসিয়াল ইমেইল এড্রেস" data-live-location="ফুটার - ইমেইল">{{ $getSetting('email', 'mnctsc@gmail.com') }}</strong>
           </div>
         </div>
       </div>
@@ -882,5 +882,6 @@
 
 <script src="{{ asset('js/site.js') }}"></script>
 @yield('scripts')
+@include('partials.live_editor')
 </body>
 </html>
