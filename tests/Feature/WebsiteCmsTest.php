@@ -265,7 +265,7 @@ class WebsiteCmsTest extends TestCase
         $homeResponse->assertDontSee('class="section-kicker">ABOUT US');
         $homeResponse->assertSee('Mahmudunnabi Chowdhury Technical School');
         $homeResponse->assertSee('Technical and Vocational Education and Training (TVET) institution');
-        $homeResponse->assertSee('grid-template-columns: 1.25fr 0.95fr !important;');
+        $homeResponse->assertSee('about-image-floated');
         $homeResponse->assertDontSee('id="notices"');
 
         // 4. Verify Admin Settings page displays recommended resolution badges
