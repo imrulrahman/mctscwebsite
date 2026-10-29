@@ -336,7 +336,7 @@
       <article class="career-card" id="job-{{ $job->id }}">
         <div class="career-header">
           <div>
-            <h2 class="career-title">{{ $job->title }}</h2>
+            <h2 class="career-title" data-live-edit data-live-content-id="{{ $job->id }}" data-live-content-field="title" data-live-type="text" data-live-title="Job: {{ $job->title }}" data-live-location="Career">{{ $job->title }}</h2>
             <div class="career-badges">
               @if($job->category)
                 <span class="career-badge badge-category">{{ $job->category }}</span>
@@ -370,13 +370,13 @@
         </div>
 
         @if($job->excerpt)
-          <div style="font-weight: 600; color: #1e293b; font-size: 14.5px; margin-bottom: 14px; line-height: 1.55;">
+          <div data-live-edit data-live-content-id="{{ $job->id }}" data-live-content-field="excerpt" data-live-type="textarea" data-live-title="Job Summary: {{ $job->title }}" data-live-location="Career" style="font-weight: 600; color: #1e293b; font-size: 14.5px; margin-bottom: 14px; line-height: 1.55;">
             {{ $job->excerpt }}
           </div>
         @endif
 
         @if($job->body)
-          <div class="career-body">
+          <div class="career-body" data-live-edit data-live-content-id="{{ $job->id }}" data-live-content-field="body" data-live-type="rich" data-live-title="Circular Body: {{ $job->title }}" data-live-location="Career">
             @if(strip_tags($job->body) !== $job->body)
               {!! $job->body !!}
             @else

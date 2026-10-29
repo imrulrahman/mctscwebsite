@@ -37,7 +37,7 @@
             </div>
           </div>
           <div style="padding: 12px 14px; background: #ffffff;">
-            <strong style="font-size: 13.5px; color: #1e3d35; font-family: var(--serif); display: block; line-height: 1.3;">
+            <strong data-live-edit data-live-content-id="{{ $item->id }}" data-live-content-field="title" data-live-type="text" data-live-title="Photo: {{ $title }}" data-live-location="Gallery" style="font-size: 13.5px; color: #1e3d35; font-family: var(--serif); display: block; line-height: 1.3;">
               {{ $title }}
             </strong>
             @if($item->excerpt)

@@ -259,24 +259,28 @@ body.live-edit-mode-active [data-live-edit]:hover {
   background-color: rgba(15, 81, 50, 0.08) !important;
 }
 body.live-edit-mode-active [data-live-edit]::after {
-  content: "✎ Edit";
+  content: "✎ " attr(data-live-title);
   position: absolute;
   top: -12px;
   right: 8px;
   background: #0f5132;
   color: #ffffff;
-  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 10.5px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 11px;
   font-weight: 700;
-  padding: 2px 7px;
+  padding: 2.5px 8px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
   pointer-events: none;
   opacity: 0;
   transform: translateY(3px);
   transition: opacity 0.15s ease, transform 0.15s ease;
   z-index: 10000;
   white-space: nowrap;
+}
+body.live-edit-mode-active [data-live-edit]:not([data-live-title])::after,
+body.live-edit-mode-active [data-live-edit][data-live-title=""]::after {
+  content: "✎ Edit";
 }
 body.live-edit-mode-active [data-live-edit]:hover::after {
   opacity: 1;
@@ -577,13 +581,32 @@ body.live-edit-mode-active [data-live-edit]:hover::after {
     currentTarget = elem;
     currentKey = elem.getAttribute('data-live-key') || '';
     currentType = elem.getAttribute('data-live-type') || 'text';
-    var title = elem.getAttribute('data-live-title') || 'তথ্য সম্পাদনা';
-    var loc = elem.getAttribute('data-live-location') || 'ওয়েবসাইট পেইজ';
+    var title = elem.getAttribute('data-live-title');
+    if (!title) {
+      var rawSnippet = elem.innerText.trim();
+      if (rawSnippet && rawSnippet.length <= 40) {
+        title = rawSnippet;
+      } else if (rawSnippet) {
+        title = rawSnippet.substring(0, 36) + '...';
+      } else {
+        title = elem.getAttribute('aria-label') || elem.getAttribute('alt') || 'তথ্য সম্পাদনা';
+      }
+    }
+    var loc = elem.getAttribute('data-live-location') || (document.title.split('·')[0].trim() || 'ওয়েবসাইট');
 
     // Content specific
     contentId = elem.getAttribute('data-live-content-id');
     contentField = elem.getAttribute('data-live-content-field');
     isContent = (contentId && contentField);
+
+    if (isContent) {
+      var sec = elem.getAttribute('data-live-location') || 'content';
+      deepLink.href = '{{ url("admin/content") }}/' + sec.toLowerCase();
+      deepLink.textContent = 'এডমিন প্যানেলে বিস্তারিত দেখুন ↗';
+    } else {
+      deepLink.href = '{{ route("admin.settings") }}';
+      deepLink.textContent = 'সাইট সেটিংস পেজে যান ↗';
+    }
 
     modalTitle.textContent = title;
     modalLoc.textContent = '📍 ' + loc;

@@ -56,11 +56,11 @@
 
           <div style="padding: 18px; flex: 1; display: flex; flex-direction: column; justify-content: space-between;">
             <div>
-              <h3 style="font-family: var(--serif); font-size: 17px; font-weight: 700; color: #1e3d35; margin: 0 0 8px 0; line-height: 1.35;">
+              <h3 data-live-edit data-live-content-id="{{ $course->id }}" data-live-content-field="title" data-live-type="text" data-live-title="Course: {{ $course->title }}" data-live-location="Courses" style="font-family: var(--serif); font-size: 17px; font-weight: 700; color: #1e3d35; margin: 0 0 8px 0; line-height: 1.35;">
                 {{ $cTitle }}
               </h3>
               @if(!empty($course->excerpt))
-                <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin: 0 0 14px 0;">
+                <p data-live-edit data-live-content-id="{{ $course->id }}" data-live-content-field="excerpt" data-live-type="textarea" data-live-title="Course Summary: {{ $course->title }}" data-live-location="Courses" style="font-size: 13px; color: #64748b; line-height: 1.5; margin: 0 0 14px 0;">
                   {{ $course->excerpt }}
                 </p>
               @else

@@ -1284,9 +1284,9 @@
         <div class="vmo-col vmo-col-left">
           <!-- Vision Card -->
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-vision">{{ $settings->get('vmo_vision_pill') ?: ($isBn ? 'রূপকল্প' : 'Vision') }}</div>
+            <div class="vmo-pill pill-vision" data-live-edit data-live-key="vmo_vision_pill" data-live-type="text" data-live-title="Vision (Pill Tag)" data-live-location="Vision & Mission">{{ $settings->get('vmo_vision_pill') ?: ($isBn ? 'রূপকল্প' : 'Vision') }}</div>
             <div class="vmo-box">
-              <p>
+              <p data-live-edit data-live-key="{{ $isBn ? 'vmo_vision_text_bn' : 'vmo_vision_text' }}" data-live-type="textarea" data-live-title="Vision (Description)" data-live-location="Vision & Mission">
                 @if($isBn && !empty($settings->get('vmo_vision_text_bn')))
                   {{ $settings->get('vmo_vision_text_bn') }}
                 @elseif(!empty($settings->get('vmo_vision_text')))
@@ -1302,9 +1302,9 @@
 
           <!-- Mission Card -->
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-mission">{{ $settings->get('vmo_mission_pill') ?: ($isBn ? 'লক্ষ্য' : 'Mission') }}</div>
+            <div class="vmo-pill pill-mission" data-live-edit data-live-key="vmo_mission_pill" data-live-type="text" data-live-title="Mission (Pill Tag)" data-live-location="Vision & Mission">{{ $settings->get('vmo_mission_pill') ?: ($isBn ? 'লক্ষ্য' : 'Mission') }}</div>
             <div class="vmo-box">
-              <p>
+              <p data-live-edit data-live-key="{{ $isBn ? 'vmo_mission_text_bn' : 'vmo_mission_text' }}" data-live-type="textarea" data-live-title="Mission (Description)" data-live-location="Vision & Mission">
                 @if($isBn && !empty($settings->get('vmo_mission_text_bn')))
                   {{ $settings->get('vmo_mission_text_bn') }}
                 @elseif(!empty($settings->get('vmo_mission_text')))
@@ -1322,7 +1322,7 @@
         <!-- Right Column: Objectives Card -->
         <div class="vmo-col vmo-col-right">
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-objectives">{{ $settings->get('vmo_objectives_pill') ?: ($isBn ? 'উদ্দেশ্যসমূহ' : 'Objectives') }}</div>
+            <div class="vmo-pill pill-objectives" data-live-edit data-live-key="vmo_objectives_pill" data-live-type="text" data-live-title="Objectives (Pill Tag)" data-live-location="Vision & Mission">{{ $settings->get('vmo_objectives_pill') ?: ($isBn ? 'উদ্দেশ্যসমূহ' : 'Objectives') }}</div>
             <div class="vmo-box">
               <ul class="vmo-objectives-list">
                 @php
@@ -1365,15 +1365,15 @@
         <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
           <span style="font-size: 28px;">🤝</span>
           <div>
-            <span style="font-size: 12px; font-weight: 700; color: #166534; letter-spacing: 1.5px; text-transform: uppercase;">
+            <span data-live-edit data-live-key="strategic_partnership_kicker" data-live-type="text" data-live-title="STRATEGIC PARTNERSHIP (Badge)" data-live-location="STRATEGIC PARTNERSHIP" style="font-size: 12px; font-weight: 700; color: #166534; letter-spacing: 1.5px; text-transform: uppercase;">
               {{ $settings->get('strategic_partnership_kicker') ?: ($isBn ? 'কৌশলগত অংশীদারিত্ব' : 'STRATEGIC PARTNERSHIP') }}
             </span>
-            <h3 data-live-edit data-live-key="strategic_partnership_title" data-live-type="text" data-live-title="কৌশলগত অংশীদারিত্ব শিরোনাম" data-live-location="হোমপেজ - পার্টনারশিপ" style="font-family: var(--serif); font-size: 22px; color: #14532d; margin: 2px 0 0 0;">
+            <h3 data-live-edit data-live-key="strategic_partnership_title" data-live-type="text" data-live-title="STRATEGIC PARTNERSHIP (Title)" data-live-location="STRATEGIC PARTNERSHIP" style="font-family: var(--serif); font-size: 22px; color: #14532d; margin: 2px 0 0 0;">
               {{ $settings->get('strategic_partnership_title') ?: ($isBn ? 'ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative)-এর সাথে অংশীদারিত্ব' : 'Partnership with Impact Initiative') }}
             </h3>
           </div>
         </div>
-        <div data-live-edit data-live-key="{{ $isBn ? 'strategic_partnership_body_bn' : 'strategic_partnership_body' }}" data-live-type="textarea" data-live-title="কৌশলগত অংশীদারিত্ব বিবরণ" data-live-location="হোমপেজ - পার্টনারশিপ" style="font-size: 15px; line-height: 1.8; color: #166534; text-align: justify; text-justify: inter-word;">
+        <div data-live-edit data-live-key="{{ $isBn ? 'strategic_partnership_body_bn' : 'strategic_partnership_body' }}" data-live-type="textarea" data-live-title="STRATEGIC PARTNERSHIP (Description)" data-live-location="STRATEGIC PARTNERSHIP" style="font-size: 15px; line-height: 1.8; color: #166534; text-align: justify; text-justify: inter-word;">
           @php
             $hasSpBodyBn = $settings->has('strategic_partnership_body_bn');
             $hasSpBodyEn = $settings->has('strategic_partnership_body');
@@ -1414,7 +1414,7 @@
           <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed #86efac;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
               <h4 style="font-family: var(--serif); font-size: 20px; color: #14532d; margin: 0; display: flex; align-items: center; gap: 8px;">
-                <span>👥</span> <em>{{ $settings->get('gov_committee_title') ?: ($isBn ? 'পরিচালনা ও ব্যবস্থাপনা কমিটি (Governance / Management Committee)' : 'Governance / Management Committee') }}</em>
+                <span>👥</span> <em data-live-edit data-live-key="gov_committee_title" data-live-type="text" data-live-title="Management Committee Title" data-live-location="Management Committee">{{ $settings->get('gov_committee_title') ?: ($isBn ? 'পরিচালনা ও ব্যবস্থাপনা কমিটি (Governance / Management Committee)' : 'Governance / Management Committee') }}</em>
               </h4>
               <span style="font-size: 12px; font-weight: 700; color: #166534; background: #dcfce7; padding: 4px 10px; border-radius: 4px; border: 1px solid #bbf7d0; text-transform: uppercase; letter-spacing: 0.5px;">
                 {{ $isBn ? 'কোয়ালিটি এস্যুরেন্স বডি' : 'Quality Assurance' }}
@@ -1434,7 +1434,7 @@
               }
             @endphp
             @if(filled(trim($govIntroText ?? '')))
-              <p style="font-size: 14.5px; line-height: 1.65; color: #166534; margin: 0 0 16px 0; text-align: justify; text-justify: inter-word;">
+              <p data-live-edit data-live-key="{{ $isBn ? 'gov_committee_intro_bn' : 'gov_committee_intro' }}" data-live-type="textarea" data-live-title="Management Committee Intro" data-live-location="Management Committee" style="font-size: 14.5px; line-height: 1.65; color: #166534; margin: 0 0 16px 0; text-align: justify; text-justify: inter-word;">
                 {{ $govIntroText }}
               </p>
             @endif
@@ -1479,14 +1479,13 @@
               ];
             @endphp
 
-            <div style="overflow-x: auto; background: #ffffff; border-radius: 8px; border: 1px solid #bbf7d0; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.04);">
-              <table style="width: 100%; border-collapse: collapse; font-size: 13.5px; text-align: left;">
+            <div style="overflow-x: auto; background: #ffffff; border-radius: 8px; border: 1px solid #bbf7d0; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.06); max-width: 780px; margin: 0 auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
                 <thead>
                   <tr style="background: #14532d; color: #ffffff;">
-                    <th style="padding: 10px 14px; width: 45px; text-align: center; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'নং' : 'SN' }}</th>
-                    <th style="padding: 10px 14px; min-width: 180px; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'নাম (Name)' : 'Name' }}</th>
-                    <th style="padding: 10px 14px; min-width: 140px; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'পদবী (Position)' : 'Position' }}</th>
-                    <th style="padding: 10px 14px; min-width: 260px;">{{ $isBn ? 'শিক্ষাগত যোগ্যতা (Educational Qualification)' : 'Educational Qualification' }}</th>
+                    <th style="padding: 12px 16px; width: 60px; text-align: center; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'নং' : 'SN' }}</th>
+                    <th style="padding: 12px 18px; min-width: 220px; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'নাম' : 'Name' }}</th>
+                    <th style="padding: 12px 18px; min-width: 200px;">{{ $isBn ? 'পদবী' : 'Position' }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -1495,16 +1494,15 @@
                       $def = $defaultCommittee[$m];
                       $mName = $settings->get('gov_member_' . $m . '_name', $def['name']);
                       $mPos = $settings->get('gov_member_' . $m . '_position', ($isBn ? $def['position_bn'] : $def['position']));
-                      $mQual = $settings->get('gov_member_' . $m . '_qualification', $def['qualification']);
-                      $mExp = $settings->get('gov_member_' . $m . '_experience', $def['experience']);
                     @endphp
                     <tr style="background: {{ $m % 2 === 0 ? '#f8fdfa' : '#ffffff' }}; border-bottom: 1px solid #e2ebe6;">
-                      <td style="padding: 11px 14px; text-align: center; font-weight: 700; color: #166534; border-right: 1px solid #eef4f0;">{{ $m }}</td>
-                      <td style="padding: 11px 14px; font-weight: 700; color: #1e293b; border-right: 1px solid #eef4f0;">{{ $mName }}</td>
-                      <td style="padding: 11px 14px; border-right: 1px solid #eef4f0; font-weight: 600; color: #14532d;">
-                        {{ $mPos }}
+                      <td style="padding: 12px 16px; text-align: center; font-weight: 700; color: #166534; border-right: 1px solid #eef4f0;">{{ $m }}</td>
+                      <td style="padding: 12px 18px; font-weight: 700; color: #1e293b; border-right: 1px solid #eef4f0;">
+                        <span data-live-edit data-live-key="gov_member_{{ $m }}_name" data-live-type="text" data-live-title="Member #{{ $m }} Name" data-live-location="Management Committee">{{ $mName }}</span>
                       </td>
-                      <td style="padding: 11px 14px; color: #334155;">{{ $mQual }}</td>
+                      <td style="padding: 12px 18px; font-weight: 600; color: #14532d;">
+                        <span data-live-edit data-live-key="gov_member_{{ $m }}_position" data-live-type="text" data-live-title="Member #{{ $m }} Position" data-live-location="Management Committee">{{ $mPos }}</span>
+                      </td>
                     </tr>
                   @endfor
                 </tbody>

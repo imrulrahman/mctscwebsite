@@ -1298,7 +1298,7 @@
                 @php $mDef = $defaultGovMembers[$gm]; @endphp
                 <div style="background:#ffffff;border:1px solid #bbf7d0;padding:12px;border-radius:6px;">
                   <strong style="color:#14532d;font-size:13.5px;display:block;margin-bottom:8px;">Member #{{ $gm }} (সদস্য {{ $gm }})</strong>
-                  <div class="field-grid" style="grid-template-columns: 1.2fr 1fr 2fr;">
+                  <div class="field-grid" style="grid-template-columns: 1.2fr 1fr;">
                     <label>
                       Name (নাম)
                       <input name="gov_member_{{ $gm }}_name" value="{{ old('gov_member_' . $gm . '_name', $settings->get('gov_member_' . $gm . '_name', $mDef['name'])) }}">
@@ -1307,11 +1307,7 @@
                       Position (পদবী)
                       <input name="gov_member_{{ $gm }}_position" value="{{ old('gov_member_' . $gm . '_position', $settings->get('gov_member_' . $gm . '_position', $mDef['pos'])) }}">
                     </label>
-                    <label>
-                      Educational Qualification (শিক্ষাগত যোগ্যতা)
-                      <input name="gov_member_{{ $gm }}_qualification" value="{{ old('gov_member_' . $gm . '_qualification', $settings->get('gov_member_' . $gm . '_qualification', $mDef['qual'])) }}">
-                    </label>
-                    </div>
+                  </div>
                 </div>
               @endfor
             </div>

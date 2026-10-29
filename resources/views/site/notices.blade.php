@@ -38,16 +38,16 @@
 
             <!-- NOTICE CONTENT -->
             <div style="flex: 1; min-width: 0;">
-              <h3 style="font-size: 17px; font-weight: 700; color: #1e3d35; margin: 0 0 6px 0; font-family: var(--serif); line-height: 1.35;">
+              <h3 data-live-edit data-live-content-id="{{ $notice->id }}" data-live-content-field="title" data-live-type="text" data-live-title="Notice: {{ $notice->title }}" data-live-location="Notices" style="font-size: 17px; font-weight: 700; color: #1e3d35; margin: 0 0 6px 0; font-family: var(--serif); line-height: 1.35;">
                 {{ $notice->title }}
               </h3>
               @if(!empty($notice->excerpt))
-                <p style="font-size: 14px; color: #475569; margin: 0 0 10px 0; line-height: 1.5;">
+                <p data-live-edit data-live-content-id="{{ $notice->id }}" data-live-content-field="excerpt" data-live-type="textarea" data-live-title="Notice Summary: {{ $notice->title }}" data-live-location="Notices" style="font-size: 14px; color: #475569; margin: 0 0 10px 0; line-height: 1.5;">
                   {{ $notice->excerpt }}
                 </p>
               @endif
               @if(!empty($notice->body))
-                <div style="font-size: 13.5px; color: #334155; line-height: 1.6; margin-bottom: 10px;">
+                <div data-live-edit data-live-content-id="{{ $notice->id }}" data-live-content-field="body" data-live-type="rich" data-live-title="Notice Details: {{ $notice->title }}" data-live-location="Notices" style="font-size: 13.5px; color: #334155; line-height: 1.6; margin-bottom: 10px;">
                   {!! nl2br(e($notice->body)) !!}
                 </div>
               @endif
