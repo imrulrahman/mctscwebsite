@@ -60,10 +60,61 @@
         <textarea name="excerpt" rows="3" maxlength="1000" placeholder="Brief summary for cards...">{{ old('excerpt', $item->excerpt) }}</textarea>
       </label>
 
-      <label>
-        Details / Full Body Content
-        <textarea name="body" rows="6" placeholder="Full details, syllabus or info...">{{ old('body', $item->body) }}</textarea>
-      </label>
+      <div class="rich-text-group" style="margin-top: 4px; margin-bottom: 8px;">
+        <label style="display:block; margin-bottom: 6px; font-weight: 600; color: #394842; font-size: 12px;">
+          Details / Full Body Content (Rich Text Editor / ফরম্যাটিং টেক্সট বক্স)
+        </label>
+        <p style="margin: 0 0 8px; color: #6b7772; font-size: 12px;">
+          নিচের টুলবার থেকে সরাসরি লেখা <b>বোল্ড</b>, <i>ইটালিক</i>, <span style="color:#0f5132;font-weight:600;">কালার</span>, বুলেট/নম্বর লিস্ট, হেডিং ইত্যাদি ফরম্যাটিং করতে পারবেন:
+        </p>
+
+        <div id="quill-toolbar">
+          <span class="ql-formats">
+            <select class="ql-header">
+              <option value="2">Heading 2</option>
+              <option value="3">Heading 3</option>
+              <option value="4">Heading 4</option>
+              <option selected>Normal Text</option>
+            </select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-bold" type="button" title="Bold (Ctrl+B)"></button>
+            <button class="ql-italic" type="button" title="Italic (Ctrl+I)"></button>
+            <button class="ql-underline" type="button" title="Underline (Ctrl+U)"></button>
+            <button class="ql-strike" type="button" title="Strikethrough"></button>
+          </span>
+          <span class="ql-formats">
+            <select class="ql-color" title="Text Color"></select>
+            <select class="ql-background" title="Highlight Color"></select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-list" value="ordered" type="button" title="Numbered List"></button>
+            <button class="ql-list" value="bullet" type="button" title="Bullet List"></button>
+          </span>
+          <span class="ql-formats">
+            <select class="ql-align" title="Text Alignment"></select>
+          </span>
+          <span class="ql-formats">
+            <button class="ql-link" type="button" title="Insert Link"></button>
+            <button class="ql-clean" type="button" title="Clear Formatting"></button>
+          </span>
+        </div>
+
+        @php
+          $rawBody = old('body', $item->body);
+          if ($rawBody && strip_tags($rawBody) === $rawBody) {
+            $initialBody = nl2br(e($rawBody));
+          } else {
+            $initialBody = $rawBody;
+          }
+        @endphp
+
+        <div id="quill-editor" style="min-height: 250px; background: #ffffff; font-size: 14.5px; line-height: 1.6;">{!! $initialBody !!}</div>
+        <textarea name="body" id="body-hidden-input" style="display: none;">{!! old('body', $item->body) !!}</textarea>
+        @error('body')
+          <small class="field-error">{{ $message }}</small>
+        @enderror
+      </div>
     @endif
 
     @if(in_array($section, ['courses', 'gallery', 'projects', 'partners', 'hero_slides', 'career']))
@@ -123,4 +174,71 @@
     </div>
   </form>
 </section>
+
+<link href="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.snow.css" rel="stylesheet">
+<style>
+  .ql-toolbar.ql-snow {
+    border: 1px solid #d7e1dc !important;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+    background: #f8fafc;
+    padding: 8px 10px;
+  }
+  .ql-container.ql-snow {
+    border: 1px solid #d7e1dc !important;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    background: #ffffff;
+    font-family: inherit;
+    font-size: 14.5px;
+  }
+  .ql-editor {
+    min-height: 240px;
+    line-height: 1.65;
+  }
+  .ql-editor.ql-blank::before {
+    font-style: normal;
+    color: #94a3b8;
+    font-size: 14px;
+  }
+  .ql-snow .ql-picker.ql-header {
+    width: 120px;
+  }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var editorElem = document.getElementById('quill-editor');
+    if (!editorElem) return;
+
+    var quill = new Quill('#quill-editor', {
+      modules: {
+        toolbar: '#quill-toolbar'
+      },
+      theme: 'snow',
+      placeholder: 'সম্পূর্ণ বিবরণ, প্রয়োজনীয় তথ্য বা যোগ্যতা এখানে লিখুন...'
+    });
+
+    var hiddenInput = document.getElementById('body-hidden-input');
+    var form = editorElem.closest('form');
+
+    function syncBody() {
+      if (!hiddenInput) return;
+      var html = quill.root.innerHTML;
+      if (html === '<p><br></p>' || html.trim() === '') {
+        hiddenInput.value = '';
+      } else {
+        hiddenInput.value = html;
+      }
+    }
+
+    quill.on('text-change', syncBody);
+
+    if (form) {
+      form.addEventListener('submit', function() {
+        syncBody();
+      });
+    }
+  });
+</script>
 @endsection

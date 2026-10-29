@@ -91,13 +91,54 @@
   color: #0f5132;
 }
 .career-body {
-  font-size: 14px;
-  line-height: 1.55;
+  font-size: 14.5px;
+  line-height: 1.7;
   color: #334155;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
-.career-body br + br + br {
-  display: none;
+.career-body h2,
+.career-body h3,
+.career-body h4 {
+  color: var(--green, #0f5132);
+  font-size: 16px;
+  font-weight: 700;
+  margin: 18px 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.career-body h4::before,
+.career-body h3::before {
+  content: "▪";
+  color: #bd9635;
+  font-size: 16px;
+  line-height: 1;
+}
+.career-body p {
+  margin: 0 0 10px 0;
+  line-height: 1.65;
+}
+.career-body ul,
+.career-body ol {
+  margin: 6px 0 14px 20px;
+  padding-left: 6px;
+}
+.career-body li {
+  margin-bottom: 6px;
+  line-height: 1.55;
+}
+.career-body strong,
+.career-body b {
+  color: #0f172a;
+  font-weight: 600;
+}
+.career-body a {
+  color: var(--green, #0f5132);
+  font-weight: 600;
+  text-decoration: underline;
+}
+.career-body a:hover {
+  color: #bd9635;
 }
 .career-actions {
   display: flex;
@@ -336,7 +377,11 @@
 
         @if($job->body)
           <div class="career-body">
-            {!! preg_replace('/(<br\s*\/?>\s*){3,}/i', '<br><br>', nl2br(e($job->body))) !!}
+            @if(strip_tags($job->body) !== $job->body)
+              {!! $job->body !!}
+            @else
+              {!! nl2br(e($job->body)) !!}
+            @endif
           </div>
         @endif
 
