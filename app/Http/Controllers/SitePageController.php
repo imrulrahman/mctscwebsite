@@ -91,6 +91,40 @@ class SitePageController extends Controller
         return view('site.career', compact('settings', 'circulars'));
     }
 
+    public function activities(): View
+    {
+        $settings = $this->getSettings();
+        $activities = SiteContent::query()
+            ->published()
+            ->where('section', 'activities')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->paginate(12);
+
+        return view('site.activities', compact('settings', 'activities'));
+    }
+
+    public function activityShow(string $slug): View
+    {
+        $settings = $this->getSettings();
+        $activity = SiteContent::query()
+            ->published()
+            ->where('section', 'activities')
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $recentActivities = SiteContent::query()
+            ->published()
+            ->where('section', 'activities')
+            ->where('id', '!=', $activity->id)
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->limit(5)
+            ->get();
+
+        return view('site.activity_detail', compact('settings', 'activity', 'recentActivities'));
+    }
+
     public function contact(): View
     {
         $settings = $this->getSettings();

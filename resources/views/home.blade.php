@@ -544,33 +544,35 @@
       display: none !important;
     }
     .about-section {
-      padding: 50px 0 46px 0 !important;
+      padding: 24px 0 36px 0 !important;
       background: #ffffff;
       width: 100% !important;
-      overflow: hidden !important;
     }
-    .about-grid {
-      display: grid !important;
-      grid-template-columns: 1.25fr 0.95fr !important;
-      gap: 40px !important;
-      align-items: center !important;
+    .about-wrap {
       width: 100% !important;
       box-sizing: border-box !important;
     }
-    .about-grid > * {
-      min-width: 0 !important;
-      box-sizing: border-box !important;
-    }
-    .about-copy {
-      padding: 10px 0 !important;
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-    }
-    .about-copy h2 {
+    .about-wrap h2 {
       font-size: 30px !important;
       line-height: 1.25 !important;
       margin: 0 0 12px 0 !important;
       color: {{ $primaryColor }} !important;
+    }
+    .about-summary-text {
+      width: 100% !important;
+      box-sizing: border-box !important;
+      color: #334d44 !important;
+      font-size: 15px !important;
+      line-height: 1.75 !important;
+      text-align: justify !important;
+      text-justify: inter-word !important;
+      margin-bottom: 20px !important;
+    }
+    .about-summary-text::after,
+    .about-wrap::after {
+      content: "";
+      display: table;
+      clear: both;
     }
     .about-summary-text p,
     .about-copy p:not(.section-kicker) {
@@ -579,45 +581,44 @@
       color: #334d44 !important;
       text-align: justify !important;
       text-justify: inter-word !important;
+      margin: 0 0 14px 0 !important;
     }
-    .about-image {
-      width: 100% !important;
-      height: 100% !important;
-      min-height: 280px !important;
-      max-height: 380px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
+    .about-summary-text > p:first-of-type,
+    .about-summary-text p:first-child {
+      margin-top: 0 !important;
+    }
+    /* Floated image aligned to the very top with text */
+    .about-image-floated {
+      float: right !important;
+      width: min(350px, 44%) !important;
+      margin: 2px 0 16px 24px !important;
       border-radius: 12px !important;
       overflow: hidden !important;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.07) !important;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08) !important;
       background: #ffffff !important;
+      border: 1px solid #e2ebe6 !important;
       box-sizing: border-box !important;
     }
-    .about-image img {
+    .about-image-floated img {
       width: 100% !important;
-      height: 100% !important;
-      max-height: 380px !important;
-      object-fit: contain !important;
+      height: auto !important;
       display: block !important;
-      border-radius: 12px !important;
-      transition: transform 0.3s ease;
+      object-fit: cover !important;
+      border-radius: 11px !important;
+      transition: transform 0.3s ease !important;
     }
-    .about-image:hover img {
-      transform: scale(1.02);
+    .about-image-floated:hover img {
+      transform: scale(1.02) !important;
     }
-    @media (max-width: 900px) {
-      .about-grid {
-        grid-template-columns: 1fr !important;
-        gap: 24px !important;
-      }
-      .about-image {
-        max-height: 300px !important;
-        min-height: 220px !important;
-      }
-      .about-image img {
-        max-height: 300px !important;
-        min-height: 220px !important;
+    .about-action-row {
+      clear: both !important;
+      margin-top: 20px !important;
+    }
+    @media (max-width: 680px) {
+      .about-image-floated {
+        float: none !important;
+        width: 100% !important;
+        margin: 0 0 16px 0 !important;
       }
     }
 
@@ -1068,6 +1069,314 @@
         transform: translateX(21px);
       }
     }
+    /* ========================================================
+       PORTAL 2-COLUMN LAYOUT BELOW HERO BANNER
+       Left: Main Content (About, Vision & Mission, Strategic Partnership)
+       Right: Sticky Recent Activity Sidebar (Right of About photo, stays fixed as page scrolls)
+       ======================================================== */
+    .portal-wrapper {
+      padding: 0 0 24px;
+      background: #ffffff;
+      width: 100%;
+    }
+    .portal-container {
+      width: min(1140px, calc(100% - 64px)) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 255px;
+      gap: 24px;
+      align-items: start;
+      box-sizing: border-box !important;
+    }
+    .portal-main-col {
+      min-width: 0;
+      width: 100%;
+    }
+    .portal-main-col .container {
+      width: 100% !important;
+      max-width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    .portal-main-col .section {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    /* RIGHT STICKY SIDEBAR */
+    .portal-sidebar-col {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 90px;
+      align-self: start;
+      width: 100%;
+      z-index: 15;
+      padding-top: 24px;
+    }
+
+    /* RECENT ACTIVITY SIDEBAR WIDGET (GOVERNMENT PORTAL STYLE) */
+    .sidebar-widget {
+      background: #ffffff;
+      border-radius: 8px;
+      border: 1px solid #cce2d6;
+      box-shadow: 0 4px 18px rgba(15, 81, 50, 0.08);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .sidebar-widget-header {
+      background: var(--green, #0f5132);
+      color: #ffffff;
+      padding: 9px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      border-bottom: 2px solid var(--gold, #c59b27);
+    }
+    .sidebar-widget-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13.5px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      color: #ffffff;
+      white-space: nowrap;
+    }
+    .sidebar-widget-title svg {
+      width: 15px;
+      height: 15px;
+      stroke: #ffffff;
+      flex-shrink: 0;
+    }
+    .sidebar-widget-viewall {
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 2px 7px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .sidebar-widget-viewall:hover {
+      background: rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+    }
+
+    .sidebar-activity-list {
+      display: flex;
+      flex-direction: column;
+      max-height: calc(100vh - 190px);
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(15, 81, 50, 0.25) transparent;
+    }
+    .sidebar-activity-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .sidebar-activity-list::-webkit-scrollbar-thumb {
+      background: rgba(15, 81, 50, 0.25);
+      border-radius: 4px;
+    }
+
+    /* Activity Item Row */
+    .sidebar-activity-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 11px;
+      border-bottom: 1px solid #edf2f7;
+      cursor: pointer;
+      transition: background 0.15s ease;
+      text-decoration: none;
+      color: inherit;
+    }
+    .sidebar-activity-item:last-child {
+      border-bottom: none;
+    }
+    .sidebar-activity-item:hover {
+      background: #f8fafc;
+    }
+    .sidebar-activity-thumb {
+      width: 50px;
+      height: 50px;
+      border-radius: 6px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+    }
+    .sidebar-activity-body {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .sidebar-activity-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: #0f2942;
+      line-height: 1.35;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transition: color 0.15s;
+    }
+    .sidebar-activity-item:hover .sidebar-activity-title {
+      color: var(--green, #0f5132);
+    }
+    .sidebar-activity-excerpt {
+      font-size: 11px;
+      line-height: 1.4;
+      color: #64748b;
+      margin: 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .sidebar-activity-readmore {
+      font-size: 11px;
+      font-weight: 700;
+      color: #16a34a;
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      margin-top: 2px;
+      transition: gap 0.15s;
+    }
+    .sidebar-activity-item:hover .sidebar-activity-readmore {
+      gap: 5px;
+    }
+    .sidebar-widget-footer {
+      padding: 8px 10px;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    .sidebar-widget-footer a {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--green, #0f5132);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    .sidebar-widget-footer a:hover {
+      color: var(--gold, #c59b27);
+    }
+
+    /* Modal Styling */
+    .activity-modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      box-sizing: border-box;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .activity-modal-backdrop.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .activity-modal-dialog {
+      background: #ffffff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 720px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      position: relative;
+      transform: scale(0.95);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-sizing: border-box;
+    }
+    .activity-modal-backdrop.is-open .activity-modal-dialog {
+      transform: scale(1);
+    }
+    .activity-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #e2e8f0;
+      color: #0f172a;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+    .activity-modal-close:hover {
+      background: #f1f5f9;
+      transform: scale(1.05);
+    }
+    .activity-modal-body-text {
+      font-size: 15px;
+      line-height: 1.85;
+      color: #334155;
+      text-align: justify;
+      text-justify: inter-word;
+      word-break: break-word;
+    }
+    .activity-modal-body-text p {
+      margin: 0 0 16px 0;
+      line-height: 1.85;
+      color: #334155;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+    .activity-modal-body-text p:last-child {
+      margin-bottom: 0;
+    }
+    .activity-modal-body-text strong,
+    .activity-modal-body-text b {
+      color: #0f172a;
+      font-weight: 700;
+    }
+    .activity-modal-body-text iframe {
+      max-width: 100%;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 991px) {
+      .portal-container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .portal-sidebar-col {
+        position: static;
+        padding-top: 0;
+      }
+      .sidebar-activity-list {
+        max-height: none;
+        overflow-y: visible;
+      }
+    }
   </style>
 </head>
 <body>
@@ -1112,6 +1421,7 @@
           </div>
         </div>
         <a href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
+        <a href="{{ route('activities') }}">{{ $isBn ? 'কার্যক্রম' : 'Activities' }}</a>
         <a href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
         <a class="{{ request()->routeIs('career*') ? 'active' : '' }}" href="{{ route('career') }}">{{ $isBn ? 'ক্যারিয়ার' : 'Career' }}</a>
       </nav>
@@ -1214,63 +1524,67 @@
     @endif
   </section>
 
-  <!-- 2. ABOUT SECTION: Institute Background (Directly below Hero Slider, No Notice Bar) -->
+  <!-- PORTAL 2-COLUMN LAYOUT BELOW HERO BANNER -->
+  <div class="portal-wrapper">
+    <div class="portal-container">
+      <div class="portal-main-col">
+        <!-- 2. ABOUT SECTION: Institute Background (Directly below Hero Slider, No Notice Bar) -->
   <section id="about" class="section about-section">
     <div class="container">
-      <div class="about-grid">
-        <div class="about-copy">
-          <h2 data-live-edit data-live-key="about_title" data-live-type="text" data-live-title="ইনস্টিটিউটের পটভূমি শিরোনাম" data-live-location="হোমপেজ - পটভূমি">{{ $settings->get('about_title') ?: ($isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background') }}</h2>
-          <div class="gold-rule"></div>
-          <div class="about-summary-text" data-live-edit data-live-key="{{ $isBn ? 'about_bn' : 'about' }}" data-live-type="textarea" data-live-title="ইনস্টিটিউটের পটভূমি বিবরণ" data-live-location="হোমপেজ - পটভূমি" style="font-size: 15px; line-height: 1.75; color: #334d44; margin-bottom: 24px; text-align: justify; text-justify: inter-word;">
-            @php
-              $customAbout = $settings->get('about');
-            @endphp
-            @if($isBn && !empty($settings->get('about_bn')))
-              @foreach(explode("\n\n", str_replace("\r\n", "\n", $settings->get('about_bn'))) as $par)
-                @if(trim($par))
-                  <p style="margin: 0 0 14px 0;">{!! nl2br(e(trim($par))) !!}</p>
-                @endif
-              @endforeach
-            @elseif(!empty($customAbout))
-              @foreach(explode("\n\n", str_replace("\r\n", "\n", $customAbout)) as $par)
-                @if(trim($par))
-                  <p style="margin: 0 0 14px 0;">{!! nl2br(e(trim($par))) !!}</p>
-                @endif
-              @endforeach
-            @else
-              @if($isBn)
-                <p style="margin: 0 0 14px 0;">
-                  <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
-                </p>
-                <p style="margin: 0 0 14px 0;">
-                  <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong> কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে।
-                </p>
-                <p style="margin: 0;">
-                  প্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।
-                </p>
-              @else
-                <p style="margin: 0 0 14px 0;">
-                  <strong>Mahmudunnabi Chowdhury Technical School & College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006 as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, and <strong>Impact Initiative (IMI)</strong>, the institution is committed to developing skilled human resources and creating employment opportunities for socially and economically disadvantaged people.
-                </p>
-                <p style="margin: 0 0 14px 0;">
-                  Managed by <strong>Impact Initiative</strong>, MCTSC provides vocational and technical training opportunities for unemployed, unskilled, underprivileged group and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.
-                </p>
-                <p style="margin: 0;">
-                  Since its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.
-                </p>
-              @endif
-            @endif
-          </div>
-          <a class="button button-green" href="{{ route('about') }}">{{ $isBn ? 'আরও বিস্তারিত দেখুন' : 'Read More' }} <span>→</span></a>
-        </div>
-        <div class="about-image">
+      <div class="about-wrap">
+        <h2 data-live-edit data-live-key="about_title" data-live-type="text" data-live-title="ইনস্টিটিউটের পটভূমি শিরোনাম" data-live-location="হোমপেজ - পটভূমি">{{ $settings->get('about_title') ?: ($isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background') }}</h2>
+        <div class="gold-rule"></div>
+        <div class="about-summary-text" data-live-edit data-live-key="{{ $isBn ? 'about_bn' : 'about' }}" data-live-type="textarea" data-live-title="ইনস্টিটিউটের পটভূমি বিবরণ" data-live-location="হোমপেজ - পটভূমি">
           @php
             $aboutImgSrc = storage_asset($settings->get('about_image'), 'assets/about_mahmudunnabi_legacy.jpg');
             if (empty($settings->get('about_image')) || $settings->get('about_image') === 'assets/MC Building Photo.jpg') {
                 $aboutImgSrc = asset('assets/about_mahmudunnabi_legacy.jpg');
             }
           @endphp
-          <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus" data-live-edit data-live-key="about_image" data-live-type="image" data-live-title="ক্যাম্পাস ও পটভূমি ছবি" data-live-location="হোমপেজ - পটভূমি">
+          <div class="about-image-floated">
+            <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus" data-live-edit data-live-key="about_image" data-live-type="image" data-live-title="ক্যাম্পাস ও পটভূমি ছবি" data-live-location="হোমপেজ - পটভূমি">
+          </div>
+          @php
+            $customAbout = $settings->get('about');
+          @endphp
+          @if($isBn && !empty($settings->get('about_bn')))
+            @foreach(explode("\n\n", str_replace("\r\n", "\n", $settings->get('about_bn'))) as $par)
+              @if(trim($par))
+                <p>{!! nl2br(e(trim($par))) !!}</p>
+              @endif
+            @endforeach
+          @elseif(!empty($customAbout))
+            @foreach(explode("\n\n", str_replace("\r\n", "\n", $customAbout)) as $par)
+              @if(trim($par))
+                <p>{!! nl2br(e(trim($par))) !!}</p>
+              @endif
+            @endforeach
+          @else
+            @if($isBn)
+              <p>
+                <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
+              </p>
+              <p>
+                <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong> কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে।
+              </p>
+              <p>
+                প্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।
+              </p>
+            @else
+              <p>
+                <strong>Mahmudunnabi Chowdhury Technical School & College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006 as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, and <strong>Impact Initiative (IMI)</strong>, the institution is committed to developing skilled human resources and creating employment opportunities for socially and economically disadvantaged people.
+              </p>
+              <p>
+                Managed by <strong>Impact Initiative</strong>, MCTSC provides vocational and technical training opportunities for unemployed, unskilled, underprivileged group and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.
+              </p>
+              <p>
+                Since its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.
+              </p>
+            @endif
+          @endif
+        </div>
+        <div class="about-action-row">
+          <a class="button button-green" href="{{ route('about') }}">{{ $isBn ? 'আরও বিস্তারিত দেখুন' : 'Read More' }} <span>→</span></a>
         </div>
       </div>
     </div>
@@ -1514,6 +1828,110 @@
     </div>
   </section>
 
+      </div><!-- /.portal-main-col -->
+
+      <!-- RIGHT: Sticky Recent Activity Sidebar Menu (Government Portal Style as per Sample 2) -->
+      <aside class="portal-sidebar-col">
+        @php
+          $dbActivities = ($activities ?? collect());
+          if ($dbActivities->isEmpty()) {
+            $dbActivities = collect([
+              (object)[
+                'id' => 101,
+                'title' => 'Expatriates\' Welfare Minister Visits Mahmudunnabi Chowdhury Technical School and College',
+                'slug' => 'expatriates-welfare-minister-visits-mahmudunnabi-chowdhury-technical-school-and-college',
+                'category' => 'Official Visit',
+                'excerpt' => 'Expatriates\' Welfare and Overseas Employment Minister Ariful Haque Choudhury visited Mahmudunnabi Chowdhury Technical School and College (MCTSC) in Pahartali, Chattogram, inspecting its technical training programs and post-training job placement initiatives.',
+                'body' => '<p><strong>CHATTOGRAM, Oct 3, 2026 (BSS)</strong> — Expatriates\' Welfare and Overseas Employment Minister Ariful Haque Choudhury visited Mahmudunnabi Chowdhury Technical School and College (MCTSC), managed by Impact Initiative, in Chattogram on Saturday.</p><p>During the visit, Mohammad Saif Ullah Mansur, CEO of Mahmudunnabi Chowdhury Foundation, gave the Minister a tour of the technical and vocational skills development training facilities and briefed him on trainees\' skill acquisition and post-training job placement support.</p>',
+                'image' => 'assets/activities/minister_visit_mctsc.jpg',
+                'created_at' => \Carbon\Carbon::parse('2026-10-29 18:00:00'),
+              ],
+              (object)[
+                'id' => 102,
+                'title' => 'Orientation & Class Inauguration of NHRDF Free Technical Training Courses (10 Oct 2026)',
+                'slug' => 'nhrdf-free-technical-training-class-inauguration-orientation',
+                'category' => 'NHRDF / Class Inauguration',
+                'excerpt' => 'The class inauguration and orientation ceremony for NHRDF-funded free technical training courses was successfully held on 10 October 2026 at MCTSC.',
+                'body' => '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin-bottom:20px;box-shadow:0 4px 18px rgba(0,0,0,0.12);"><iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" src="https://www.youtube.com/embed/Xhzil1T8-RI" title="NHRDF-এর অর্থায়নে বিনামূল্যে কারিগরি প্রশিক্ষণ কোর্স এর অরিয়েন্টেশন ক্লাস" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><p><strong>CHATTOGRAM, Oct 10, 2026</strong> — The class inauguration and orientation ceremony for the new batch of free technical training courses funded by NHRDF was successfully held at MCTSC campus in Pahartali, Chattogram.</p>',
+                'image' => 'assets/activities/nhrdf_class_orientation.jpg',
+                'created_at' => \Carbon\Carbon::parse('2026-10-28 15:00:00'),
+              ],
+              (object)[
+                'id' => 103,
+                'title' => 'Admission Test for NHRDF Subsidized Technical Training Batch Successfully Completed (08 Oct 2026)',
+                'slug' => 'admission-test-for-nhrdf-subsidized-technical-training-batch',
+                'category' => 'NHRDF / Admission Test',
+                'excerpt' => 'The formal admission examination and screening test for the NHRDF subsidized technical training courses was successfully completed on 08 October 2026 at MCTSC.',
+                'body' => '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin-bottom:20px;box-shadow:0 4px 18px rgba(0,0,0,0.12);"><iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" src="https://www.youtube.com/embed/GLxni5-GswQ" title="Admission Test batch of NHRDF" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><p><strong>CHATTOGRAM, Oct 8, 2026</strong> — The formal admission examination for the technical training batches under the NHRDF program was successfully conducted on 08 October 2026 at MCTSC.</p>',
+                'image' => 'assets/activities/nhrdf_admission_test.jpg',
+                'created_at' => \Carbon\Carbon::parse('2026-10-27 15:00:00'),
+              ],
+              (object)[
+                'id' => 100,
+                'title' => 'Impact Initiative Distributed Winter Warmer to the various districts of Bangladesh',
+                'slug' => 'impact-initiative-distributed-winter-warmer-to-the-various-districts-of-bangladesh',
+                'category' => 'Humanitarian Relief',
+                'excerpt' => 'Impact Initiative distributed winter warmer clothes and blankets across various vulnerable districts in Bangladesh to support underprivileged communities during the harsh winter season.',
+                'body' => '<p>Impact Initiative distributed winter warmer clothes and blankets across various vulnerable districts in Bangladesh to support underprivileged communities during the harsh winter season.</p>',
+                'image' => 'assets/activities/winter_warmer.jpg',
+                'created_at' => \Carbon\Carbon::parse('2026-10-26 12:00:00'),
+              ],
+            ]);
+          }
+        @endphp
+
+        <div class="sidebar-widget">
+          <!-- Widget Header matching sample photo 2 (Green Bar) -->
+          <div class="sidebar-widget-header">
+            <div class="sidebar-widget-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              <span data-live-edit data-live-key="activities_sidebar_title" data-live-type="text" data-live-title="Recent Activity Sidebar Title" data-live-location="Sidebar">
+                {{ $settings->get('activities_sidebar_title') ?: 'Recent Activity' }}
+              </span>
+            </div>
+            <a href="{{ route('activities') }}" class="sidebar-widget-viewall" title="{{ $isBn ? 'সকল কার্যক্রম দেখুন' : 'View all activities' }}">
+              {{ $isBn ? 'সব দেখুন' : 'View All' }}
+            </a>
+          </div>
+
+          <!-- Activity items list (Newest post at top, with thumb on left, title, excerpt, and Read more) -->
+          <div class="sidebar-activity-list">
+            @foreach($dbActivities as $act)
+              @php
+                $actImg = $act->image ? storage_asset($act->image, 'assets/activities/winter_warmer.jpg') : asset('assets/activities/winter_warmer.jpg');
+              @endphp
+              <div class="sidebar-activity-item open-activity-modal-btn" data-act-id="{{ $act->id }}" data-act-title="{{ $act->title }}" data-act-cat="{{ $act->category ?: 'Activity' }}" data-act-date="{{ $act->created_at ? $act->created_at->format('d F Y') : '' }}" data-act-img="{{ $actImg }}" data-act-excerpt="{{ $act->excerpt }}" data-act-url="{{ route('activities.show', $act->slug) }}" title="{{ $act->title }}">
+                <template id="act-body-tmpl-{{ $act->id }}">{!! $act->body ?: nl2br(e($act->excerpt)) !!}</template>
+                <img class="sidebar-activity-thumb" src="{{ $actImg }}" alt="{{ $act->title }}" loading="lazy">
+                <div class="sidebar-activity-body">
+                  <h4 class="sidebar-activity-title">
+                    {{ $act->title }}
+                  </h4>
+                  @if(!empty($act->excerpt))
+                    <p class="sidebar-activity-excerpt">
+                      {{ $act->excerpt }}
+                    </p>
+                  @endif
+                  <span class="sidebar-activity-readmore">
+                    {{ $isBn ? 'বিস্তারিত পড়ুন →' : 'Read more →' }}
+                  </span>
+                </div>
+              </div>
+            @endforeach
+          </div>
+
+          <div class="sidebar-widget-footer">
+            <a href="{{ route('activities') }}">
+              {{ $isBn ? 'সকল কার্যক্রম দেখুন →' : 'View All Activities →' }}
+            </a>
+          </div>
+        </div>
+      </aside><!-- /.portal-sidebar-col -->
+    </div><!-- /.portal-container -->
+  </div><!-- /.portal-wrapper -->
+
   <!-- 4. DEVELOPMENT PARTNERS (EXACT SLIDING MARQUEE AS ON IMPACTINI.ORG) -->
   <section id="development-partners" class="section partners-marquee-section">
     <div class="container">
@@ -1748,6 +2166,87 @@
     }, { passive: true });
 
     startTimer();
+  });
+</script>
+<!-- Interactive Modal for Story / Activity Reading -->
+<div id="activity-detail-modal" class="activity-modal-backdrop" aria-hidden="true" style="display:none;">
+  <div class="activity-modal-dialog">
+    <button type="button" class="activity-modal-close" id="activity-modal-close-btn" aria-label="Close modal">&times;</button>
+    <div id="activity-modal-inner" style="padding: 28px 32px;"></div>
+  </div>
+</div>
+
+<script>
+  // Recent Activities In-Page Modal Handler
+  document.addEventListener('DOMContentLoaded', function () {
+    const modal = document.getElementById('activity-detail-modal');
+    const modalInner = document.getElementById('activity-modal-inner');
+    const closeBtn = document.getElementById('activity-modal-close-btn');
+
+    function openActivityModal(data) {
+      if (!modal || !modalInner) return;
+      modalInner.innerHTML = `
+        ${data.img ? `<div style="width:100%;max-height:360px;border-radius:14px;overflow:hidden;margin-bottom:20px;background:#f1f5f9;"><img src="${data.img}" alt="${data.title}" style="width:100%;height:100%;object-fit:cover;display:block;"></div>` : ''}
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;">
+          <span style="background:#e0f2fe;color:#0369a1;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;text-transform:uppercase;">${data.cat || 'Activity'}</span>
+          ${data.date ? `<span style="font-size:12.5px;color:#64748b;">📅 ${data.date}</span>` : ''}
+        </div>
+        <h2 style="font-family:var(--serif, serif);font-size:22px;font-weight:800;color:#0f172a;line-height:1.35;margin:0 0 14px 0;">${data.title}</h2>
+        ${data.excerpt ? `<div style="font-size:14.5px;font-weight:600;color:#334155;line-height:1.6;margin-bottom:16px;padding-bottom:14px;border-bottom:1px dashed #cbd5e1;text-align:justify;text-justify:inter-word;">${data.excerpt}</div>` : ''}
+        <div class="activity-modal-body-text">${data.body || data.excerpt || ''}</div>
+        <div style="margin-top:24px;padding-top:16px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;">
+          <a href="${data.url}" style="font-size:13px;font-weight:700;color:#16a34a;text-decoration:none;">{{ $isBn ? 'আলাদা পেইজে দেখুন →' : 'Open in full page →' }}</a>
+          <button type="button" class="btn light" id="activity-modal-ok-btn" style="padding:6px 16px;font-size:13px;cursor:pointer;border:1px solid #cbd5e1;background:#f8fafc;border-radius:6px;">{{ $isBn ? 'বন্ধ করুন' : 'Close' }}</button>
+        </div>
+      `;
+
+      modal.style.display = 'flex';
+      setTimeout(() => modal.classList.add('is-open'), 10);
+      document.body.style.overflow = 'hidden';
+
+      const okBtn = document.getElementById('activity-modal-ok-btn');
+      if (okBtn) okBtn.addEventListener('click', closeActivityModal);
+    }
+
+    function closeActivityModal() {
+      if (!modal) return;
+      modal.classList.remove('is-open');
+      setTimeout(() => {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+      }, 250);
+    }
+
+    document.querySelectorAll('.open-activity-modal-btn').forEach(btn => {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        const tmpl = document.getElementById('act-body-tmpl-' + this.dataset.actId);
+        const bodyContent = tmpl ? tmpl.innerHTML : (this.dataset.actExcerpt || '');
+        const data = {
+          id: this.dataset.actId,
+          title: this.dataset.actTitle,
+          cat: this.dataset.actCat,
+          date: this.dataset.actDate,
+          img: this.dataset.actImg,
+          excerpt: this.dataset.actExcerpt,
+          body: bodyContent,
+          url: this.dataset.actUrl,
+        };
+        openActivityModal(data);
+      });
+    });
+
+    if (closeBtn) closeBtn.addEventListener('click', closeActivityModal);
+    if (modal) {
+      modal.addEventListener('click', function (e) {
+        if (e.target === modal) closeActivityModal();
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal && modal.classList.contains('is-open')) {
+        closeActivityModal();
+      }
+    });
   });
 </script>
 @include('partials.live_editor')

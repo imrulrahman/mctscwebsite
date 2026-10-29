@@ -307,6 +307,15 @@
         </a>
       @endcan
 
+      @if(auth()->user()?->can('activities.manage') || auth()->user()?->can('notices.manage') || auth()->user()?->can('events.manage') || auth()->user()?->can('projects.manage') || auth()->user()?->is_admin)
+        <a class="{{ request()->is('admin/content/activities*') ? 'active' : '' }}" href="{{ route('admin.content.index','activities') }}" title="Recent Activities">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+          </span>
+          <span class="nav-text">Recent Activities</span>
+        </a>
+      @endif
+
       @can('events.manage')
         <a class="{{ request()->is('admin/content/events*') ? 'active' : '' }}" href="{{ route('admin.content.index','events') }}" title="Events">
           <span class="nav-icon">

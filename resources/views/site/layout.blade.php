@@ -739,6 +739,7 @@
           </div>
         </div>
         <a class="{{ request()->routeIs('notices') ? 'active' : '' }}" href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
+        <a class="{{ request()->routeIs('activities*') ? 'active' : '' }}" href="{{ route('activities') }}">{{ $isBn ? 'কার্যক্রম' : 'Activities' }}</a>
         <a class="{{ request()->routeIs('gallery') ? 'active' : '' }}" href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
         <a class="{{ request()->routeIs('career*') ? 'active' : '' }}" href="{{ route('career') }}">{{ $isBn ? 'ক্যারিয়ার' : 'Career' }}</a>
       </nav>

@@ -13,6 +13,14 @@ class HomeController extends Controller
         $published = fn (string $section, int $limit = 20) => SiteContent::query()->published()->where('section', $section)->orderBy('sort_order')->orderByDesc('created_at')->limit($limit)->get();
         $settings = SiteSetting::query()->pluck('value', 'key');
 
+        $activities = SiteContent::query()
+            ->published()
+            ->where('section', 'activities')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id')
+            ->limit(20)
+            ->get();
+
         return view('home', [
             'heroSlides' => $published('hero_slides', 50),
             'courses' => $published('courses', 4),
@@ -21,6 +29,7 @@ class HomeController extends Controller
             'notices' => $published('notices', 8),
             'events' => $published('events', 3),
             'gallery' => $published('gallery', 12),
+            'activities' => $activities,
             'settings' => $settings,
         ]);
     }

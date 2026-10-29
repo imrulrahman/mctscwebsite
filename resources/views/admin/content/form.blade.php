@@ -20,14 +20,14 @@
 
     <div class="field-grid">
       <label>
-        {{ $section === 'partners' ? 'Partner Name / উন্নয়ন সহযোগীর নাম' : ($section === 'hero_slides' ? 'Slide Title / ব্যানারের নাম' : 'Title') }} <span>*</span>
+        {{ $section === 'partners' ? 'Partner Name / উন্নয়ন সহযোগীর নাম' : ($section === 'hero_slides' ? 'Slide Title / ব্যানারের নাম' : ($section === 'activities' ? 'Activity Title / কার্যক্রমের নাম' : 'Title')) }} <span>*</span>
         <input name="title" required maxlength="180" value="{{ old('title', $item->title) }}" placeholder="{{ $section === 'partners' ? 'e.g. BRAC, UNDP, ILO, ASSET Project' : ($section === 'hero_slides' ? 'e.g. Robotics & Automation Lab' : 'Enter title') }}">
         @error('title')
           <small class="field-error">{{ $message }}</small>
         @enderror
       </label>
       <label>
-        {{ $section === 'partners' ? 'Affiliation / Program Subtitle (কর্মসূচি/অংশীদারিত্ব)' : ($section === 'hero_slides' ? 'Category / Tag (ট্যাগ/ক্যাটেগরি)' : 'Category / Type') }}
+        {{ $section === 'partners' ? 'Affiliation / Program Subtitle (কর্মসূচি/অংশীদারিত্ব)' : ($section === 'hero_slides' ? 'Category / Tag (ট্যাগ/ক্যাটেগরি)' : ($section === 'activities' ? 'Badge / Category (e.g. Featured Story, Community, TVET)' : 'Category / Type')) }}
         <input name="category" maxlength="120" value="{{ old('category', $item->category) }}" placeholder="{{ $section === 'partners' ? 'e.g. POWER_kfw-BRAC, UPPR - UNDP, DTE / World Bank' : ($section === 'hero_slides' ? 'e.g. Campus Lab, Workshop' : 'e.g. Training Initiative, IT & Computer') }}">
       </label>
     </div>
@@ -117,13 +117,13 @@
       </div>
     @endif
 
-    @if(in_array($section, ['courses', 'gallery', 'projects', 'partners', 'hero_slides', 'career']))
+    @if(in_array($section, ['courses', 'gallery', 'projects', 'partners', 'hero_slides', 'career', 'activities']))
       <div style="background:#f8faf9;border:1px solid #e2ebe6;padding:14px;border-radius:6px;margin:10px 0;">
         <label>
           <strong>{{ $section === 'partners' ? 'Partner Logo / পার্টনার লোগো' : ($section === 'hero_slides' ? 'Banner Image / ব্যানার ছবি' : ($section === 'projects' ? 'Project Logo / Image' : 'Featured Image')) }}</strong> (JPG, PNG, WEBP, SVG; up to 5 MB)
           <input type="file" name="image" accept="image/*,.svg">
           <small style="color:#0369a1;background:#e0f2fe;padding:3px 8px;border-radius:4px;font-size:11.5px;font-weight:600;display:inline-block;margin-top:4px;">
-            📐 Recommended: {{ $section === 'partners' ? '240 × 80 px (Transparent PNG or SVG vector)' : ($section === 'hero_slides' ? '1920 × 720 px (1920x720 Aspect Ratio, High-res JPG/WEBP)' : ($section === 'gallery' ? '1200 × 800 px or 1920 × 1080 px (Landscape)' : ($section === 'projects' ? '300 × 300 px (Square PNG)' : '800 × 500 px (16:10 Ratio)'))) }}
+            📐 Recommended: {{ $section === 'partners' ? '240 × 80 px (Transparent PNG or SVG vector)' : ($section === 'hero_slides' ? '1920 × 720 px (1920x720 Aspect Ratio, High-res JPG/WEBP)' : ($section === 'gallery' ? '1200 × 800 px or 1920 × 1080 px (Landscape)' : ($section === 'projects' ? '300 × 300 px (Square PNG)' : ($section === 'activities' ? 'Featured: 800 × 550 px / Thumbnail: 300 × 300 px (Square or 4:3 Ratio)' : '800 × 500 px (16:10 Ratio)')))) }}
           </small>
           @if($item->image)
             <div style="margin-top:10px;display:flex;align-items:center;gap:12px;">

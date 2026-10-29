@@ -13,14 +13,14 @@ use Illuminate\View\View;
 
 class ContentController extends Controller
 {
-    public const SECTIONS = ['courses', 'projects', 'notices', 'events', 'gallery', 'partners', 'hero_slides', 'career'];
-    public const LABELS = ['courses' => 'Courses', 'projects' => 'Projects', 'notices' => 'Notices', 'events' => 'Events', 'gallery' => 'Gallery', 'partners' => 'Development Partners', 'hero_slides' => 'Hero Slider Banners', 'career' => 'Job Circulars & Career'];
+    public const SECTIONS = ['courses', 'projects', 'notices', 'events', 'gallery', 'partners', 'hero_slides', 'career', 'activities'];
+    public const LABELS = ['courses' => 'Courses', 'projects' => 'Projects', 'notices' => 'Notices', 'events' => 'Events', 'gallery' => 'Gallery', 'partners' => 'Development Partners', 'hero_slides' => 'Hero Slider Banners', 'career' => 'Job Circulars & Career', 'activities' => 'Recent Activities'];
 
     private function check(string $section): void
     {
         abort_unless(in_array($section, self::SECTIONS, true), 404);
 
-        if (in_array($section, ['partners', 'hero_slides', 'career'], true)) {
+        if (in_array($section, ['partners', 'hero_slides', 'career', 'activities'], true)) {
             $user = auth()->user();
             $canAccess = $user?->is_admin
                 || $user?->can('settings.manage')
@@ -28,7 +28,9 @@ class ContentController extends Controller
                 || $user?->can('partners.manage')
                 || $user?->can('hero_slides.manage')
                 || $user?->can('notices.manage')
-                || $user?->can('career.manage');
+                || $user?->can('career.manage')
+                || $user?->can('activities.manage')
+                || $user?->can('events.manage');
             abort_unless($canAccess, 403, 'এই সেকশনে এক্সেস করার অনুমতি আপনার অ্যাকাউন্টে নেই।');
             return;
         }
@@ -50,7 +52,10 @@ class ContentController extends Controller
     public function index(string $section): View
     {
         $this->check($section);
-        return view('admin.content.index', ['section' => $section, 'label' => self::LABELS[$section], 'items' => SiteContent::where('section', $section)->orderBy('sort_order')->latest('updated_at')->paginate(15)]);
+        $items = SiteContent::where('section', $section)
+            ->when($section === 'activities', fn ($q) => $q->orderByDesc('created_at')->orderByDesc('id'), fn ($q) => $q->orderBy('sort_order')->latest('updated_at'))
+            ->paginate(15);
+        return view('admin.content.index', ['section' => $section, 'label' => self::LABELS[$section], 'items' => $items]);
     }
 
     public function create(string $section): View

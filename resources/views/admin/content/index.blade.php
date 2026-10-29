@@ -9,9 +9,20 @@
     <p>Manage {{ strtolower($label) }} displayed on the public website.</p>
   </div>
   <a class="btn gold" href="{{ route('admin.content.create', $section) }}">
-    ＋ Add {{ $section === 'partners' ? 'Partner' : ($section === 'hero_slides' ? 'Slide' : rtrim($label, 's')) }}
+    ＋ Add {{ $section === 'partners' ? 'Partner' : ($section === 'hero_slides' ? 'Slide' : ($section === 'activities' ? 'Activity' : rtrim($label, 's'))) }}
   </a>
 </div>
+
+@if($section === 'activities')
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;padding:14px 18px;border-radius:6px;margin-bottom:18px;">
+    <strong style="color:#166534;font-size:14px;display:flex;align-items:center;gap:6px;">
+      <span>💡</span> Recent Activity (সাম্প্রতিক কার্যক্রম) নির্দেশনা
+    </strong>
+    <p style="margin:4px 0 0 0;font-size:13px;color:#15803d;line-height:1.6;">
+      এখানে সর্বশেষ যে এক্টিভিটি আপনি পোস্ট করবেন, সেটি স্বয়ংক্রিয়ভাবে হোমপেইজের 'Recent Activity' কলামের সবার প্রথমে থাকবে। এছাড়া কোনো এক্টিভিটির ক্যাটাগরি 'Featured Story' (বা বিশেষ কার্যক্রম) হিসেবে দিলে সেটি হোমপেইজের বামপাশের মূল বড় কার্ড হিসেবে হাইলাইট হবে।
+    </p>
+  </div>
+@endif
 
 @if($section === 'hero_slides')
   <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;padding:14px 18px;border-radius:6px;margin-bottom:18px;">
@@ -29,7 +40,12 @@
     <table>
       <thead>
         <tr>
-          @if($section === 'partners')
+          @if($section === 'activities')
+            <th style="width: 70px;">Photo</th>
+            <th>Title & Excerpt</th>
+            <th>Badge / Category</th>
+            <th style="width: 150px;">Posted Date</th>
+          @elseif($section === 'partners')
             <th style="width: 130px;">Logo</th>
             <th>Partner Name</th>
             <th>Affiliation / Program</th>
@@ -54,7 +70,31 @@
       <tbody>
         @forelse($items as $item)
           <tr>
-            @if($section === 'partners')
+            @if($section === 'activities')
+              <td>
+                @if($item->image)
+                  <img src="{{ storage_asset($item->image) }}" alt="{{ $item->title }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; display: block;">
+                @else
+                  <span style="font-size: 11px; color: #94a3b8; font-style: italic;">No Photo</span>
+                @endif
+              </td>
+              <td>
+                <strong style="color: #0f2942; font-size: 14px;">{{ $item->title }}</strong>
+                @if($item->excerpt)
+                  <small class="subline" style="display:block; color:#64748b; margin-top:3px;">{{ \Illuminate\Support\Str::limit($item->excerpt, 100) }}</small>
+                @endif
+              </td>
+              <td>
+                @if(stripos($item->category ?? '', 'featured') !== false)
+                  <span style="background: #ffe4e6; color: #e11d48; padding: 3px 8px; border-radius: 4px; font-weight: 700; font-size: 11px;">● FEATURED</span>
+                @else
+                  <span style="background: #f1f5f9; color: #334155; padding: 3px 8px; border-radius: 4px; font-weight: 600; font-size: 11.5px;">{{ $item->category ?: 'General' }}</span>
+                @endif
+              </td>
+              <td>
+                <span style="font-size: 12px; color: #64748b;">{{ $item->created_at ? $item->created_at->format('d M Y, h:i A') : '—' }}</span>
+              </td>
+            @elseif($section === 'partners')
               <td>
                 @if($item->image)
                   <img src="{{ storage_asset($item->image) }}" alt="{{ $item->title }}" style="height: 34px; max-width: 110px; object-fit: contain; background: #ffffff; padding: 2px 6px; border: 1px solid #e2e8f0; border-radius: 4px; display: block;">
@@ -112,7 +152,7 @@
           </tr>
         @empty
           <tr>
-            <td colspan="{{ $section === 'projects' ? 6 : (in_array($section, ['partners', 'hero_slides']) ? 6 : 5) }}" class="empty">
+            <td colspan="{{ in_array($section, ['activities', 'partners', 'hero_slides', 'projects']) ? 7 : 6 }}" class="empty">
               No {{ strtolower($label) }} have been added yet.
             </td>
           </tr>

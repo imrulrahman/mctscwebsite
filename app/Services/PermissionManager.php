@@ -36,6 +36,7 @@ class PermissionManager
                 'description' => 'Publish notices, schedule institute events and manage photo gallery.',
                 'permissions' => [
                     'notices.manage' => 'Manage Notices',
+                    'activities.manage' => 'Manage Recent Activities',
                     'events.manage' => 'Manage Events',
                     'gallery.manage' => 'Manage Photo Gallery',
                 ],
