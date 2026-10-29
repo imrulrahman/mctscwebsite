@@ -92,10 +92,12 @@
 }
 .career-body {
   font-size: 14px;
-  line-height: 1.65;
+  line-height: 1.55;
   color: #334155;
-  white-space: pre-line;
   margin-bottom: 20px;
+}
+.career-body br + br + br {
+  display: none;
 }
 .career-actions {
   display: flex;
@@ -334,7 +336,7 @@
 
         @if($job->body)
           <div class="career-body">
-            {!! nl2br(e($job->body)) !!}
+            {!! preg_replace('/(<br\s*\/?>\s*){3,}/i', '<br><br>', nl2br(e($job->body))) !!}
           </div>
         @endif
 
