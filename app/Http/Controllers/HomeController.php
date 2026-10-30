@@ -16,9 +16,7 @@ class HomeController extends Controller
         $activities = SiteContent::query()
             ->published()
             ->where('section', 'activities')
-            ->orderBy('sort_order')
-            ->orderByDesc('created_at')
-            ->orderByDesc('id')
+            ->ordered()
             ->limit(20)
             ->get();
 

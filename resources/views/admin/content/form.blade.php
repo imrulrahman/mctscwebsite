@@ -158,6 +158,7 @@
       <label>
         Display Order
         <input type="number" min="0" max="9999" name="sort_order" value="{{ old('sort_order', $item->sort_order ?? 0) }}">
+        <small style="display:block; color:#64748b; font-size:12px; margin-top:4px;">ক্রমিক নম্বর (১ = সবার উপরে, ২ = ২য় স্থানে... এভাবে সাজাতে পারেন)</small>
       </label>
       <label>
         Publication Status

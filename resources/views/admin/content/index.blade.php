@@ -44,6 +44,7 @@
             <th style="width: 70px;">Photo</th>
             <th>Title & Excerpt</th>
             <th>Badge / Category</th>
+            <th style="width: 100px; text-align: center;">Display Order</th>
             <th style="width: 150px;">Posted Date</th>
           @elseif($section === 'partners')
             <th style="width: 130px;">Logo</th>
@@ -90,6 +91,9 @@
                 @else
                   <span style="background: #f1f5f9; color: #334155; padding: 3px 8px; border-radius: 4px; font-weight: 600; font-size: 11.5px;">{{ $item->category ?: 'General' }}</span>
                 @endif
+              </td>
+              <td style="text-align: center;">
+                <span style="display: inline-block; padding: 3px 10px; background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; border-radius: 6px; font-weight: 700; font-size: 13px;">#{{ $item->sort_order ?: '—' }}</span>
               </td>
               <td>
                 <span style="font-size: 12px; color: #64748b;">{{ $item->created_at ? $item->created_at->format('d M Y, h:i A') : '—' }}</span>

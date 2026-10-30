@@ -97,9 +97,7 @@ class SitePageController extends Controller
         $activities = SiteContent::query()
             ->published()
             ->where('section', 'activities')
-            ->orderBy('sort_order')
-            ->orderByDesc('created_at')
-            ->orderByDesc('id')
+            ->ordered()
             ->paginate(12);
 
         return view('site.activities', compact('settings', 'activities'));
@@ -118,9 +116,7 @@ class SitePageController extends Controller
             ->published()
             ->where('section', 'activities')
             ->where('id', '!=', $activity->id)
-            ->orderBy('sort_order')
-            ->orderByDesc('created_at')
-            ->orderByDesc('id')
+            ->ordered()
             ->limit(5)
             ->get();
 

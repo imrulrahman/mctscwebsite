@@ -23,4 +23,11 @@ class SiteContent extends Model
     {
         return $query->where('status', 'published');
     }
+
+    public function scopeOrdered(Builder $query): Builder
+    {
+        return $query->orderByRaw('CASE WHEN sort_order > 0 THEN sort_order ELSE 999999 END ASC')
+            ->orderByDesc('created_at')
+            ->orderByDesc('id');
+    }
 }

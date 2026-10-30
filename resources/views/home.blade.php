@@ -1891,9 +1891,16 @@
                 {{ $settings->get('activities_sidebar_title') ?: 'Recent Activity' }}
               </span>
             </div>
-            <a href="{{ route('activities') }}" class="sidebar-widget-viewall" title="{{ $isBn ? 'সকল কার্যক্রম দেখুন' : 'View all activities' }}">
-              {{ $isBn ? 'সব দেখুন' : 'View All' }}
-            </a>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <a href="{{ route('activities') }}" class="sidebar-widget-viewall" title="{{ $isBn ? 'সকল কার্যক্রম দেখুন' : 'View all activities' }}">
+                {{ $isBn ? 'সব দেখুন' : 'View All' }}
+              </a>
+              @if(auth()->check() && (auth()->user()->is_admin || auth()->user()->can('settings.manage')))
+                <a href="{{ route('admin.content.index', 'activities') }}" class="sidebar-widget-viewall" style="background:#bd9635; color:#ffffff;" title="এডমিন থেকে অ্যাক্টিভিটি ক্রমানুসারে সাজান" target="_blank">
+                  ⚙️ সাজান
+                </a>
+              @endif
+            </div>
           </div>
 
           <!-- Activity items list (Newest post at top, with thumb on left, title, excerpt, and Read more) -->

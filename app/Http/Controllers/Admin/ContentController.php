@@ -53,7 +53,7 @@ class ContentController extends Controller
     {
         $this->check($section);
         $items = SiteContent::where('section', $section)
-            ->when($section === 'activities', fn ($q) => $q->orderByDesc('created_at')->orderByDesc('id'), fn ($q) => $q->orderBy('sort_order')->latest('updated_at'))
+            ->when($section === 'activities', fn ($q) => $q->ordered(), fn ($q) => $q->orderBy('sort_order')->latest('updated_at'))
             ->paginate(15);
         return view('admin.content.index', ['section' => $section, 'label' => self::LABELS[$section], 'items' => $items]);
     }
