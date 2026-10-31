@@ -64,9 +64,14 @@
         <label style="display:block; margin-bottom: 6px; font-weight: 600; color: #394842; font-size: 12px;">
           Details / Full Body Content (Rich Text Editor / ফরম্যাটিং টেক্সট বক্স)
         </label>
-        <p style="margin: 0 0 8px; color: #6b7772; font-size: 12px;">
-          নিচের টুলবার থেকে সরাসরি লেখা <b>বোল্ড</b>, <i>ইটালিক</i>, <span style="color:#0f5132;font-weight:600;">কালার</span>, বুলেট/নম্বর লিস্ট, হেডিং ইত্যাদি ফরম্যাটিং করতে পারবেন:
-        </p>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+          <p style="margin: 0; color: #6b7772; font-size: 12px;">
+            নিচের টুলবার থেকে সরাসরি লেখা <b>বোল্ড</b>, <i>ইটালিক</i>, <span style="color:#0f5132;font-weight:600;">কালার</span>, 🎥 <b>ইউটিউব ভিডিও</b>, বুলেট লিস্ট ইত্যাদি ফরম্যাটিং করতে পারবেন:
+          </p>
+          <button type="button" id="btn-toggle-source" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:5px; padding:4px 10px; font-size:12px; font-weight:600; color:#334155; cursor:pointer; display:inline-flex; align-items:center; gap:5px;" title="HTML কোড সরাসরি দেখতে বা এডিট করতে ক্লিক করুন">
+            <span>&lt;/&gt;</span> HTML কোড এডিট মোড
+          </button>
+        </div>
 
         <div id="quill-toolbar">
           <span class="ql-formats">
@@ -96,6 +101,7 @@
           </span>
           <span class="ql-formats">
             <button class="ql-link" type="button" title="Insert Link"></button>
+            <button class="ql-video" type="button" title="Embed YouTube Video / ইউটিউব ভিডিও যুক্ত করুন"></button>
             <button class="ql-clean" type="button" title="Clear Formatting"></button>
           </span>
         </div>
@@ -111,6 +117,10 @@
 
         <div id="quill-editor" style="min-height: 250px; background: #ffffff; font-size: 14.5px; line-height: 1.6;">{!! $initialBody !!}</div>
         <textarea name="body" id="body-hidden-input" style="display: none;">{!! old('body', $item->body) !!}</textarea>
+        
+        <div style="background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; padding:8px 12px; margin-top:8px; font-size:12px; color:#166534; display:flex; align-items:center; gap:8px;">
+          <span>💡 <strong>ইউটিউব ভিডিও যুক্ত করার নিয়ম:</strong> টুলবারের ভিডিও আইকনে (🎥) ক্লিক করে ইউটিউব ভিডিওর লিংক (যেমন: <code>https://www.youtube.com/watch?v=...</code>) পেস্ট করুন, অথবা <strong>HTML কোড এডিট মোড</strong> বাটনে ক্লিক করে সরাসরি <code>&lt;iframe&gt;</code> কোড বসান।</span>
+        </div>
         @error('body')
           <small class="field-error">{{ $message }}</small>
         @enderror
@@ -205,6 +215,15 @@
   .ql-snow .ql-picker.ql-header {
     width: 120px;
   }
+  .ql-editor iframe.ql-video {
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 16 / 9;
+    min-height: 250px;
+    border-radius: 8px;
+    display: block;
+    margin: 12px 0;
+  }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/quill@1.3.7/dist/quill.min.js"></script>
 <script>
@@ -222,15 +241,55 @@
 
     var hiddenInput = document.getElementById('body-hidden-input');
     var form = editorElem.closest('form');
+    var toggleSourceBtn = document.getElementById('btn-toggle-source');
+    var toolbarElem = document.getElementById('quill-toolbar');
+    var isSourceMode = false;
 
     function syncBody() {
       if (!hiddenInput) return;
-      var html = quill.root.innerHTML;
-      if (html === '<p><br></p>' || html.trim() === '') {
-        hiddenInput.value = '';
-      } else {
-        hiddenInput.value = html;
+      if (!isSourceMode) {
+        var html = quill.root.innerHTML;
+        if (html === '<p><br></p>' || html.trim() === '') {
+          hiddenInput.value = '';
+        } else {
+          hiddenInput.value = html;
+        }
       }
+    }
+
+    if (toggleSourceBtn && hiddenInput && editorElem && toolbarElem) {
+      toggleSourceBtn.addEventListener('click', function() {
+        isSourceMode = !isSourceMode;
+        if (isSourceMode) {
+          syncBody();
+          editorElem.style.display = 'none';
+          toolbarElem.style.display = 'none';
+          hiddenInput.style.display = 'block';
+          hiddenInput.style.width = '100%';
+          hiddenInput.style.minHeight = '280px';
+          hiddenInput.style.fontFamily = 'Consolas, monospace';
+          hiddenInput.style.fontSize = '13.5px';
+          hiddenInput.style.lineHeight = '1.6';
+          hiddenInput.style.padding = '14px';
+          hiddenInput.style.border = '1px solid #0f5132';
+          hiddenInput.style.borderRadius = '6px';
+          hiddenInput.style.background = '#1e293b';
+          hiddenInput.style.color = '#f8fafc';
+          toggleSourceBtn.innerHTML = '<span>✏️</span> ভিজ্যুয়াল এডিটরে ফিরে যান';
+          toggleSourceBtn.style.background = '#fef3c7';
+          toggleSourceBtn.style.borderColor = '#f59e0b';
+          toggleSourceBtn.style.color = '#92400e';
+        } else {
+          quill.root.innerHTML = hiddenInput.value;
+          hiddenInput.style.display = 'none';
+          editorElem.style.display = 'block';
+          toolbarElem.style.display = 'block';
+          toggleSourceBtn.innerHTML = '<span>&lt;/&gt;</span> HTML কোড এডিট মোড';
+          toggleSourceBtn.style.background = '#f1f5f9';
+          toggleSourceBtn.style.borderColor = '#cbd5e1';
+          toggleSourceBtn.style.color = '#334155';
+        }
+      });
     }
 
     quill.on('text-change', syncBody);

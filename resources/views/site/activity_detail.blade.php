@@ -9,6 +9,20 @@
 @section('page_subtitle', ($activity->category ? '[' . $activity->category . '] ' : '') . ($activity->created_at ? $activity->created_at->format('d F Y') : ''))
 
 @section('content')
+<style>
+  article iframe,
+  article iframe.ql-video {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 320px;
+    border: 0;
+    border-radius: 12px;
+    display: block;
+    margin: 18px 0 24px 0;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+  }
+</style>
 <section class="section" style="padding: 40px 0 70px 0; background: #f8fafc;">
   <div class="container">
     <div style="display: grid; grid-template-columns: minmax(0, 2.5fr) minmax(0, 1fr); gap: 36px; align-items: start;">

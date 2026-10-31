@@ -1358,9 +1358,16 @@
       color: #0f172a;
       font-weight: 700;
     }
-    .activity-modal-body-text iframe {
+    .activity-modal-body-text iframe,
+    .activity-modal-body-text iframe.ql-video {
+      width: 100%;
       max-width: 100%;
+      aspect-ratio: 16 / 9;
+      min-height: 280px;
+      border: 0;
       border-radius: 10px;
+      display: block;
+      margin: 14px 0 18px 0;
     }
 
     @media (max-width: 991px) {
