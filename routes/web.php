@@ -50,6 +50,10 @@ Route::get('/deploy-update', function () {
     $gitOutput = 'shell_exec not available';
     if (function_exists('shell_exec')) {
         $gitOutput = shell_exec('cd ' . escapeshellarg(base_path()) . ' && git pull origin main 2>&1') ?? 'No git output';
+        // Mirror static assets if running in cPanel split structure
+        if (is_dir('/home/mctscedu/public_html/assets')) {
+            @shell_exec('cp -rn /home/mctscedu/mctscwebsite/public/assets/* /home/mctscedu/public_html/assets/ 2>&1');
+        }
     }
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     $mig = \Illuminate\Support\Facades\Artisan::output();
@@ -135,6 +139,27 @@ Route::get('/storage/{path}', function (string $path) {
     }
     abort(404);
 })->where('path', '.*')->name('storage.file');
+
+// Asset route fallback for environments where static assets are in base repository
+Route::get('/assets/{path}', function (string $path) {
+    $cleanPath = ltrim($path, '/');
+    $candidates = [
+        public_path('assets/' . $cleanPath),
+        base_path('public/assets/' . $cleanPath),
+        '/home/mctscedu/mctscwebsite/public/assets/' . $cleanPath,
+        '/home/mctscedu/public_html/assets/' . $cleanPath,
+    ];
+    foreach ($candidates as $filePath) {
+        if (file_exists($filePath) && !is_dir($filePath)) {
+            $mime = @mime_content_type($filePath) ?: 'application/octet-stream';
+            return response()->file($filePath, [
+                'Content-Type' => $mime,
+                'Cache-Control' => 'public, max-age=604800',
+            ]);
+        }
+    }
+    abort(404);
+})->where('path', '.*')->name('assets.file');
 
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/login', [AuthController::class, 'create'])->name('login');
