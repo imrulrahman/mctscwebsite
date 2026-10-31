@@ -55,12 +55,27 @@ return new class extends Migration
                 'sort_order' => 3,
             ],
             [
-                'title' => 'Impact Initiative Distributed Winter Warmer to the various districts of Bangladesh',
-                'slug' => 'impact-initiative-distributed-winter-warmer-to-the-various-districts-of-bangladesh',
-                'category' => 'Humanitarian Relief',
-                'excerpt' => 'Impact Initiative distributed winter warmer clothes and blankets across various vulnerable districts in Bangladesh to support underprivileged communities during the harsh winter season.',
-                'body' => '<p>Impact Initiative distributed winter warmer clothes and blankets across various vulnerable districts in Bangladesh to support underprivileged communities during the harsh winter season.</p>',
-                'image' => 'assets/activities/winter_warmer.jpg',
+                'title' => 'Admissions Open: NHRDF-Funded Free Technical and Vocational Training Courses',
+                'slug' => 'admissions-open-nhrdf-funded-free-technical-training-courses',
+                'category' => 'NHRDF / Admission',
+                'excerpt' => 'Admissions are currently underway for NHRDF-funded free technical and vocational training courses at Mahmudunnabi Chowdhury Technical School and College (MCTSC) in Pahartali, Chattogram.',
+                'body' => '<div style="position:relative;padding-bottom:56.25%;height:0;overflow:hidden;border-radius:12px;margin-bottom:20px;box-shadow:0 4px 18px rgba(0,0,0,0.12);">'
+                    . '<iframe style="position:absolute;top:0;left:0;width:100%;height:100%;border:0;" src="https://www.youtube.com/embed/xZ6aU40tGt4" title="Admission going on for Technical Training of MCTSC" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'
+                    . '</div>'
+                    . '<p><strong>CHATTOGRAM</strong> — Admissions are currently ongoing for the new batch of free technical and vocational training courses funded by the <strong>National Human Resource Development Fund (NHRDF)</strong> under the Prime Minister\'s Office, conducted at <strong>Mahmudunnabi Chowdhury Technical School and College (MCTSC)</strong> campus in Pahartali, Chattogram.</p>'
+                    . '<p>মাননীয় প্রধানমন্ত্রী কার্যালয়াধীন ন্যাশনাল হিউম্যান রিসোর্স ডেভেলপমেন্ট ফান্ড (NHRDF)-এর অর্থায়নে ও ইমপ্যাক্ট ইনিশিয়েটিভ পরিচালিত মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজে সুবিধাবঞ্চিত ও বেকার যুবক-যুবতীদের জন্য সম্পূর্ণ বিনামূল্যে কর্মসংস্থানমুখী বিভিন্ন কারিগরি প্রশিক্ষণ কোর্সে ভর্তি চলছে।</p>'
+                    . '<p>The training courses offer comprehensive theoretical knowledge and hands-on practical workshop training designed to develop high-demand market-oriented skills. Eligible youth (men and women) receive full tuition waivers, state-of-the-art laboratory access, practical consumables, and dedicated job placement assistance upon course completion.</p>'
+                    . '<p><strong>Available Trades Include:</strong></p>'
+                    . '<ul>'
+                    . '<li>Computer Applications & Office Management</li>'
+                    . '<li>Electrical Installation and Maintenance</li>'
+                    . '<li>Refrigeration and Air Conditioning (RAC)</li>'
+                    . '<li>Knit Sewing Machine Operation (KSMO) & Tailoring</li>'
+                    . '<li>Professional Driving & Auto-mechanics</li>'
+                    . '<li>Plumbing and Sanitary Occupations</li>'
+                    . '</ul>'
+                    . '<p>Interested applicants are encouraged to visit the MCTSC campus or submit their admission application online through our official website portal.</p>',
+                'image' => 'assets/activities/nhrdf_admission_going_on.jpg',
                 'created_at' => Carbon::parse('2026-10-26 12:00:00'),
                 'sort_order' => 4,
             ],
