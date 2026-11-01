@@ -164,75 +164,275 @@
       animation: kenBurnsZoomOut 7s ease-out forwards;
     }
 
-    /* Header responsive & brand wrapping fix */
+    /* Badarshah-style Two-Tier Header & Brand Banner */
     .site-header {
-      min-height: 78px !important;
-      height: auto !important;
-      padding: 6px 0 !important;
+      width: 100% !important;
       background: #ffffff !important;
-      border-bottom: 1px solid #e2ebe6 !important;
       position: -webkit-sticky !important;
       position: sticky !important;
       top: 0 !important;
       z-index: 1000 !important;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06) !important;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06) !important;
+      padding: 0 !important;
+      margin: 0 !important;
     }
-    .site-header .container {
+    .brand-banner {
+      background: #ffffff;
+      padding: 10px 0 9px 0;
+      border-bottom: 1px solid #e2ebe6;
+    }
+    .brand-banner-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
       width: min(1440px, calc(100% - 32px)) !important;
       max-width: 1440px !important;
-      padding: 0 16px !important;
-      box-sizing: border-box !important;
+      margin: 0 auto;
+      padding: 0 16px;
+      box-sizing: border-box;
     }
-    .nav-wrap {
-      min-height: 66px !important;
+    .brand-logo-block {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      flex: 1 1 auto;
+      min-width: 0;
     }
     .brand {
-      flex-shrink: 0 !important;
-      max-width: none !important;
-      font-size: 14.5px !important;
-      line-height: 1.25 !important;
-      text-decoration: none !important;
-      white-space: nowrap !important;
       display: flex !important;
       align-items: center !important;
+      gap: 13px;
+      text-decoration: none !important;
+      min-width: 0;
     }
-    .brand img {
-      width: 48px;
-      height: 48px;
+    .brand-emblem-img {
+      width: 54px;
+      height: 54px;
       object-fit: contain;
-      margin-right: 10px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 5px rgba(0,0,0,0.08));
+      border-radius: 50%;
+    }
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+    .brand-name-single {
+      font-family: var(--serif, serif);
+      font-size: clamp(16px, 1.45vw, 21.5px);
+      font-weight: 800;
+      color: #064e3b;
+      margin: 0 0 5px 0;
+      line-height: 1.25;
+      letter-spacing: -0.2px;
+      white-space: nowrap;
+    }
+    .brand-badges-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+    .badge-accred {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2.5px 8.5px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.35;
+      transition: all 0.2s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .badge-accred .badge-icon {
+      width: 12.5px;
+      height: 12.5px;
       flex-shrink: 0;
     }
-    .header-right-group {
+    .badge-accred .badge-title {
+      font-weight: 700;
+    }
+    .badge-accred .badge-chips {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+    }
+    .badge-accred .badge-chips code {
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 0.5px 5px;
+      border-radius: 4px;
+      letter-spacing: 0.3px;
+    }
+    .badge-accred.badge-bteb {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+    }
+    .badge-accred.badge-bteb .badge-chips code {
+      background: #ffffff;
+      border: 1px solid #6ee7b7;
+      color: #047857;
+    }
+    .badge-accred.badge-nsda {
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      color: #0369a1;
+    }
+    .badge-accred.badge-nsda .badge-chips code {
+      background: #ffffff;
+      border: 1px solid #7dd3fc;
+      color: #0284c7;
+    }
+    .brand-right-features {
       display: flex;
       align-items: center;
       gap: 14px;
       flex-shrink: 0;
-      margin-left: auto;
     }
-    .main-nav {
+    .header-foundation {
       display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 3px;
+      padding-right: 14px;
+      border-right: 2px solid rgba(0, 106, 78, 0.12);
+    }
+    .foundation-label {
+      font-size: 9.5px;
+      font-weight: 800;
+      letter-spacing: 1.1px;
+      text-transform: uppercase;
+      color: #047857;
+      line-height: 1;
+    }
+    .foundation-logo-link {
+      display: inline-flex;
       align-items: center;
-      gap: clamp(10px, 1.2vw, 18px) !important;
-      font-weight: 700;
-      font-size: 13.5px !important;
-    }
-    .main-nav a {
-      white-space: nowrap !important;
-      padding: 8px 3px !important;
-      color: #252d2a;
       text-decoration: none;
+      transition: opacity 0.2s ease, transform 0.2s ease;
     }
-    .main-nav a:hover,
-    .main-nav a.active {
-      color: {{ $primaryColor }};
+    .foundation-logo-link:hover {
+      opacity: 0.88;
+      transform: translateY(-1px);
+    }
+    .foundation-logo-img {
+      height: 32px;
+      max-width: 140px;
+      object-fit: contain;
+      display: block;
+    }
+    .header-quick-call {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      padding-right: 14px;
+      border-right: 2px solid rgba(0, 106, 78, 0.12);
+    }
+    .badge-admission-live {
+      background: rgba(16, 185, 129, 0.12);
+      color: #047857;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 2.5px 10px;
+      border-radius: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 2px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .badge-admission-live:hover {
+      background: #047857;
+      color: #ffffff;
+      border-color: #047857;
+    }
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10b981;
+      display: inline-block;
+      box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: pulse-green 1.8s infinite;
+    }
+    @keyframes pulse-green {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    .header-phone-link {
+      font-size: 12.5px;
+      font-weight: 800;
+      color: #0f172a;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .header-phone-link:hover {
+      color: #e11d48;
     }
 
-    /* About us Submenu Dropdown */
+    /* Green Navigation Bar (Badarshah / Institutional Technical Style) */
+    .main-navbar-strip {
+      background: #064e3b;
+      background: linear-gradient(180deg, #064e3b 0%, #04382a 100%);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-strip-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: min(1440px, calc(100% - 32px)) !important;
+      max-width: 1440px !important;
+      margin: 0 auto;
+      padding: 0 16px;
+      box-sizing: border-box;
+      min-height: 50px;
+    }
+    .main-navbar-strip .main-nav {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(8px, 1.3vw, 20px) !important;
+      font-weight: 600;
+      font-size: 15px !important;
+      margin: 0 auto;
+    }
+    .main-navbar-strip .main-nav a {
+      color: #f1fdf6;
+      text-decoration: none;
+      padding: 13px 12px !important;
+      font-size: 15px !important;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap !important;
+      border-radius: 6px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .main-navbar-strip .main-nav a:hover,
+    .main-navbar-strip .main-nav a.active {
+      background: rgba(255, 255, 255, 0.16) !important;
+      color: #ffffff !important;
+    }
+    .nav-ico {
+      width: 15px;
+      height: 15px;
+      opacity: 0.92;
+      flex-shrink: 0;
+    }
+
+    /* Submenu Dropdown in Green Bar */
     .nav-item-dropdown {
       position: relative;
       display: inline-flex;
@@ -241,31 +441,33 @@
     .nav-item-dropdown .nav-link-parent {
       display: inline-flex;
       align-items: center;
-      gap: 3px;
+      gap: 4px;
+      font-size: 15px !important;
+      font-weight: 600;
       white-space: nowrap !important;
     }
     .nav-item-dropdown .dropdown-caret {
-      font-size: 9px;
+      font-size: 10px;
       transition: transform 0.2s ease;
       display: inline-block;
-      color: #718096;
+      color: rgba(255, 255, 255, 0.7);
     }
     .nav-item-dropdown:hover .dropdown-caret {
       transform: rotate(180deg);
-      color: {{ $primaryColor }};
+      color: #ffffff;
     }
     .nav-item-dropdown .dropdown-menu {
       position: absolute;
       top: 100%;
       left: 0;
-      min-width: 165px;
+      min-width: 195px;
       background: #ffffff;
       border: 1px solid #d7e2dd;
-      border-radius: 6px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.16);
       padding: 6px 0;
       display: none;
-      z-index: 100;
+      z-index: 1000;
     }
     .nav-item-dropdown:hover .dropdown-menu,
     .nav-item-dropdown:focus-within .dropdown-menu {
@@ -273,52 +475,35 @@
     }
     .nav-item-dropdown .dropdown-menu a {
       display: block !important;
-      padding: 9px 16px !important;
-      font-size: 13px !important;
+      padding: 10px 18px !important;
+      font-size: 14.5px !important;
       font-weight: 600 !important;
       color: #1e3d35 !important;
       border-bottom: 1px solid #f1f5f3 !important;
       white-space: nowrap !important;
       text-decoration: none !important;
+      border-radius: 0 !important;
+      background: transparent !important;
     }
     .nav-item-dropdown .dropdown-menu a:last-child {
       border-bottom: none !important;
     }
     .nav-item-dropdown .dropdown-menu a:hover,
     .nav-item-dropdown .dropdown-menu a.active {
-      background: rgba(15, 81, 50, 0.08) !important;
-      color: {{ $primaryColor }} !important;
+      background: #ecfdf5 !important;
+      color: #064e3b !important;
     }
 
-    /* 2-line Apply for Admission CTA button */
-    .main-nav .nav-cta {
-      background: var(--gold, #bd9635) !important;
-      color: #ffffff !important;
-      padding: 5px 12px !important;
-      border-radius: 5px !important;
-      display: inline-flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      line-height: 1.15 !important;
-      font-size: 11.5px !important;
-      font-weight: 700 !important;
-      text-align: center !important;
-      white-space: nowrap !important;
-      margin-left: 2px !important;
-      border: 0 !important;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.12);
-      transition: transform 0.15s, background 0.15s;
-      flex-shrink: 0 !important;
-    }
-    .main-nav .nav-cta:hover {
-      transform: translateY(-1px);
-      background: var(--secondaryHover, #a37d18) !important;
-      color: #ffffff !important;
-    }
-    .main-nav .nav-cta span {
-      display: block;
-      line-height: 1.15;
+    /* Mobile menu button hidden on desktop */
+    .menu-toggle {
+      display: none;
+      border: 0;
+      background: #f1f5f9;
+      font-size: 20px;
+      color: #064e3b;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
     }
 
     /* Language Switcher safe margin */
@@ -328,35 +513,81 @@
     }
 
     @media (max-width: 1200px) and (min-width: 1025px) {
-      .main-nav {
-        gap: 10px !important;
-        font-size: 12.5px !important;
+      .main-navbar-strip .main-nav {
+        gap: 12px !important;
+        font-size: 14px !important;
+        justify-content: center;
       }
-      .brand {
-        font-size: 13.5px !important;
+      .main-navbar-strip .main-nav a {
+        font-size: 14px !important;
+        padding: 11px 9px !important;
+      }
+      .brand-name-single {
+        font-size: 17px !important;
+      }
+      .header-foundation {
+        padding-right: 10px;
+        gap: 3px;
+      }
+      .foundation-logo-img {
+        height: 28px;
+        max-width: 120px;
+      }
+      .header-quick-call {
+        padding-right: 10px;
       }
     }
     @media (max-width: 1024px) {
-      .main-nav {
+      .brand-banner-container {
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .brand-logo-block {
+        width: 100%;
+        justify-content: space-between;
+      }
+      .brand-right-features {
+        width: 100%;
+        justify-content: space-between;
+        padding-top: 8px;
+        border-top: 1px dashed #e2e8f0;
+      }
+      .brand-name-single {
+        white-space: normal !important;
+        font-size: 16.5px !important;
+      }
+      .menu-toggle {
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+      }
+      .main-navbar-strip {
+        position: relative;
+      }
+      .nav-strip-container {
+        padding: 0;
+      }
+      .main-navbar-strip .main-nav {
         display: none;
         position: absolute;
         top: 100%;
         left: 0;
         right: 0;
-        background: #ffffff;
-        padding: 16px 24px;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+        background: #064e3b;
+        padding: 16px 20px;
+        box-shadow: 0 14px 28px rgba(0,0,0,0.25);
         flex-direction: column;
         align-items: stretch;
         gap: 0 !important;
-        border-top: 1px solid #edf1ef;
+        z-index: 1000;
+        border-top: 1px solid rgba(255,255,255,0.1);
       }
-      .main-nav.open {
+      .main-navbar-strip .main-nav.open {
         display: flex !important;
       }
-      .main-nav a {
-        padding: 12px 0 !important;
-        border-bottom: 1px solid #f1f5f3;
+      .main-navbar-strip .main-nav a {
+        padding: 12px 6px !important;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
         font-size: 14px !important;
       }
       .nav-item-dropdown {
@@ -369,31 +600,282 @@
         box-shadow: none;
         border: none;
         padding: 0 0 0 14px;
-        background: #f8faf9;
+        background: rgba(0, 0, 0, 0.2);
         border-radius: 6px;
         margin: 4px 0 8px 0;
       }
       .nav-item-dropdown .dropdown-menu a {
         padding: 10px 12px !important;
         font-size: 13px !important;
-      }
-      .main-nav .nav-cta {
-        text-align: center;
-        margin-top: 10px;
-        padding: 10px !important;
-        font-size: 13px !important;
-      }
-      .menu-toggle {
-        display: block !important;
+        color: #e2e8f0 !important;
       }
     }
     @media (max-width: 680px) {
-      .brand {
-        font-size: 12px !important;
-        white-space: normal !important;
-        max-width: 220px !important;
-        line-height: 1.2 !important;
+      .brand-name-single {
+        font-size: 14.5px !important;
+        line-height: 1.3 !important;
       }
+      .brand-emblem-img {
+        width: 44px;
+        height: 44px;
+      }
+      .header-foundation {
+        border-right: none;
+        padding-right: 0;
+      }
+      .foundation-logo-img {
+        height: 26px;
+        max-width: 110px;
+      }
+      .header-quick-call {
+        display: none;
+      }
+      .badge-accred {
+        font-size: 10px;
+        padding: 2px 6px;
+      }
+      .badge-accred .badge-chips code {
+        font-size: 9.5px;
+      }
+    }
+
+    /* Key Highlights / Stats Counter Section (Badarshah Style) */
+    .highlights-section {
+      background: #f0f6f3;
+      padding: 24px 0 16px 0;
+      border-bottom: 1px solid #dce8e1;
+    }
+    .highlights-container {
+      width: min(1440px, calc(100% - 32px)) !important;
+      max-width: 1440px !important;
+      margin: 0 auto;
+      padding: 0 16px;
+      box-sizing: border-box;
+    }
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 15px;
+    }
+    .stat-card {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid #d9e6de;
+      box-shadow: 0 4px 15px rgba(0, 106, 78, 0.05);
+      padding: 22px 14px 18px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 106, 78, 0.12);
+    }
+    .stat-card-stripe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4.5px;
+    }
+    .stat-stripe-1 { background: linear-gradient(90deg, #e11d48, #006a4e); }
+    .stat-stripe-2 { background: linear-gradient(90deg, #2563eb, #006a4e); }
+    .stat-stripe-3 { background: linear-gradient(90deg, #ea580c, #006a4e); }
+    .stat-stripe-4 { background: #006a4e; }
+    .stat-stripe-5 { background: linear-gradient(90deg, #0d9488, #10b981); }
+
+    .stat-icon-wrap {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px auto;
+    }
+    .stat-icon-wrap svg {
+      width: 22px;
+      height: 22px;
+    }
+    .stat-icon-1 { background: #fce7f3; color: #db2777; }
+    .stat-icon-2 { background: #eff6ff; color: #2563eb; }
+    .stat-icon-3 { background: #fff7ed; color: #ea580c; }
+    .stat-icon-4 { background: #ecfdf5; color: #047857; }
+    .stat-icon-5 { background: #f0fdfa; color: #0d9488; }
+
+    .stat-number {
+      font-family: var(--serif, serif);
+      font-size: clamp(23px, 1.8vw, 30px);
+      font-weight: 800;
+      color: #064e3b;
+      line-height: 1.15;
+      margin: 2px 0 5px 0;
+      letter-spacing: -0.5px;
+    }
+    .stat-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #1e3d35;
+      line-height: 1.35;
+      margin: 0 0 3px 0;
+    }
+    .stat-sub {
+      font-size: 11.5px;
+      color: #64748b;
+      font-weight: 500;
+      line-height: 1.35;
+      margin: 0;
+    }
+
+    @media (max-width: 1100px) {
+      .highlights-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    @media (max-width: 720px) {
+      .highlights-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 460px) {
+      .highlights-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Floating Modal for Institute Background */
+    .about-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 78, 59, 0.68);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      z-index: 10050;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .about-modal-backdrop.open {
+      opacity: 1;
+      visibility: visible;
+    }
+    .about-modal-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 820px;
+      max-height: 88vh;
+      border-radius: 18px;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.35);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      transform: scale(0.95);
+      transition: transform 0.25s ease;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+    }
+    .about-modal-backdrop.open .about-modal-card {
+      transform: scale(1);
+    }
+    .about-modal-head {
+      background: linear-gradient(135deg, #064e3b 0%, #006a4e 100%);
+      color: #ffffff;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #10b981;
+    }
+    .about-modal-head h3 {
+      margin: 0;
+      font-family: var(--serif, serif);
+      font-size: 19px;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .about-modal-close {
+      background: rgba(255, 255, 255, 0.16);
+      border: none;
+      color: #ffffff;
+      font-size: 22px;
+      line-height: 1;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .about-modal-close:hover {
+      background: rgba(239, 68, 68, 0.9);
+      transform: rotate(90deg);
+    }
+    .about-modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #334155;
+      text-align: justify;
+      text-justify: inter-word;
+    }
+    .about-modal-body p {
+      margin-bottom: 16px;
+    }
+    .about-modal-body p:last-child {
+      margin-bottom: 0;
+    }
+    .about-modal-body strong {
+      color: #064e3b;
+    }
+    .about-modal-body .modal-about-img {
+      width: 100%;
+      max-height: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      border: 1px solid #e2ebe6;
+    }
+    .about-modal-foot {
+      padding: 12px 24px;
+      background: #f8faf9;
+      border-top: 1px solid #e2ebe6;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-readmore-floating {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #006a4e;
+      color: #ffffff !important;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      box-shadow: 0 4px 12px rgba(0, 106, 78, 0.2);
+      transition: all 0.2s ease;
+    }
+    .btn-readmore-floating:hover {
+      background: #064e3b;
+      box-shadow: 0 6px 16px rgba(0, 106, 78, 0.3);
+      transform: translateY(-1px);
     }
 
     /* Hero Image Carousel Slider (1920x720 Resolution Aspect Ratio & Non-Squishing) */
@@ -1388,20 +1870,103 @@
 </head>
 <body>
 <header class="site-header">
-  <div class="container nav-wrap">
-    <a class="brand" href="{{ route('home') }}">
-      <img src="{{ $siteLogo }}" alt="{{ $settings->get('institution_name', 'MCTSC') }} logo" data-live-edit data-live-key="site_logo" data-live-type="image" data-live-title="অফিসিয়াল মনোগ্রাম / লোগো" data-live-location="হেডার (Header)">
-      <div class="brand-text">
-        <span class="brand-line-1">{{ $isBn ? 'মাহমুদুন্নবী চৌধুরী' : 'Mahmudunnabi Chowdhury' }}</span>
-        <span class="brand-line-2">{{ $isBn ? 'টেকনিক্যাল স্কুল এন্ড কলেজ' : 'Technical School and College' }}</span>
+  <!-- Tier 1: White Brand Banner (Institue Logo + Name in one line + Accreditation Badges + Implemented by Impact Initiative + Helpline & Admissions) -->
+  <div class="brand-banner">
+    <div class="container brand-banner-container">
+      <div class="brand-logo-block">
+        <a class="brand" href="{{ route('home') }}">
+          <img src="{{ $siteLogo }}" alt="{{ $settings->get('institution_name', 'MCTSC') }} logo" class="brand-emblem-img" data-live-edit data-live-key="site_logo" data-live-type="image" data-live-title="অফিসিয়াল মনোগ্রাম / লোগো" data-live-location="হেডার (Header)">
+          <div class="brand-text">
+            <h1 class="brand-name-single">
+              <span data-live-edit data-live-key="{{ $isBn ? 'institution_name_bn' : 'institution_name' }}" data-live-type="text" data-live-title="প্রতিষ্ঠানের নাম" data-live-location="হেডার (Header)">
+                {{ $isBn ? $settings->get('institution_name_bn', 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল অ্যান্ড কলেজ') : $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School and College') }}
+              </span>
+            </h1>
+            <div class="brand-badges-bar">
+              <span class="badge-accred badge-bteb" title="বাংলাদেশ কারিগরি শিক্ষা বোর্ড অনুমোদিত - কোড: ৭০১০২">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="badge-icon"><path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 2L2 7h20L12 2z"/></svg>
+                <span class="badge-title">BTEB Institute Code:</span>
+                <span class="badge-chips"><code>70102</code></span>
+              </span>
+              <span class="badge-accred badge-nsda" title="জাতীয় দক্ষতা উন্নয়ন কর্তৃপক্ষ অনুমোদিত - নিবন্ধন: STP-CHA-000135">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="badge-icon"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+                <span class="badge-title">NSDA Registration:</span>
+                <span class="badge-chips"><code>STP-CHA-000135</code></span>
+              </span>
+            </div>
+          </div>
+        </a>
       </div>
-    </a>
-    <div class="header-right-group">
-      <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+
+      <!-- Right Side: Implemented by Impact Initiative + Live Admission & Helpline + Language Switcher -->
+      <div class="brand-right-features">
+        <div class="header-foundation" title="{{ $isBn ? 'বাস্তবায়নে: ইমপ্যাক্ট ইনিশিয়েটিভ' : 'Implemented by Impact Initiative' }}">
+          <span class="foundation-label">{{ $isBn ? 'বাস্তবায়নে' : 'IMPLEMENTED BY' }}</span>
+          <a href="https://impactini.org" target="_blank" rel="noopener noreferrer" class="foundation-logo-link" title="Visit Impact Initiative Website">
+            <img src="{{ asset('assets/impact_initiative_official.png') }}" alt="Impact Initiative" class="foundation-logo-img">
+          </a>
+        </div>
+
+        <div class="header-quick-call">
+          <a href="{{ route('apply') }}" class="badge-admission-live" title="{{ $isBn ? 'ভর্তি আবেদন করুন' : 'Apply for Admission' }}">
+            <span class="pulse-dot"></span>
+            {{ $isBn ? 'ভর্তি আবেদন' : 'Apply for Admission' }}
+          </a>
+          <a href="tel:{{ preg_replace('/[^0-9+]/', '', $settings->get('contact_phone', '01880919275')) }}" class="header-phone-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:13px;height:13px;color:#e11d48;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            {{ $settings->get('contact_phone', '01880919275') }}
+          </a>
+        </div>
+
+        <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->
+        <div class="lang-switch-box" title="{{ $isBn ? 'Switch to English' : 'বাংলা ভাষায় দেখুন' }}">
+          <a href="{{ route('lang.switch', 'en') }}" class="lang-code {{ !$isBn ? 'active' : 'inactive' }}" title="English Version">EN</a>
+          <a href="{{ route('lang.switch', $isBn ? 'en' : 'bn') }}" class="toggle-slider-track {{ $isBn ? 'is-bn' : 'is-en' }}" aria-label="{{ $isBn ? 'Switch to English' : 'Switch to Bangla' }}" title="{{ $isBn ? 'Switch to English' : 'Switch to Bangla' }}">
+            <div class="toggle-slider-knob">
+              @if($isBn)
+                <!-- Bangladesh Flag Knob (Round) -->
+                <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <clipPath id="bd-knob-clip"><circle cx="30" cy="30" r="30"/></clipPath>
+                  <g clip-path="url(#bd-knob-clip)">
+                    <rect width="60" height="60" fill="#006a4e"/>
+                    <circle cx="28" cy="30" r="14" fill="#f42a41"/>
+                  </g>
+                </svg>
+              @else
+                <!-- UK Flag Knob (Round) -->
+                <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                  <clipPath id="uk-knob-clip"><circle cx="30" cy="30" r="30"/></clipPath>
+                  <g clip-path="url(#uk-knob-clip)">
+                    <rect width="60" height="60" fill="#012169"/>
+                    <path d="M0 0 L60 60 M60 0 L0 60" stroke="#ffffff" stroke-width="11"/>
+                    <path d="M0 0 L60 60" stroke="#C8102E" stroke-width="4"/>
+                    <path d="M60 0 L0 60" stroke="#C8102E" stroke-width="4"/>
+                    <path d="M30 0 v60 M0 30 h60" stroke="#ffffff" stroke-width="15"/>
+                    <path d="M30 0 v60 M0 30 h60" stroke="#C8102E" stroke-width="9"/>
+                  </g>
+                </svg>
+              @endif
+            </div>
+          </a>
+          <a href="{{ route('lang.switch', 'bn') }}" class="lang-code {{ $isBn ? 'active' : 'inactive' }}" title="বাংলা সংস্করণ">বাং</a>
+        </div>
+
+        <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tier 2: Dark Forest Green Institutional Navigation Bar (Badarshah / BTEB Portal Style) -->
+  <div class="main-navbar-strip">
+    <div class="container nav-strip-container">
       <nav class="main-nav" aria-label="Primary navigation">
-        <a class="active" href="{{ route('home') }}">{{ $isBn ? 'হোম' : 'Home' }}</a>
+        <a class="active" href="{{ route('home') }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          {{ $isBn ? 'হোম' : 'Home' }}
+        </a>
         <div class="nav-item-dropdown">
           <a class="nav-link-parent {{ request()->routeIs('about') || request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('about') }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 2L2 7h20L12 2z"/></svg>
             {{ $isBn ? 'আমাদের সম্পর্কে' : 'About us' }} <span class="dropdown-caret">▾</span>
           </a>
           <div class="dropdown-menu">
@@ -1413,9 +1978,13 @@
             </a>
           </div>
         </div>
-        <a class="{{ request()->routeIs('infrastructure') ? 'active' : '' }}" href="{{ route('infrastructure') }}" style="white-space: nowrap;">{{ $isBn ? 'অবকাঠামো' : 'Infrastructure' }}</a>
+        <a class="{{ request()->routeIs('infrastructure') ? 'active' : '' }}" href="{{ route('infrastructure') }}" style="white-space: nowrap;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="9" y1="22" x2="9" y2="22.01"/><line x1="15" y1="22" x2="15" y2="22.01"/><line x1="9" y1="18" x2="9" y2="18.01"/><line x1="15" y1="18" x2="15" y2="18.01"/><line x1="9" y1="14" x2="9" y2="14.01"/><line x1="15" y1="14" x2="15" y2="14.01"/><line x1="9" y1="10" x2="9" y2="10.01"/><line x1="15" y1="10" x2="15" y2="10.01"/><line x1="9" y1="6" x2="9" y2="6.01"/><line x1="15" y1="6" x2="15" y2="6.01"/></svg>
+          {{ $isBn ? 'অবকাঠামো' : 'Infrastructure' }}
+        </a>
         <div class="nav-item-dropdown">
           <a class="nav-link-parent" href="{{ route('courses') }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
             {{ $isBn ? 'কোর্সসমূহ' : 'Courses' }} <span class="dropdown-caret">▾</span>
           </a>
           <div class="dropdown-menu">
@@ -1427,43 +1996,23 @@
             </a>
           </div>
         </div>
-        <a href="{{ route('notices') }}">{{ $isBn ? 'নোটিশ' : 'Notices' }}</a>
-        <a href="{{ route('activities') }}">{{ $isBn ? 'কার্যক্রম' : 'Activities' }}</a>
-        <a href="{{ route('gallery') }}">{{ $isBn ? 'গ্যালারি' : 'Gallery' }}</a>
-        <a class="{{ request()->routeIs('career*') ? 'active' : '' }}" href="{{ route('career') }}">{{ $isBn ? 'ক্যারিয়ার' : 'Career' }}</a>
-      </nav>
-      <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->
-      <div class="lang-switch-box" title="{{ $isBn ? 'Switch to English' : 'বাংলা ভাষায় দেখুন' }}">
-        <a href="{{ route('lang.switch', 'en') }}" class="lang-code {{ !$isBn ? 'active' : 'inactive' }}" title="English Version">EN</a>
-        <a href="{{ route('lang.switch', $isBn ? 'en' : 'bn') }}" class="toggle-slider-track {{ $isBn ? 'is-bn' : 'is-en' }}" aria-label="{{ $isBn ? 'Switch to English' : 'Switch to Bangla' }}" title="{{ $isBn ? 'Switch to English' : 'Switch to Bangla' }}">
-          <div class="toggle-slider-knob">
-            @if($isBn)
-              <!-- Bangladesh Flag Knob (Round) -->
-              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <clipPath id="bd-knob-clip"><circle cx="30" cy="30" r="30"/></clipPath>
-                <g clip-path="url(#bd-knob-clip)">
-                  <rect width="60" height="60" fill="#006a4e"/>
-                  <circle cx="28" cy="30" r="14" fill="#f42a41"/>
-                </g>
-              </svg>
-            @else
-              <!-- UK Flag Knob (Round) -->
-              <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                <clipPath id="uk-knob-clip"><circle cx="30" cy="30" r="30"/></clipPath>
-                <g clip-path="url(#uk-knob-clip)">
-                  <rect width="60" height="60" fill="#012169"/>
-                  <path d="M0 0 L60 60 M60 0 L0 60" stroke="#ffffff" stroke-width="11"/>
-                  <path d="M0 0 L60 60" stroke="#C8102E" stroke-width="4"/>
-                  <path d="M60 0 L0 60" stroke="#C8102E" stroke-width="4"/>
-                  <path d="M30 0 v60 M0 30 h60" stroke="#ffffff" stroke-width="15"/>
-                  <path d="M30 0 v60 M0 30 h60" stroke="#C8102E" stroke-width="9"/>
-                </g>
-              </svg>
-            @endif
-          </div>
+        <a href="{{ route('notices') }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          {{ $isBn ? 'নোটিশ' : 'Notices' }}
         </a>
-        <a href="{{ route('lang.switch', 'bn') }}" class="lang-code {{ $isBn ? 'active' : 'inactive' }}" title="বাংলা সংস্করণ">বাং</a>
-      </div>
+        <a href="{{ route('activities') }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          {{ $isBn ? 'কার্যক্রম' : 'Activities' }}
+        </a>
+        <a href="{{ route('gallery') }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          {{ $isBn ? 'গ্যালারি' : 'Gallery' }}
+        </a>
+        <a class="{{ request()->routeIs('career*') ? 'active' : '' }}" href="{{ route('career') }}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          {{ $isBn ? 'ক্যারিয়ার' : 'Career' }}
+        </a>
+      </nav>
     </div>
   </div>
 </header>
@@ -1531,6 +2080,68 @@
     @endif
   </section>
 
+  <!-- KEY HIGHLIGHTS / STATS COUNTER STRIP (BADARSHAH STYLE) -->
+  <section class="highlights-section" aria-label="Key Institutional Highlights & Statistics">
+    <div class="container highlights-container">
+      <div class="highlights-grid">
+        <!-- Card 1: Regular Students & Trainees -->
+        <div class="stat-card">
+          <div class="stat-card-stripe stat-stripe-1"></div>
+          <div class="stat-icon-wrap stat-icon-1" title="Students & Trainees">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+          <div class="stat-number" data-live-edit data-live-key="stat_1_num" data-live-type="text" data-live-title="কার্ড ১ - সংখ্যা" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get('stat_1_num', '280+') }}</div>
+          <div class="stat-title" data-live-edit data-live-key="{{ $isBn ? 'stat_1_title_bn' : 'stat_1_title' }}" data-live-type="text" data-live-title="কার্ড ১ - শিরোনাম" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get($isBn ? 'stat_1_title_bn' : 'stat_1_title', $isBn ? 'নিয়মিত শিক্ষার্থী ও ট্রেইনি' : 'Regular Students & Trainees') }}</div>
+          <div class="stat-sub" data-live-edit data-live-key="{{ $isBn ? 'stat_1_sub_bn' : 'stat_1_sub' }}" data-live-type="text" data-live-title="কার্ড ১ - সাবটাইটেল" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get($isBn ? 'stat_1_sub_bn' : 'stat_1_sub', $isBn ? 'ডিপ্লোমা ও সিবিটিঅ্যান্ডএ কোর্স' : 'Diploma & CBT&A Courses') }}</div>
+        </div>
+
+        <!-- Card 2: Approved Programs -->
+        <div class="stat-card">
+          <div class="stat-card-stripe stat-stripe-2"></div>
+          <div class="stat-icon-wrap stat-icon-2" title="Approved Programs">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+          <div class="stat-number" data-live-edit data-live-key="stat_2_num" data-live-type="text" data-live-title="কার্ড ২ - সংখ্যা" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get('stat_2_num', $isBn ? '১৪টি' : '14+') }}</div>
+          <div class="stat-title" data-live-edit data-live-key="{{ $isBn ? 'stat_2_title_bn' : 'stat_2_title' }}" data-live-type="text" data-live-title="কার্ড ২ - শিরোনাম" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get($isBn ? 'stat_2_title_bn' : 'stat_2_title', $isBn ? 'অনুমোদিত প্রোগ্রাম' : 'Approved Programs') }}</div>
+          <div class="stat-sub" data-live-edit data-live-key="{{ $isBn ? 'stat_2_sub_bn' : 'stat_2_sub' }}" data-live-type="text" data-live-title="কার্ড ২ - সাবটাইটেল" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get($isBn ? 'stat_2_sub_bn' : 'stat_2_sub', $isBn ? '২ ডিপ্লোমা ও ১২ শর্ট কোর্স' : '2 Diploma & 12 Short Courses') }}</div>
+        </div>
+
+        <!-- Card 3: Expert Instructors & Trainers -->
+        <div class="stat-card">
+          <div class="stat-card-stripe stat-stripe-3"></div>
+          <div class="stat-icon-wrap stat-icon-3" title="Expert Instructors">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          </div>
+          <div class="stat-number" data-live-edit data-live-key="stat_3_num" data-live-type="text" data-live-title="কার্ড ৩ - সংখ্যা" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get('stat_3_num', $isBn ? '১৩ জন' : '13+') }}</div>
+          <div class="stat-title" data-live-edit data-live-key="{{ $isBn ? 'stat_3_title_bn' : 'stat_3_title' }}" data-live-type="text" data-live-title="কার্ড ৩ - শিরোনাম" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get($isBn ? 'stat_3_title_bn' : 'stat_3_title', $isBn ? 'দক্ষ শিক্ষক ও প্রশিক্ষক' : 'Expert Instructors & Trainers') }}</div>
+          <div class="stat-sub" data-live-edit data-live-key="{{ $isBn ? 'stat_3_sub_bn' : 'stat_3_sub' }}" data-live-type="text" data-live-title="কার্ড ৩ - সাবটাইটেল" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get($isBn ? 'stat_3_sub_bn' : 'stat_3_sub', $isBn ? 'ইঞ্জিনিয়ার ও সার্টিফাইড মেন্টর' : 'Engineers & Certified Mentors') }}</div>
+        </div>
+
+        <!-- Card 4: Government Board Recognition -->
+        <div class="stat-card">
+          <div class="stat-card-stripe stat-stripe-4"></div>
+          <div class="stat-icon-wrap stat-icon-4" title="Board Recognition">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+          </div>
+          <div class="stat-number" data-live-edit data-live-key="stat_4_num" data-live-type="text" data-live-title="কার্ড ৪ - সংখ্যা" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get('stat_4_num', '100%') }}</div>
+          <div class="stat-title" data-live-edit data-live-key="{{ $isBn ? 'stat_4_title_bn' : 'stat_4_title' }}" data-live-type="text" data-live-title="কার্ড ৪ - শিরোনাম" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get($isBn ? 'stat_4_title_bn' : 'stat_4_title', $isBn ? 'সরকারি বোর্ড স্বীকৃতি' : 'Government Board Recognition') }}</div>
+          <div class="stat-sub" data-live-edit data-live-key="{{ $isBn ? 'stat_4_sub_bn' : 'stat_4_sub' }}" data-live-type="text" data-live-title="কার্ড ৪ - সাবটাইটেল" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get($isBn ? 'stat_4_sub_bn' : 'stat_4_sub', $isBn ? 'BTEB ও NSDA অনুমোদিত' : 'BTEB & NSDA Affiliated') }}</div>
+        </div>
+
+        <!-- Card 5: Employment & Placement -->
+        <div class="stat-card">
+          <div class="stat-card-stripe stat-stripe-5"></div>
+          <div class="stat-icon-wrap stat-icon-5" title="Employment & Placement">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+          </div>
+          <div class="stat-number" data-live-edit data-live-key="stat_5_num" data-live-type="text" data-live-title="কার্ড ৫ - সংখ্যা" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get('stat_5_num', '94.8%') }}</div>
+          <div class="stat-title" data-live-edit data-live-key="{{ $isBn ? 'stat_5_title_bn' : 'stat_5_title' }}" data-live-type="text" data-live-title="কার্ড ৫ - শিরোনাম" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get($isBn ? 'stat_5_title_bn' : 'stat_5_title', $isBn ? 'কর্মসংস্থান ও অ্যাটাচমেন্ট' : 'Employment & Placement') }}</div>
+          <div class="stat-sub" data-live-edit data-live-key="{{ $isBn ? 'stat_5_sub_bn' : 'stat_5_sub' }}" data-live-type="text" data-live-title="কার্ড ৫ - সাবটাইটেল" data-live-location="হোমপেজ - পরিসংখ্যান">{{ $settings->get($isBn ? 'stat_5_sub_bn' : 'stat_5_sub', $isBn ? 'শিল্পকারখানা ও ফ্রিল্যান্সিং' : 'Industrial & Freelancing') }}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- PORTAL 2-COLUMN LAYOUT BELOW HERO BANNER -->
   <div class="portal-wrapper">
     <div class="portal-container">
@@ -1541,7 +2152,7 @@
       <div class="about-wrap">
         <h2 data-live-edit data-live-key="about_title" data-live-type="text" data-live-title="ইনস্টিটিউটের পটভূমি শিরোনাম" data-live-location="হোমপেজ - পটভূমি">{{ $settings->get('about_title') ?: ($isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background') }}</h2>
         <div class="gold-rule"></div>
-        <div class="about-summary-text" data-live-edit data-live-key="{{ $isBn ? 'about_bn' : 'about' }}" data-live-type="textarea" data-live-title="ইনস্টিটিউটের পটভূমি বিবরণ" data-live-location="হোমপেজ - পটভূমি">
+        <div class="about-summary-text">
           @php
             $aboutImgSrc = storage_asset($settings->get('about_image'), 'assets/about_mahmudunnabi_legacy.jpg');
             if (empty($settings->get('about_image')) || $settings->get('about_image') === 'assets/MC Building Photo.jpg') {
@@ -1551,51 +2162,100 @@
           <div class="about-image-floated">
             <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus" data-live-edit data-live-key="about_image" data-live-type="image" data-live-title="ক্যাম্পাস ও পটভূমি ছবি" data-live-location="হোমপেজ - পটভূমি">
           </div>
-          @php
-            $customAbout = $settings->get('about');
-          @endphp
-          @if($isBn && !empty($settings->get('about_bn')))
-            @foreach(explode("\n\n", str_replace("\r\n", "\n", $settings->get('about_bn'))) as $par)
-              @if(trim($par))
-                <p>{!! nl2br(e(trim($par))) !!}</p>
-              @endif
-            @endforeach
-          @elseif(!empty($customAbout))
-            @foreach(explode("\n\n", str_replace("\r\n", "\n", $customAbout)) as $par)
-              @if(trim($par))
-                <p>{!! nl2br(e(trim($par))) !!}</p>
-              @endif
-            @endforeach
+          @if($isBn)
+            <p>
+              <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
+            </p>
+            <p>
+              ২০১৮ সাল থেকে MCTSC কারিগরি ও বৃত্তিমূলক শিক্ষা এবং প্রশিক্ষণে (TVET) সুদীর্ঘ অভিজ্ঞতাসম্পন্ন উন্নয়ন সংস্থা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর সাথে যৌথভাবে কার্যক্রম পরিচালনা করে আসছে...
+            </p>
           @else
-            @if($isBn)
-              <p>
-                <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
-              </p>
-              <p>
-                <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong> কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে।
-              </p>
-              <p>
-                প্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।
-              </p>
-            @else
-              <p>
-                <strong>Mahmudunnabi Chowdhury Technical School & College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006 as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, and <strong>Impact Initiative (IMI)</strong>, the institution is committed to developing skilled human resources and creating employment opportunities for socially and economically disadvantaged people.
-              </p>
-              <p>
-                Managed by <strong>Impact Initiative</strong>, MCTSC provides vocational and technical training opportunities for unemployed, unskilled, underprivileged group and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.
-              </p>
-              <p>
-                Since its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.
-              </p>
-            @endif
+            <p>
+              <strong>Mahmudunnabi Chowdhury Technical School and College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006, the institution was founded as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, a Bangladeshi politician, businessman, former minister and father of Amir Khasru Mahmud Chowdhury, the Minister, Ministry of Finance and Ministry of Planning, Government of the People's Republic of Bangladesh.
+            </p>
+            <p>
+              Since 2018, MCTSC has been working jointly with <strong>Impact Initiative (IMI)</strong>, a development organization with extensive experience in Technical and Vocational Education and Training (TVET)...
+            </p>
           @endif
-        </div>
-        <div class="about-action-row">
-          <a class="button button-green" href="{{ route('about') }}">{{ $isBn ? 'আরও বিস্তারিত দেখুন' : 'Read More' }} <span>→</span></a>
+
+          <div style="margin-top: 14px;">
+            <button type="button" id="openAboutModalBtn" class="btn-readmore-floating">
+              <span>{{ $isBn ? 'সম্পূর্ণ পটভূমি পড়ুন' : 'Read More' }}</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- FLOATING MODAL FOR FULL INSTITUTE BACKGROUND -->
+  <div id="aboutDetailModal" class="about-modal-backdrop" aria-hidden="true" role="dialog" aria-labelledby="aboutModalTitle">
+    <div class="about-modal-card">
+      <div class="about-modal-head">
+        <h3 id="aboutModalTitle">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 2L2 7h20L12 2z"/></svg>
+          <span>{{ $settings->get('about_title') ?: ($isBn ? 'ইনস্টিটিউটের পূর্ণাঙ্গ পটভূমি' : 'Institute Background') }}</span>
+        </h3>
+        <button type="button" id="closeAboutModalBtn" class="about-modal-close" aria-label="Close dialog">&times;</button>
+      </div>
+      <div class="about-modal-body" data-live-edit data-live-key="{{ $isBn ? 'about_bn' : 'about' }}" data-live-type="textarea" data-live-title="ইনস্টিটিউটের পটভূমি পূর্ণাঙ্গ বিবরণ" data-live-location="হোমপেজ - পটভূমি">
+        <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus" class="modal-about-img">
+        @php
+          $customAbout = $settings->get('about');
+        @endphp
+        @if($isBn && !empty($settings->get('about_bn')))
+          @foreach(explode("\n\n", str_replace("\r\n", "\n", $settings->get('about_bn'))) as $par)
+            @if(trim($par))
+              <p>{!! nl2br(e(trim($par))) !!}</p>
+            @endif
+          @endforeach
+        @elseif(!empty($customAbout))
+          @foreach(explode("\n\n", str_replace("\r\n", "\n", $customAbout)) as $par)
+            @if(trim($par))
+              <p>{!! nl2br(e(trim($par))) !!}</p>
+            @endif
+          @endforeach
+        @else
+          @if($isBn)
+            <p>
+              <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
+            </p>
+            <p>
+              ২০১৮ সাল থেকে MCTSC কারিগরি ও বৃত্তিমূলক শিক্ষা এবং প্রশিক্ষণে (TVET) সুদীর্ঘ অভিজ্ঞতাসম্পন্ন উন্নয়ন সংস্থা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর সাথে যৌথভাবে কার্যক্রম পরিচালনা করে আসছে। এই যৌথ উদ্যোগের লক্ষ্য প্রশিক্ষণ কর্মসূচির গুণগত মান নিশ্চিত করা, উচ্চ প্রশিক্ষণের মান বজায় রাখা এবং দক্ষতা ও উদ্যোক্তা উন্নয়ন কার্যক্রমের মাধ্যমে দারিদ্র্য বিমোচন ও প্রাসঙ্গিকতা বৃদ্ধি করা।
+            </p>
+            <p>
+              <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong> কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে।
+            </p>
+            <p>
+              প্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।
+            </p>
+          @else
+            <p>
+              <strong>Mahmudunnabi Chowdhury Technical School and College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006, the institution was founded as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, a Bangladeshi politician, businessman, former minister and father of Amir Khasru Mahmud Chowdhury, the Minister, Ministry of Finance and Ministry of Planning, Government of the People's Republic of Bangladesh.
+            </p>
+            <p>
+              Since 2018, MCTSC has been working jointly with <strong>Impact Initiative (IMI)</strong>, a development organization with extensive experience in Technical and Vocational Education and Training (TVET). This collaboration aims to strengthen the quality assurance of training programmes, maintain high training standards, enhance the relevance and Poverty Elevation through Equip with Skills and Entrepreneurship development initiatives.
+            </p>
+            <p>
+              MCTSC is committed to providing vocational and technical training opportunities for unemployed, unskilled, underprivileged, and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.
+            </p>
+            <p>
+              Since its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.
+            </p>
+          @endif
+        @endif
+      </div>
+      <div class="about-modal-foot">
+        <a href="{{ route('about') }}" class="button button-green" style="font-size: 13px; padding: 7px 16px;">
+          {{ $isBn ? 'আমাদের সম্পর্কে বিস্তারিত পেইজ' : 'Full About Us Page' }} →
+        </a>
+        <button type="button" id="closeAboutModalFootBtn" class="button" style="background:#e2e8f0; color:#334155; font-size: 13px; padding: 7px 16px; border:none; border-radius:6px; cursor:pointer;">
+          {{ $isBn ? 'বন্ধ করুন' : 'Close' }}
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- 3. VISION, MISSION & OBJECTIVES (PILL BADGE VIEW & TEXT-BASED AUTO-HEIGHT) -->
   <section id="vision-mission-objectives" class="section vmo-section">
@@ -2259,6 +2919,38 @@
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && modal && modal.classList.contains('is-open')) {
         closeActivityModal();
+      }
+    });
+
+    // About Modal (Floating Full Institute Background)
+    const aboutModal = document.getElementById('aboutDetailModal');
+    const openAboutBtn = document.getElementById('openAboutModalBtn');
+    const closeAboutBtn = document.getElementById('closeAboutModalBtn');
+    const closeAboutFootBtn = document.getElementById('closeAboutModalFootBtn');
+
+    function openAboutDialog() {
+      if (!aboutModal) return;
+      aboutModal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeAboutDialog() {
+      if (!aboutModal) return;
+      aboutModal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    if (openAboutBtn) openAboutBtn.addEventListener('click', openAboutDialog);
+    if (closeAboutBtn) closeAboutBtn.addEventListener('click', closeAboutDialog);
+    if (closeAboutFootBtn) closeAboutFootBtn.addEventListener('click', closeAboutDialog);
+    if (aboutModal) {
+      aboutModal.addEventListener('click', function (e) {
+        if (e.target === aboutModal) closeAboutDialog();
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && aboutModal && aboutModal.classList.contains('open')) {
+        closeAboutDialog();
       }
     });
   });
