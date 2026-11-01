@@ -68,7 +68,7 @@ class LiveEditController extends Controller
 
         $request->validate([
             'id' => ['required', 'integer', 'exists:site_contents,id'],
-            'field' => ['required', 'string', 'in:title,category,excerpt,body,admission_fee'],
+            'field' => ['required', 'string', 'in:title,category,excerpt,body,admission_fee,image'],
             'value' => ['nullable', 'string', 'max:50000'],
             'image' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:5120'],
         ]);

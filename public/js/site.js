@@ -1,18 +1,48 @@
 // Site Navigation & Interactive Features
 document.addEventListener('DOMContentLoaded', function () {
   // 1. Mobile Menu Toggle
-  const toggle = document.querySelector('.menu-toggle');
+  const toggleBtns = document.querySelectorAll('.menu-toggle, .mobile-menu-toggle-btn');
   const nav = document.querySelector('.main-nav');
-  if (toggle && nav) {
-    toggle.addEventListener('click', function () {
-      const open = nav.classList.toggle('open');
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (toggleBtns.length && nav) {
+    toggleBtns.forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const open = nav.classList.toggle('open');
+        toggleBtns.forEach(function (b) {
+          b.setAttribute('aria-expanded', open ? 'true' : 'false');
+          const bars = b.querySelector('.menu-icon-bars');
+          if (bars) bars.textContent = open ? '✕' : '☰';
+          const caret = b.querySelector('.menu-caret');
+          if (caret) caret.style.transform = open ? 'rotate(180deg)' : 'none';
+        });
+      });
     });
+
     document.querySelectorAll('.main-nav a').forEach(function (link) {
       link.addEventListener('click', function () {
         nav.classList.remove('open');
-        toggle.setAttribute('aria-expanded', 'false');
+        toggleBtns.forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+          const bars = b.querySelector('.menu-icon-bars');
+          if (bars) bars.textContent = '☰';
+          const caret = b.querySelector('.menu-caret');
+          if (caret) caret.style.transform = 'none';
+        });
       });
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!nav.contains(e.target) && !Array.from(toggleBtns).some(function (b) { return b.contains(e.target); })) {
+        nav.classList.remove('open');
+        toggleBtns.forEach(function (b) {
+          b.setAttribute('aria-expanded', 'false');
+          const bars = b.querySelector('.menu-icon-bars');
+          if (bars) bars.textContent = '☰';
+          const caret = b.querySelector('.menu-caret');
+          if (caret) caret.style.transform = 'none';
+        });
+      }
     });
   }
 

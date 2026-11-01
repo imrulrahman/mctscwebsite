@@ -204,6 +204,7 @@
       align-items: center;
       gap: 7px;
       flex-wrap: wrap;
+      max-width: 100%;
     }
     .badge-accred {
       display: inline-flex;
@@ -216,6 +217,9 @@
       line-height: 1.35;
       transition: all 0.2s ease;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .badge-title-short {
+      display: none;
     }
     .badge-accred .badge-icon {
       width: 12.5px;
@@ -267,8 +271,9 @@
     .header-foundation {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       justify-content: center;
+      text-align: center;
       gap: 3px;
       padding-right: 14px;
       border-right: 2px solid rgba(0, 106, 78, 0.12);
@@ -280,10 +285,13 @@
       text-transform: uppercase;
       color: #047857;
       line-height: 1;
+      text-align: center;
+      width: 100%;
     }
     .foundation-logo-link {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       text-decoration: none;
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
@@ -508,101 +516,290 @@
         padding-right: 10px;
       }
     }
+    /* ========================================================
+       SEMANTIC RESPONSIVE HEADER ARCHITECTURE
+       ======================================================== */
+    .header-mobile-controls {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .mobile-nav-bar {
+      display: none;
+    }
+
     @media (max-width: 1024px) {
+      .site-header {
+        position: -webkit-sticky !important;
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 1000 !important;
+      }
+      .brand-banner {
+        padding: 8px 0 6px 0 !important;
+      }
       .brand-banner-container {
-        flex-wrap: wrap;
-        gap: 12px;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 14px !important;
+        gap: 6px !important;
+        box-sizing: border-box !important;
       }
       .brand-logo-block {
-        width: 100%;
-        justify-content: space-between;
+        display: flex !important;
+        align-items: flex-start !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        gap: 10px !important;
       }
-      .brand-right-features {
-        width: 100%;
-        justify-content: space-between;
-        padding-top: 8px;
-        border-top: 1px dashed #e2e8f0;
+      .brand {
+        display: flex !important;
+        align-items: flex-start !important;
+        gap: 10px !important;
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+      }
+      .brand-emblem-img {
+        width: 44px !important;
+        height: 44px !important;
+        min-width: 44px !important;
+        margin-top: 2px !important;
+      }
+      .brand-text {
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
       }
       .brand-name-single {
         white-space: normal !important;
-        font-size: 16.5px !important;
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        font-size: clamp(14px, 3.8vw, 17.5px) !important;
+        line-height: 1.25 !important;
+        margin: 0 0 4px 0 !important;
+      }
+      .brand-badges-bar {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 5px !important;
+        max-width: 100% !important;
+      }
+      .badge-accred {
+        font-size: 10.5px !important;
+        padding: 2px 7px !important;
+        white-space: nowrap !important;
+      }
+      .badge-accred .badge-chips code {
+        font-size: 10px !important;
+      }
+      .header-mobile-controls {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        flex-shrink: 0 !important;
+        margin-top: 2px !important;
       }
       .menu-toggle {
         display: inline-flex !important;
-        align-items: center;
-        justify-content: center;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 36px !important;
+        height: 36px !important;
+        padding: 0 !important;
+        border-radius: 6px !important;
+        background: #ecfdf5 !important;
+        border: 1px solid #a7f3d0 !important;
+        color: #064e3b !important;
+        font-size: 18px !important;
+        cursor: pointer !important;
       }
+      .brand-right-features {
+        display: flex !important;
+        width: 100% !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        padding-top: 6px !important;
+        border-top: 1px dashed #e2e8f0 !important;
+        margin-top: 2px !important;
+      }
+      .header-foundation {
+        align-items: center !important;
+        text-align: center !important;
+        border-right: none !important;
+        padding-right: 0 !important;
+        gap: 2px !important;
+      }
+      .foundation-label {
+        font-size: 8.5px !important;
+        text-align: center !important;
+        width: 100% !important;
+      }
+      .foundation-logo-img {
+        height: 25px !important;
+        max-width: 110px !important;
+      }
+      .header-quick-call {
+        border-right: none !important;
+        padding-right: 0 !important;
+      }
+      .badge-admission-live {
+        display: none !important;
+      }
+      .header-phone-link {
+        font-size: 12px !important;
+      }
+      .lang-switch-box.lang-switch-desktop {
+        display: none !important;
+      }
+
+      /* Mobile Navigation Strip & Drawer */
       .main-navbar-strip {
-        position: relative;
+        position: relative !important;
+        min-height: auto !important;
       }
       .nav-strip-container {
-        padding: 0;
+        padding: 0 14px !important;
+        min-height: 44px !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
+      .mobile-nav-bar {
+        display: flex !important;
+        width: 100% !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding: 5px 0 !important;
+        gap: 10px !important;
+      }
+      .mobile-menu-toggle-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 7px !important;
+        background: rgba(255, 255, 255, 0.14) !important;
+        color: #ffffff !important;
+        border: 1px solid rgba(255, 255, 255, 0.25) !important;
+        padding: 7px 14px !important;
+        border-radius: 6px !important;
+        font-size: 13.5px !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+        transition: background 0.15s ease !important;
+      }
+      .mobile-menu-toggle-btn:hover {
+        background: rgba(255, 255, 255, 0.22) !important;
+      }
+      .mobile-nav-apply-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        background: #c59b27 !important;
+        color: #092c1d !important;
+        font-weight: 800 !important;
+        font-size: 12.5px !important;
+        padding: 7px 14px !important;
+        border-radius: 6px !important;
+        text-decoration: none !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.18) !important;
+        transition: transform 0.15s ease, background 0.15s ease !important;
+      }
+      .mobile-nav-apply-btn:hover {
+        background: #d4a72c !important;
+        transform: translateY(-1px) !important;
+      }
+      .pulse-dot-gold {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #092c1d;
+        display: inline-block;
+      }
+
+      /* Mobile Navigation Drawer */
       .main-navbar-strip .main-nav {
         display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: #064e3b;
-        padding: 16px 20px;
-        box-shadow: 0 14px 28px rgba(0,0,0,0.25);
-        flex-direction: column;
-        align-items: stretch;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        background: #064e3b !important;
+        padding: 12px 16px 20px 16px !important;
+        box-shadow: 0 18px 35px rgba(0,0,0,0.35) !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
         gap: 0 !important;
-        z-index: 1000;
-        border-top: 1px solid rgba(255,255,255,0.1);
+        z-index: 1000 !important;
+        border-top: 1px solid rgba(255,255,255,0.1) !important;
+        border-bottom-left-radius: 12px !important;
+        border-bottom-right-radius: 12px !important;
+        max-height: 82vh !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
       }
       .main-navbar-strip .main-nav.open {
         display: flex !important;
       }
       .main-navbar-strip .main-nav a {
-        padding: 12px 6px !important;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding: 11px 10px !important;
+        border-bottom: 1px solid rgba(255,255,255,0.08) !important;
         font-size: 14px !important;
+        color: #f1fdf6 !important;
       }
       .nav-item-dropdown {
-        flex-direction: column;
-        align-items: stretch;
+        flex-direction: column !important;
+        align-items: stretch !important;
       }
       .nav-item-dropdown .dropdown-menu {
-        position: static;
-        display: block;
-        box-shadow: none;
-        border: none;
-        padding: 0 0 0 14px;
-        background: rgba(0, 0, 0, 0.2);
-        border-radius: 6px;
-        margin: 4px 0 8px 0;
+        position: static !important;
+        display: block !important;
+        box-shadow: none !important;
+        border: none !important;
+        padding: 2px 0 4px 12px !important;
+        background: rgba(0, 0, 0, 0.22) !important;
+        border-radius: 6px !important;
+        margin: 3px 0 6px 0 !important;
       }
       .nav-item-dropdown .dropdown-menu a {
-        padding: 10px 12px !important;
-        font-size: 13px !important;
-        color: #e2e8f0 !important;
+        padding: 9px 12px !important;
+        font-size: 13.5px !important;
+        color: #d1fae5 !important;
+        border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+      }
+      .nav-item-dropdown .dropdown-menu a:last-child {
+        border-bottom: none !important;
       }
     }
+
     @media (max-width: 680px) {
-      .brand-name-single {
-        font-size: 14.5px !important;
-        line-height: 1.3 !important;
+      .badge-title-full {
+        display: none !important;
       }
-      .brand-emblem-img {
-        width: 44px;
-        height: 44px;
-      }
-      .header-foundation {
-        border-right: none;
-        padding-right: 0;
-      }
-      .header-quick-call {
-        display: none;
+      .badge-title-short {
+        display: inline !important;
       }
       .badge-accred {
-        font-size: 10px;
-        padding: 2px 6px;
+        font-size: 10px !important;
+        padding: 2px 6px !important;
       }
       .badge-accred .badge-chips code {
-        font-size: 9.5px;
+        font-size: 9.5px !important;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header-foundation .foundation-logo-img {
+        height: 22px !important;
+        max-width: 95px !important;
+      }
+      .mobile-menu-toggle-btn {
+        padding: 6px 11px !important;
+        font-size: 12.5px !important;
+      }
+      .mobile-nav-apply-btn {
+        padding: 6px 11px !important;
+        font-size: 11.5px !important;
       }
     }
 
@@ -953,20 +1150,59 @@
             <div class="brand-badges-bar">
               <span class="badge-accred badge-bteb" title="বাংলাদেশ কারিগরি শিক্ষা বোর্ড অনুমোদিত - কোড: ৭০১০২">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="badge-icon"><path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 2L2 7h20L12 2z"/></svg>
-                <span class="badge-title">BTEB Institute Code:</span>
+                <span class="badge-title badge-title-full">BTEB Institute Code:</span>
+                <span class="badge-title badge-title-short">BTEB Code:</span>
                 <span class="badge-chips"><code>70102</code></span>
               </span>
               <span class="badge-accred badge-nsda" title="জাতীয় দক্ষতা উন্নয়ন কর্তৃপক্ষ অনুমোদিত - নিবন্ধন: STP-CHA-000135">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="badge-icon"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-                <span class="badge-title">NSDA Registration:</span>
+                <span class="badge-title badge-title-full">NSDA Registration:</span>
+                <span class="badge-title badge-title-short">NSDA Reg:</span>
                 <span class="badge-chips"><code>STP-CHA-000135</code></span>
               </span>
             </div>
           </div>
         </a>
+
+        <!-- Mobile Quick Lang Switcher & Mobile Menu Toggle (Visible right beside brand on small screens) -->
+        <div class="header-mobile-controls">
+          <div class="lang-switch-box" title="{{ $isBn ? 'Switch to English' : 'বাংলা ভাষায় দেখুন' }}">
+            <a href="{{ route('lang.switch', 'en') }}" class="lang-code {{ !$isBn ? 'active' : 'inactive' }}" title="English Version">EN</a>
+            <a href="{{ route('lang.switch', $isBn ? 'en' : 'bn') }}" class="toggle-slider-track {{ $isBn ? 'is-bn' : 'is-en' }}" aria-label="{{ $isBn ? 'Switch to English' : 'Switch to Bangla' }}" title="{{ $isBn ? 'Switch to English' : 'Switch to Bangla' }}">
+              <div class="toggle-slider-knob">
+                @if($isBn)
+                  <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <clipPath id="bd-knob-clip-mob-l"><circle cx="30" cy="30" r="30"/></clipPath>
+                    <g clip-path="url(#bd-knob-clip-mob-l)">
+                      <rect width="60" height="60" fill="#006a4e"/>
+                      <circle cx="28" cy="30" r="14" fill="#f42a41"/>
+                    </g>
+                  </svg>
+                @else
+                  <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <clipPath id="uk-knob-clip-mob-l"><circle cx="30" cy="30" r="30"/></clipPath>
+                    <g clip-path="url(#uk-knob-clip-mob-l)">
+                      <rect width="60" height="60" fill="#012169"/>
+                      <path d="M0 0 L60 60 M60 0 L0 60" stroke="#ffffff" stroke-width="11"/>
+                      <path d="M0 0 L60 60" stroke="#C8102E" stroke-width="4"/>
+                      <path d="M60 0 L0 60" stroke="#C8102E" stroke-width="4"/>
+                      <path d="M30 0 v60 M0 30 h60" stroke="#ffffff" stroke-width="15"/>
+                      <path d="M30 0 v60 M0 30 h60" stroke="#C8102E" stroke-width="9"/>
+                    </g>
+                  </svg>
+                @endif
+              </div>
+            </a>
+            <a href="{{ route('lang.switch', 'bn') }}" class="lang-code {{ $isBn ? 'active' : 'inactive' }}" title="বাংলা সংস্করণ">বাং</a>
+          </div>
+
+          <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" type="button">
+            <span class="menu-icon-bars">☰</span>
+          </button>
+        </div>
       </div>
 
-      <!-- Right Side: Implemented by Impact Initiative + Live Admission & Helpline + Language Switcher -->
+      <!-- Right Side: Implemented by Impact Initiative + Live Admission & Helpline + Desktop Language Switcher -->
       <div class="brand-right-features">
         <div class="header-foundation" title="{{ $isBn ? 'বাস্তবায়নে: ইমপ্যাক্ট ইনিশিয়েটিভ' : 'Implemented by Impact Initiative' }}">
           <span class="foundation-label">{{ $isBn ? 'বাস্তবায়নে' : 'IMPLEMENTED BY' }}</span>
@@ -986,8 +1222,8 @@
           </a>
         </div>
 
-        <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (EN [ Flag Knob ] বাং) -->
-        <div class="lang-switch-box" title="{{ $isBn ? 'Switch to English' : 'বাংলা ভাষায় দেখুন' }}">
+        <!-- SKEUOMORPHIC FLAG LANGUAGE SWITCHER (Desktop) -->
+        <div class="lang-switch-box lang-switch-desktop" title="{{ $isBn ? 'Switch to English' : 'বাংলা ভাষায় দেখুন' }}">
           <a href="{{ route('lang.switch', 'en') }}" class="lang-code {{ !$isBn ? 'active' : 'inactive' }}" title="English Version">EN</a>
           <a href="{{ route('lang.switch', $isBn ? 'en' : 'bn') }}" class="toggle-slider-track {{ $isBn ? 'is-bn' : 'is-en' }}" aria-label="{{ $isBn ? 'Switch to English' : 'Switch to Bangla' }}" title="{{ $isBn ? 'Switch to English' : 'Switch to Bangla' }}">
             <div class="toggle-slider-knob">
@@ -1018,8 +1254,6 @@
           </a>
           <a href="{{ route('lang.switch', 'bn') }}" class="lang-code {{ $isBn ? 'active' : 'inactive' }}" title="বাংলা সংস্করণ">বাং</a>
         </div>
-
-        <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
       </div>
     </div>
   </div>
@@ -1027,6 +1261,20 @@
   <!-- Tier 2: Dark Forest Green Institutional Navigation Bar (Badarshah / BTEB Portal Style) -->
   <div class="main-navbar-strip">
     <div class="container nav-strip-container">
+      
+      <!-- Mobile Bar visible only on mobile/tablet (< 1024px) -->
+      <div class="mobile-nav-bar">
+        <button type="button" class="mobile-menu-toggle-btn" aria-label="Toggle navigation" aria-expanded="false">
+          <span class="menu-icon-bars">☰</span>
+          <span class="menu-btn-label">{{ $isBn ? 'মেনু ব্রাউজ করুন' : 'Browse Menu' }}</span>
+          <span class="menu-caret">▾</span>
+        </button>
+        <a href="{{ route('apply') }}" class="mobile-nav-apply-btn">
+          <span class="pulse-dot-gold"></span>
+          <span>{{ $isBn ? 'ভর্তি আবেদন' : 'Apply Online' }}</span>
+        </a>
+      </div>
+
       <nav class="main-nav" aria-label="Primary navigation">
         <a class="{{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -1076,6 +1324,20 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
           {{ $isBn ? 'গ্যালারি' : 'Gallery' }}
         </a>
+        <div class="nav-item-dropdown">
+          <a class="nav-link-parent {{ request()->routeIs('success_stories*') || request()->routeIs('case_studies*') || request()->routeIs('stories*') ? 'active' : '' }}" href="{{ route('success_stories') }}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
+            {{ $isBn ? 'সাফল্যের গল্প' : 'Success Story' }} <span class="dropdown-caret">▾</span>
+          </a>
+          <div class="dropdown-menu">
+            <a class="{{ request()->routeIs('success_stories*') || (request()->routeIs('stories*') && request('type') !== 'case_study') ? 'active' : '' }}" href="{{ route('success_stories') }}">
+              {{ $isBn ? 'সাফল্যের গল্প' : 'Success Story' }}
+            </a>
+            <a class="{{ request()->routeIs('case_studies*') || (request()->routeIs('stories*') && request('type') === 'case_study') ? 'active' : '' }}" href="{{ route('case_studies') }}">
+              {{ $isBn ? 'কেস স্টাডি' : 'Case Study' }}
+            </a>
+          </div>
+        </div>
         <a class="{{ request()->routeIs('career*') ? 'active' : '' }}" href="{{ route('career') }}">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-ico"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
           {{ $isBn ? 'ক্যারিয়ার' : 'Career' }}

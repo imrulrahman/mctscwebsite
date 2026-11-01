@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\SiteContent;
 use App\Models\SiteSetting;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class SitePageController extends Controller
@@ -121,6 +122,75 @@ class SitePageController extends Controller
             ->get();
 
         return view('site.activity_detail', compact('settings', 'activity', 'recentActivities'));
+    }
+
+    public function successStories(Request $request): View
+    {
+        $settings = $this->getSettings();
+        $filter = $request->query('filter', 'success_story');
+        
+        $query = SiteContent::query()
+            ->published()
+            ->where('section', 'stories');
+
+        if ($filter === 'success_story') {
+            $query->where(function ($q) {
+                $q->where('category', 'Success Story')
+                  ->orWhere('category', 'like', '%Success%')
+                  ->orWhereNull('category')
+                  ->orWhere('category', '');
+            });
+        } elseif ($filter === 'case_study') {
+            $query->where(function ($q) {
+                $q->where('category', 'Case Study')
+                  ->orWhere('category', 'like', '%Case%');
+            });
+        }
+
+        $stories = $query->ordered()->paginate(12)->withQueryString();
+        $currentType = 'success_story';
+
+        return view('site.stories', compact('settings', 'stories', 'filter', 'currentType'));
+    }
+
+    public function caseStudies(Request $request): View
+    {
+        $settings = $this->getSettings();
+        $stories = SiteContent::query()
+            ->published()
+            ->where('section', 'stories')
+            ->where(function ($q) {
+                $q->where('category', 'Case Study')
+                  ->orWhere('category', 'like', '%Case%');
+            })
+            ->ordered()
+            ->paginate(12)
+            ->withQueryString();
+
+        $filter = 'case_study';
+        $currentType = 'case_study';
+
+        return view('site.stories', compact('settings', 'stories', 'filter', 'currentType'));
+    }
+
+    public function storyShow(string $slug): View
+    {
+        $settings = $this->getSettings();
+        $story = SiteContent::query()
+            ->published()
+            ->where('section', 'stories')
+            ->where('slug', $slug)
+            ->firstOrFail();
+
+        $relatedStories = SiteContent::query()
+            ->published()
+            ->where('section', 'stories')
+            ->where('id', '!=', $story->id)
+            ->ordered()
+            ->limit(5)
+            ->get();
+
+        return view('site.story_detail', compact('settings', 'story', 'relatedStories'));
     }
 
     public function contact(): View

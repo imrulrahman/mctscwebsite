@@ -24,6 +24,17 @@
   </div>
 @endif
 
+@if($section === 'stories')
+  <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;padding:14px 18px;border-radius:6px;margin-bottom:18px;">
+    <strong style="color:#166534;font-size:14px;display:flex;align-items:center;gap:6px;">
+      <span>🏆</span> Success Story & Case Study (সাফল্যের গল্প ও কেস স্টাডি)
+    </strong>
+    <p style="margin:4px 0 0 0;font-size:13px;color:#15803d;line-height:1.6;">
+      এখানে আপনি শিক্ষার্থীদের বাস্তব সাফল্যের গল্প (Success Story) এবং কারিগরি প্রকল্পভিত্তিক পর্যালোচনা (Case Study) তৈরি, এডিট ও ডিলিট করতে পারবেন। ক্যাটাগরি হিসেবে 'Success Story' অথবা 'Case Study' সিলেক্ট করলেই ওয়েবসাইট মেনুর সংশ্লিষ্ট পেজে এটি স্বয়ংক্রিয়ভাবে প্রদর্শিত হবে।
+    </p>
+  </div>
+@endif
+
 @if($section === 'hero_slides')
   <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #16a34a;padding:14px 18px;border-radius:6px;margin-bottom:18px;">
     <strong style="color:#166534;font-size:14px;display:flex;align-items:center;gap:6px;">
@@ -46,6 +57,12 @@
             <th>Badge / Category</th>
             <th style="width: 100px; text-align: center;">Display Order</th>
             <th style="width: 150px;">Posted Date</th>
+          @elseif($section === 'stories')
+            <th style="width: 70px;">Photo</th>
+            <th>Title & Excerpt</th>
+            <th>Type</th>
+            <th style="width: 90px; text-align: center;">Order</th>
+            <th style="width: 140px;">Date</th>
           @elseif($section === 'partners')
             <th style="width: 130px;">Logo</th>
             <th>Partner Name</th>
@@ -98,7 +115,34 @@
               <td>
                 <span style="font-size: 12px; color: #64748b;">{{ $item->created_at ? $item->created_at->format('d M Y, h:i A') : '—' }}</span>
               </td>
-            @elseif($section === 'partners')
+            @elseif($section === 'stories')
+              <td>
+                @if($item->image)
+                  <img src="{{ storage_asset($item->image) }}" alt="{{ $item->title }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; display: block;">
+                @else
+                  <span style="font-size: 11px; color: #94a3b8; font-style: italic;">No Photo</span>
+                @endif
+              </td>
+              <td>
+                <strong style="color: #0f2942; font-size: 14px;">{{ $item->title }}</strong>
+                @if($item->excerpt)
+                  <small class="subline" style="display:block; color:#64748b; margin-top:3px;">{{ \Illuminate\Support\Str::limit($item->excerpt, 90) }}</small>
+                @endif
+              </td>
+              <td>
+                @if(stripos($item->category ?? '', 'case') !== false)
+                  <span style="background: #e0f2fe; color: #0284c7; padding: 3px 9px; border-radius: 4px; font-weight: 700; font-size: 11.5px; border: 1px solid #bae6fd;">📊 CASE STUDY</span>
+                @else
+                  <span style="background: #ecfdf5; color: #047857; padding: 3px 9px; border-radius: 4px; font-weight: 700; font-size: 11.5px; border: 1px solid #a7f3d0;">🏆 SUCCESS STORY</span>
+                @endif
+              </td>
+              <td style="text-align: center;">
+                <span style="display: inline-block; padding: 3px 10px; background: #f1f5f9; color: #334155; border-radius: 6px; font-weight: 700; font-size: 13px;">#{{ $item->sort_order ?: '—' }}</span>
+              </td>
+              <td>
+                <span style="font-size: 12px; color: #64748b;">{{ $item->created_at ? $item->created_at->format('d M Y') : '—' }}</span>
+              </td>
+          @elseif($section === 'partners')
               <td>
                 @if($item->image)
                   <img src="{{ storage_asset($item->image) }}" alt="{{ $item->title }}" style="height: 34px; max-width: 110px; object-fit: contain; background: #ffffff; padding: 2px 6px; border: 1px solid #e2e8f0; border-radius: 4px; display: block;">
@@ -146,6 +190,9 @@
             <td><span class="badge {{ $item->status }}">{{ ucfirst($item->status) }}</span></td>
             <td>{{ $item->updated_at->format('d M Y') }}</td>
             <td class="actions">
+              @if($section === 'stories')
+                <a class="edit-link" href="{{ route('stories.show', $item->slug) }}" target="_blank" title="View Story" style="color: #0284c7;">View</a>
+              @endif
               <a class="edit-link" href="{{ route('admin.content.edit', ['section' => $section, 'content' => $item]) }}">Edit</a>
               <form method="post" action="{{ route('admin.content.destroy', ['section' => $section, 'content' => $item]) }}" onsubmit="return confirm('Delete this {{ $section === 'partners' ? 'partner' : ($section === 'hero_slides' ? 'slide' : 'item') }}?')">
                 @csrf
@@ -156,7 +203,7 @@
           </tr>
         @empty
           <tr>
-            <td colspan="{{ in_array($section, ['activities', 'partners', 'hero_slides', 'projects']) ? 7 : 6 }}" class="empty">
+            <td colspan="{{ in_array($section, ['activities', 'stories', 'partners', 'hero_slides', 'projects']) ? 7 : 6 }}" class="empty">
               No {{ strtolower($label) }} have been added yet.
             </td>
           </tr>

@@ -20,16 +20,26 @@
 
     <div class="field-grid">
       <label>
-        {{ $section === 'partners' ? 'Partner Name / উন্নয়ন সহযোগীর নাম' : ($section === 'hero_slides' ? 'Slide Title / ব্যানারের নাম' : ($section === 'activities' ? 'Activity Title / কার্যক্রমের নাম' : 'Title')) }} <span>*</span>
-        <input name="title" required maxlength="180" value="{{ old('title', $item->title) }}" placeholder="{{ $section === 'partners' ? 'e.g. BRAC, UNDP, ILO, ASSET Project' : ($section === 'hero_slides' ? 'e.g. Robotics & Automation Lab' : 'Enter title') }}">
+        {{ $section === 'partners' ? 'Partner Name / উন্নয়ন সহযোগীর নাম' : ($section === 'hero_slides' ? 'Slide Title / ব্যানারের নাম' : ($section === 'activities' ? 'Activity Title / কার্যক্রমের নাম' : ($section === 'stories' ? 'Title / সাফল্যের গল্প বা কেস স্টাডির শিরোনাম' : 'Title'))) }} <span>*</span>
+        <input name="title" required maxlength="180" value="{{ old('title', $item->title) }}" placeholder="{{ $section === 'partners' ? 'e.g. BRAC, UNDP, ILO, ASSET Project' : ($section === 'hero_slides' ? 'e.g. Robotics & Automation Lab' : ($section === 'stories' ? 'e.g. মোঃ সাইফুল ইসলাম - ইলেকট্রিক্যাল টেকনিশিয়ান হিসেবে সফল ক্যারিয়ার' : 'Enter title')) }}">
         @error('title')
           <small class="field-error">{{ $message }}</small>
         @enderror
       </label>
-      <label>
-        {{ $section === 'partners' ? 'Affiliation / Program Subtitle (কর্মসূচি/অংশীদারিত্ব)' : ($section === 'hero_slides' ? 'Category / Tag (ট্যাগ/ক্যাটেগরি)' : ($section === 'activities' ? 'Badge / Category (e.g. Featured Story, Community, TVET)' : 'Category / Type')) }}
-        <input name="category" maxlength="120" value="{{ old('category', $item->category) }}" placeholder="{{ $section === 'partners' ? 'e.g. POWER_kfw-BRAC, UPPR - UNDP, DTE / World Bank' : ($section === 'hero_slides' ? 'e.g. Campus Lab, Workshop' : 'e.g. Training Initiative, IT & Computer') }}">
-      </label>
+      @if($section === 'stories')
+        <label>
+          Story Type / ধরণ <span>*</span>
+          <select name="category" required style="font-size:14px; font-weight:600; padding:9px 12px; border-radius:6px; border:1px solid #cbd5e1; background:#ffffff;">
+            <option value="Success Story" {{ old('category', $item->category ?: 'Success Story') === 'Success Story' ? 'selected' : '' }}>🏆 Success Story (সাফল্যের গল্প)</option>
+            <option value="Case Study" {{ old('category', $item->category) === 'Case Study' ? 'selected' : '' }}>📊 Case Study (কেস স্টাডি)</option>
+          </select>
+        </label>
+      @else
+        <label>
+          {{ $section === 'partners' ? 'Affiliation / Program Subtitle (কর্মসূচি/অংশীদারিত্ব)' : ($section === 'hero_slides' ? 'Category / Tag (ট্যাগ/ক্যাটেগরি)' : ($section === 'activities' ? 'Badge / Category (e.g. Featured Story, Community, TVET)' : 'Category / Type')) }}
+          <input name="category" maxlength="120" value="{{ old('category', $item->category) }}" placeholder="{{ $section === 'partners' ? 'e.g. POWER_kfw-BRAC, UPPR - UNDP, DTE / World Bank' : ($section === 'hero_slides' ? 'e.g. Campus Lab, Workshop' : 'e.g. Training Initiative, IT & Computer') }}">
+        </label>
+      @endif
     </div>
 
     @if($section === 'projects')

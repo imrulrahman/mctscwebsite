@@ -13,14 +13,14 @@ use Illuminate\View\View;
 
 class ContentController extends Controller
 {
-    public const SECTIONS = ['courses', 'projects', 'notices', 'events', 'gallery', 'partners', 'hero_slides', 'career', 'activities'];
-    public const LABELS = ['courses' => 'Courses', 'projects' => 'Projects', 'notices' => 'Notices', 'events' => 'Events', 'gallery' => 'Gallery', 'partners' => 'Development Partners', 'hero_slides' => 'Hero Slider Banners', 'career' => 'Job Circulars & Career', 'activities' => 'Recent Activities'];
+    public const SECTIONS = ['courses', 'projects', 'notices', 'events', 'gallery', 'partners', 'hero_slides', 'career', 'activities', 'stories'];
+    public const LABELS = ['courses' => 'Courses', 'projects' => 'Projects', 'notices' => 'Notices', 'events' => 'Events', 'gallery' => 'Gallery', 'partners' => 'Development Partners', 'hero_slides' => 'Hero Slider Banners', 'career' => 'Job Circulars & Career', 'activities' => 'Recent Activities', 'stories' => 'Success Stories & Case Studies'];
 
     private function check(string $section): void
     {
         abort_unless(in_array($section, self::SECTIONS, true), 404);
 
-        if (in_array($section, ['partners', 'hero_slides', 'career', 'activities'], true)) {
+        if (in_array($section, ['partners', 'hero_slides', 'career', 'activities', 'stories'], true)) {
             $user = auth()->user();
             $canAccess = $user?->is_admin
                 || $user?->can('settings.manage')
@@ -53,7 +53,7 @@ class ContentController extends Controller
     {
         $this->check($section);
         $items = SiteContent::where('section', $section)
-            ->when($section === 'activities', fn ($q) => $q->ordered(), fn ($q) => $q->orderBy('sort_order')->latest('updated_at'))
+            ->when($section === 'activities' || $section === 'stories', fn ($q) => $q->ordered(), fn ($q) => $q->orderBy('sort_order')->latest('updated_at'))
             ->paginate(15);
         return view('admin.content.index', ['section' => $section, 'label' => self::LABELS[$section], 'items' => $items]);
     }
