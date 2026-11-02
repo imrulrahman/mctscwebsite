@@ -958,44 +958,79 @@ class StudentManagementController extends Controller
     {
         $this->checkPermission('students.import');
 
-        $request->validate([
-            'excel_file' => [
-                'required',
-                'file',
-                'max:51200',
-                function ($attribute, $value, $fail) {
-                    $ext = strtolower($value->getClientOriginalExtension());
-                    if (!in_array($ext, ['xlsx', 'xlsm', 'xls', 'csv', 'txt'])) {
-                        $fail('The uploaded file must be an Excel or CSV file (.xlsx, .xlsm, .xls, .csv).');
-                    }
-                },
-            ],
-        ]);
+        @ini_set('memory_limit', '512M');
+        @set_time_limit(300);
+
+        if (!$request->hasFile('excel_file')) {
+            $postMax = ini_get('post_max_size') ?: 'N/A';
+            $uploadMax = ini_get('upload_max_filesize') ?: 'N/A';
+            return back()->with('error', "No file received by the server. If you selected a file, it may exceed server upload limits (upload_max_filesize: {$uploadMax}, post_max_size: {$postMax}). Please choose a file smaller than {$uploadMax} or check your server configuration.");
+        }
 
         $file = $request->file('excel_file');
+        if (!$file->isValid()) {
+            return back()->with('error', 'File upload error: ' . $file->getErrorMessage());
+        }
+
         $originalName = $file->getClientOriginalName();
-        $ext = strtolower($file->getClientOriginalExtension() ?: 'xlsx');
+        $ext = strtolower($file->getClientOriginalExtension() ?: pathinfo($originalName, PATHINFO_EXTENSION));
+
+        if (!in_array($ext, ['xlsx', 'xlsm', 'xls', 'csv', 'txt'])) {
+            return back()->with('error', "The selected file '{$originalName}' has an unsupported extension (." . ($ext ?: 'unknown') . "). Please upload an Excel (.xlsx, .xlsm) or CSV file.");
+        }
+
         $fileName = 'import_' . time() . '_' . uniqid() . '.' . $ext;
 
-        $tempPath = $file->storeAs('temp_imports', $fileName, 'local');
-        $fullPath = Storage::disk('local')->path($tempPath);
+        $tempPath = null;
+        $fullPath = null;
+        try {
+            $tempPath = $file->storeAs('temp_imports', $fileName, 'local');
+            $fullPath = Storage::disk('local')->path($tempPath);
+        } catch (\Throwable $e) {}
 
-        if (!file_exists($fullPath)) {
-            $fullPath = storage_path('app/' . $tempPath);
+        if (!$fullPath || !file_exists($fullPath)) {
+            $fullPath = $file->getRealPath();
         }
 
-        $rawRows = StudentImportService::parseFile($fullPath);
+        $rawRows = [];
+        try {
+            $rawRows = StudentImportService::parseFile($fullPath);
+        } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning('parseFile primary path failed: ' . $e->getMessage());
+        }
+
+        if (empty($rawRows) && $file->getRealPath() && $file->getRealPath() !== $fullPath) {
+            try {
+                $rawRows = StudentImportService::parseFile($file->getRealPath());
+            } catch (\Throwable $e) {}
+        }
+
         if (empty($rawRows)) {
-            Storage::disk('local')->delete($tempPath);
-            @unlink($fullPath);
-            return back()->with('error', 'Unable to parse records from "' . htmlspecialchars($originalName) . '". Please ensure it is a valid Excel (.xlsx, .xlsm) or CSV file with the standard StudentDB sheet.');
+            if ($tempPath) {
+                Storage::disk('local')->delete($tempPath);
+            }
+            return back()->with('error', 'Unable to parse records from "' . htmlspecialchars($originalName) . '". Please ensure it is a valid Excel (.xlsx, .xlsm) or CSV file containing student records.');
         }
 
-        $analysis = StudentImportService::previewAnalysis($rawRows);
+        // Cache rows for 2 hours so execution never fails even if temp file is purged
+        $importToken = 'import_' . time() . '_' . uniqid();
+        \Illuminate\Support\Facades\Cache::put($importToken, [
+            'rows' => $rawRows,
+            'file_name' => $originalName,
+            'temp_path' => $tempPath,
+        ], 7200);
+
+        try {
+            $analysis = StudentImportService::previewAnalysis($rawRows);
+        } catch (\Throwable $e) {
+            return back()->with('error', 'Error analyzing records: ' . $e->getMessage());
+        }
+
         $importBatches = StudentImportBatch::latest()->paginate(10);
 
         return view('admin.students.import', compact(
             'analysis',
+            'importToken',
             'tempPath',
             'originalName',
             'importBatches'
@@ -1009,24 +1044,44 @@ class StudentManagementController extends Controller
     {
         $this->checkPermission('students.import');
 
+        @ini_set('memory_limit', '512M');
+        @set_time_limit(300);
+
+        $importToken = $request->input('import_token');
         $tempPath = $request->input('temp_path');
-        $originalName = $request->input('original_name', 'students_import.csv');
+        $originalName = $request->input('original_name', 'students_import.xlsx');
 
-        $fullPath = Storage::disk('local')->path($tempPath);
-        if (!file_exists($fullPath)) {
-            $fullPath = storage_path('app/' . $tempPath);
+        $rawRows = [];
+
+        // 1. Retrieve from cache first (fastest and immune to disk permission issues)
+        if ($importToken && \Illuminate\Support\Facades\Cache::has($importToken)) {
+            $cached = \Illuminate\Support\Facades\Cache::get($importToken);
+            $rawRows = $cached['rows'] ?? [];
+            $originalName = $cached['file_name'] ?? $originalName;
+            \Illuminate\Support\Facades\Cache::forget($importToken);
         }
 
-        if (!file_exists($fullPath)) {
+        // 2. Fallback to temp file if cache expired
+        if (empty($rawRows) && $tempPath) {
+            $fullPath = Storage::disk('local')->path($tempPath);
+            if (!file_exists($fullPath)) {
+                $fullPath = storage_path('app/' . $tempPath);
+            }
+            if (file_exists($fullPath)) {
+                $rawRows = StudentImportService::parseFile($fullPath);
+            }
+        }
+
+        if (empty($rawRows)) {
             return redirect()->route('admin.students.import')
-                ->with('error', 'Temporary import file expired or not found. Please re-upload.');
+                ->with('error', 'Temporary import session expired or file not found. Please re-upload the file.');
         }
 
-        $rawRows = StudentImportService::parseFile($fullPath);
         $batch = StudentImportService::executeImport($rawRows, $originalName, auth()->id());
 
-        Storage::disk('local')->delete($tempPath);
-        @unlink($fullPath);
+        if ($tempPath) {
+            Storage::disk('local')->delete($tempPath);
+        }
 
         return redirect()->route('admin.students.import')
             ->with('success', "Import completed! Successfully imported {$batch->successful_rows} student records. (Skipped duplicates: {$batch->duplicate_rows})");

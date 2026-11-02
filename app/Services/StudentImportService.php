@@ -19,12 +19,20 @@ class StudentImportService
      */
     public static function parseFile(string $filePath): array
     {
+        if (!file_exists($filePath)) {
+            return [];
+        }
+
         $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
 
-        if (in_array($ext, ['xlsx', 'xlsm', 'xls'])) {
-            $rows = self::parseXlsxPurePhp($filePath);
-            if (!empty($rows)) {
-                return $rows;
+        if (in_array($ext, ['xlsx', 'xlsm', 'xls']) || self::isZipFile($filePath)) {
+            try {
+                $rows = self::parseXlsxPurePhp($filePath);
+                if (!empty($rows)) {
+                    return $rows;
+                }
+            } catch (\Throwable $e) {
+                \Illuminate\Support\Facades\Log::warning('parseXlsxPurePhp failed, falling back to CSV: ' . $e->getMessage());
             }
         }
 
@@ -32,16 +40,29 @@ class StudentImportService
     }
 
     /**
+     * Check if file starts with ZIP magic bytes (PK..)
+     */
+    protected static function isZipFile(string $filePath): bool
+    {
+        $f = @fopen($filePath, 'rb');
+        if (!$f) return false;
+        $bytes = fread($f, 4);
+        fclose($f);
+        return $bytes === "PK\x03\x04" || $bytes === "PK\x05\x06";
+    }
+
+    /**
      * Pure PHP XLSX/XLSM Parser using ZipArchive and XMLReader
      */
     public static function parseXlsxPurePhp(string $filePath): array
     {
-        if (!file_exists($filePath)) {
+        if (!file_exists($filePath) || !class_exists('ZipArchive')) {
             return [];
         }
 
         $zip = new ZipArchive();
-        if ($zip->open($filePath) !== true) {
+        $res = $zip->open($filePath);
+        if ($res !== true) {
             return [];
         }
 
@@ -67,8 +88,9 @@ class StudentImportService
             }
         }
 
-        // 2. Identify the student database sheet
-        $targetSheetFile = null;
+        // 2. Collect candidate worksheet files in priority order
+        $candidateSheetFiles = [];
+
         $workbookXml = $zip->getFromName('xl/workbook.xml');
         $relsXml = $zip->getFromName('xl/_rels/workbook.xml.rels');
 
@@ -82,52 +104,68 @@ class StudentImportService
                 }
             }
 
-            $selectedRId = null;
             if ($wb && isset($wb->sheets)) {
+                $priority = [];
+                $other = [];
                 foreach ($wb->sheets->sheet as $s) {
                     $name = strtolower(trim((string)$s['name']));
                     $rId = (string)$s->attributes('http://schemas.openxmlformats.org/officeDocument/2006/relationships')['id'];
-
-                    // Prioritize sheets named stdntdb, studentdb, students, db
-                    if (str_contains($name, 'stdnt') || str_contains($name, 'student') || str_contains($name, 'database') || str_contains($name, 'db')) {
-                        $selectedRId = $rId;
-                        break;
+                    if (empty($rId) && isset($s->attributes('r', true)['id'])) {
+                        $rId = (string)$s->attributes('r', true)['id'];
                     }
 
-                    if ($selectedRId === null) {
-                        $selectedRId = $rId;
+                    if ($rId && isset($relMap[$rId])) {
+                        $target = $relMap[$rId];
+                        $targetFile = str_starts_with($target, 'worksheets/') ? 'xl/' . $target : (str_starts_with($target, '/') ? ltrim($target, '/') : 'xl/' . ltrim($target, '/'));
+                        if (str_contains($name, 'stdnt') || str_contains($name, 'student') || str_contains($name, 'database') || str_contains($name, 'db')) {
+                            $priority[] = $targetFile;
+                        } else {
+                            $other[] = $targetFile;
+                        }
                     }
                 }
-            }
-
-            if ($selectedRId && isset($relMap[$selectedRId])) {
-                $target = $relMap[$selectedRId];
-                $targetSheetFile = str_starts_with($target, 'worksheets/') ? 'xl/' . $target : (str_starts_with($target, '/') ? ltrim($target, '/') : 'xl/' . ltrim($target, '/'));
+                $candidateSheetFiles = array_merge($priority, $other);
             }
         }
 
-        if (!$targetSheetFile || $zip->locateName($targetSheetFile) === false) {
-            $targetSheetFile = 'xl/worksheets/sheet1.xml';
+        // Add all worksheets found in the zip as fallback candidates
+        for ($i = 0; $i < $zip->numFiles; $i++) {
+            $entryName = $zip->getNameIndex($i);
+            if (str_starts_with($entryName, 'xl/worksheets/') && str_ends_with($entryName, '.xml')) {
+                if (!in_array($entryName, $candidateSheetFiles)) {
+                    $candidateSheetFiles[] = $entryName;
+                }
+            }
         }
 
-        $sheetXml = $zip->getFromName($targetSheetFile);
-        if ($sheetXml === false) {
-            for ($i = 1; $i <= 10; $i++) {
-                $cand = "xl/worksheets/sheet{$i}.xml";
-                if ($zip->locateName($cand) !== false) {
-                    $sheetXml = $zip->getFromName($cand);
-                    break;
-                }
+        // 3. Test candidate sheets and pick the one with most rows / valid data
+        $bestRows = [];
+        foreach ($candidateSheetFiles as $sheetFile) {
+            $sheetXml = $zip->getFromName($sheetFile);
+            if ($sheetXml === false) {
+                continue;
+            }
+
+            $sheetRows = self::parseSheetXmlContent($sheetXml, $sharedStrings);
+            if (count($sheetRows) > count($bestRows)) {
+                $bestRows = $sheetRows;
+            }
+
+            // If we found a sheet with over 20 rows, it's definitely the database sheet
+            if (count($bestRows) > 20) {
+                break;
             }
         }
 
         $zip->close();
+        return $bestRows;
+    }
 
-        if ($sheetXml === false) {
-            return [];
-        }
-
-        // 3. Parse XMLReader stream
+    /**
+     * Parse XMLReader stream of worksheet XML
+     */
+    protected static function parseSheetXmlContent(string $sheetXml, array $sharedStrings): array
+    {
         $rows = [];
         $reader = new XMLReader();
         if (!@$reader->xml($sheetXml)) {
