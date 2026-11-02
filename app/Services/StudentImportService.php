@@ -320,25 +320,29 @@ class StudentImportService
         $existingIds = Student::pluck('student_id')->filter()->flip()->toArray();
 
         foreach ($dataRows as $idx => $row) {
-            $mapped = self::mapRowToStudentData($row, $headerMap);
-            if ($mapped === null) {
-                $errorCount++;
-                continue;
-            }
-
-            $isDuplicate = !empty($mapped['student_id']) && isset($existingIds[$mapped['student_id']]);
-            if ($isDuplicate) {
-                $existingCount++;
-                if (count($duplicateSamples) < 5) {
-                    $duplicateSamples[] = $mapped['student_id'];
+            try {
+                $mapped = self::mapRowToStudentData($row, $headerMap);
+                if ($mapped === null) {
+                    $errorCount++;
+                    continue;
                 }
-            } else {
-                $newCount++;
-            }
 
-            if (count($previewSample) < 15) {
-                $mapped['is_duplicate'] = $isDuplicate;
-                $previewSample[] = $mapped;
+                $isDuplicate = !empty($mapped['student_id']) && isset($existingIds[$mapped['student_id']]);
+                if ($isDuplicate) {
+                    $existingCount++;
+                    if (count($duplicateSamples) < 5) {
+                        $duplicateSamples[] = $mapped['student_id'];
+                    }
+                } else {
+                    $newCount++;
+                }
+
+                if (count($previewSample) < 15) {
+                    $mapped['is_duplicate'] = $isDuplicate;
+                    $previewSample[] = $mapped;
+                }
+            } catch (\Throwable $e) {
+                $errorCount++;
             }
         }
 
@@ -359,7 +363,8 @@ class StudentImportService
      */
     public static function mapRowToStudentData(array $row, array $headerMap = [], ?int $createdBy = null): ?array
     {
-        // 1. Student ID
+        try {
+            // 1. Student ID
         $studentId = self::getFieldVal($row, $headerMap, ['idno', 'studentid', 'id', 'rollno', 'traineeid']);
         // 2. Student Name
         $studentName = self::getFieldVal($row, $headerMap, ['studentname', 'name', 'traineename', 'fullname', 'nameofstudent']);
@@ -392,7 +397,21 @@ class StudentImportService
         $rplCourse = self::getFieldVal($row, $headerMap, ['rplcourse', 'rpl'], $row[5] ?? '');
 
         // Academic Year
-        $academicYear = self::getFieldVal($row, $headerMap, ['academicyear', 'year', 'sessionyear'], $row[6] ?? date('Y'));
+        $academicYearRaw = self::getFieldVal($row, $headerMap, ['academicyear', 'year', 'sessionyear']);
+        $academicYear = null;
+        if (!empty($academicYearRaw)) {
+            if (preg_match('/(20\d{2}|19\d{2})/', (string)$academicYearRaw, $ym)) {
+                $academicYear = $ym[1];
+            } elseif (is_numeric($academicYearRaw) && (int)$academicYearRaw >= 1990 && (int)$academicYearRaw <= 2050) {
+                $academicYear = (string)(int)$academicYearRaw;
+            }
+        }
+        if (!$academicYear && isset($row[6]) && is_numeric($row[6]) && (int)$row[6] >= 1990 && (int)$row[6] <= 2050) {
+            $academicYear = (string)(int)$row[6];
+        }
+        if (!$academicYear) {
+            $academicYear = date('Y');
+        }
 
         // Session
         $session = self::getFieldVal($row, $headerMap, ['session', 'batchsession'], $row[7] ?? 'Session 1');
@@ -445,7 +464,14 @@ class StudentImportService
 
         // Admission Date
         $admissionDateRaw = self::getFieldVal($row, $headerMap, ['dateofadmission', 'admissiondate', 'admission']);
-        $admissionDate = self::parseDate($admissionDateRaw) ?: ($academicYear ? Carbon::create($academicYear, 1, 1)->format('Y-m-d') : null);
+        $admissionDate = self::parseDate($admissionDateRaw);
+        if (!$admissionDate && is_numeric($academicYear)) {
+            try {
+                $admissionDate = Carbon::create((int)$academicYear, 1, 1)->format('Y-m-d');
+            } catch (\Throwable $e) {
+                $admissionDate = null;
+            }
+        }
 
         // Auto-generate ID if missing
         if (empty($studentId)) {
@@ -462,6 +488,15 @@ class StudentImportService
 
         // Job Status
         $jobStatus = !empty($companyName) || !empty($designation) ? 'Employed' : 'Not Yet Employed';
+
+        $age = null;
+        if ($dob) {
+            try {
+                $age = Carbon::parse($dob)->age;
+            } catch (\Throwable $e) {
+                $age = null;
+            }
+        }
 
         return [
             'student_id' => $studentId,
@@ -482,7 +517,7 @@ class StudentImportService
             'donor' => 'IMI',
             'phone' => $phone,
             'dob' => $dob,
-            'age' => $dob ? Carbon::parse($dob)->age : null,
+            'age' => $age,
             'nid_birth_cert' => '',
             'parent_phone' => '',
             'educational_qualification' => '',
@@ -520,6 +555,9 @@ class StudentImportService
             'remarks' => $remarks,
             'created_by' => $createdBy,
         ];
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 
     /**
@@ -649,6 +687,11 @@ class StudentImportService
     protected static function parseDate(?string $value): ?string
     {
         if (empty($value) || $value === '0000-00-00' || $value === 'NULL' || $value === '!DOB?') {
+            return null;
+        }
+
+        $trimmed = strtolower(trim((string)$value));
+        if (in_array($trimmed, ['male', 'female', 'yes', 'no', 'islam', 'hindu', 'christian', 'buddhist', 'employed', 'unemployed', 'short course'])) {
             return null;
         }
 
