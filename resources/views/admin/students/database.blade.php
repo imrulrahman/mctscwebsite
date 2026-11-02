@@ -229,6 +229,28 @@
     </div>
   </form>
 
+  {{-- Bogus Header Records Cleanup Alert --}}
+  @php
+    $bogusCount = \App\Models\Student::whereIn('student_id', [
+        'Contact No (Parents)', 'Address', 'Siblings', 'Mother\'s Name',
+        'Father\'s Name', 'Family Information', 'MR No', 'Student Name', 'ID No'
+    ])->orWhere('student_name', 'ST')->count();
+  @endphp
+  @if($bogusCount > 0)
+    <div style="background:#fee2e2; border:1px solid #f87171; border-radius:8px; padding:12px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center;">
+      <div style="color:#991b1b; font-size:13.5px; font-weight:600; display:flex; align-items:center; gap:8px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <span>Found {{ $bogusCount }} invalid column-header records (e.g. 'MR No', 'Address', 'Father\'s Name') from previous import.</span>
+      </div>
+      <form method="POST" action="{{ route('admin.students.clean-bogus', [], false) }}" onsubmit="return confirm('Are you sure you want to delete these {{ $bogusCount }} invalid records?');">
+        @csrf
+        <button type="submit" class="sm-btn" style="background:#dc2626; color:#ffffff; padding:6px 14px; font-size:12.5px; border-radius:6px; font-weight:700; border:none; cursor:pointer;">
+          Delete {{ $bogusCount }} Invalid Records Now
+        </button>
+      </form>
+    </div>
+  @endif
+
   {{-- Student Records Table Card --}}
   <div class="sdb-table-card">
     <div class="sdb-table-header">
@@ -344,6 +366,16 @@
                       <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                     </svg>
                   </a>
+                  <form method="POST" action="{{ route('admin.students.destroy', $s, false) }}" onsubmit="return confirm('Are you sure you want to delete this student record?');" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="sdb-action-btn" style="border:none;background:none;cursor:pointer;color:#dc2626;" title="Delete Record">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                      </svg>
+                    </button>
+                  </form>
                 </div>
               </td>
             </tr>

@@ -195,6 +195,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/certificates/{student}/update-status', [StudentManagementController::class, 'updateCertificateStatus'])->name('certificates.update_status');
             Route::get('/certificates/{student}/print', [StudentManagementController::class, 'printCertificate'])->name('certificates.print');
             Route::get('/job-placement', [StudentManagementController::class, 'jobPlacement'])->name('job_placement');
+            Route::post('/clean-bogus', [StudentManagementController::class, 'cleanBogusRecords'])->name('clean-bogus');
             Route::get('/{student}', [StudentManagementController::class, 'show'])->name('show');
             Route::get('/{student}/edit', [StudentManagementController::class, 'edit'])->name('edit');
             Route::put('/{student}', [StudentManagementController::class, 'update'])->name('update');

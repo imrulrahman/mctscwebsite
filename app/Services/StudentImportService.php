@@ -36,7 +36,8 @@ class StudentImportService
             }
         }
 
-        return self::parseCsv($filePath);
+        $csvRows = self::parseCsv($filePath);
+        return self::autoTransposeIfVertical($csvRows);
     }
 
     /**
@@ -140,6 +141,8 @@ class StudentImportService
 
         // 3. Test candidate sheets and pick the one with most rows / valid data
         $bestRows = [];
+        $bestScore = -1;
+
         foreach ($candidateSheetFiles as $sheetFile) {
             $sheetXml = $zip->getFromName($sheetFile);
             if ($sheetXml === false) {
@@ -147,24 +150,93 @@ class StudentImportService
             }
 
             $sheetRows = self::parseSheetXmlContent($sheetXml, $sharedStrings);
-            if (count($sheetRows) > count($bestRows)) {
-                $bestRows = $sheetRows;
+            if (empty($sheetRows)) {
+                continue;
             }
 
-            // If we found a sheet with over 20 rows, it's definitely the database sheet
-            if (count($bestRows) > 20) {
-                break;
+            $score = count($sheetRows);
+
+            // Check if this sheet has student database headers
+            $hIdx = -1;
+            $hMap = self::buildHeaderMap($sheetRows, $hIdx);
+            if ($hIdx >= 0 && count($hMap) >= 3) {
+                $score += 100000; // Overwhelming bonus for sheets with authentic student headers
+            }
+
+            if ($score > $bestScore) {
+                $bestScore = $score;
+                $bestRows = $sheetRows;
             }
         }
 
         $zip->close();
-        return $bestRows;
+        return self::autoTransposeIfVertical($bestRows);
+    }
+
+    /**
+     * Automatically detect and transpose vertical / column-wise student sheets
+     */
+    public static function autoTransposeIfVertical(array $rows): array
+    {
+        if (count($rows) < 3) {
+            return $rows;
+        }
+
+        // 1. If it already has standard horizontal student headers, do not transpose
+        $hIdx = -1;
+        $hMap = self::buildHeaderMap($rows, $hIdx);
+        if ($hIdx >= 0 && count($hMap) >= 3) {
+            return $rows;
+        }
+
+        // 2. Check if Column 0 contains known vertical field names
+        $verticalMatches = 0;
+        $anchors = [
+            'id', 'idno', 'studentid', 'roll', 'mrno', 'mr',
+            'name', 'studentname', 'fullname', 'traineename', 'nameofstudent',
+            'father', 'fathersname', 'fathername', 'guardian',
+            'mother', 'mothersname', 'mothername',
+            'gender', 'sex',
+            'dob', 'dateofbirth', 'birthdate', 'age',
+            'occupation', 'trade', 'course', 'coursetype',
+            'phone', 'mobile', 'contact', 'contactno', 'contactnoparents', 'parentphone',
+            'address', 'presentaddress', 'permanentaddress',
+            'siblings', 'familyinformation', 'religion', 'ethnic', 'pwd', 'grade'
+        ];
+
+        foreach ($rows as $row) {
+            $col0 = preg_replace('/[^a-z0-9]/', '', strtolower(trim((string)($row[0] ?? ''))));
+            if (!empty($col0) && in_array($col0, $anchors)) {
+                $verticalMatches++;
+            }
+        }
+
+        // If 3 or more rows in Column 0 match field names, it's a transposed sheet!
+        if ($verticalMatches >= 3) {
+            $maxCol = 0;
+            foreach ($rows as $r) {
+                $maxCol = max($maxCol, count($r));
+            }
+
+            $transposed = [];
+            for ($c = 0; $c < $maxCol; $c++) {
+                $newRow = [];
+                for ($r = 0; $r < count($rows); $r++) {
+                    $newRow[] = $rows[$r][$c] ?? '';
+                }
+                $transposed[] = $newRow;
+            }
+
+            return $transposed;
+        }
+
+        return $rows;
     }
 
     /**
      * Parse XMLReader stream of worksheet XML
      */
-    protected static function parseSheetXmlContent(string $sheetXml, array $sharedStrings): array
+    public static function parseSheetXmlContent(string $sheetXml, array $sharedStrings): array
     {
         $rows = [];
         $reader = new XMLReader();
@@ -259,7 +331,7 @@ class StudentImportService
             $foundAnchor = false;
             foreach ($row as $colText) {
                 $clean = strtolower(trim((string)$colText));
-                if (in_array($clean, ['id no', 'student id', 'student name', 'trainee name', 'name', 'occupation', 'trade'])) {
+                if (in_array($clean, ['id no', 'student id', 'student name', 'trainee name', 'name', 'occupation', 'trade', 'mr no', 'mr', 'registration no', 'reg no', 'roll no'])) {
                     $foundAnchor = true;
                     break;
                 }
@@ -365,9 +437,22 @@ class StudentImportService
     {
         try {
             // 1. Student ID
-        $studentId = self::getFieldVal($row, $headerMap, ['idno', 'studentid', 'id', 'rollno', 'traineeid']);
+        $studentId = self::getFieldVal($row, $headerMap, ['idno', 'studentid', 'id', 'rollno', 'traineeid', 'mrno', 'mr', 'regno', 'registrationno', 'slno', 'sl']);
         // 2. Student Name
         $studentName = self::getFieldVal($row, $headerMap, ['studentname', 'name', 'traineename', 'fullname', 'nameofstudent']);
+
+        // Prevent header field names from ever becoming student records
+        $knownFieldLabels = [
+            'mrno', 'mr', 'familyinformation', 'fathersname', 'fathername', 'father',
+            'mothersname', 'mothername', 'mother', 'siblings', 'address', 'contactnoparents',
+            'contactno', 'studentid', 'studentname', 'occupation', 'trade', 'course', 'session',
+            'batch', 'batchno', 'grade', 'phone', 'mobile', 'email', 'religion', 'ethnic', 'pwd'
+        ];
+        $idNorm = preg_replace('/[^a-z0-9]/', '', strtolower($studentId));
+        $nameNorm = preg_replace('/[^a-z0-9]/', '', strtolower($studentName));
+        if (in_array($idNorm, $knownFieldLabels) || in_array($nameNorm, ['studentname', 'fullname', 'nameofstudent', 'idno', 'mrno'])) {
+            return null;
+        }
 
         // Positional fallback if headers were not matched
         if (empty($studentId) && empty($studentName) && empty($headerMap)) {
@@ -459,8 +544,17 @@ class StudentImportService
         // Religion
         $religion = self::getFieldVal($row, $headerMap, ['religion', 'faith'], 'Islam');
 
-        // Remarks
+        // Remarks & Family Info
         $remarks = self::getFieldVal($row, $headerMap, ['remarks', 'comment', 'note']);
+        $familyInfo = self::getFieldVal($row, $headerMap, ['familyinformation', 'familyinfo']);
+        if (empty($remarks) && !empty($familyInfo)) {
+            $remarks = $familyInfo;
+        }
+
+        // Parent Phone & Siblings
+        $parentPhone = self::getFieldVal($row, $headerMap, ['parentphone', 'parentsphone', 'parentcontact', 'contactnoparents', 'contactparents', 'guardiancontact', 'guardianphone']);
+        $siblingsRaw = self::getFieldVal($row, $headerMap, ['siblings', 'numberofsiblings', 'sibling']);
+        $siblings = is_numeric($siblingsRaw) ? (int)$siblingsRaw : null;
 
         // Admission Date
         $admissionDateRaw = self::getFieldVal($row, $headerMap, ['dateofadmission', 'admissiondate', 'admission']);
@@ -519,11 +613,11 @@ class StudentImportService
             'dob' => $dob,
             'age' => $age,
             'nid_birth_cert' => '',
-            'parent_phone' => '',
+            'parent_phone' => $parentPhone,
             'educational_qualification' => '',
             'father_name' => $fatherName,
             'mother_name' => $motherName,
-            'siblings' => null,
+            'siblings' => $siblings,
             'marital_status' => null,
             'address' => $presentAddress,
             'present_address' => $presentAddress,

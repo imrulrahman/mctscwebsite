@@ -1086,4 +1086,25 @@ class StudentManagementController extends Controller
         return redirect()->route('admin.students.import')
             ->with('success', "Import completed! Successfully imported {$batch->successful_rows} student records. (Skipped duplicates: {$batch->duplicate_rows})");
     }
+
+    /**
+     * Clean invalid / bogus header records from student database
+     */
+    public function cleanBogusRecords(): RedirectResponse
+    {
+        $this->checkPermission('students.delete');
+
+        $bogusIds = [
+            'Contact No (Parents)', 'Address', 'Siblings', 'Mother\'s Name',
+            'Father\'s Name', 'Family Information', 'MR No', 'Student Name', 'ID No',
+            'Designation', 'Company Name', 'Remarks', 'Religion', 'Gender', 'Ethnic', 'PWD'
+        ];
+
+        $deleted = Student::whereIn('student_id', $bogusIds)
+            ->orWhere('student_name', 'ST')
+            ->delete();
+
+        return redirect()->route('admin.students.database')
+            ->with('success', "Cleaned up {$deleted} invalid header records from database.");
+    }
 }
