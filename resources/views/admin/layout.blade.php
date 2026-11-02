@@ -196,6 +196,76 @@
       padding: 0 !important;
     }
 
+    /* Student Management Dropdown Submenu */
+    .sidebar-dropdown {
+      display: block;
+    }
+    .sidebar-dropdown .dropdown-toggle {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 9px 14px;
+      color: #e4efea;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 13px;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+    .sidebar-dropdown.open .dropdown-arrow svg {
+      transform: rotate(180deg);
+    }
+    .sidebar-submenu {
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 2px;
+      margin-bottom: 6px;
+    }
+    .sidebar-submenu a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
+      color: #c9dfd6;
+      font-size: 12.5px;
+      font-weight: 500;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .sidebar-submenu a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .sidebar-submenu a.active-sub {
+      background: rgba(16, 185, 129, 0.22);
+      color: #34d399 !important;
+      font-weight: 700;
+    }
+    .sub-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #739889;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+    .sidebar-submenu a:hover .sub-dot,
+    .sidebar-submenu a.active-sub .sub-dot {
+      background: #10b981;
+      box-shadow: 0 0 6px rgba(16, 185, 129, 0.8);
+    }
+    html.sidebar-is-collapsed .sidebar-submenu {
+      display: none !important;
+    }
+    html.sidebar-is-collapsed .sidebar-dropdown .dropdown-arrow {
+      display: none !important;
+    }
+
     @media (max-width: 700px) {
       .sidebar-toggle-btn {
         display: none;
@@ -225,6 +295,16 @@
         </span>
         <span class="nav-text">Dashboard</span>
       </a>
+
+      {{-- Student Management Direct Menu (Submenus are accessed from the Student Management Dashboard page) --}}
+      @if(auth()->user()?->isSystemAdmin() || auth()->user()?->hasPermission('students.view'))
+        <a class="{{ request()->routeIs('admin.students.*') ? 'active' : '' }}" href="{{ route('admin.students.dashboard') }}" title="Student Management">
+          <span class="nav-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+          </span>
+          <span class="nav-text">Student Management</span>
+        </a>
+      @endif
 
       @can('admissions.view')
         <a class="{{ request()->routeIs('admin.applications*') ? 'active' : '' }}" href="{{ route('admin.applications') }}" title="Admissions">
@@ -442,6 +522,8 @@
 </div>
 
 <script>
+  function toggleStudentMenu(e) {}
+
   document.addEventListener('DOMContentLoaded', function() {
     var toggleBtn = document.getElementById('sidebarToggle');
     if (toggleBtn) {

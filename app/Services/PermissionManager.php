@@ -7,6 +7,21 @@ class PermissionManager
     public static function allGroups(): array
     {
         return [
+            'students' => [
+                'title' => 'Student Management',
+                'icon' => 'users',
+                'description' => 'Manage Student Database, Admissions, Certificates and Graduate Job Placements.',
+                'permissions' => [
+                    'students.view' => 'View Student Database & Dashboard',
+                    'students.create' => 'Add Student Record',
+                    'students.edit' => 'Edit Student Profile',
+                    'students.delete' => 'Delete Student Record',
+                    'students.import' => 'Import Students (Excel/CSV)',
+                    'students.export' => 'Export & Print Student Roster',
+                    'students.certificates' => 'Manage Certificates',
+                    'students.placements' => 'Manage Job Placements',
+                ],
+            ],
             'admissions' => [
                 'title' => 'Student Admissions',
                 'icon' => 'user-check',
@@ -107,6 +122,12 @@ class PermissionManager
         return match ($slug) {
             'system-admin' => self::allKeys(),
             'admin' => [
+                'students.view',
+                'students.create',
+                'students.edit',
+                'students.export',
+                'students.certificates',
+                'students.placements',
                 'admissions.view',
                 'admissions.create',
                 'admissions.edit',

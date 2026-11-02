@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\LiveEditController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\StudentManagementController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SiteFormsController;
@@ -174,6 +175,31 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', DashboardController::class)->name('dashboard');
+
+        // Student Management Module
+        Route::prefix('student-management')->name('students.')->group(function () {
+            Route::get('/', [StudentManagementController::class, 'dashboard'])->name('dashboard');
+            Route::get('/database', [StudentManagementController::class, 'database'])->name('database');
+            Route::get('/create', [StudentManagementController::class, 'create'])->name('create');
+            Route::post('/', [StudentManagementController::class, 'store'])->name('store');
+            Route::get('/preview-id', [StudentManagementController::class, 'previewId'])->name('preview-id');
+            Route::get('/export', [StudentManagementController::class, 'export'])->name('export');
+            Route::get('/print-roster', [StudentManagementController::class, 'printRoster'])->name('print-roster');
+            Route::get('/import', [StudentManagementController::class, 'importForm'])->name('import');
+            Route::post('/import/preview', [StudentManagementController::class, 'importPreview'])->name('import.preview');
+            Route::post('/import/process', [StudentManagementController::class, 'importProcess'])->name('import.process');
+            Route::get('/admission', [StudentManagementController::class, 'admission'])->name('admission');
+            Route::get('/certificates', [StudentManagementController::class, 'certificates'])->name('certificates');
+            Route::post('/certificates/{student}/issue', [StudentManagementController::class, 'issueCertificate'])->name('certificates.issue');
+            Route::post('/certificates/{student}/reissue', [StudentManagementController::class, 'reissueCertificate'])->name('certificates.reissue');
+            Route::post('/certificates/{student}/update-status', [StudentManagementController::class, 'updateCertificateStatus'])->name('certificates.update_status');
+            Route::get('/certificates/{student}/print', [StudentManagementController::class, 'printCertificate'])->name('certificates.print');
+            Route::get('/job-placement', [StudentManagementController::class, 'jobPlacement'])->name('job_placement');
+            Route::get('/{student}', [StudentManagementController::class, 'show'])->name('show');
+            Route::get('/{student}/edit', [StudentManagementController::class, 'edit'])->name('edit');
+            Route::put('/{student}', [StudentManagementController::class, 'update'])->name('update');
+            Route::delete('/{student}', [StudentManagementController::class, 'destroy'])->name('destroy');
+        });
         Route::get('/content/{section}', [ContentController::class, 'index'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides|career|activities|stories')->name('content.index');
         Route::get('/content/{section}/create', [ContentController::class, 'create'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides|career|activities|stories')->name('content.create');
         Route::post('/content/{section}', [ContentController::class, 'store'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides|career|activities|stories')->name('content.store');
