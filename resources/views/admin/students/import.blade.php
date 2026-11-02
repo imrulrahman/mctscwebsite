@@ -144,9 +144,9 @@
   @else
     {{-- Upload Form --}}
     <div class="sm-upload-card">
-      <form method="POST" action="{{ route('admin.students.import.preview', [], false) }}" enctype="multipart/form-data" id="uploadForm">
+      <form method="POST" action="{{ route('admin.students.import.preview', [], false) }}" enctype="multipart/form-data" id="uploadForm" onsubmit="return handleFormSubmit(event)">
         @csrf
-        <div class="sm-drop-area" id="dropArea">
+        <div class="sm-drop-area" id="dropArea" onclick="handleDropAreaClick(event)">
           <input type="file" id="excelFileInput" name="excel_file" accept=".xlsx,.xlsm,.xls,.csv,.txt" required style="display:none;" onchange="showSelectedFileName(this)">
           
           <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="1.8" style="margin-bottom:10px;">
@@ -154,23 +154,31 @@
             <polyline points="17 8 12 3 7 8"></polyline>
             <line x1="12" y1="3" x2="12" y2="15"></line>
           </svg>
-          <h3 style="font-size:16px;font-weight:700;color:#1f2937;margin:0 0 4px;">Choose Excel (.xlsx, .xlsm) or CSV Workbook</h3>
-          <p style="font-size:13px;color:#64748b;margin:0 0 16px;">Click Browse File or drag and drop your StudentDB workbook here</p>
+          <h3 style="font-size:17px;font-weight:700;color:#1f2937;margin:0 0 4px;">Choose Excel (.xlsx, .xlsm) or CSV Workbook</h3>
+          <p style="font-size:13px;color:#64748b;margin:0 0 16px;">Click Browse File below or drag and drop your StudentDB workbook here</p>
           
-          <div>
-            <button type="button" class="sm-btn sm-btn-primary" onclick="document.getElementById('excelFileInput').click()">
-              Browse File
+          <div style="margin-bottom:12px;">
+            <button type="button" class="sm-btn sm-btn-primary" onclick="event.stopPropagation(); document.getElementById('excelFileInput').click();" style="padding:10px 24px;font-size:14px;cursor:pointer;">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              <span>Browse File</span>
             </button>
           </div>
 
-          <div id="fileSelectedInfo" style="display:none;margin-top:14px;padding:8px 14px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:6px;display:inline-flex;align-items:center;gap:8px;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span id="selectedFileNameBadge" style="font-size:13px;font-weight:600;color:#065f46;">No file selected</span>
+          <div id="fileSelectedInfo" style="display:none;margin-top:10px;padding:8px 16px;background:#ecfdf5;border:1px solid #10b981;border-radius:6px;align-items:center;gap:8px;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#047857" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span id="selectedFileNameBadge" style="font-size:13.5px;font-weight:700;color:#065f46;"></span>
+          </div>
+
+          <div id="noFileWarning" style="display:none;margin-top:10px;color:#dc2626;font-size:13px;font-weight:600;">
+            âš  Please click "Browse File" and select an Excel or CSV file first.
           </div>
         </div>
 
-        <div style="margin-top:20px;display:flex;justify-content:flex-end;">
-          <button type="submit" id="uploadBtn" class="sm-btn sm-btn-primary" onclick="handleUploadSubmit(this)">
+        <div style="margin-top:20px;display:flex;justify-content:space-between;align-items:center;">
+          <div style="font-size:12px;color:#64748b;">
+            Supported formats: <b>.xlsx, .xlsm, .csv</b> &bull; Max allowed size: <b>64 MB</b>
+          </div>
+          <button type="submit" id="uploadBtn" class="sm-btn sm-btn-primary" style="padding:10px 22px;">
             <span id="uploadBtnText">Upload & Preview Records &rarr;</span>
           </button>
         </div>
@@ -223,17 +231,34 @@
 </div>
 
 <script>
+function handleDropAreaClick(e) {
+  // Avoid re-triggering if the browse button was clicked
+  if (e.target && (e.target.tagName === 'BUTTON' || e.target.closest('button'))) {
+    return;
+  }
+  document.getElementById('excelFileInput').click();
+}
+
 function showSelectedFileName(input) {
   var infoBox = document.getElementById('fileSelectedInfo');
   var badge = document.getElementById('selectedFileNameBadge');
+  var warnBox = document.getElementById('noFileWarning');
+  var dropArea = document.getElementById('dropArea');
+
+  if (warnBox) warnBox.style.display = 'none';
+
   if (input.files && input.files[0]) {
     var f = input.files[0];
     var sizeKB = Math.round(f.size / 1024);
     var sizeStr = sizeKB > 1024 ? (sizeKB / 1024).toFixed(1) + ' MB' : sizeKB + ' KB';
-    badge.textContent = f.name + ' (' + sizeStr + ')';
-    infoBox.style.display = 'inline-flex';
+    if (badge) badge.textContent = f.name + ' (' + sizeStr + ')';
+    if (infoBox) infoBox.style.display = 'inline-flex';
+    if (dropArea) {
+      dropArea.style.borderColor = '#10b981';
+      dropArea.style.background = '#f0fdf4';
+    }
   } else {
-    infoBox.style.display = 'none';
+    if (infoBox) infoBox.style.display = 'none';
   }
 }
 
@@ -270,19 +295,27 @@ if (dropArea) {
   }, false);
 }
 
-function handleUploadSubmit(btn) {
+function handleFormSubmit(e) {
   var fileInput = document.getElementById('excelFileInput');
+  var warnBox = document.getElementById('noFileWarning');
+
   if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-    alert('Please select an Excel or CSV file first.');
+    if (e) e.preventDefault();
+    if (warnBox) warnBox.style.display = 'block';
+    alert('দয়া করে প্রথমে "Browse File" এ ক্লিক করে আপনার এক্সেল ফাইলটি সিলেক্ট করুন।');
     return false;
   }
+
+  var btn = document.getElementById('uploadBtn');
   var btnText = document.getElementById('uploadBtnText');
   if (btnText) {
     btnText.textContent = 'Uploading & Parsing... Please wait';
   }
-  btn.style.opacity = '0.7';
-  btn.style.pointerEvents = 'none';
-  document.getElementById('uploadForm').submit();
+  if (btn) {
+    btn.style.opacity = '0.7';
+    btn.style.pointerEvents = 'none';
+  }
+  return true;
 }
 
 function handleConfirmSubmit(btn) {
