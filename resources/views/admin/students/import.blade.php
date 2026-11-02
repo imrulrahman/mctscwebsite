@@ -8,7 +8,7 @@
   <div class="sm-import-header">
     <div>
       <h1 class="sm-import-title">Import Student Database from Excel</h1>
-      <p class="sm-import-subtitle">Upload institution Excel (.xlsx) or CSV file with automatic schema mapping, duplicate identification and historical ID preservation.</p>
+      <p class="sm-import-subtitle">Upload institution Excel (.xlsx, .xlsm) or CSV file with automatic schema mapping, duplicate identification and historical ID preservation.</p>
     </div>
     <div>
       <a href="{{ route('admin.students.database') }}" class="sm-btn sm-btn-secondary">
@@ -103,8 +103,8 @@
             <line x1="12" y1="3" x2="12" y2="15"></line>
           </svg>
           <h3 style="font-size:16px;font-weight:700;color:#1f2937;margin:0 0 4px;">Choose Excel or CSV Workbook</h3>
-          <p style="font-size:13px;color:#64748b;margin:0 0 14px;">Select the official institute StudentDB workbook (.xlsx, .csv)</p>
-          <input type="file" id="excelFileInput" name="excel_file" accept=".xlsx,.xls,.csv" required style="display:none;" onchange="showSelectedFileName(this)">
+          <p style="font-size:13px;color:#64748b;margin:0 0 14px;">Select the official institute StudentDB workbook (.xlsx, .xlsm, .csv)</p>
+          <input type="file" id="excelFileInput" name="excel_file" accept=".xlsx,.xlsm,.xls,.csv,.txt" required style="display:none;" onchange="showSelectedFileName(this)">
           <span id="selectedFileNameBadge" class="sm-btn sm-btn-primary">Browse File</span>
         </div>
 

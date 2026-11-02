@@ -959,18 +959,36 @@ class StudentManagementController extends Controller
         $this->checkPermission('students.import');
 
         $request->validate([
-            'excel_file' => ['required', 'file', 'mimes:xlsx,xls,csv,txt', 'max:25600'],
+            'excel_file' => [
+                'required',
+                'file',
+                'max:51200',
+                function ($attribute, $value, $fail) {
+                    $ext = strtolower($value->getClientOriginalExtension());
+                    if (!in_array($ext, ['xlsx', 'xlsm', 'xls', 'csv', 'txt'])) {
+                        $fail('The uploaded file must be an Excel or CSV file (.xlsx, .xlsm, .xls, .csv).');
+                    }
+                },
+            ],
         ]);
 
         $file = $request->file('excel_file');
         $originalName = $file->getClientOriginalName();
-        $tempPath = $file->storeAs('temp_imports', 'import_' . time() . '.' . $file->getClientOriginalExtension());
-        $fullPath = storage_path('app/' . $tempPath);
+        $ext = strtolower($file->getClientOriginalExtension() ?: 'xlsx');
+        $fileName = 'import_' . time() . '_' . uniqid() . '.' . $ext;
+
+        $tempPath = $file->storeAs('temp_imports', $fileName, 'local');
+        $fullPath = Storage::disk('local')->path($tempPath);
+
+        if (!file_exists($fullPath)) {
+            $fullPath = storage_path('app/' . $tempPath);
+        }
 
         $rawRows = StudentImportService::parseFile($fullPath);
         if (empty($rawRows)) {
+            Storage::disk('local')->delete($tempPath);
             @unlink($fullPath);
-            return back()->with('error', 'Unable to parse records from the file. Please ensure it follows the StudentDB layout.');
+            return back()->with('error', 'Unable to parse records from "' . htmlspecialchars($originalName) . '". Please ensure it is a valid Excel (.xlsx, .xlsm) or CSV file with the standard StudentDB sheet.');
         }
 
         $analysis = StudentImportService::previewAnalysis($rawRows);
@@ -993,7 +1011,11 @@ class StudentManagementController extends Controller
 
         $tempPath = $request->input('temp_path');
         $originalName = $request->input('original_name', 'students_import.csv');
-        $fullPath = storage_path('app/' . $tempPath);
+
+        $fullPath = Storage::disk('local')->path($tempPath);
+        if (!file_exists($fullPath)) {
+            $fullPath = storage_path('app/' . $tempPath);
+        }
 
         if (!file_exists($fullPath)) {
             return redirect()->route('admin.students.import')
@@ -1002,6 +1024,8 @@ class StudentManagementController extends Controller
 
         $rawRows = StudentImportService::parseFile($fullPath);
         $batch = StudentImportService::executeImport($rawRows, $originalName, auth()->id());
+
+        Storage::disk('local')->delete($tempPath);
         @unlink($fullPath);
 
         return redirect()->route('admin.students.import')

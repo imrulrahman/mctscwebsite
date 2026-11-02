@@ -8,39 +8,182 @@ use App\Models\StudentBatch;
 use App\Models\StudentImportBatch;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+use XMLReader;
+use ZipArchive;
 
 class StudentImportService
 {
     /**
-     * Clean string from invisible characters, non-breaking spaces, and normalize UTF-8
-     */
-    public static function clean(?string $value): string
-    {
-        if ($value === null) {
-            return '';
-        }
-        // Replace NBSP with normal space
-        $str = str_replace(["\xc2\xa0", "\xa0", "&nbsp;"], ' ', $value);
-        // Remove non-printable control characters except newline and tab
-        $str = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/u', '', $str);
-        // Ensure valid UTF-8
-        $str = @iconv('UTF-8', 'UTF-8//IGNORE', $str) ?: $str;
-        return trim($str);
-    }
-
-    /**
-     * Parse uploaded file (.xlsx or .csv) into array of rows
+     * Parse uploaded file (XLSX, XLSM, XLS, CSV, TXT)
+     * Pure PHP - no external Python or shell dependency.
      */
     public static function parseFile(string $filePath): array
     {
         $ext = strtolower(pathinfo($filePath, PATHINFO_EXTENSION));
 
-        if ($ext === 'xlsx' || $ext === 'xls') {
-            return self::parseXlsxWithPython($filePath);
+        if (in_array($ext, ['xlsx', 'xlsm', 'xls'])) {
+            $rows = self::parseXlsxPurePhp($filePath);
+            if (!empty($rows)) {
+                return $rows;
+            }
         }
 
         return self::parseCsv($filePath);
+    }
+
+    /**
+     * Pure PHP XLSX/XLSM Parser using ZipArchive and XMLReader
+     */
+    public static function parseXlsxPurePhp(string $filePath): array
+    {
+        if (!file_exists($filePath)) {
+            return [];
+        }
+
+        $zip = new ZipArchive();
+        if ($zip->open($filePath) !== true) {
+            return [];
+        }
+
+        // 1. Read shared strings
+        $sharedStrings = [];
+        $sharedStringsXml = $zip->getFromName('xl/sharedStrings.xml');
+        if ($sharedStringsXml !== false) {
+            $xml = @simplexml_load_string($sharedStringsXml);
+            if ($xml !== false) {
+                foreach ($xml->si as $si) {
+                    if (isset($si->t)) {
+                        $sharedStrings[] = (string)$si->t;
+                    } elseif (isset($si->r)) {
+                        $text = '';
+                        foreach ($si->r as $r) {
+                            $text .= (string)$r->t;
+                        }
+                        $sharedStrings[] = $text;
+                    } else {
+                        $sharedStrings[] = '';
+                    }
+                }
+            }
+        }
+
+        // 2. Identify the student database sheet
+        $targetSheetFile = null;
+        $workbookXml = $zip->getFromName('xl/workbook.xml');
+        $relsXml = $zip->getFromName('xl/_rels/workbook.xml.rels');
+
+        if ($workbookXml !== false && $relsXml !== false) {
+            $wb = @simplexml_load_string($workbookXml);
+            $rels = @simplexml_load_string($relsXml);
+            $relMap = [];
+            if ($rels) {
+                foreach ($rels->Relationship as $rel) {
+                    $relMap[(string)$rel['Id']] = (string)$rel['Target'];
+                }
+            }
+
+            $selectedRId = null;
+            if ($wb && isset($wb->sheets)) {
+                foreach ($wb->sheets->sheet as $s) {
+                    $name = strtolower(trim((string)$s['name']));
+                    $rId = (string)$s->attributes('http://schemas.openxmlformats.org/officeDocument/2006/relationships')['id'];
+
+                    // Prioritize sheets named stdntdb, studentdb, students, db
+                    if (str_contains($name, 'stdnt') || str_contains($name, 'student') || str_contains($name, 'database') || str_contains($name, 'db')) {
+                        $selectedRId = $rId;
+                        break;
+                    }
+
+                    if ($selectedRId === null) {
+                        $selectedRId = $rId;
+                    }
+                }
+            }
+
+            if ($selectedRId && isset($relMap[$selectedRId])) {
+                $target = $relMap[$selectedRId];
+                $targetSheetFile = str_starts_with($target, 'worksheets/') ? 'xl/' . $target : (str_starts_with($target, '/') ? ltrim($target, '/') : 'xl/' . ltrim($target, '/'));
+            }
+        }
+
+        if (!$targetSheetFile || $zip->locateName($targetSheetFile) === false) {
+            $targetSheetFile = 'xl/worksheets/sheet1.xml';
+        }
+
+        $sheetXml = $zip->getFromName($targetSheetFile);
+        if ($sheetXml === false) {
+            for ($i = 1; $i <= 10; $i++) {
+                $cand = "xl/worksheets/sheet{$i}.xml";
+                if ($zip->locateName($cand) !== false) {
+                    $sheetXml = $zip->getFromName($cand);
+                    break;
+                }
+            }
+        }
+
+        $zip->close();
+
+        if ($sheetXml === false) {
+            return [];
+        }
+
+        // 3. Parse XMLReader stream
+        $rows = [];
+        $reader = new XMLReader();
+        if (!@$reader->xml($sheetXml)) {
+            return [];
+        }
+
+        $currentRow = [];
+        $currentCellRef = '';
+        $cellType = '';
+        $cellVal = '';
+
+        while ($reader->read()) {
+            if ($reader->nodeType === XMLReader::ELEMENT) {
+                if ($reader->name === 'row') {
+                    $currentRow = [];
+                } elseif ($reader->name === 'c') {
+                    $currentCellRef = $reader->getAttribute('r') ?? '';
+                    $cellType = $reader->getAttribute('t') ?? '';
+                    $cellVal = '';
+                } elseif ($reader->name === 'v' || $reader->name === 't') {
+                    $cellVal = $reader->readString();
+                }
+            } elseif ($reader->nodeType === XMLReader::END_ELEMENT) {
+                if ($reader->name === 'c') {
+                    $finalVal = '';
+                    if ($cellType === 's') {
+                        $idx = (int)$cellVal;
+                        $finalVal = $sharedStrings[$idx] ?? '';
+                    } else {
+                        $finalVal = $cellVal;
+                    }
+
+                    // Convert cell ref (e.g. "B5") to 0-based column index
+                    $colLetters = preg_replace('/[0-9]/', '', $currentCellRef);
+                    $colIdx = 0;
+                    for ($k = 0; $k < strlen($colLetters); $k++) {
+                        $colIdx = $colIdx * 26 + (ord(strtoupper($colLetters[$k])) - ord('A') + 1);
+                    }
+                    $colIdx = max(0, $colIdx - 1);
+
+                    $currentRow[$colIdx] = $finalVal;
+                } elseif ($reader->name === 'row') {
+                    if (!empty($currentRow)) {
+                        $maxCol = max(array_keys($currentRow));
+                        $rowDense = [];
+                        for ($c = 0; $c <= $maxCol; $c++) {
+                            $rowDense[$c] = $currentRow[$c] ?? '';
+                        }
+                        $rows[] = $rowDense;
+                    }
+                }
+            }
+        }
+        $reader->close();
+
+        return $rows;
     }
 
     /**
@@ -58,182 +201,229 @@ class StudentImportService
             return $rows;
         }
 
-        $headerFound = false;
-        $rowIdx = 0;
-
         while (($data = fgetcsv($handle, 10000, ',')) !== false) {
-            $rowIdx++;
-            if (!$headerFound) {
-                // Check if this row is the header row
-                foreach ($data as $col) {
-                    $lower = strtolower(trim($col));
-                    if ($lower === 'id no' || $lower === 'student id' || $lower === 'student name') {
-                        $headerFound = true;
-                        break;
-                    }
-                }
-                continue;
-            }
-
-            // Must have student ID or student name
-            if (count($data) > 2 && (!empty(trim($data[1] ?? '')) || !empty(trim($data[2] ?? '')))) {
-                $rows[] = $data;
-            }
+            $rows[] = $data;
         }
-
         fclose($handle);
+
         return $rows;
     }
 
     /**
-     * Parse XLSX using Python helper
+     * Build dynamic header map from rows
      */
-    public static function parseXlsxWithPython(string $filePath): array
+    public static function buildHeaderMap(array $rows, int &$headerRowIndex): array
     {
-        $csvTemp = tempnam(sys_get_temp_dir(), 'mctsc_import_') . '.csv';
-        $pyScript = base_path('convert_xlsx_sheet.py');
+        $headerMap = [];
+        $headerRowIndex = -1;
 
-        if (!file_exists($pyScript)) {
-            $code = <<<'PY'
-import sys, openpyxl, csv
+        foreach ($rows as $rIdx => $row) {
+            $foundAnchor = false;
+            foreach ($row as $colText) {
+                $clean = strtolower(trim((string)$colText));
+                if (in_array($clean, ['id no', 'student id', 'student name', 'trainee name', 'name', 'occupation', 'trade'])) {
+                    $foundAnchor = true;
+                    break;
+                }
+            }
 
-xlsx_path = sys.argv[1]
-out_csv = sys.argv[2]
-
-wb = openpyxl.load_workbook(xlsx_path, read_only=True, data_only=True)
-sheet_name = 'StudentDB' if 'StudentDB' in wb.sheetnames else wb.sheetnames[0]
-ws = wb[sheet_name]
-
-with open(out_csv, 'w', encoding='utf-8', newline='') as f:
-    writer = csv.writer(f)
-    for row in ws.iter_rows(values_only=True):
-        writer.writerow([str(c) if c is not None else '' for c in row])
-PY;
-            file_put_contents($pyScript, $code);
+            if ($foundAnchor) {
+                $headerRowIndex = $rIdx;
+                foreach ($row as $cIdx => $headerVal) {
+                    $norm = preg_replace('/[^a-z0-9]/', '', strtolower((string)$headerVal));
+                    if (!empty($norm) && !isset($headerMap[$norm])) {
+                        $headerMap[$norm] = $cIdx;
+                    }
+                }
+                break;
+            }
         }
 
-        $cmd = 'python ' . escapeshellarg($pyScript) . ' ' . escapeshellarg($filePath) . ' ' . escapeshellarg($csvTemp);
-        shell_exec($cmd);
-
-        if (file_exists($csvTemp)) {
-            $rows = self::parseCsv($csvTemp);
-            @unlink($csvTemp);
-            return $rows;
-        }
-
-        return [];
+        return $headerMap;
     }
 
     /**
-     * Map raw row into normalized Student data array
+     * Helper to get value from row using multiple column aliases
      */
-    public static function mapRowToStudentData(array $row, ?int $createdBy = null): ?array
+    protected static function getFieldVal(array $row, array $headerMap, array $aliases, $default = ''): string
     {
-        $studentId = self::clean($row[1] ?? '');
-        $studentName = self::clean($row[2] ?? '');
+        foreach ($aliases as $alias) {
+            $norm = preg_replace('/[^a-z0-9]/', '', strtolower($alias));
+            if (isset($headerMap[$norm])) {
+                $colIdx = $headerMap[$norm];
+                if (isset($row[$colIdx])) {
+                    $val = self::clean((string)$row[$colIdx]);
+                    if ($val !== '') {
+                        return $val;
+                    }
+                }
+            }
+        }
+
+        return (string)$default;
+    }
+
+    /**
+     * Preview analysis before import
+     */
+    public static function previewAnalysis(array $rawRows): array
+    {
+        $headerRowIdx = -1;
+        $headerMap = self::buildHeaderMap($rawRows, $headerRowIdx);
+
+        $dataRows = ($headerRowIdx >= 0) ? array_slice($rawRows, $headerRowIdx + 1) : $rawRows;
+
+        $totalRows = count($dataRows);
+        $previewSample = [];
+        $duplicateSamples = [];
+        $existingCount = 0;
+        $newCount = 0;
+        $errorCount = 0;
+        $existingIds = Student::pluck('student_id')->filter()->flip()->toArray();
+
+        foreach ($dataRows as $idx => $row) {
+            $mapped = self::mapRowToStudentData($row, $headerMap);
+            if ($mapped === null) {
+                $errorCount++;
+                continue;
+            }
+
+            $isDuplicate = !empty($mapped['student_id']) && isset($existingIds[$mapped['student_id']]);
+            if ($isDuplicate) {
+                $existingCount++;
+                if (count($duplicateSamples) < 5) {
+                    $duplicateSamples[] = $mapped['student_id'];
+                }
+            } else {
+                $newCount++;
+            }
+
+            if (count($previewSample) < 15) {
+                $mapped['is_duplicate'] = $isDuplicate;
+                $previewSample[] = $mapped;
+            }
+        }
+
+        return [
+            'total_rows' => $totalRows,
+            'duplicate_count' => $existingCount,
+            'duplicate_records' => $existingCount,
+            'new_records' => $newCount,
+            'error_count' => $errorCount,
+            'duplicate_samples' => $duplicateSamples,
+            'preview_rows' => $previewSample,
+            'sample_data' => $previewSample,
+        ];
+    }
+
+    /**
+     * Map a single row to student data array
+     */
+    public static function mapRowToStudentData(array $row, array $headerMap = [], ?int $createdBy = null): ?array
+    {
+        // 1. Student ID
+        $studentId = self::getFieldVal($row, $headerMap, ['idno', 'studentid', 'id', 'rollno', 'traineeid']);
+        // 2. Student Name
+        $studentName = self::getFieldVal($row, $headerMap, ['studentname', 'name', 'traineename', 'fullname', 'nameofstudent']);
+
+        // Positional fallback if headers were not matched
+        if (empty($studentId) && empty($studentName) && empty($headerMap)) {
+            $studentId = self::clean($row[0] ?? $row[1] ?? '');
+            $studentName = self::clean($row[1] ?? $row[2] ?? '');
+        }
 
         if (empty($studentId) && empty($studentName)) {
             return null;
         }
 
-        $gender = self::clean($row[3] ?? '');
-        $genderNorm = match (strtolower($gender)) {
+        // Gender
+        $genderRaw = self::getFieldVal($row, $headerMap, ['gender', 'sex'], $row[2] ?? '');
+        $genderNorm = match (strtolower(trim($genderRaw))) {
             'm', 'male' => 'Male',
             'f', 'female' => 'Female',
-            default => !empty($gender) ? ucfirst(strtolower($gender)) : null,
+            default => !empty($genderRaw) ? ucfirst(strtolower(trim($genderRaw))) : null,
         };
 
-        $admissionDate = self::parseDate(self::clean($row[4] ?? ''));
-        $courseType = self::clean($row[5] ?? 'Short Course');
-        $section = self::clean($row[6] ?? '');
-        $occupation = self::clean($row[7] ?? '');
-        $rplCourse = self::clean($row[8] ?? '');
-        $academicYear = self::clean($row[9] ?? '');
-        $session = self::clean($row[10] ?? '');
-        $batchNo = self::clean($row[11] ?? '');
-        $shift = self::clean($row[12] ?? '');
-        $donor = self::clean($row[13] ?? '');
-        $phone = self::clean($row[14] ?? '');
-        $dob = self::parseDate(self::clean($row[15] ?? ''));
-        $ageRaw = self::clean($row[16] ?? '');
-        $age = is_numeric($ageRaw) ? (int)$ageRaw : null;
-        $nidBirthCert = self::clean($row[17] ?? '');
-        $parentPhone = self::clean($row[18] ?? '');
-        $eduQual = self::clean($row[19] ?? '');
-        $fatherName = self::clean($row[20] ?? '');
-        $motherName = self::clean($row[21] ?? '');
-        $siblings = self::clean($row[22] ?? '');
-        $maritalStatus = self::clean($row[23] ?? '');
-        $address = self::clean($row[24] ?? '');
-        $paymentStatus = self::clean($row[25] ?? '');
+        // Course Type
+        $courseType = self::getFieldVal($row, $headerMap, ['coursetype', 'course', 'type'], $row[3] ?? 'Short Course');
 
-        // Training Status
-        $rawStatus = strtolower(self::clean($row[26] ?? ''));
-        $trainingStatus = match ($rawStatus) {
-            'complite', 'completed' => 'Completed',
-            'running' => 'Running',
-            'dropped' => 'Dropped',
-            default => 'Active',
-        };
+        // Occupation
+        $occupation = self::getFieldVal($row, $headerMap, ['occupation', 'trade', 'technology', 'subject'], $row[4] ?? '');
 
-        // Marks
-        $vivaRaw = self::clean($row[27] ?? '');
-        $theoryRaw = self::clean($row[28] ?? '');
-        $practicalRaw = self::clean($row[29] ?? '');
-        $totalRaw = self::clean($row[30] ?? '');
+        // RPL Course
+        $rplCourse = self::getFieldVal($row, $headerMap, ['rplcourse', 'rpl'], $row[5] ?? '');
 
-        $viva = is_numeric($vivaRaw) ? (float)$vivaRaw : null;
-        $theory = is_numeric($theoryRaw) ? (float)$theoryRaw : null;
-        $practical = is_numeric($practicalRaw) ? (float)$practicalRaw : null;
-        $totalMarks = is_numeric($totalRaw) ? (float)$totalRaw : null;
-        $grade = self::clean($row[31] ?? '');
-        $nsdaBteb = self::clean($row[32] ?? '');
+        // Academic Year
+        $academicYear = self::getFieldVal($row, $headerMap, ['academicyear', 'year', 'sessionyear'], $row[6] ?? date('Y'));
 
-        // Employment
-        $rawJobStatus = strtolower(self::clean($row[33] ?? ''));
-        $jobStatus = match ($rawJobStatus) {
-            'employed', 'yes', 'engaged in job' => 'Employed',
-            'self employed', 'self defended' => 'Self Employed',
-            'not yet emplyed', 'not yet employed', 'no' => 'Not Yet Employed',
-            default => (!empty(self::clean($row[34] ?? ''))) ? 'Employed' : 'Not Yet Employed',
-        };
-
-        $companyName = self::clean($row[34] ?? '');
-        $companyType = self::clean($row[35] ?? '');
-        $employerPhone = self::clean($row[36] ?? '');
-        $companyAddress = self::clean($row[37] ?? '');
-        $designation = self::clean($row[38] ?? '');
-        $employmentType = self::clean($row[39] ?? '');
-        $joiningDate = self::parseDate(self::clean($row[40] ?? ''));
-        $salaryRaw = self::clean($row[41] ?? '');
-        $salary = is_numeric($salaryRaw) ? (float)$salaryRaw : null;
-
-        $remarks = self::clean($row[42] ?? '') ?: self::clean($row[46] ?? '');
-
-        // Ethnic & PWD & Religion
-        $ethnicRaw = strtolower(self::clean($row[43] ?? 'no'));
-        $ethnic = in_array($ethnicRaw, ['yes', '1', 'true']) ? 'Yes' : 'No';
-
-        $pwdRaw = strtolower(self::clean($row[44] ?? 'no'));
-        $pwd = in_array($pwdRaw, ['yes', '1', 'true']) ? 'Yes' : 'No';
-
-        $religion = self::clean($row[45] ?? '');
-
-        // Session number extraction
+        // Session
+        $session = self::getFieldVal($row, $headerMap, ['session', 'batchsession'], $row[7] ?? 'Session 1');
         $sessionNumber = 1;
-        if (preg_match('/(\d)/', $session, $sMatches)) {
-            $sessionNumber = (int)$sMatches[1];
+        if (preg_match('/(?:session\s*)?(\d+)/i', $session, $matches)) {
+            $sessionNumber = (int)$matches[1];
         }
+
+        // Batch No
+        $batchNo = self::getFieldVal($row, $headerMap, ['batchno', 'batch', 'batchname'], $row[8] ?? '');
+
+        // DOB
+        $dobRaw = self::getFieldVal($row, $headerMap, ['dob', 'dateofbirth', 'birthdate'], $row[9] ?? '');
+        $dob = self::parseDate($dobRaw);
+
+        // Father's Name
+        $fatherName = self::getFieldVal($row, $headerMap, ['fathersname', 'fathername', 'father', 'guardianname'], $row[10] ?? '');
+
+        // Mother's Name
+        $motherName = self::getFieldVal($row, $headerMap, ['mothersname', 'mothername', 'mother']);
+
+        // Phone
+        $phone = self::getFieldVal($row, $headerMap, ['phone', 'mobile', 'cell', 'contact', 'phoneno', 'mobileno']);
+
+        // Grade
+        $grade = self::getFieldVal($row, $headerMap, ['grade', 'result', 'gpa', 'gradeperformance']);
+
+        // Address
+        $companyAddress = self::getFieldVal($row, $headerMap, ['companyaddress', 'officeaddress']);
+        $presentAddress = self::getFieldVal($row, $headerMap, ['address', 'presentaddress', 'residentialaddress']) ?: $companyAddress;
+
+        // Designation
+        $designation = self::getFieldVal($row, $headerMap, ['designation', 'position', 'jobtitle']);
+
+        // Company Name
+        $companyName = self::getFieldVal($row, $headerMap, ['companyname', 'company', 'organization', 'employer']);
+
+        // Ethnic & PWD
+        $ethnicRaw = self::getFieldVal($row, $headerMap, ['ethnic', 'ethnicgroup', 'tribal'], 'No');
+        $ethnic = (strtolower($ethnicRaw) === 'yes' || strtolower($ethnicRaw) === 'y') ? 'Yes' : 'No';
+
+        $pwdRaw = self::getFieldVal($row, $headerMap, ['pwd', 'disability', 'disabled'], 'No');
+        $pwd = (strtolower($pwdRaw) === 'yes' || strtolower($pwdRaw) === 'y') ? 'Yes' : 'No';
+
+        // Religion
+        $religion = self::getFieldVal($row, $headerMap, ['religion', 'faith'], 'Islam');
+
+        // Remarks
+        $remarks = self::getFieldVal($row, $headerMap, ['remarks', 'comment', 'note']);
+
+        // Admission Date
+        $admissionDateRaw = self::getFieldVal($row, $headerMap, ['dateofadmission', 'admissiondate', 'admission']);
+        $admissionDate = self::parseDate($admissionDateRaw) ?: ($academicYear ? Carbon::create($academicYear, 1, 1)->format('Y-m-d') : null);
 
         // Auto-generate ID if missing
         if (empty($studentId)) {
-            $studentId = StudentIdService::generateId($occupation, $academicYear ?: date('Y'), $session, $section);
+            $studentId = StudentIdService::generateId($occupation, $academicYear ?: date('Y'), $session);
         }
 
-        $occupationCode = StudentIdService::resolveOccupationCode($occupation, $section);
+        $occupationCode = StudentIdService::resolveOccupationCode($occupation);
 
         // Certificate status
-        $certStatus = ($trainingStatus === 'Completed' || ($totalMarks !== null && $totalMarks > 0)) ? 'Issued' : 'Pending';
+        $certStatus = 'Not Issued';
+        if (!empty($grade) && !in_array(strtolower($grade), ['fail', 'f', 'absent'])) {
+            $certStatus = 'Issued';
+        }
+
+        // Job Status
+        $jobStatus = !empty($companyName) || !empty($designation) ? 'Employed' : 'Not Yet Employed';
 
         return [
             'student_id' => $studentId,
@@ -241,7 +431,8 @@ PY;
             'gender' => $genderNorm,
             'date_of_admission' => $admissionDate,
             'course_type' => $courseType ?: 'Short Course',
-            'section' => $section,
+            'course_duration_months' => 3,
+            'section' => '',
             'occupation' => $occupation,
             'occupation_code' => $occupationCode,
             'rpl_course' => $rplCourse,
@@ -249,172 +440,156 @@ PY;
             'session' => $session ?: 'Session 1',
             'session_number' => $sessionNumber,
             'batch_no' => $batchNo,
-            'shift' => $shift,
-            'donor' => $donor,
+            'shift' => 'Day',
+            'donor' => 'IMI',
             'phone' => $phone,
             'dob' => $dob,
-            'age' => $age,
-            'nid_birth_cert' => $nidBirthCert,
-            'parent_phone' => $parentPhone,
-            'educational_qualification' => $eduQual,
+            'age' => $dob ? Carbon::parse($dob)->age : null,
+            'nid_birth_cert' => '',
+            'parent_phone' => '',
+            'educational_qualification' => '',
             'father_name' => $fatherName,
             'mother_name' => $motherName,
-            'siblings' => $siblings,
-            'marital_status' => $maritalStatus,
-            'address' => $address,
-            'present_address' => $address,
+            'siblings' => null,
+            'marital_status' => null,
+            'address' => $presentAddress,
+            'present_address' => $presentAddress,
+            'permanent_address' => '',
             'religion' => $religion,
             'ethnic' => $ethnic,
             'pwd' => $pwd,
-            'payment_status' => $paymentStatus,
-            'training_status' => $trainingStatus,
-            'viva_mark' => $viva,
-            'theory_mark' => $theory,
-            'practical_mark' => $practical,
-            'total_marks' => $totalMarks,
-            'grade' => $grade,
-            'nsda_bteb_result' => $nsdaBteb,
+            'payment_status' => null,
+            'training_status' => 'Completed',
+            'total_marks' => null,
+            'grade' => $grade ?: null,
+            'nsda_bteb_result' => null,
             'certificate_status' => $certStatus,
+            'certificate_no' => $certStatus === 'Issued' ? ('MCTSC-' . ($academicYear ?: date('Y')) . '-' . $studentId) : null,
+            'certificate_issue_date' => $certStatus === 'Issued' ? now()->format('Y-m-d') : null,
+            'certificate_printed_at' => null,
+            'certificate_distributed_at' => null,
+            'certificate_reissued_at' => null,
+            'certificate_reissue_count' => 0,
             'job_status' => $jobStatus,
             'company_name' => $companyName,
-            'company_type' => $companyType,
-            'employer_phone' => $employerPhone,
+            'company_type' => null,
+            'employer_phone' => null,
             'company_address' => $companyAddress,
             'designation' => $designation,
-            'employment_type' => $employmentType,
-            'joining_date' => $joiningDate,
-            'salary' => $salary,
+            'employment_type' => null,
+            'joining_date' => null,
+            'salary' => null,
             'remarks' => $remarks,
             'created_by' => $createdBy,
         ];
     }
 
     /**
-     * Preview analysis of rows before importing
+     * Execute full import and write to database in chunks
      */
-    public static function previewAnalysis(array $rawRows): array
-    {
-        $totalRows = count($rawRows);
-        $previewRows = [];
-        $duplicateIds = [];
-        $errors = [];
-        $existingIds = Student::pluck('student_id')->flip()->toArray();
-
-        $seenInFile = [];
-
-        foreach ($rawRows as $idx => $r) {
-            $sid = self::clean($r[1] ?? '');
-            $sname = self::clean($r[2] ?? '');
-
-            if (empty($sid) && empty($sname)) {
-                $errors[] = "Row " . ($idx + 1) . ": Empty Student ID and Name.";
-                continue;
-            }
-
-            if (!empty($sid)) {
-                if (isset($existingIds[$sid])) {
-                    $duplicateIds[] = $sid;
-                }
-                if (isset($seenInFile[$sid])) {
-                    $duplicateIds[] = $sid . ' (repeated in file)';
-                }
-                $seenInFile[$sid] = true;
-            }
-
-            if (count($previewRows) < 15) {
-                $mapped = self::mapRowToStudentData($r);
-                if ($mapped) {
-                    $previewRows[] = $mapped;
-                }
-            }
-        }
-
-        return [
-            'total_rows' => $totalRows,
-            'duplicate_count' => count(array_unique($duplicateIds)),
-            'duplicate_samples' => array_slice(array_unique($duplicateIds), 0, 10),
-            'error_count' => count($errors),
-            'error_samples' => array_slice($errors, 0, 5),
-            'preview_rows' => $previewRows,
-        ];
-    }
-
-    /**
-     * Execute full import with transaction and batch logging
-     */
-    public static function executeImport(array $rawRows, string $fileName, ?int $userId = null): StudentImportBatch
+    public static function executeImport(array $rawRows, string $originalFileName, ?int $userId = null): StudentImportBatch
     {
         $batch = StudentImportBatch::create([
-            'file_name' => $fileName,
+            'file_name' => $originalFileName,
             'imported_by' => $userId,
             'total_rows' => count($rawRows),
+            'successful_rows' => 0,
+            'duplicate_rows' => 0,
+            'error_rows' => 0,
             'status' => 'processing',
         ]);
+
+        $headerRowIdx = -1;
+        $headerMap = self::buildHeaderMap($rawRows, $headerRowIdx);
+        $dataRows = ($headerRowIdx >= 0) ? array_slice($rawRows, $headerRowIdx + 1) : $rawRows;
+
+        $existingIds = Student::pluck('student_id')->filter()->flip()->toArray();
+
+        $chunkSize = 100;
+        $chunks = array_chunk($dataRows, $chunkSize);
 
         $success = 0;
         $duplicates = 0;
         $errors = 0;
         $errorLogs = [];
-
-        $existingIds = Student::pluck('student_id')->flip()->toArray();
-        $chunks = array_chunk($rawRows, 150);
+        $occupationsToRecord = [];
+        $batchesToRecord = [];
 
         foreach ($chunks as $chunk) {
-            DB::beginTransaction();
-            try {
-                $insertData = [];
-                $batchesToRecord = [];
-
-                foreach ($chunk as $row) {
-                    $mapped = self::mapRowToStudentData($row, $userId);
-                    if (!$mapped) {
-                        $errors++;
+            $insertData = [];
+            foreach ($chunk as $row) {
+                try {
+                    $mapped = self::mapRowToStudentData($row, $headerMap, $userId);
+                    if ($mapped === null) {
                         continue;
                     }
 
-                    $sid = $mapped['student_id'];
-                    if (isset($existingIds[$sid])) {
+                    if (!empty($mapped['student_id']) && isset($existingIds[$mapped['student_id']])) {
                         $duplicates++;
                         continue;
                     }
 
-                    $existingIds[$sid] = true;
                     $insertData[] = array_merge($mapped, [
                         'created_at' => now(),
                         'updated_at' => now(),
                     ]);
 
+                    if (!empty($mapped['student_id'])) {
+                        $existingIds[$mapped['student_id']] = true;
+                    }
+
                     if (!empty($mapped['batch_no'])) {
                         $batchesToRecord[$mapped['batch_no']] = [
                             'name' => $mapped['batch_no'],
-                            'academic_year' => $mapped['academic_year'],
+                            'academic_year' => $mapped['academic_year'] ?? date('Y'),
                         ];
                     }
-                }
 
-                if (!empty($insertData)) {
+                    if (!empty($mapped['occupation'])) {
+                        $occupationsToRecord[$mapped['occupation']] = [
+                            'name' => $mapped['occupation'],
+                            'code' => $mapped['occupation_code'] ?? 'S',
+                        ];
+                    }
+                } catch (\Throwable $e) {
+                    $errors++;
+                    $errorLogs[] = "Row error: " . $e->getMessage();
+                }
+            }
+
+            if (!empty($insertData)) {
+                try {
                     Student::insert($insertData);
                     $success += count($insertData);
-                }
-
-                // Upsert batches
-                foreach ($batchesToRecord as $b) {
-                    if (!empty($b['name'])) {
-                        StudentBatch::firstOrCreate(
-                            ['name' => $b['name'], 'academic_year' => $b['academic_year']],
-                            ['status' => 'active']
-                        );
+                } catch (\Throwable $e) {
+                    // Fallback to row-by-row on batch insert failure
+                    foreach ($insertData as $rec) {
+                        try {
+                            Student::create($rec);
+                            $success++;
+                        } catch (\Throwable $innerEx) {
+                            $errors++;
+                            $errorLogs[] = "Insert error [{$rec['student_id']}]: " . $innerEx->getMessage();
+                        }
                     }
                 }
-
-                DB::commit();
-            } catch (\Throwable $e) {
-                DB::rollBack();
-                $errors += count($chunk);
-                $cleanMsg = self::clean($e->getMessage());
-                $errorLogs[] = substr($cleanMsg, 0, 500);
-                Log::error('Student import chunk failed: ' . $cleanMsg);
             }
+        }
+
+        // Record any new occupations
+        foreach ($occupationsToRecord as $occ) {
+            Occupation::firstOrCreate(
+                ['name' => $occ['name']],
+                ['code' => $occ['code'], 'status' => 'active']
+            );
+        }
+
+        // Record any new batches
+        foreach ($batchesToRecord as $b) {
+            StudentBatch::firstOrCreate(
+                ['name' => $b['name'], 'academic_year' => $b['academic_year']],
+                ['status' => 'active']
+            );
         }
 
         $cleanErrLog = !empty($errorLogs) ? substr(implode("\n", array_unique($errorLogs)), 0, 5000) : null;
@@ -431,7 +606,7 @@ PY;
     }
 
     /**
-     * Safe date parser handling multiple formats (1-Jan-18, 2018-01-01, 01/01/2018)
+     * Safe date parser handling multiple formats and Excel serial numbers
      */
     protected static function parseDate(?string $value): ?string
     {
@@ -439,10 +614,41 @@ PY;
             return null;
         }
 
+        // Excel numeric serial date (e.g. 44123 for Oct 18, 2020)
+        if (is_numeric($value) && (float)$value > 1000 && (float)$value < 90000) {
+            try {
+                $unix = ((float)$value - 25569) * 86400;
+                return gmdate('Y-m-d', (int)$unix);
+            } catch (\Throwable $e) {
+                // fallback
+            }
+        }
+
         try {
             return Carbon::parse($value)->format('Y-m-d');
         } catch (\Throwable $e) {
+            if (preg_match('/^(\d{1,2})[\/\.-](\d{1,2})[\/\.-](\d{2,4})$/', $value, $m)) {
+                $year = (int)$m[3];
+                if ($year < 100) $year += ($year > 50 ? 1900 : 2000);
+                try {
+                    return Carbon::create($year, (int)$m[2], (int)$m[1])->format('Y-m-d');
+                } catch (\Throwable $ex) {}
+            }
             return null;
         }
+    }
+
+    /**
+     * Clean string: UTF-8 normalize, strip non-breaking spaces
+     */
+    public static function clean(?string $val): string
+    {
+        if ($val === null) {
+            return '';
+        }
+
+        $clean = str_replace(["\xc2\xa0", "\xa0", "\r"], [' ', ' ', ''], $val);
+        $clean = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $clean);
+        return trim($clean);
     }
 }
