@@ -355,7 +355,7 @@ class StudentImportService
     /**
      * Helper to get value from row using multiple column aliases
      */
-    protected static function getFieldVal(array $row, array $headerMap, array $aliases, $default = ''): string
+    public static function getFieldVal(array $row, array $headerMap, array $aliases, $default = ''): string
     {
         foreach ($aliases as $alias) {
             $norm = preg_replace('/[^a-z0-9]/', '', strtolower($alias));
@@ -389,7 +389,12 @@ class StudentImportService
         $existingCount = 0;
         $newCount = 0;
         $errorCount = 0;
-        $existingIds = Student::pluck('student_id')->filter()->flip()->toArray();
+        $existingIds = [];
+        try {
+            $existingIds = Student::pluck('student_id')->filter()->flip()->toArray();
+        } catch (\Throwable $e) {
+            $existingIds = [];
+        }
 
         foreach ($dataRows as $idx => $row) {
             try {
@@ -650,6 +655,7 @@ class StudentImportService
             'created_by' => $createdBy,
         ];
         } catch (\Throwable $e) {
+            \Illuminate\Support\Facades\Log::warning("mapRowToStudentData error: " . $e->getMessage() . " at " . $e->getFile() . ":" . $e->getLine());
             return null;
         }
     }
@@ -673,7 +679,12 @@ class StudentImportService
         $headerMap = self::buildHeaderMap($rawRows, $headerRowIdx);
         $dataRows = ($headerRowIdx >= 0) ? array_slice($rawRows, $headerRowIdx + 1) : $rawRows;
 
-        $existingIds = Student::pluck('student_id')->filter()->flip()->toArray();
+        $existingIds = [];
+        try {
+            $existingIds = Student::pluck('student_id')->filter()->flip()->toArray();
+        } catch (\Throwable $e) {
+            $existingIds = [];
+        }
 
         $chunkSize = 100;
         $chunks = array_chunk($dataRows, $chunkSize);

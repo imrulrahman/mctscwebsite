@@ -28,6 +28,11 @@ class StudentIdService
     ];
 
     /**
+     * In-memory cache of DB occupations
+     */
+    protected static ?array $cachedDbMap = null;
+
+    /**
      * Resolve the occupation code based on Excel rules
      */
     public static function resolveOccupationCode(?string $occupation, ?string $section = null): string
@@ -41,22 +46,33 @@ class StudentIdService
             return 'RPL';
         }
 
-        // Rule 2: Check database occupations table
-        $dbOcc = Occupation::where('name', $occ)->first();
-        if ($dbOcc && !empty($dbOcc->code)) {
-            return strtoupper(trim($dbOcc->code));
-        }
-
-        // Rule 3: Check fallback code map
+        // Rule 2: Fast in-memory lookup (0 SQL queries)
         if (isset(self::$codeMap[$occLower])) {
             return self::$codeMap[$occLower];
         }
 
-        // Rule 4: Check if any known key is substring
+        // Rule 3: Substring match in known code map
         foreach (self::$codeMap as $key => $val) {
             if (str_contains($occLower, $key)) {
                 return $val;
             }
+        }
+
+        // Rule 4: Check database occupations table once (cached in static memory)
+        if (self::$cachedDbMap === null) {
+            self::$cachedDbMap = [];
+            try {
+                $dbItems = Occupation::select('name', 'code')->whereNotNull('code')->get();
+                foreach ($dbItems as $item) {
+                    self::$cachedDbMap[strtolower(trim($item->name))] = strtoupper(trim($item->code));
+                }
+            } catch (\Throwable $e) {
+                // If DB is offline or table missing, continue safely without crashing
+                self::$cachedDbMap = [];
+            }
+        }
+        if (isset(self::$cachedDbMap[$occLower])) {
+            return self::$cachedDbMap[$occLower];
         }
 
         // Rule 5: Derive code from initials (e.g. "Civil Engineering" -> "CE")
