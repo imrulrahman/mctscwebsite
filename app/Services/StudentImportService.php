@@ -320,32 +320,79 @@ class StudentImportService
     }
 
     /**
-     * Build dynamic header map from rows
+     * Build dynamic header map from rows by scoring candidate rows
      */
     public static function buildHeaderMap(array $rows, int &$headerRowIndex): array
     {
         $headerMap = [];
         $headerRowIndex = -1;
+        $bestScore = -1;
+        $bestIdx = -1;
 
-        foreach ($rows as $rIdx => $row) {
-            $foundAnchor = false;
-            foreach ($row as $colText) {
-                $clean = strtolower(trim((string)$colText));
-                if (in_array($clean, ['id no', 'student id', 'student name', 'trainee name', 'name', 'occupation', 'trade', 'mr no', 'mr', 'registration no', 'reg no', 'roll no'])) {
-                    $foundAnchor = true;
-                    break;
+        $knownHeaders = [
+            'idno', 'studentid', 'id', 'regno', 'registrationno', 'rollno', 'mrno',
+            'studentname', 'traineename', 'name', 'fullname',
+            'gender', 'sex',
+            'dateofadmission', 'admissiondate',
+            'coursetype', 'course', 'occupation', 'trade', 'section',
+            'academicyear', 'year', 'session', 'batchno', 'batch', 'shift', 'donor',
+            'fathername', 'fathersname', 'mothername', 'mothersname',
+            'contactnoself', 'contactno', 'phone', 'mobile', 'address',
+            'grade', 'jobstatus', 'dob', 'religion', 'maritalstatus',
+            'educationalqualification', 'totalmarks', 'nidbirthcertno'
+        ];
+
+        $anchorHeaders = [
+            'idno', 'studentid', 'studentname', 'traineename', 'candidatename',
+            'mrno', 'regno', 'registrationno', 'rollno'
+        ];
+
+        $limit = min(50, count($rows));
+        for ($rIdx = 0; $rIdx < $limit; $rIdx++) {
+            $row = $rows[$rIdx];
+            $currentMap = [];
+            $matchScore = 0;
+            $hasAnchor = false;
+
+            foreach ($row as $cIdx => $colVal) {
+                $raw = trim((string)$colVal);
+                if ($raw === '') continue;
+                $norm = preg_replace('/[^a-z0-9]/', '', strtolower($raw));
+                if (empty($norm)) continue;
+
+                if (in_array($norm, $anchorHeaders)) {
+                    $hasAnchor = true;
+                }
+
+                foreach ($knownHeaders as $kh) {
+                    if ($norm === $kh || str_contains($norm, $kh)) {
+                        $matchScore++;
+                        if (!isset($currentMap[$norm])) {
+                            $currentMap[$norm] = $cIdx;
+                        }
+                        break;
+                    }
                 }
             }
 
-            if ($foundAnchor) {
-                $headerRowIndex = $rIdx;
-                foreach ($row as $cIdx => $headerVal) {
-                    $norm = preg_replace('/[^a-z0-9]/', '', strtolower((string)$headerVal));
-                    if (!empty($norm) && !isset($headerMap[$norm])) {
-                        $headerMap[$norm] = $cIdx;
-                    }
+            // High priority if row contains student ID/Name anchor
+            $weightedScore = $matchScore + ($hasAnchor ? 50 : 0);
+
+            if ($weightedScore > $bestScore && ($hasAnchor || $matchScore >= 3)) {
+                $bestScore = $weightedScore;
+                $bestIdx = $rIdx;
+                $headerMap = $currentMap;
+            }
+        }
+
+        if ($bestIdx >= 0) {
+            $headerRowIndex = $bestIdx;
+            // Also store all normalized headers from the winning row
+            foreach ($rows[$bestIdx] as $cIdx => $val) {
+                $norm = preg_replace('/[^a-z0-9]/', '', strtolower(trim((string)$val)));
+                if (!empty($norm) && !isset($headerMap[$norm])) {
+                    $headerMap[$norm] = $cIdx;
                 }
-                break;
             }
         }
 
