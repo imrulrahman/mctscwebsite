@@ -28,11 +28,11 @@
 
     <label>
       Email address
-      <input type="email" name="email" required autocomplete="username" value="{{ old('email') }}" placeholder="admin@mctsc.edu.bd">
+      <input type="email" name="email" required autocomplete="username" value="{{ old('email') }}" placeholder="Enter your email">
     </label>
     <label>
       Password
-      <input type="password" name="password" required autocomplete="current-password" placeholder="••••••••">
+      <input type="password" name="password" required autocomplete="current-password" placeholder="Enter your Password">
     </label>
     <label class="check">
       <input type="checkbox" name="remember" value="1"> Remember me

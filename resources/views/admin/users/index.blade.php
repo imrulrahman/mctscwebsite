@@ -8,7 +8,10 @@
     <h1>User Management</h1>
     <p>Create, edit, manage administrative accounts, assign roles and configure individual permissions</p>
   </div>
-  <div>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <a class="btn light" href="{{ route('admin.activity-logs.index') }}" style="display:inline-flex;align-items:center;gap:6px;">
+      <span>📋</span> User Activity Logs
+    </a>
     <a class="btn gold" href="{{ route('admin.users.create') }}">+ Create New User</a>
   </div>
 </div>
@@ -116,6 +119,9 @@
             </td>
             <td style="text-align:right;">
               <div class="actions" style="justify-content:flex-end;gap:8px;">
+                <a class="edit-link" href="{{ route('admin.activity-logs.index', ['user_id' => $user->id]) }}" style="color:#0f5132;background:#ecfdf5;padding:4px 8px;border-radius:4px;font-size:11.5px;" title="View user activity history">
+                  Logs
+                </a>
                 <a class="edit-link" href="{{ route('admin.users.permissions', $user) }}" style="color:#0284c7;background:#f0f9ff;padding:4px 8px;border-radius:4px;font-size:11.5px;" title="Manage Permissions">
                   Manage Permissions
                 </a>

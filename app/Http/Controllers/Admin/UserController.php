@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Role;
 use App\Models\User;
+use App\Services\ActivityLogger;
 use App\Services\PermissionManager;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -103,7 +104,7 @@ class UserController extends Controller
             $this->mirrorToPublic($avatarPath);
         }
 
-        User::create([
+        $newUser = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,
@@ -113,6 +114,13 @@ class UserController extends Controller
             'is_admin' => $isAdmin,
             'password' => Hash::make(trim($validated['password'])),
         ]);
+
+        ActivityLogger::log(
+            action: 'create',
+            module: 'User Management',
+            description: (auth()->user()?->name ?? 'Admin') . ' নতুন ইউজার তৈরি করেছেন: ' . $newUser->name . ' (' . $newUser->email . ')',
+            subject: $newUser
+        );
 
         return redirect()->route('admin.users.index')->with('success', 'New user account created successfully.');
     }
@@ -174,6 +182,13 @@ class UserController extends Controller
 
         $user->update($data);
 
+        ActivityLogger::log(
+            action: 'update',
+            module: 'User Management',
+            description: (auth()->user()?->name ?? 'Admin') . ' ইউজার প্রোফাইল ও তথ্য পরিবর্তন করেছেন: ' . $user->name,
+            subject: $user
+        );
+
         return redirect()->route('admin.users.index')->with('success', 'User account updated successfully.');
     }
 
@@ -196,7 +211,15 @@ class UserController extends Controller
             }
         }
 
+        $userName = $user->name;
+        $userEmail = $user->email;
         $user->delete();
+
+        ActivityLogger::log(
+            action: 'delete',
+            module: 'User Management',
+            description: (auth()->user()?->name ?? 'Admin') . " ইউজার অ্যাকাউন্ট মুছে ফেলেছেন: {$userName} ({$userEmail})"
+        );
 
         return redirect()->route('admin.users.index')->with('success', 'User account deleted successfully.');
     }
@@ -249,6 +272,13 @@ class UserController extends Controller
             'custom_permissions' => !empty($customOverrides) ? $customOverrides : null,
         ]);
 
+        ActivityLogger::log(
+            action: 'update',
+            module: 'User Management',
+            description: (auth()->user()?->name ?? 'Admin') . ' ইউজার (' . $user->name . ') এর কাস্টম অ্যাক্সেস পারমিশন পরিবর্তন করেছেন।',
+            subject: $user
+        );
+
         return redirect()->route('admin.users.permissions', $user)->with('success', 'User permissions updated successfully.');
     }
 
@@ -260,6 +290,13 @@ class UserController extends Controller
         $this->authorizeUserAccess('users.permissions');
 
         $user->update(['custom_permissions' => null]);
+
+        ActivityLogger::log(
+            action: 'update',
+            module: 'User Management',
+            description: (auth()->user()?->name ?? 'Admin') . ' ইউজার (' . $user->name . ') এর পারমিশন রিসেট করে রোল ডিফল্টে নিয়েছেন।',
+            subject: $user
+        );
 
         return redirect()->route('admin.users.permissions', $user)->with('success', 'User permissions have been reset to role defaults.');
     }

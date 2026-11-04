@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SiteContent;
+use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -74,8 +75,18 @@ class ContentController extends Controller
         }
         $data['section'] = $section;
         $data['slug'] = $this->uniqueSlug($data['title']);
-        SiteContent::create($data);
+        $data['last_edited_by'] = auth()->id();
+        $data['last_editor_name'] = auth()->user()?->name ?? 'Administrator';
+        $item = SiteContent::create($data);
         $this->clearCaches();
+
+        ActivityLogger::log(
+            action: 'create',
+            module: self::LABELS[$section] ?? ucfirst($section),
+            description: (auth()->user()?->name ?? 'Admin') . ' নতুন ' . (self::LABELS[$section] ?? $section) . ' যোগ করেছেন: ' . $data['title'],
+            subject: $item
+        );
+
         return redirect()->route('admin.content.index', $section)->with('success', 'নতুন কনটেন্ট সংরক্ষিত হয়েছে।');
     }
 
@@ -101,8 +112,24 @@ class ContentController extends Controller
             $this->mirrorToPublic($data['image']);
         }
         $data['slug'] = $this->uniqueSlug($data['title'], $content->id);
+        $data['last_edited_by'] = auth()->id();
+        $data['last_editor_name'] = auth()->user()?->name ?? 'Administrator';
         $content->update($data);
         $this->clearCaches();
+
+        $actionType = $section === 'hero_slides' ? 'change_banner' : 'update';
+        $moduleName = self::LABELS[$section] ?? ucfirst($section);
+        $desc = $section === 'hero_slides'
+            ? (auth()->user()?->name ?? 'Admin') . ' ব্যানার স্লাইড আপডেট করেছেন: ' . $content->title
+            : (auth()->user()?->name ?? 'Admin') . ' ' . $moduleName . ' তথ্য আপডেট করেছেন: ' . $content->title;
+
+        ActivityLogger::log(
+            action: $actionType,
+            module: $moduleName,
+            description: $desc,
+            subject: $content
+        );
+
         return redirect()->route('admin.content.index', $section)->with('success', 'পরিবর্তন সংরক্ষিত হয়েছে।');
     }
 
@@ -110,6 +137,7 @@ class ContentController extends Controller
     {
         $this->check($section);
         abort_unless($content->section === $section, 404);
+        $title = $content->title;
         if ($content->image) {
             Storage::disk('public')->delete($content->image);
             $oldPub = public_path('storage/' . $content->image);
@@ -117,6 +145,13 @@ class ContentController extends Controller
         }
         $content->delete();
         $this->clearCaches();
+
+        ActivityLogger::log(
+            action: 'delete',
+            module: self::LABELS[$section] ?? ucfirst($section),
+            description: (auth()->user()?->name ?? 'Admin') . ' ' . (self::LABELS[$section] ?? $section) . ' মুছে ফেলেছেন: ' . $title
+        );
+
         return back()->with('success', 'কনটেন্ট মুছে ফেলা হয়েছে।');
     }
 

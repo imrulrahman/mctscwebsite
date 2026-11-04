@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -65,6 +66,13 @@ class ProfileController extends Controller
 
         $user->update($data);
 
+        ActivityLogger::log(
+            action: 'update',
+            module: 'Security & Auth',
+            description: $user->name . ' নিজের প্রোফাইল তথ্য আপডেট করেছেন।',
+            subject: $user
+        );
+
         return back()->with('profile_success', 'Your profile details have been updated successfully.');
     }
 
@@ -84,6 +92,13 @@ class ProfileController extends Controller
         $user->update([
             'password' => Hash::make($validated['password']),
         ]);
+
+        ActivityLogger::log(
+            action: 'update',
+            module: 'Security & Auth',
+            description: $user->name . ' নিজের পাসওয়ার্ড পরিবর্তন করেছেন।',
+            subject: $user
+        );
 
         return back()->with('password_success', 'Your password has been changed successfully.');
     }

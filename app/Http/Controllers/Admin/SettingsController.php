@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SiteSetting;
+use App\Services\ActivityLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -100,17 +101,23 @@ class SettingsController extends Controller
             );
         }
 
+        $bannerChanged = false;
+
         // Handle preset banner selection if no new custom image file uploaded
         if (!$request->hasFile('hero_banner') && $request->filled('preset_banner')) {
             $preset = $request->input('preset_banner');
             if (str_starts_with($preset, 'assets/banners/')) {
                 SiteSetting::updateOrCreate(['key' => 'hero_banner'], ['value' => $preset]);
+                $bannerChanged = true;
             }
         }
 
         // Update image uploads
         foreach (self::IMAGE_FIELDS as $field) {
             if ($request->hasFile($field)) {
+                if ($field === 'hero_banner') {
+                    $bannerChanged = true;
+                }
                 $old = SiteSetting::where('key', $field)->value('value');
                 if ($old && !str_starts_with($old, 'assets/')) {
                     Storage::disk('public')->delete($old);
@@ -139,6 +146,30 @@ class SettingsController extends Controller
                 }
             }
         }
+
+        $nowStr = now()->format('Y-m-d H:i:s');
+        $adminName = auth()->user()?->name ?? 'Administrator';
+
+        if ($bannerChanged) {
+            SiteSetting::updateOrCreate(['key' => 'last_banner_edited_by'], ['value' => (string)auth()->id()]);
+            SiteSetting::updateOrCreate(['key' => 'last_banner_editor_name'], ['value' => $adminName]);
+            SiteSetting::updateOrCreate(['key' => 'last_banner_edited_at'], ['value' => $nowStr]);
+
+            ActivityLogger::log(
+                action: 'change_banner',
+                module: 'Hero Banner',
+                description: "{$adminName} হোমপেইজের মূল ব্যানার ইমেজ পরিবর্তন করেছেন।"
+            );
+        }
+
+        SiteSetting::updateOrCreate(['key' => 'last_settings_editor_name'], ['value' => $adminName]);
+        SiteSetting::updateOrCreate(['key' => 'last_settings_edited_at'], ['value' => $nowStr]);
+
+        ActivityLogger::log(
+            action: 'update',
+            module: 'Site Settings',
+            description: "{$adminName} সাইট সেটিংস ও প্রতিষ্ঠানের কনফিগারেশন আপডেট করেছেন।"
+        );
 
         // Clear cached views and settings cache so changes take effect immediately
         try {

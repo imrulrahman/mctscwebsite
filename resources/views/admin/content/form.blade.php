@@ -7,6 +7,12 @@
   <div>
     <h1>{{ $item->exists ? 'Edit' : 'Add' }} {{ rtrim($label, 's') }}</h1>
     <p>Changes are reflected on the public website when published.</p>
+    @if($item->exists && ($item->last_editor_name || $item->updated_at))
+      <div style="margin-top:8px;display:inline-flex;align-items:center;gap:6px;background:#eef7f2;border:1px solid #b8dfd7;color:#0f5132;padding:4px 12px;border-radius:20px;font-size:12.5px;font-weight:600;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <span>Last Edit: <strong>{{ $item->last_editor_name ?? $item->lastEditor?->name ?? 'Administrator' }}</strong>; {{ $item->updated_at?->format('d/m/Y h:i A') }}</span>
+      </div>
+    @endif
   </div>
   <a class="btn light" href="{{ route('admin.content.index', $section) }}">← Back to {{ $label }}</a>
 </div>

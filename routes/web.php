@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StudentManagementController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\VisitorAnalyticsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SiteFormsController;
 use App\Http\Controllers\SitePageController;
@@ -251,6 +253,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
         Route::put('/roles/{role}', [RoleController::class, 'update'])->name('roles.update');
         Route::delete('/roles/{role}', [RoleController::class, 'destroy'])->name('roles.destroy');
+
+        // Activity & Security Logs
+        Route::get('/activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+        Route::delete('/activity-logs/clear', [ActivityLogController::class, 'clearOldLogs'])->name('activity-logs.clear');
+
+        // Website Visitor Analytics
+        Route::get('/visitors', [VisitorAnalyticsController::class, 'index'])->name('visitors.index');
 
         // User Self-Profile & Password
         Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

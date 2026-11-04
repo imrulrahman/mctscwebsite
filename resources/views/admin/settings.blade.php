@@ -1207,9 +1207,17 @@
               @php
                 $currentHero = storage_asset($settings->get('hero_banner'), 'assets/banners/banner_robotics_lab.jpg');
               @endphp
-              <div style="margin-top: 10px; display: flex; align-items: center; gap: 14px;">
+              <div style="margin-top: 10px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
                 <img src="{{ $currentHero }}" alt="Hero Banner" style="height: 70px; max-width: 180px; object-fit: cover; border: 1px solid #ccc; border-radius: 4px;">
-                <span style="font-size: 12px; color: #555;">Current Active Hero Banner Preview</span>
+                <div>
+                  <span style="font-size: 12px; color: #555; display:block;">Current Active Hero Banner Preview</span>
+                  @if($settings->get('last_banner_editor_name'))
+                    <span style="margin-top:4px;display:inline-flex;align-items:center;gap:6px;background:#eef7f2;border:1px solid #b8dfd7;color:#0f5132;padding:3px 10px;border-radius:20px;font-size:11.5px;font-weight:600;">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      Last Edit: <strong>{{ $settings->get('last_banner_editor_name') }}</strong>; {{ $settings->get('last_banner_edited_at') ? \Carbon\Carbon::parse($settings->get('last_banner_edited_at'))->format('d/m/Y h:i A') : '04/11/2026' }}
+                    </span>
+                  @endif
+                </div>
               </div>
             </label>
           </div>

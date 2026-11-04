@@ -54,6 +54,22 @@
       <b>{{ $counts['notices'] }}</b>
     </div>
   </a>
+
+  <a class="stat-card" href="{{ route('admin.visitors.index') }}" style="border-left: 4px solid #10b981;">
+    <i style="color: #10b981;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+    </i>
+    <div>
+      <span>Today's Visitors</span>
+      <b>{{ number_format($todayVisitorsCount) }}</b>
+      <small style="color:#059669;font-weight:700;font-size:11px;margin-top:2px;display:inline-block;">
+        {{ number_format($todayUniqueVisitorsCount) }} Unique
+        @if($todayCountries->isNotEmpty())
+          · {{ $todayCountries->pluck('flag')->take(3)->implode(' ') }}
+        @endif
+      </small>
+    </div>
+  </a>
 </div>
 
 {{-- Top Alert for Pending Admissions --}}
@@ -165,32 +181,109 @@
       </table>
     </div>
   </section>
+  {{-- Panel: Live Visitors & Country Distribution --}}
   <section class="panel">
     <div class="panel-head">
-      <h2>Recent Updates</h2>
-      <a href="{{ route('admin.content.index','notices') }}">View All →</a>
+      <div>
+        <h2 style="display:flex;align-items:center;gap:6px;">
+          <span>🌐 Today's Visitors & Countries (আজকের ভিজিটর ও দেশ)</span>
+        </h2>
+        <span style="font-size:12px;color:var(--muted);">Total: {{ number_format($todayVisitorsCount) }} visits · {{ number_format($todayUniqueVisitorsCount) }} unique</span>
+      </div>
+      <a href="{{ route('admin.visitors.index') }}">Full Visitor Analytics →</a>
+    </div>
+    <div style="padding:14px 16px;">
+      <h3 style="font-size:12px;text-transform:uppercase;color:#64748b;letter-spacing:0.5px;margin-bottom:10px;">Top Countries Today (আজ কোন দেশ থেকে কত ভিজিটর)</h3>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
+        @forelse($todayCountries as $c)
+          <div style="display:inline-flex;align-items:center;gap:6px;background:#f0fdf4;border:1px solid #bbf7d0;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600;color:#166534;">
+            <span style="font-size:18px;line-height:1;">{{ $c->flag }}</span>
+            <span>{{ $c->country_name }}</span>
+            <span style="background:#15803d;color:#fff;padding:1px 7px;border-radius:10px;font-size:11px;">{{ $c->total }}</span>
+          </div>
+        @empty
+          <p style="font-size:12.5px;color:#94a3b8;margin:0;">আজ এখনও কোন ভিজিটর রেকর্ড হয়নি। পাবলিক ওয়েবসাইট ব্রাউজ করলে এখানে লাইভ দেখা যাবে।</p>
+        @endforelse
+      </div>
+
+      <h3 style="font-size:12px;text-transform:uppercase;color:#64748b;letter-spacing:0.5px;margin-bottom:10px;">Recent Live Visitors</h3>
+      <div class="table-wrap" style="margin:0;">
+        <table style="font-size:12.5px;">
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>IP Address</th>
+              <th>Device</th>
+              <th>Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse($recentVisitors as $rv)
+              <tr>
+                <td>
+                  <span style="font-size:16px;vertical-align:middle;margin-right:4px;">{{ $rv->getCountryFlagEmoji() }}</span>
+                  <strong>{{ $rv->country_name }}</strong>
+                </td>
+                <td><code>{{ $rv->ip_address }}</code></td>
+                <td>{{ $rv->device_type }} · {{ $rv->browser }}</td>
+                <td style="color:#64748b;white-space:nowrap;">{{ $rv->created_at->diffForHumans() }}</td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="4" class="empty" style="padding:15px;">No visitor data yet.</td>
+              </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  {{-- Panel: Recent User Activity & Security Logs --}}
+  <section class="panel">
+    <div class="panel-head">
+      <div>
+        <h2 style="display:flex;align-items:center;gap:6px;">
+          <span>📋 User Activity & Security Log (ইউজার এক্টিভিটি)</span>
+        </h2>
+        <span style="font-size:12px;color:var(--muted);">Who changed what on the website and system</span>
+      </div>
+      <a href="{{ route('admin.activity-logs.index') }}">View All Activity Logs →</a>
     </div>
     <div class="table-wrap">
-      <table>
+      <table style="font-size:12.5px;">
         <thead>
           <tr>
-            <th>Content</th>
-            <th>Type</th>
-            <th>Status</th>
-            <th>Last updated</th>
+            <th>User</th>
+            <th>Action</th>
+            <th>Activity Description</th>
+            <th>Time</th>
           </tr>
         </thead>
         <tbody>
-          @forelse($recent as $row)
+          @forelse($recentActivities as $act)
             <tr>
-              <td><strong>{{ $row->title }}</strong></td>
-              <td>{{ ucfirst($row->section) }}</td>
-              <td><span class="badge {{ $row->status }}">{{ ucfirst($row->status) }}</span></td>
-              <td>{{ $row->updated_at->diffForHumans() }}</td>
+              <td>
+                <strong style="color:#0f5132;display:block;">{{ $act->user_name ?: 'System' }}</strong>
+                <small style="color:#64748b;font-size:11px;">{{ $act->user_role ?: 'User' }}</small>
+              </td>
+              <td>
+                <span class="badge" style="font-size:11px;padding:2px 7px;border-radius:10px;{{ $act->action === 'change_banner' ? 'background:#ede9fe;color:#6d28d9;' : ($act->action === 'failed_login' ? 'background:#fee2e2;color:#991b1b;' : 'background:#e0f2fe;color:#0369a1;') }}">
+                  {{ $act->action === 'change_banner' ? 'Banner' : ucfirst(str_replace('_', ' ', $act->action)) }}
+                </span>
+              </td>
+              <td>
+                <div style="max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="{{ $act->description }}">
+                  {{ $act->description }}
+                </div>
+              </td>
+              <td style="white-space:nowrap;color:#64748b;font-size:11.5px;">
+                {{ $act->created_at->diffForHumans() }}
+              </td>
             </tr>
           @empty
             <tr>
-              <td colspan="4">No content yet.</td>
+              <td colspan="4" class="empty" style="padding:15px;">No user activity recorded yet.</td>
             </tr>
           @endforelse
         </tbody>
