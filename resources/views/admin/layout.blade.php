@@ -37,79 +37,132 @@
       overflow-x: hidden;
     }
     .sidebar {
-      background: {{ $admHover }};
+      background: linear-gradient(180deg, #053523 0%, #032619 100%);
+      width: 256px !important;
       height: 100vh;
       max-height: 100vh;
       overflow-y: auto;
       overflow-x: hidden;
       scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+      scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
       transition: width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .sidebar::-webkit-scrollbar {
       width: 4px;
     }
     .sidebar::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.22);
       border-radius: 4px;
     }
     .admin-main {
+      margin-left: 256px;
+      width: calc(100% - 256px);
+      max-width: calc(100% - 256px);
       min-width: 0;
       box-sizing: border-box;
       transition: margin-left 0.22s cubic-bezier(0.4, 0, 0.2, 1), width 0.22s cubic-bezier(0.4, 0, 0.2, 1);
     }
     .btn.gold { background: {{ $admAccent }}; }
     .btn.gold:hover { background: {{ $admAccentHover }}; }
-    .sidebar nav a:hover, .sidebar nav a.active { border-left-color: {{ $admAccent }}; }
     .sidebar nav {
-      display: grid;
-      gap: 3px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 6px 10px 14px;
       flex: 1 0 auto;
     }
     .nav-group-heading {
       font-size: 10px;
       font-weight: 700;
-      letter-spacing: 1px;
-      color: rgba(255, 255, 255, 0.45);
-      padding: 14px 16px 4px;
+      letter-spacing: 1.1px;
+      color: rgba(209, 250, 229, 0.48);
+      padding: 13px 10px 4px;
       text-transform: uppercase;
       user-select: none;
     }
     html.sidebar-is-collapsed .nav-group-heading {
       display: none !important;
     }
-    .sidebar nav a {
+    .sidebar nav a,
+    .sidebar-dropdown .dropdown-toggle {
       display: flex;
       align-items: center;
-      gap: 11px;
-      padding: 9px 14px;
-      color: #e4efea;
-      border-radius: 6px;
+      gap: 10px;
+      padding: 8px 11px !important;
+      color: #d1e7dd;
+      border-radius: 7px;
+      border-left: 3px solid transparent;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 13px !important;
+      line-height: 1.3;
       text-decoration: none;
-      transition: all 0.2s ease;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
+    }
+    .sidebar nav a:hover,
+    .sidebar-dropdown .dropdown-toggle:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+    }
+    .sidebar nav a.active,
+    .sidebar-dropdown.is-active > .dropdown-toggle {
+      background: rgba(16, 185, 129, 0.22);
+      border-left-color: #34d399;
+      color: #ffffff;
+      font-weight: 700;
+    }
+    .sidebar nav a span.nav-text,
+    .sidebar-dropdown .dropdown-toggle span.nav-text {
+      flex: 1;
+      width: auto !important;
+      text-align: left !important;
+      font-size: 13px !important;
+      font-weight: 600;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .sidebar nav a span.nav-chevron {
+      width: auto !important;
+      font-size: 14px !important;
+      color: rgba(255, 255, 255, 0.35);
+      margin-left: auto;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+    .sidebar nav a.active span.nav-chevron {
+      color: #a7f3d0;
+    }
+    html.sidebar-is-collapsed .nav-chevron {
+      display: none !important;
     }
     .side-footer {
-      margin: 16px 14px 10px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      margin: auto 10px 10px;
+      padding: 12px 6px 4px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
       flex-shrink: 0;
     }
-    .sidebar nav a span.nav-icon {
+    .sidebar nav a span.nav-icon,
+    .sidebar-dropdown .dropdown-toggle span.nav-icon {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 22px;
-      height: 22px;
+      width: 20px !important;
+      height: 20px;
+      font-size: 16px !important;
       flex-shrink: 0;
+      opacity: 0.9;
     }
-    .sidebar nav a svg {
-      width: 19px;
-      height: 19px;
+    .sidebar nav a svg,
+    .sidebar-dropdown .dropdown-toggle svg {
+      width: 18px;
+      height: 18px;
       stroke-width: 2;
     }
     .side-brand strong {
@@ -196,42 +249,37 @@
       padding: 0 !important;
     }
 
-    /* Student Management Dropdown Submenu */
+    /* Dropdown Submenus */
     .sidebar-dropdown {
       display: block;
     }
-    .sidebar-dropdown .dropdown-toggle {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 9px 14px;
-      color: #e4efea;
-      border-radius: 6px;
-      font-weight: 600;
-      font-size: 13px;
-      text-decoration: none;
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.2s ease;
+    .sidebar-dropdown .dropdown-arrow {
+      margin-left: auto;
+      display: inline-flex;
+      transition: transform 0.2s ease;
+      color: rgba(255, 255, 255, 0.5);
     }
-    .sidebar-dropdown.open .dropdown-arrow svg {
-      transform: rotate(180deg);
+    .sidebar-dropdown.open .dropdown-arrow {
+      transform: rotate(90deg);
     }
     .sidebar-submenu {
-      padding-left: 20px;
-      display: flex;
+      padding-left: 18px;
+      display: none;
       flex-direction: column;
       gap: 2px;
       margin-top: 2px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
+    }
+    .sidebar-dropdown.open .sidebar-submenu {
+      display: flex;
     }
     .sidebar-submenu a {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 7px 12px;
+      padding: 6.5px 10px !important;
       color: #c9dfd6;
-      font-size: 12.5px;
+      font-size: 12.5px !important;
       font-weight: 500;
       border-radius: 5px;
       text-decoration: none;
@@ -246,9 +294,10 @@
       color: #34d399 !important;
       font-weight: 700;
     }
-    .sub-dot {
-      width: 6px;
-      height: 6px;
+    .sidebar nav .sidebar-submenu a span.sub-dot {
+      width: 6px !important;
+      height: 6px !important;
+      font-size: 0 !important;
       border-radius: 50%;
       background: #739889;
       flex-shrink: 0;
@@ -286,17 +335,19 @@
       <strong>{{ !empty($settings) && $settings->get('institution_name') ? $settings->get('institution_name') : 'MCTSC Admin' }}</strong>
     </a>
     <nav>
-      {{-- GROUP 1: MAIN / ওভারভিউ ও প্রধান কার্যক্রম --}}
-      <div class="nav-group-heading">MAIN / প্রধান</div>
+      {{-- GROUP 1: OVERVIEW --}}
+      <div class="nav-group-heading">OVERVIEW</div>
 
       <a class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}" href="{{ route('admin.dashboard') }}" title="Dashboard">
         <span class="nav-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
         </span>
         <span class="nav-text">Dashboard</span>
       </a>
 
-      {{-- Student Management Direct Menu (Submenus are accessed from the Student Management Dashboard page) --}}
+      {{-- GROUP 2: ACADEMIC --}}
+      <div class="nav-group-heading">ACADEMIC</div>
+
       @if(auth()->user()?->isSystemAdmin() || auth()->user()?->hasPermission('students.view'))
         <a class="{{ request()->routeIs('admin.students.*') ? 'active' : '' }}" href="{{ route('admin.students.dashboard') }}" title="Student Management">
           <span class="nav-icon">
@@ -313,13 +364,10 @@
           </span>
           <span class="nav-text">Admissions</span>
           @if(($pendingAdmissionsCount ?? 0) > 0)
-            <span style="background:#e11d48;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:auto;font-weight:700;">{{ $pendingAdmissionsCount }}</span>
+            <span style="background:#e11d48;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;font-weight:700;">{{ $pendingAdmissionsCount }}</span>
           @endif
         </a>
       @endcan
-
-      {{-- GROUP 2: ACADEMIC & PROJECTS / শিক্ষা ও ট্রেনিং --}}
-      <div class="nav-group-heading">ACADEMIC & PROJECTS</div>
 
       @can('courses.manage')
         <a class="{{ request()->is('admin/content/courses*') ? 'active' : '' }}" href="{{ route('admin.content.index','courses') }}" title="Courses">
@@ -340,25 +388,16 @@
       @endcan
 
       @if(auth()->user()?->can('partners.manage') || auth()->user()?->can('projects.manage') || auth()->user()?->can('settings.manage') || auth()->user()?->is_admin)
-        <a class="{{ request()->is('admin/content/partners*') ? 'active' : '' }}" href="{{ route('admin.content.index','partners') }}" title="Development Partners">
+        <a class="{{ request()->is('admin/content/partners*') ? 'active' : '' }}" href="{{ route('admin.content.index','partners') }}" title="Partners">
           <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           </span>
           <span class="nav-text">Partners</span>
         </a>
       @endif
 
-      {{-- GROUP 3: WEBSITE CMS & MEDIA / ওয়েবসাইট কনটেন্ট --}}
-      <div class="nav-group-heading">WEBSITE CMS & MEDIA</div>
-
-      @if(auth()->user()?->can('hero_slides.manage') || auth()->user()?->can('settings.manage') || auth()->user()?->can('projects.manage') || auth()->user()?->is_admin)
-        <a class="{{ request()->is('admin/content/hero_slides*') ? 'active' : '' }}" href="{{ route('admin.content.index','hero_slides') }}" title="Hero Slider Banners">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
-          </span>
-          <span class="nav-text">Hero Slider</span>
-        </a>
-      @endif
+      {{-- GROUP 3: WEBSITE CONTENT --}}
+      <div class="nav-group-heading">WEBSITE CONTENT</div>
 
       @can('notices.manage')
         <a class="{{ request()->is('admin/content/notices*') ? 'active' : '' }}" href="{{ route('admin.content.index','notices') }}" title="Notices">
@@ -369,13 +408,30 @@
         </a>
       @endcan
 
+      {{-- Career Dropdown (includes Job Circulars & Job Applications) --}}
       @if(auth()->user()?->can('career.manage') || auth()->user()?->can('notices.manage') || auth()->user()?->is_admin)
-        <a class="{{ request()->is('admin/content/career*') ? 'active' : '' }}" href="{{ route('admin.content.index','career') }}" title="Career / Job Circulars">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-          </span>
-          <span class="nav-text">Career / Jobs</span>
-        </a>
+        @php
+          $careerOpen = request()->is('admin/content/career*') || request()->routeIs('admin.job-applications*');
+        @endphp
+        <div class="sidebar-dropdown {{ $careerOpen ? 'open is-active' : '' }}">
+          <div class="dropdown-toggle" onclick="this.parentElement.classList.toggle('open')" title="Career">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+            </span>
+            <span class="nav-text">Career</span>
+            <span class="dropdown-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"></polyline></svg>
+            </span>
+          </div>
+          <div class="sidebar-submenu">
+            <a class="{{ request()->is('admin/content/career*') ? 'active-sub' : '' }}" href="{{ route('admin.content.index','career') }}">
+              <span class="sub-dot"></span> Job Circulars
+            </a>
+            <a class="{{ request()->routeIs('admin.job-applications*') ? 'active-sub' : '' }}" href="{{ route('admin.job-applications.index') }}">
+              <span class="sub-dot"></span> Job Applications
+            </a>
+          </div>
+        </div>
       @endif
 
       @can('gallery.manage')
@@ -388,7 +444,7 @@
       @endcan
 
       @if(auth()->user()?->can('projects.manage') || auth()->user()?->can('settings.manage') || auth()->user()?->can('activities.manage') || auth()->user()?->is_admin)
-        <a class="{{ request()->is('admin/content/stories*') ? 'active' : '' }}" href="{{ route('admin.content.index','stories') }}" title="Success Stories & Case Studies">
+        <a class="{{ request()->is('admin/content/stories*') ? 'active' : '' }}" href="{{ route('admin.content.index','stories') }}" title="Success Stories">
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2z"/></svg>
           </span>
@@ -414,8 +470,8 @@
         </a>
       @endcan
 
-      {{-- GROUP 4: SYSTEM & ACCESS / সিস্টেম ও সেটিংস --}}
-      <div class="nav-group-heading">SYSTEM & SETTINGS</div>
+      {{-- GROUP 4: SYSTEM --}}
+      <div class="nav-group-heading">SYSTEM</div>
 
       @can('messages.view')
         <a class="{{ request()->routeIs('admin.messages*') ? 'active' : '' }}" href="{{ route('admin.messages') }}" title="Messages">
@@ -426,17 +482,38 @@
         </a>
       @endcan
 
-      @can('settings.manage')
-        <a class="{{ request()->routeIs('admin.settings*') ? 'active' : '' }}" href="{{ route('admin.settings') }}" title="Site Settings">
-          <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-          </span>
-          <span class="nav-text">Site Settings</span>
-        </a>
-      @endcan
+      {{-- Site Settings Dropdown (includes General Settings & Hero Slider) --}}
+      @if(auth()->user()?->can('settings.manage') || auth()->user()?->can('hero_slides.manage') || auth()->user()?->is_admin)
+        @php
+          $settingsOpen = request()->routeIs('admin.settings*') || request()->is('admin/content/hero_slides*');
+        @endphp
+        <div class="sidebar-dropdown {{ $settingsOpen ? 'open is-active' : '' }}">
+          <div class="dropdown-toggle" onclick="this.parentElement.classList.toggle('open')" title="Site Settings">
+            <span class="nav-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </span>
+            <span class="nav-text">Site Settings</span>
+            <span class="dropdown-arrow">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 6 15 12 9 18"></polyline></svg>
+            </span>
+          </div>
+          <div class="sidebar-submenu">
+            @can('settings.manage')
+              <a class="{{ request()->routeIs('admin.settings*') ? 'active-sub' : '' }}" href="{{ route('admin.settings') }}">
+                <span class="sub-dot"></span> General & Banner
+              </a>
+            @endcan
+            @if(auth()->user()?->can('hero_slides.manage') || auth()->user()?->can('settings.manage') || auth()->user()?->can('projects.manage') || auth()->user()?->is_admin)
+              <a class="{{ request()->is('admin/content/hero_slides*') ? 'active-sub' : '' }}" href="{{ route('admin.content.index','hero_slides') }}">
+                <span class="sub-dot"></span> Hero Slider
+              </a>
+            @endif
+          </div>
+        </div>
+      @endif
 
       @can('users.view')
-        <a class="{{ request()->routeIs('admin.users*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}" title="User Management">
+        <a class="{{ request()->routeIs('admin.users*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}" title="Users">
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
           </span>
@@ -445,7 +522,7 @@
       @endcan
 
       @can('roles.manage')
-        <a class="{{ request()->routeIs('admin.roles*') ? 'active' : '' }}" href="{{ route('admin.roles.index') }}" title="Role Management">
+        <a class="{{ request()->routeIs('admin.roles*') ? 'active' : '' }}" href="{{ route('admin.roles.index') }}" title="Roles">
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
           </span>
@@ -454,29 +531,22 @@
       @endcan
 
       @if(auth()->user()?->isSystemAdmin() || auth()->user()?->can('users.view') || auth()->user()?->can('settings.manage'))
-        <a class="{{ request()->routeIs('admin.activity-logs*') ? 'active' : '' }}" href="{{ route('admin.activity-logs.index') }}" title="User Activity & Security Logs">
+        <a class="{{ request()->routeIs('admin.activity-logs*') ? 'active' : '' }}" href="{{ route('admin.activity-logs.index') }}" title="Activity Logs">
           <span class="nav-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
           </span>
           <span class="nav-text">Activity Logs</span>
         </a>
       @endif
 
       @if(auth()->user()?->isSystemAdmin() || auth()->user()?->is_admin || auth()->user()?->can('settings.manage') || auth()->user()?->can('users.view'))
-        <a class="{{ request()->routeIs('admin.visitors*') ? 'active' : '' }}" href="{{ route('admin.visitors.index') }}" title="Website Visitor Analytics">
+        <a class="{{ request()->routeIs('admin.visitors*') ? 'active' : '' }}" href="{{ route('admin.visitors.index') }}" title="Visitor Analytics">
           <span class="nav-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
           </span>
           <span class="nav-text">Visitor Analytics</span>
         </a>
       @endif
-
-      <a class="{{ request()->routeIs('admin.profile*') ? 'active' : '' }}" href="{{ route('admin.profile.edit') }}" title="My Profile & Security">
-        <span class="nav-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg>
-        </span>
-        <span class="nav-text">My Profile</span>
-      </a>
     </nav>
     <div class="side-footer">
       <div class="side-user-btn" onclick="window.location='{{ route('admin.profile.edit') }}'" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.location='{{ route('admin.profile.edit') }}';}" role="button" tabindex="0" title="My Profile & Security" style="color:#fff;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;">

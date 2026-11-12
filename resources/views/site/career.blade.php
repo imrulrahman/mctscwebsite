@@ -386,10 +386,16 @@
         @endif
 
         <div class="career-actions">
-          <button type="button" class="btn-apply" onclick="openApplyModal('{{ addslashes($job->title) }}')">
+          <a href="{{ route('career.apply', ['job' => $job->slug]) }}" class="btn-apply" style="text-decoration:none;">
             <span>📝</span> {{ $isBn ? 'আবেদন করুন (Apply Now)' : 'Apply Now' }}
-          </button>
-          <a href="mailto:career@mctsc.edu.bd?subject={{ urlencode('Application for ' . $job->title) }}" class="btn-details">
+          </a>
+          @php
+            $gmailTo = 'career@mctsc.edu.bd';
+            $gmailSubject = 'Application for ' . $job->title;
+            $gmailBody = "Dear Hiring Committee,\n\nI am writing to apply for the position of {$job->title} at Mahmudunnabi Chowdhury Technical School and College.\n\nPlease find my CV/resume attached.\n\nSincerely,\n[Your Name]\n[Your Phone Number]";
+            $gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=' . urlencode($gmailTo) . '&su=' . urlencode($gmailSubject) . '&body=' . urlencode($gmailBody);
+          @endphp
+          <a href="{{ $gmailUrl }}" target="_blank" rel="noopener" class="btn-details" style="text-decoration:none;">
             <span>✉️</span> {{ $isBn ? 'ইমেইলে সিভি পাঠান' : 'Apply via Email' }}
           </a>
         </div>
@@ -397,62 +403,4 @@
     @endforeach
   @endif
 </div>
-
-<!-- APPLY MODAL -->
-<div class="apply-modal" id="applyModal" onclick="if(event.target === this) closeApplyModal()">
-  <div class="apply-modal-box">
-    <button type="button" class="modal-close" onclick="closeApplyModal()">&times;</button>
-    <h3 style="font-family: var(--serif, 'Libre Baskerville', Georgia, serif); font-size: 20px; color: var(--green, #0f5132); margin: 0 0 6px 0;">
-      {{ $isBn ? 'অনলাইন চাকরির আবেদন' : 'Online Job Application' }}
-    </h3>
-    <p style="font-size: 13px; color: #64748b; margin: 0 0 18px 0;" id="modalJobSubtitle">
-      {{ $isBn ? 'আবেদনের পদ:' : 'Position:' }} <strong id="modalJobTitleText"></strong>
-    </p>
-
-    <form method="post" action="{{ route('contact.store') }}">
-      @csrf
-      <input type="hidden" name="subject" id="modalSubject" value="Job Application">
-      
-      <div class="apply-field">
-        <label>{{ $isBn ? 'আপনার পূর্ণ নাম' : 'Full Name' }} <span style="color: #dc2626;">*</span></label>
-        <input type="text" name="name" required placeholder="{{ $isBn ? 'যেমন: মোহাম্মদ রহিম' : 'e.g. John Doe' }}">
-      </div>
-
-      <div class="apply-field">
-        <label>{{ $isBn ? 'ইমেইল অ্যাড্রেস' : 'Email Address' }} <span style="color: #dc2626;">*</span></label>
-        <input type="email" name="email" required placeholder="name@example.com">
-      </div>
-
-      <div class="apply-field">
-        <label>{{ $isBn ? 'মোবাইল / হোয়াটসঅ্যাপ নম্বর' : 'Phone / WhatsApp' }} <span style="color: #dc2626;">*</span></label>
-        <input type="tel" name="phone" required placeholder="01XXXXXXXXX">
-      </div>
-
-      <div class="apply-field">
-        <label>{{ $isBn ? 'যোগ্যতা ও অভিজ্ঞতা সংক্ষেপ / কভার নোট' : 'Qualifications, Experience & CV Details' }} <span style="color: #dc2626;">*</span></label>
-        <textarea name="message" rows="4" required placeholder="{{ $isBn ? 'আপনার শিক্ষাগত যোগ্যতা, ডিপ্লোমা/সার্টিফিকেশন, অভিজ্ঞতা এবং সিভি / পোর্টফোলিও লিংক লিখুন...' : 'Briefly describe your relevant education, TVET diploma/certificates, years of experience, and Google Drive CV link...' }}"></textarea>
-      </div>
-
-      <div style="background: #f8fafc; border: 1px dashed #cbd5e1; padding: 10px 14px; border-radius: 6px; font-size: 12px; color: #64748b; margin-bottom: 18px;">
-        💡 {{ $isBn ? 'সিভির গুগল ড্রাইভ / ড্রপবক্স লিংক উপরে উল্লেখ করতে পারেন অথবা আবেদন করার পর career@mctsc.edu.bd ঠিকানায় সরাসরি সিভি এটাচ করে পাঠাতে পারেন।' : 'You may include your Google Drive / Dropbox CV link in the box above, or email your resume directly to career@mctsc.edu.bd.' }}
-      </div>
-
-      <div style="display: flex; justify-content: flex-end; gap: 10px;">
-        <button type="button" class="btn-details" onclick="closeApplyModal()">{{ $isBn ? 'বাতিল' : 'Cancel' }}</button>
-        <button type="submit" class="btn-apply">{{ $isBn ? 'আবেদন জমা দিন' : 'Submit Application' }}</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<script>
-function openApplyModal(jobTitle) {
-  document.getElementById('modalJobTitleText').textContent = jobTitle;
-  document.getElementById('modalSubject').value = 'Job Application: ' + jobTitle;
-  document.getElementById('applyModal').classList.add('active');
-}
-function closeApplyModal() {
-  document.getElementById('applyModal').classList.remove('active');
-}
-</script>
 @endsection

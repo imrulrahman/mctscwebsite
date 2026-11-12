@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\ActivityLog;
 use App\Models\AdmissionApplication;
 use App\Models\ContactMessage;
 use App\Models\SiteContent;
+use App\Models\Student;
 use App\Models\VisitorLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -23,7 +23,6 @@ class DashboardController extends Controller
         $today = today()->toDateString();
         $todayVisitorsCount = VisitorLog::where('visit_date', $today)->count();
         $todayUniqueVisitorsCount = VisitorLog::where('visit_date', $today)->where('is_unique_today', true)->count();
-        $allTimeVisitorsCount = VisitorLog::count();
 
         $todayCountries = VisitorLog::where('visit_date', $today)
             ->select('country_code', 'country_name', DB::raw('count(*) as total'))
@@ -38,8 +37,31 @@ class DashboardController extends Controller
             return $item;
         });
 
-        $recentVisitors = VisitorLog::latest('id')->limit(6)->get();
-        $recentActivities = ActivityLog::latest('id')->limit(6)->get();
+        // Trainee / Student Demographic Summary
+        $traineeStats = [
+            'total' => Student::count(),
+            'male' => Student::whereRaw("LOWER(gender) = 'male'")->count(),
+            'female' => Student::whereRaw("LOWER(gender) = 'female'")->count(),
+            'ethnic' => Student::whereRaw("LOWER(ethnic) = 'yes'")->count(),
+            'pwd' => Student::whereRaw("LOWER(pwd) = 'yes'")->count(),
+        ];
+
+        // Occupation-wise Trainee Breakdown
+        $occupationStats = Student::query()
+            ->select(
+                'occupation',
+                DB::raw('MAX(occupation_code) as occupation_code'),
+                DB::raw('COUNT(*) as total'),
+                DB::raw("SUM(CASE WHEN LOWER(gender) = 'male' THEN 1 ELSE 0 END) as male_count"),
+                DB::raw("SUM(CASE WHEN LOWER(gender) = 'female' THEN 1 ELSE 0 END) as female_count"),
+                DB::raw("SUM(CASE WHEN LOWER(ethnic) = 'yes' THEN 1 ELSE 0 END) as ethnic_count"),
+                DB::raw("SUM(CASE WHEN LOWER(pwd) = 'yes' THEN 1 ELSE 0 END) as pwd_count")
+            )
+            ->whereNotNull('occupation')
+            ->where('occupation', '!=', '')
+            ->groupBy('occupation')
+            ->orderByDesc('total')
+            ->get();
 
         return view('admin.dashboard', [
             'counts' => $counts,
@@ -48,14 +70,12 @@ class DashboardController extends Controller
             'totalApplicationCount' => AdmissionApplication::count(),
             'pendingApplicationCount' => AdmissionApplication::where('status', 'new')->count(),
             'applicationCount' => AdmissionApplication::count(),
-            'recentApplications' => AdmissionApplication::latest()->limit(8)->get(),
             'messageCount' => ContactMessage::query()->where('is_read', false)->count(),
             'todayVisitorsCount' => $todayVisitorsCount,
             'todayUniqueVisitorsCount' => $todayUniqueVisitorsCount,
-            'allTimeVisitorsCount' => $allTimeVisitorsCount,
             'todayCountries' => $todayCountries,
-            'recentVisitors' => $recentVisitors,
-            'recentActivities' => $recentActivities,
+            'traineeStats' => $traineeStats,
+            'occupationStats' => $occupationStats,
         ]);
     }
 }

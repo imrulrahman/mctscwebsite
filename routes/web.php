@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\InboxController;
+use App\Http\Controllers\Admin\JobApplicationController;
 use App\Http\Controllers\Admin\LiveEditController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\StudentManagementController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\VisitorAnalyticsController;
+use App\Http\Controllers\CareerApplicationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SiteFormsController;
 use App\Http\Controllers\SitePageController;
@@ -28,6 +30,10 @@ Route::get('/success-stories', [SitePageController::class, 'successStories'])->n
 Route::get('/case-studies', [SitePageController::class, 'caseStudies'])->name('case_studies');
 Route::get('/stories/{slug}', [SitePageController::class, 'storyShow'])->name('stories.show');
 Route::get('/career', [SitePageController::class, 'career'])->name('career');
+Route::get('/career/apply/{slug?}', [CareerApplicationController::class, 'showForm'])->name('career.apply');
+Route::post('/career/apply', [CareerApplicationController::class, 'submit'])->middleware('throttle:10,1')->name('career.apply.submit');
+Route::get('/career/apply/confirmation/{tracking_no}', [CareerApplicationController::class, 'confirmation'])->name('career.apply.confirmation');
+Route::post('/career/email-apply', [CareerApplicationController::class, 'sendEmailApplication'])->middleware('throttle:10,1')->name('career.email.send');
 Route::get('/activities', [SitePageController::class, 'activities'])->name('activities');
 Route::get('/activities/{slug}', [SitePageController::class, 'activityShow'])->name('activities.show');
 Route::get('/contact', [SitePageController::class, 'contact'])->name('contact');
@@ -226,6 +232,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Messages Management
         Route::get('/messages', [InboxController::class, 'messages'])->name('messages');
         Route::delete('/messages/{message}', [InboxController::class, 'destroyMessage'])->name('messages.destroy');
+
+        // Job Applications Management
+        Route::get('/job-applications', [JobApplicationController::class, 'index'])->name('job-applications.index');
+        Route::get('/job-applications/{jobApplication}', [JobApplicationController::class, 'show'])->name('job-applications.show');
+        Route::patch('/job-applications/{jobApplication}', [JobApplicationController::class, 'update'])->name('job-applications.update');
+        Route::delete('/job-applications/{jobApplication}', [JobApplicationController::class, 'destroy'])->name('job-applications.destroy');
 
         // Site Settings
         Route::get('/settings', [SettingsController::class, 'edit'])->name('settings');

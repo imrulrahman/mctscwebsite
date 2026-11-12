@@ -87,207 +87,94 @@
 @endif
 
 <div class="dash-grid">
+  {{-- Trainee Demographic Summary Cards --}}
   <section class="panel" style="grid-column: 1 / -1;">
     <div class="panel-head">
       <div>
-        <h2 style="display:flex;align-items:center;gap:8px;">
-          <span>Recent Student Applications (সর্বশেষ ভর্তি আবেদন)</span>
-          @if($pendingApplicationCount > 0)
-            <span style="background:#fef3c7;color:#92400e;font-size:11.5px;padding:2px 8px;border-radius:12px;font-weight:700;">{{ $pendingApplicationCount }} Pending</span>
-          @endif
-        </h2>
-        <p style="font-size:12px;color:#64748b;margin:2px 0 0 0;">Review, approve and print student applications</p>
+        <h2>👥 Trainees Overview (ট্রেইনী পরিসংখ্যান)</h2>
+        <p style="font-size:12px;color:#64748b;margin:2px 0 0 0;">Total trainees breakdown by gender, ethnicity, and occupation</p>
       </div>
-      <a href="{{ route('admin.applications') }}">View All Applications →</a>
+      <a href="{{ route('admin.students.database') }}">Open Student Database →</a>
     </div>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Tracking ID</th>
-            <th>Applicant Name</th>
-            <th>Course & Shift</th>
-            <th>Project / Batch</th>
-            <th>Fee & Discount</th>
-            <th>Status</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          @forelse($recentApplications as $app)
-            <tr>
-              <td><strong style="color:#0f5132;">{{ $app->tracking_no }}</strong></td>
-              <td>
-                <strong>{{ $app->trainee_name_en ?: $app->name }}</strong>
-                @if($app->trainee_name_bn)
-                  <small class="subline" style="color:#64748b;">{{ $app->trainee_name_bn }}</small>
-                @endif
-                <small class="subline" style="color:#0f5132;font-weight:600;">📞 {{ $app->contact_no ?: $app->phone }}</small>
-              </td>
-              <td>
-                <strong>{{ $app->course }}</strong>
-                @if($app->preferred_shift)
-                  <small class="subline" style="color:#64748b;">{{ $app->preferred_shift }}</small>
-                @endif
-              </td>
-              <td>
-                <span style="display:inline-block;background:#f1f5f9;border:1px solid #cbd5e1;padding:2px 8px;border-radius:4px;font-weight:600;font-size:12px;color:#0f172a;">
-                  {{ $app->project_name ?: '— (অনির্ধারিত)' }}
-                </span>
-              </td>
-              <td>
-                <div>
-                  <strong style="color:{{ $app->isFreeProject() ? '#059669' : '#0f172a' }};">
-                    {{ $app->isFreeProject() ? 'Free (৳ 0)' : ('৳ ' . number_format($app->payable_amount, 0)) }}
-                  </strong>
-                  @if((float)$app->discount > 0)
-                    <small class="subline" style="color:#16a34a;">ছাড়: ৳ {{ number_format($app->discount, 0) }}</small>
-                  @endif
-                </div>
-              </td>
-              <td>
-                @if($app->status === 'accepted')
-                  <span style="background:#d1fae5;color:#065f46;padding:3px 8px;border-radius:4px;font-weight:700;font-size:11.5px;display:inline-flex;align-items:center;gap:4px;">
-                    ✔ Approved
-                  </span>
-                @elseif($app->status === 'rejected')
-                  <span style="background:#fee2e2;color:#991b1b;padding:3px 8px;border-radius:4px;font-weight:700;font-size:11.5px;">Rejected</span>
-                @else
-                  <span style="background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:4px;font-weight:700;font-size:11.5px;">⏳ Pending</span>
-                @endif
-              </td>
-              <td>
-                <small>{{ $app->created_at->format('d M, Y') }}</small>
-              </td>
-              <td>
-                <div style="display:flex;gap:6px;align-items:center;">
-                  @if($app->status !== 'accepted')
-                    <a href="{{ route('admin.applications.show', $app) }}#approval-section" style="background:#0f5132;color:#fff;padding:5px 10px;border-radius:4px;font-size:11.5px;font-weight:700;text-decoration:none;display:inline-flex;align-items:center;gap:4px;">
-                      ✔ Approve
-                    </a>
-                  @endif
-                  <a href="{{ route('admin.applications.show', $app) }}" style="background:#e2e8f0;color:#0f172a;padding:5px 8px;border-radius:4px;font-size:11.5px;text-decoration:none;font-weight:600;">Details</a>
-                  <a href="{{ route('admin.applications.print', $app) }}" target="_blank" style="background:#f8fafc;color:#0f172a;border:1px solid #cbd5e1;padding:4px 7px;border-radius:4px;font-size:11.5px;text-decoration:none;" title="Print Form & Voucher">🖨️</a>
-                </div>
-              </td>
-            </tr>
-          @empty
-            <tr>
-              <td colspan="8" class="empty">No student applications submitted yet.</td>
-            </tr>
-          @endforelse
-        </tbody>
-      </table>
-    </div>
-  </section>
-  {{-- Panel: Live Visitors & Country Distribution --}}
-  <section class="panel">
-    <div class="panel-head">
-      <div>
-        <h2 style="display:flex;align-items:center;gap:6px;">
-          <span>🌐 Today's Visitors & Countries (আজকের ভিজিটর ও দেশ)</span>
-        </h2>
-        <span style="font-size:12px;color:var(--muted);">Total: {{ number_format($todayVisitorsCount) }} visits · {{ number_format($todayUniqueVisitorsCount) }} unique</span>
-      </div>
-      <a href="{{ route('admin.visitors.index') }}">Full Visitor Analytics →</a>
-    </div>
-    <div style="padding:14px 16px;">
-      <h3 style="font-size:12px;text-transform:uppercase;color:#64748b;letter-spacing:0.5px;margin-bottom:10px;">Top Countries Today (আজ কোন দেশ থেকে কত ভিজিটর)</h3>
-      <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;">
-        @forelse($todayCountries as $c)
-          <div style="display:inline-flex;align-items:center;gap:6px;background:#f0fdf4;border:1px solid #bbf7d0;padding:6px 12px;border-radius:20px;font-size:13px;font-weight:600;color:#166534;">
-            <span style="font-size:18px;line-height:1;">{{ $c->flag }}</span>
-            <span>{{ $c->country_name }}</span>
-            <span style="background:#15803d;color:#fff;padding:1px 7px;border-radius:10px;font-size:11px;">{{ $c->total }}</span>
+    <div style="padding:16px;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(170px, 1fr));gap:14px;margin-bottom:22px;">
+        <a href="{{ route('admin.students.database') }}" style="text-decoration:none;background:#f0fdf4;border:1px solid #bbf7d0;border-left:4px solid #0f5132;border-radius:8px;padding:14px 16px;display:block;">
+          <div style="font-size:12px;color:#166534;font-weight:700;text-transform:uppercase;">Total Trainees</div>
+          <div style="font-size:26px;font-weight:800;color:#0f5132;margin:4px 0 2px;">{{ number_format($traineeStats['total']) }}</div>
+          <div style="font-size:11.5px;color:#15803d;">সর্বমোট প্রশিক্ষণার্থী</div>
+        </a>
+
+        <a href="{{ route('admin.students.database', ['gender' => 'Male']) }}" style="text-decoration:none;background:#eff6ff;border:1px solid #bfdbfe;border-left:4px solid #0284c7;border-radius:8px;padding:14px 16px;display:block;">
+          <div style="font-size:12px;color:#0369a1;font-weight:700;text-transform:uppercase;">Male (পুরুষ)</div>
+          <div style="font-size:26px;font-weight:800;color:#0c4a6e;margin:4px 0 2px;">{{ number_format($traineeStats['male']) }}</div>
+          <div style="font-size:11.5px;color:#0284c7;">
+            {{ $traineeStats['total'] > 0 ? round(($traineeStats['male'] / $traineeStats['total']) * 100, 1) : 0 }}% of total
           </div>
-        @empty
-          <p style="font-size:12.5px;color:#94a3b8;margin:0;">আজ এখনও কোন ভিজিটর রেকর্ড হয়নি। পাবলিক ওয়েবসাইট ব্রাউজ করলে এখানে লাইভ দেখা যাবে।</p>
-        @endforelse
+        </a>
+
+        <a href="{{ route('admin.students.database', ['gender' => 'Female']) }}" style="text-decoration:none;background:#fdf2f8;border:1px solid #fbcfe8;border-left:4px solid #db2777;border-radius:8px;padding:14px 16px;display:block;">
+          <div style="font-size:12px;color:#be185d;font-weight:700;text-transform:uppercase;">Female (নারী)</div>
+          <div style="font-size:26px;font-weight:800;color:#831843;margin:4px 0 2px;">{{ number_format($traineeStats['female']) }}</div>
+          <div style="font-size:11.5px;color:#db2777;">
+            {{ $traineeStats['total'] > 0 ? round(($traineeStats['female'] / $traineeStats['total']) * 100, 1) : 0 }}% of total
+          </div>
+        </a>
+
+        <a href="{{ route('admin.students.database', ['ethnic' => 'Yes']) }}" style="text-decoration:none;background:#fefce8;border:1px solid #fde68a;border-left:4px solid #d97706;border-radius:8px;padding:14px 16px;display:block;">
+          <div style="font-size:12px;color:#b45309;font-weight:700;text-transform:uppercase;">Ethnic (ক্ষুদ্র নৃ-গোষ্ঠী)</div>
+          <div style="font-size:26px;font-weight:800;color:#78350f;margin:4px 0 2px;">{{ number_format($traineeStats['ethnic']) }}</div>
+          <div style="font-size:11.5px;color:#d97706;">
+            {{ $traineeStats['total'] > 0 ? round(($traineeStats['ethnic'] / $traineeStats['total']) * 100, 1) : 0 }}% of total
+          </div>
+        </a>
+
+        @if($traineeStats['pwd'] > 0)
+          <a href="{{ route('admin.students.database', ['pwd' => 'Yes']) }}" style="text-decoration:none;background:#f5f3ff;border:1px solid #ddd6fe;border-left:4px solid #7c3aed;border-radius:8px;padding:14px 16px;display:block;">
+            <div style="font-size:12px;color:#6d28d9;font-weight:700;text-transform:uppercase;">PWD (প্রতিবন্ধী)</div>
+            <div style="font-size:26px;font-weight:800;color:#4c1d95;margin:4px 0 2px;">{{ number_format($traineeStats['pwd']) }}</div>
+            <div style="font-size:11.5px;color:#7c3aed;">Persons with Disability</div>
+          </a>
+        @endif
       </div>
 
-      <h3 style="font-size:12px;text-transform:uppercase;color:#64748b;letter-spacing:0.5px;margin-bottom:10px;">Recent Live Visitors</h3>
-      <div class="table-wrap" style="margin:0;">
-        <table style="font-size:12.5px;">
-          <thead>
-            <tr>
-              <th>Country</th>
-              <th>IP Address</th>
-              <th>Device</th>
-              <th>Time</th>
-            </tr>
-          </thead>
-          <tbody>
-            @forelse($recentVisitors as $rv)
-              <tr>
-                <td>
-                  <span style="font-size:16px;vertical-align:middle;margin-right:4px;">{{ $rv->getCountryFlagEmoji() }}</span>
-                  <strong>{{ $rv->country_name }}</strong>
-                </td>
-                <td><code>{{ $rv->ip_address }}</code></td>
-                <td>{{ $rv->device_type }} · {{ $rv->browser }}</td>
-                <td style="color:#64748b;white-space:nowrap;">{{ $rv->created_at->diffForHumans() }}</td>
-              </tr>
-            @empty
-              <tr>
-                <td colspan="4" class="empty" style="padding:15px;">No visitor data yet.</td>
-              </tr>
-            @endforelse
-          </tbody>
-        </table>
+      {{-- Occupation-wise Card View --}}
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <h3 style="margin:0;font-size:14px;color:#1e293b;">🎓 Occupation-Wise Trainees (অকুপেশন ভিত্তিক ট্রেইনী তথ্য)</h3>
+        <span style="font-size:12px;color:#64748b;">{{ $occupationStats->count() }} Occupations</span>
       </div>
-    </div>
-  </section>
 
-  {{-- Panel: Recent User Activity & Security Logs --}}
-  <section class="panel">
-    <div class="panel-head">
-      <div>
-        <h2 style="display:flex;align-items:center;gap:6px;">
-          <span>📋 User Activity & Security Log (ইউজার এক্টিভিটি)</span>
-        </h2>
-        <span style="font-size:12px;color:var(--muted);">Who changed what on the website and system</span>
-      </div>
-      <a href="{{ route('admin.activity-logs.index') }}">View All Activity Logs →</a>
-    </div>
-    <div class="table-wrap">
-      <table style="font-size:12.5px;">
-        <thead>
-          <tr>
-            <th>User</th>
-            <th>Action</th>
-            <th>Activity Description</th>
-            <th>Time</th>
-          </tr>
-        </thead>
-        <tbody>
-          @forelse($recentActivities as $act)
-            <tr>
-              <td>
-                <strong style="color:#0f5132;display:block;">{{ $act->user_name ?: 'System' }}</strong>
-                <small style="color:#64748b;font-size:11px;">{{ $act->user_role ?: 'User' }}</small>
-              </td>
-              <td>
-                <span class="badge" style="font-size:11px;padding:2px 7px;border-radius:10px;{{ $act->action === 'change_banner' ? 'background:#ede9fe;color:#6d28d9;' : ($act->action === 'failed_login' ? 'background:#fee2e2;color:#991b1b;' : 'background:#e0f2fe;color:#0369a1;') }}">
-                  {{ $act->action === 'change_banner' ? 'Banner' : ucfirst(str_replace('_', ' ', $act->action)) }}
-                </span>
-              </td>
-              <td>
-                <div style="max-width:280px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="{{ $act->description }}">
-                  {{ $act->description }}
+      @if($occupationStats->isNotEmpty())
+        <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(255px, 1fr));gap:14px;">
+          @foreach($occupationStats as $occ)
+            <a href="{{ route('admin.students.database', ['occupation' => $occ->occupation]) }}" style="text-decoration:none;background:#ffffff;border:1px solid #dbe6e0;border-radius:8px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;transition:box-shadow 0.2s, border-color 0.2s;" onmouseover="this.style.borderColor='#0f5132';this.style.boxShadow='0 4px 12px rgba(15,81,50,0.08)';" onmouseout="this.style.borderColor='#dbe6e0';this.style.boxShadow='none';">
+              <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;">
+                <div>
+                  <strong style="font-size:13.5px;color:#0f172a;display:block;line-height:1.35;">{{ $occ->occupation }}</strong>
+                  @if($occ->occupation_code)
+                    <span style="font-size:11px;color:#64748b;font-weight:600;">Code: {{ $occ->occupation_code }}</span>
+                  @endif
                 </div>
-              </td>
-              <td style="white-space:nowrap;color:#64748b;font-size:11.5px;">
-                {{ $act->created_at->diffForHumans() }}
-              </td>
-            </tr>
-          @empty
-            <tr>
-              <td colspan="4" class="empty" style="padding:15px;">No user activity recorded yet.</td>
-            </tr>
-          @endforelse
-        </tbody>
-      </table>
+                <span style="background:#ecfdf5;color:#0f5132;border:1px solid #bbf7d0;font-size:15px;font-weight:800;padding:4px 10px;border-radius:6px;flex-shrink:0;">
+                  {{ number_format($occ->total) }}
+                </span>
+              </div>
+
+              <div style="display:flex;flex-wrap:wrap;gap:6px;padding-top:8px;border-top:1px dashed #e2e8f0;font-size:11.5px;font-weight:600;">
+                <span style="background:#eff6ff;color:#0369a1;padding:2px 8px;border-radius:12px;">♂ Male: {{ number_format($occ->male_count) }}</span>
+                <span style="background:#fdf2f8;color:#be185d;padding:2px 8px;border-radius:12px;">♀ Female: {{ number_format($occ->female_count) }}</span>
+                <span style="background:#fefce8;color:#b45309;padding:2px 8px;border-radius:12px;">🌿 Ethnic: {{ number_format($occ->ethnic_count) }}</span>
+                @if($occ->pwd_count > 0)
+                  <span style="background:#f5f3ff;color:#6d28d9;padding:2px 8px;border-radius:12px;">♿ PWD: {{ number_format($occ->pwd_count) }}</span>
+                @endif
+              </div>
+            </a>
+          @endforeach
+        </div>
+      @else
+        <div style="text-align:center;padding:24px;color:#64748b;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1;">
+          No trainee data found yet.
+        </div>
+      @endif
     </div>
   </section>
 
