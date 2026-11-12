@@ -66,6 +66,9 @@ Route::get('/deploy-update', function () {
         if (is_dir('/home/mctscedu/public_html/assets')) {
             @shell_exec('cp -rn /home/mctscedu/mctscwebsite/public/assets/* /home/mctscedu/public_html/assets/ 2>&1');
         }
+        if (is_dir('/home/mctscedu/public_html/storage') && is_dir(storage_path('app/public/career-applications'))) {
+            @shell_exec('cp -rn ' . escapeshellarg(storage_path('app/public/career-applications')) . ' /home/mctscedu/public_html/storage/ 2>&1');
+        }
     }
     \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     $mig = \Illuminate\Support\Facades\Artisan::output();

@@ -254,14 +254,16 @@ class CareerApplicationController extends Controller
             }
             $targets = [
                 public_path('storage/' . $path),
-                '/home/mctscedu/public_html/storage/' . $path,
             ];
+            if (is_dir('/home/mctscedu/public_html')) {
+                $targets[] = '/home/mctscedu/public_html/storage/' . $path;
+            }
             foreach ($targets as $target) {
                 $dir = dirname($target);
-                if (!is_dir($dir) && is_dir(dirname($dir))) {
-                    @mkdir($dir, 0775, true);
+                if (!is_dir($dir)) {
+                    @mkdir($dir, 0755, true);
                 }
-                if (is_dir($dir) && !is_link(dirname($dir))) {
+                if (is_dir($dir) && !is_link($dir) && realpath($source) !== realpath($target)) {
                     @copy($source, $target);
                 }
             }
