@@ -221,9 +221,9 @@ class CareerApplicationController extends Controller
             'message' => $validated['message'] . $cvNote,
         ]);
 
-        // Also attempt to send email to career@mctsc.edu.bd / configured email
+        // Also attempt to send email to mnctsc@gmail.com / configured email
         try {
-            $toEmail = SiteSetting::where('key', 'email')->value('value') ?: 'career@mctsc.edu.bd';
+            $toEmail = SiteSetting::where('key', 'email')->value('value') ?: 'mnctsc@gmail.com';
             Mail::raw(
                 "Applicant Name: {$validated['name']}\n" .
                 "Email: {$validated['email']}\n" .

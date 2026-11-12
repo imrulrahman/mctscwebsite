@@ -327,7 +327,7 @@
       </p>
       <div class="empty-contact-pill">
         <span>📧 {{ $isBn ? 'সিভি পাঠাতে:' : 'Direct CV submission:' }}</span>
-        <a href="mailto:career@mctsc.edu.bd">career@mctsc.edu.bd</a>
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to=mnctsc%40gmail.com" target="_blank" rel="noopener">mnctsc@gmail.com</a>
       </div>
     </div>
   @else
@@ -390,7 +390,7 @@
             <span>📝</span> {{ $isBn ? 'আবেদন করুন (Apply Now)' : 'Apply Now' }}
           </a>
           @php
-            $gmailTo = 'career@mctsc.edu.bd';
+            $gmailTo = 'mnctsc@gmail.com';
             $gmailSubject = 'Application for ' . $job->title;
             $gmailBody = "Dear Hiring Committee,\n\nI am writing to apply for the position of {$job->title} at Mahmudunnabi Chowdhury Technical School and College.\n\nPlease find my CV/resume attached.\n\nSincerely,\n[Your Name]\n[Your Phone Number]";
             $gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=' . urlencode($gmailTo) . '&su=' . urlencode($gmailSubject) . '&body=' . urlencode($gmailBody);
