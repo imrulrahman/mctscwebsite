@@ -20,7 +20,7 @@
       <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:20px;margin-bottom:20px;border-bottom:1px solid #e2e8f0;padding-bottom:16px;">
         <div style="display:flex;gap:18px;align-items:center;">
           @if($application->photo_path)
-            <img src="{{ storage_asset($application->photo_path) }}" alt="Photo" style="width:96px;height:96px;object-fit:cover;border-radius:6px;border:1px solid #cbd5e1;">
+            <img src="{{ storage_asset($application->photo_path) }}" alt="Photo" style="width:96px;height:96px;object-fit:cover;border-radius:6px;border:1px solid #cbd5e1;background:#f8fafc;" onerror="this.onerror=null; this.src='{{ asset('assets/images/user-placeholder.png') }}';">
           @endif
           <div>
             <h2 style="margin:0 0 6px 0;">{{ $application->applicant_name }}</h2>
@@ -33,7 +33,7 @@
         </div>
         @if($application->signature_path)
           <div style="text-align:center;">
-            <img src="{{ storage_asset($application->signature_path) }}" alt="Signature" style="max-width:170px;max-height:52px;border:1px solid #e2e8f0;padding:4px;border-radius:4px;">
+            <img src="{{ storage_asset($application->signature_path) }}" alt="Signature" style="max-width:170px;max-height:52px;border:1px solid #e2e8f0;padding:4px;border-radius:4px;background:#fff;" onerror="this.onerror=null; this.style.display='none';">
             <div style="font-size:11px;color:#64748b;margin-top:3px;">Applicant's Signature</div>
           </div>
         @endif
