@@ -61,7 +61,7 @@ Route::get('/deploy-update', function () {
     }
     $gitOutput = 'shell_exec not available';
     if (function_exists('shell_exec')) {
-        $gitOutput = shell_exec('cd ' . escapeshellarg(base_path()) . ' && git pull origin main 2>&1') ?? 'No git output';
+        $gitOutput = shell_exec('cd ' . escapeshellarg(base_path()) . ' && rm -f error_log && git checkout . && git pull origin main 2>&1') ?? 'No git output';
         // Mirror static assets if running in cPanel split structure
         if (is_dir('/home/mctscedu/public_html/assets')) {
             @shell_exec('cp -rn /home/mctscedu/mctscwebsite/public/assets/* /home/mctscedu/public_html/assets/ 2>&1');

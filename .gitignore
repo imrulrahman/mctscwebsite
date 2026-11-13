@@ -25,3 +25,5 @@ yarn-error.log
 letters/
 create_letters.py
 /scratch/
+
+error_log
