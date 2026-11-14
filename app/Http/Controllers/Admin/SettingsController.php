@@ -26,10 +26,30 @@ class SettingsController extends Controller
         // Notice Bar
         'notice_bar_bg_color', 'notice_bar_opacity', 'notice_bar_text_color',
         // About
-        'about_title', 'about', 'about_bn', 'about_aside',
-        'about_intro_kicker', 'about_intro_title', 'about_intro_subtitle',
-        'about_intro_body', 'about_intro_body_bn',
-        'about_commitment',
+        'about_title', 'about_title_bn', 'about', 'about_bn', 'about_aside',
+        'about_intro_kicker', 'about_intro_kicker_bn', 'about_intro_title', 'about_intro_title_bn', 'about_intro_subtitle',
+        'about_intro_body', 'about_intro_body_bn', 'about_btn_text', 'about_btn_text_bn', 'about_modal_title', 'about_modal_title_bn',
+        'about_commitment', 'about_commitment_bn',
+        // Vision, Mission, Objectives
+        'vmo_vision_pill', 'vmo_vision_pill_bn', 'vmo_vision_text', 'vmo_vision_text_bn',
+        'vmo_mission_pill', 'vmo_mission_pill_bn', 'vmo_mission_text', 'vmo_mission_text_bn',
+        'vmo_objectives_pill', 'vmo_objectives_pill_bn', 'vmo_objectives_text', 'vmo_objectives_text_bn',
+        // Strategic Partnership
+        'strategic_partnership_kicker', 'strategic_partnership_kicker_bn', 'strategic_partnership_title', 'strategic_partnership_title_bn',
+        'strategic_partnership_body', 'strategic_partnership_body_bn', 'strategic_partnership_footer', 'strategic_partnership_footer_bn',
+        // Governance
+        'gov_committee_title', 'gov_committee_title_bn', 'gov_committee_intro', 'gov_committee_intro_bn',
+        // Development Partners & Activities
+        'dev_partners_kicker', 'dev_partners_kicker_bn', 'dev_partners_title', 'dev_partners_title_bn', 'dev_partners_text', 'dev_partners_text_bn',
+        'activities_sidebar_title', 'activities_sidebar_title_bn',
+        // Legal & Patron
+        'legal_status_kicker', 'legal_status_kicker_bn', 'legal_status_title', 'legal_status_title_bn', 'legal_status_intro', 'legal_status_intro_bn',
+        'legal_status_bteb', 'legal_status_nsda', 'legal_status_trade', 'legal_status_tin', 'legal_status_bin', 'legal_status_footer', 'legal_status_footer_bn',
+        'patron_kicker', 'patron_kicker_bn', 'patron_title', 'patron_title_bn', 'patron_text', 'patron_text_bn',
+        // Core Values
+        'core_values_kicker', 'core_values_kicker_bn', 'core_values_title', 'core_values_title_bn', 'core_values_subtitle', 'core_values_subtitle_bn',
+        // Contact & Misc
+        'contact_phone', 'address_bn', 'tagline_bn',
         // Industry Partnerships
         'industry_partners_kicker', 'industry_partners_title',
         'industry_partners_intro_1', 'industry_partners_intro_2',

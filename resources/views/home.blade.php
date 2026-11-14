@@ -2434,7 +2434,7 @@
   <section id="about" class="section about-section">
     <div class="container">
       <div class="about-wrap">
-        <h2 data-live-edit data-live-key="about_title" data-live-type="text" data-live-title="ইনস্টিটিউটের পটভূমি শিরোনাম" data-live-location="হোমপেজ - পটভূমি">{{ $settings->get('about_title') ?: ($isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background') }}</h2>
+        <h2 data-live-edit data-live-key="{{ $isBn ? 'about_title_bn' : 'about_title' }}" data-live-type="text" data-live-title="{{ $isBn ? 'ইনস্টিটিউটের পটভূমি শিরোনাম (বাংলা)' : 'Institute Background Title (English)' }}" data-live-location="হোমপেজ - পটভূমি">{{ $settings->get($isBn ? 'about_title_bn' : 'about_title') ?: ($isBn ? 'ইনস্টিটিউটের পটভূমি' : 'Institute Background') }}</h2>
         <div class="gold-rule"></div>
         <div class="about-summary-text">
           @php
@@ -2442,29 +2442,35 @@
             if (empty($settings->get('about_image')) || $settings->get('about_image') === 'assets/MC Building Photo.jpg') {
                 $aboutImgSrc = asset('assets/about_mahmudunnabi_legacy.jpg');
             }
+
+            $defaultAboutBn = "মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত মাহমুদুন্নবী ফাউন্ডেশন এবং ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ。\n\n২০১৮ সাল থেকে MCTSC কারিগরি ও বৃত্তিমূলক শিক্ষা এবং প্রশিক্ষণে (TVET) সুদীর্ঘ অভিজ্ঞতাসম্পন্ন উন্নয়ন সংস্থা ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)-এর সাথে যৌথভাবে কার্যক্রম পরিচালনা করে আসছে...";
+
+            $defaultAboutEn = "Mahmudunnabi Chowdhury Technical School and College (MCTSC) is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006, the institution was founded as a joint initiative of the Mahmudunnabi Foundation, established in memory of Mahmudunnabi Chowdhury, a Bangladeshi politician, businessman, former minister and father of Amir Khasru Mahmud Chowdhury, the Minister, Ministry of Finance and Ministry of Planning, Government of the People's Republic of Bangladesh.\n\nSince 2018, MCTSC has been working jointly with Impact Initiative (IMI), a development organization with extensive experience in Technical and Vocational Education and Training (TVET)...";
+
+            $hasCustomIntroBn = $settings->has('about_intro_body_bn') && filled(trim($settings->get('about_intro_body_bn')));
+            $hasCustomIntroEn = $settings->has('about_intro_body') && filled(trim($settings->get('about_intro_body')));
+
+            if ($isBn) {
+                $aboutIntroCurrent = $hasCustomIntroBn ? $settings->get('about_intro_body_bn') : $defaultAboutBn;
+            } else {
+                $aboutIntroCurrent = $hasCustomIntroEn ? $settings->get('about_intro_body') : $defaultAboutEn;
+            }
           @endphp
           <div class="about-image-floated">
-            <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus" data-live-edit data-live-key="about_image" data-live-type="image" data-live-title="ক্যাম্পাস ও পটভূমি ছবি" data-live-location="হোমপেজ - পটভূমি">
+            <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus" data-live-edit data-live-key="about_image" data-live-type="image" data-live-title="{{ $isBn ? 'ক্যাম্পাস ও পটভূমি ছবি' : 'Campus & Background Image' }}" data-live-location="হোমপেজ - পটভূমি">
           </div>
-          @if($isBn)
-            <p>
-              <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
-            </p>
-            <p>
-              ২০১৮ সাল থেকে MCTSC কারিগরি ও বৃত্তিমূলক শিক্ষা এবং প্রশিক্ষণে (TVET) সুদীর্ঘ অভিজ্ঞতাসম্পন্ন উন্নয়ন সংস্থা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর সাথে যৌথভাবে কার্যক্রম পরিচালনা করে আসছে...
-            </p>
-          @else
-            <p>
-              <strong>Mahmudunnabi Chowdhury Technical School and College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006, the institution was founded as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, a Bangladeshi politician, businessman, former minister and father of Amir Khasru Mahmud Chowdhury, the Minister, Ministry of Finance and Ministry of Planning, Government of the People's Republic of Bangladesh.
-            </p>
-            <p>
-              Since 2018, MCTSC has been working jointly with <strong>Impact Initiative (IMI)</strong>, a development organization with extensive experience in Technical and Vocational Education and Training (TVET)...
-            </p>
-          @endif
+
+          <div class="about-summary-paragraphs" data-live-edit data-live-key="{{ $isBn ? 'about_intro_body_bn' : 'about_intro_body' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'ইনস্টিটিউটের পটভূমি বিবরণ (বাংলা)' : 'Institute Background Body Text (English)' }}" data-live-location="হোমপেজ - পটভূমি" data-live-raw="{{ $aboutIntroCurrent }}" style="display: block; cursor: pointer;">
+            @foreach(explode("\n\n", str_replace("\r\n", "\n", $aboutIntroCurrent)) as $par)
+              @if(trim($par))
+                <p style="text-align: justify; text-justify: inter-word; margin-bottom: 12px; line-height: 1.8;">{!! nl2br(trim($par)) !!}</p>
+              @endif
+            @endforeach
+          </div>
 
           <div style="margin-top: 14px;">
             <button type="button" id="openAboutModalBtn" class="btn-readmore-floating">
-              <span>{{ $isBn ? 'সম্পূর্ণ পটভূমি পড়ুন' : 'Read More' }}</span>
+              <span data-live-edit data-live-key="{{ $isBn ? 'about_btn_text_bn' : 'about_btn_text' }}" data-live-type="text" data-live-title="{{ $isBn ? 'বাটন টেক্সট (বাংলা)' : 'Read More Button Text' }}" data-live-location="হোমপেজ - পটভূমি">{{ $settings->get($isBn ? 'about_btn_text_bn' : 'about_btn_text') ?: ($isBn ? 'সম্পূর্ণ পটভূমি পড়ুন' : 'Read More') }}</span>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </button>
           </div>
@@ -2479,56 +2485,24 @@
       <div class="about-modal-head">
         <h3 id="aboutModalTitle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px;"><path d="M3 21h18M3 10h18M5 10v11M9 10v11M15 10v11M19 10v11M12 2L2 7h20L12 2z"/></svg>
-          <span>{{ $settings->get('about_title') ?: ($isBn ? 'ইনস্টিটিউটের পূর্ণাঙ্গ পটভূমি' : 'Institute Background') }}</span>
+          <span data-live-edit data-live-key="{{ $isBn ? 'about_modal_title_bn' : 'about_modal_title' }}" data-live-type="text" data-live-title="{{ $isBn ? 'মডেল শিরোনাম (বাংলা)' : 'Modal Title (English)' }}" data-live-location="হোমপেজ - পটভূমি">{{ $settings->get($isBn ? 'about_modal_title_bn' : 'about_modal_title') ?: ($settings->get($isBn ? 'about_title_bn' : 'about_title') ?: ($isBn ? 'ইনস্টিটিউটের পূর্ণাঙ্গ পটভূমি' : 'Institute Background')) }}</span>
         </h3>
         <button type="button" id="closeAboutModalBtn" class="about-modal-close" aria-label="Close dialog">&times;</button>
       </div>
-      <div class="about-modal-body" data-live-edit data-live-key="{{ $isBn ? 'about_bn' : 'about' }}" data-live-type="textarea" data-live-title="ইনস্টিটিউটের পটভূমি পূর্ণাঙ্গ বিবরণ" data-live-location="হোমপেজ - পটভূমি">
+      @php
+        $defaultFullAboutBn = "মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত মাহমুদুন্নবী ফাউন্ডেশন এবং ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ。\n\n২০১৮ সাল থেকে MCTSC কারিগরি ও বৃত্তিমূলক শিক্ষা এবং প্রশিক্ষণে (TVET) সুদীর্ঘ অভিজ্ঞতাসম্পন্ন উন্নয়ন সংস্থা ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)-এর সাথে যৌথভাবে কার্যক্রম পরিচালনা করে আসছে। এই যৌথ উদ্যোগের লক্ষ্য প্রশিক্ষণ কর্মসূচির গুণগত মান নিশ্চিত করা, উচ্চ প্রশিক্ষণের মান বজায় রাখা এবং দক্ষতা ও উদ্যোক্তা উন্নয়ন কার্যক্রমের মাধ্যমে দারিদ্র্য বিমোচন ও প্রাসঙ্গিকতা বৃদ্ধি করা。\n\nইমপ্যাক্ট ইনিশিয়েটিভ কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে。\n\nপ্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।";
+
+        $defaultFullAboutEn = "Mahmudunnabi Chowdhury Technical School and College (MCTSC) is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006, the institution was founded as a joint initiative of the Mahmudunnabi Foundation, established in memory of Mahmudunnabi Chowdhury, a Bangladeshi politician, businessman, former minister and father of Amir Khasru Mahmud Chowdhury, the Minister, Ministry of Finance and Ministry of Planning, Government of the People's Republic of Bangladesh.\n\nSince 2018, MCTSC has been working jointly with Impact Initiative (IMI), a development organization with extensive experience in Technical and Vocational Education and Training (TVET). This collaboration aims to strengthen the quality assurance of training programmes, maintain high training standards, enhance the relevance and Poverty Elevation through Equip with Skills and Entrepreneurship development initiatives.\n\nMCTSC is committed to providing vocational and technical training opportunities for unemployed, unskilled, underprivileged, and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.\n\nSince its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.";
+
+        $fullAboutRaw = $isBn ? ($settings->get('about_bn') ?: $defaultFullAboutBn) : ($settings->get('about') ?: $defaultFullAboutEn);
+      @endphp
+      <div class="about-modal-body" data-live-edit data-live-key="{{ $isBn ? 'about_bn' : 'about' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'ইনস্টিটিউটের পূর্ণাঙ্গ পটভূমি বিবরণ (বাংলা)' : 'Full Institute Background (English)' }}" data-live-location="হোমপেজ - পটভূমি" data-live-raw="{{ $fullAboutRaw }}">
         <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus" class="modal-about-img">
-        @php
-          $customAbout = $settings->get('about');
-        @endphp
-        @if($isBn && !empty($settings->get('about_bn')))
-          @foreach(explode("\n\n", str_replace("\r\n", "\n", $settings->get('about_bn'))) as $par)
-            @if(trim($par))
-              <p>{!! nl2br(e(trim($par))) !!}</p>
-            @endif
-          @endforeach
-        @elseif(!empty($customAbout))
-          @foreach(explode("\n\n", str_replace("\r\n", "\n", $customAbout)) as $par)
-            @if(trim($par))
-              <p>{!! nl2br(e(trim($par))) !!}</p>
-            @endif
-          @endforeach
-        @else
-          @if($isBn)
-            <p>
-              <strong>মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)</strong> বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত <strong>মাহমুদুন্নবী ফাউন্ডেশন</strong> এবং <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।
-            </p>
-            <p>
-              ২০১৮ সাল থেকে MCTSC কারিগরি ও বৃত্তিমূলক শিক্ষা এবং প্রশিক্ষণে (TVET) সুদীর্ঘ অভিজ্ঞতাসম্পন্ন উন্নয়ন সংস্থা <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)</strong>-এর সাথে যৌথভাবে কার্যক্রম পরিচালনা করে আসছে। এই যৌথ উদ্যোগের লক্ষ্য প্রশিক্ষণ কর্মসূচির গুণগত মান নিশ্চিত করা, উচ্চ প্রশিক্ষণের মান বজায় রাখা এবং দক্ষতা ও উদ্যোক্তা উন্নয়ন কার্যক্রমের মাধ্যমে দারিদ্র্য বিমোচন ও প্রাসঙ্গিকতা বৃদ্ধি করা।
-            </p>
-            <p>
-              <strong>ইমপ্যাক্ট ইনিশিয়েটিভ</strong> কর্তৃক পরিচালিত MCTSC বেকার, অদক্ষ, অনগ্রসর ও সুবিধাবঞ্চিত তরুণ-তরুণীদের জন্য বৃত্তিমূলক ও কারিগরি প্রশিক্ষণের সুযোগ প্রদান করে। ব্যবহারিক ও কর্মমুখী প্রশিক্ষণ, জীবনদক্ষতা উন্নয়ন এবং প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তার মাধ্যমে প্রতিষ্ঠানটি ট্রেইনিদের টেকসই জীবিকা অর্জনের উপযোগী জ্ঞান, দক্ষতা ও আত্মবিশ্বাস অর্জনে সহায়তা করে।
-            </p>
-            <p>
-              প্রতিষ্ঠালগ্ন থেকেই MCTSC তরুণদের শ্রমবাজারের উপযোগী বাস্তবমুখী দক্ষতায় সজ্জিত করে কারিগরি শিক্ষা ও কর্মসংস্থানের মধ্যকার দক্ষতার ব্যবধান দূর করতে নিরলসভাবে কাজ করে চলেছে।
-            </p>
-          @else
-            <p>
-              <strong>Mahmudunnabi Chowdhury Technical School and College (MCTSC)</strong> is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006, the institution was founded as a joint initiative of the <strong>Mahmudunnabi Foundation</strong>, established in memory of Mahmudunnabi Chowdhury, a Bangladeshi politician, businessman, former minister and father of Amir Khasru Mahmud Chowdhury, the Minister, Ministry of Finance and Ministry of Planning, Government of the People's Republic of Bangladesh.
-            </p>
-            <p>
-              Since 2018, MCTSC has been working jointly with <strong>Impact Initiative (IMI)</strong>, a development organization with extensive experience in Technical and Vocational Education and Training (TVET). This collaboration aims to strengthen the quality assurance of training programmes, maintain high training standards, enhance the relevance and Poverty Elevation through Equip with Skills and Entrepreneurship development initiatives.
-            </p>
-            <p>
-              MCTSC is committed to providing vocational and technical training opportunities for unemployed, unskilled, underprivileged, and distressed young men and women. Through practical, employment-oriented training, life-skills development, and post-training employment support, the institution helps trainees develop the knowledge, skills, and confidence needed to build sustainable livelihoods.
-            </p>
-            <p>
-              Since its establishment, MCTSC has worked to bridge the competency gap between technical education and employment by equipping young people with practical skills relevant to the labour market.
-            </p>
+        @foreach(explode("\n\n", str_replace("\r\n", "\n", $fullAboutRaw)) as $par)
+          @if(trim($par))
+            <p>{!! nl2br(trim($par)) !!}</p>
           @endif
-        @endif
+        @endforeach
       </div>
       <div class="about-modal-foot">
         <a href="{{ route('about') }}" class="button button-green" style="font-size: 13px; padding: 7px 16px;">
@@ -2549,36 +2523,30 @@
         <div class="vmo-col vmo-col-left">
           <!-- Vision Card -->
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-vision" data-live-edit data-live-key="vmo_vision_pill" data-live-type="text" data-live-title="Vision (Pill Tag)" data-live-location="Vision & Mission">{{ $settings->get('vmo_vision_pill') ?: ($isBn ? 'রূপকল্প' : 'Vision') }}</div>
+            <div class="vmo-pill pill-vision" data-live-edit data-live-key="{{ $isBn ? 'vmo_vision_pill_bn' : 'vmo_vision_pill' }}" data-live-type="text" data-live-title="{{ $isBn ? 'রূপকল্প ট্যাগ' : 'Vision (Pill Tag)' }}" data-live-location="Vision & Mission">{{ $settings->get($isBn ? 'vmo_vision_pill_bn' : 'vmo_vision_pill') ?: ($isBn ? 'রূপকল্প' : 'Vision') }}</div>
             <div class="vmo-box">
-              <p data-live-edit data-live-key="{{ $isBn ? 'vmo_vision_text_bn' : 'vmo_vision_text' }}" data-live-type="textarea" data-live-title="Vision (Description)" data-live-location="Vision & Mission">
-                @if($isBn && !empty($settings->get('vmo_vision_text_bn')))
-                  {{ $settings->get('vmo_vision_text_bn') }}
-                @elseif(!empty($settings->get('vmo_vision_text')))
-                  {{ $settings->get('vmo_vision_text') }}
-                @else
-                  {{ $isBn 
-                    ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) সুবিধাবঞ্চিত যুবক, পুরুষ ও নারীদের কর্মসংস্থানের সুযোগ সৃষ্টি করতে এবং দেশের মূলধারার উন্নয়নমূলক কর্মকাণ্ডে তাদের অংশগ্রহণে উদ্বুদ্ধ করতে কাজ করে।' 
-                    : "Mahmudunnabi Chowdhury Technical School and College (MCTSC) envisions employing socially disadvantaged youth, men, and women, and encourages them to participate in the country's mainstream development initiatives." }}
-                @endif
+              @php
+                $defaultVisionBn = 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) সুবিধাবঞ্চিত যুবক, পুরুষ ও নারীদের কর্মসংস্থানের সুযোগ সৃষ্টি করতে এবং দেশের মূলধারার উন্নয়নমূলক কর্মকাণ্ডে তাদের অংশগ্রহণে উদ্বুদ্ধ করতে কাজ করে।';
+                $defaultVisionEn = "Mahmudunnabi Chowdhury Technical School and College (MCTSC) envisions employing socially disadvantaged youth, men, and women, and encourages them to participate in the country's mainstream development initiatives.";
+                $visionText = $isBn ? ($settings->get('vmo_vision_text_bn') ?: $defaultVisionBn) : ($settings->get('vmo_vision_text') ?: $defaultVisionEn);
+              @endphp
+              <p data-live-edit data-live-key="{{ $isBn ? 'vmo_vision_text_bn' : 'vmo_vision_text' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'রূপকল্প বিবরণ (বাংলা)' : 'Vision (Description)' }}" data-live-location="Vision & Mission" data-live-raw="{{ $visionText }}">
+                {{ $visionText }}
               </p>
             </div>
           </div>
 
           <!-- Mission Card -->
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-mission" data-live-edit data-live-key="vmo_mission_pill" data-live-type="text" data-live-title="Mission (Pill Tag)" data-live-location="Vision & Mission">{{ $settings->get('vmo_mission_pill') ?: ($isBn ? 'লক্ষ্য' : 'Mission') }}</div>
+            <div class="vmo-pill pill-mission" data-live-edit data-live-key="{{ $isBn ? 'vmo_mission_pill_bn' : 'vmo_mission_pill' }}" data-live-type="text" data-live-title="{{ $isBn ? 'লক্ষ্য ট্যাগ' : 'Mission (Pill Tag)' }}" data-live-location="Vision & Mission">{{ $settings->get($isBn ? 'vmo_mission_pill_bn' : 'vmo_mission_pill') ?: ($isBn ? 'লক্ষ্য' : 'Mission') }}</div>
             <div class="vmo-box">
-              <p data-live-edit data-live-key="{{ $isBn ? 'vmo_mission_text_bn' : 'vmo_mission_text' }}" data-live-type="textarea" data-live-title="Mission (Description)" data-live-location="Vision & Mission">
-                @if($isBn && !empty($settings->get('vmo_mission_text_bn')))
-                  {{ $settings->get('vmo_mission_text_bn') }}
-                @elseif(!empty($settings->get('vmo_mission_text')))
-                  {{ $settings->get('vmo_mission_text') }}
-                @else
-                  {{ $isBn 
-                    ? 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)-এর মূল লক্ষ্য হলো উচ্চমান বজায় রাখা, পরিকল্পনা ও সিদ্ধান্ত গ্রহণের জন্য নির্ভরযোগ্য তথ্য নিশ্চিতকরণ, তহবিল সংগ্রহ ও সঠিক বণ্টন এবং শিল্পের সাথে কার্যকর সংযোগ স্থাপনের মাধ্যমে দক্ষ ও আধা-দক্ষ কারিগরি ও পেশাদার জনশক্তি তৈরি করে জাতীয় অর্থনীতিকে পুনরুজ্জীবিত ও টেকসই করা এবং বেকারত্ব ও দারিদ্র্য হ্রাস করা।' 
-                    : 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) is to promote the production of skilled/semi-skilled technical and professional manpower, to revitalize and sustain the national economy, reduce unemployment and poverty through the setting and maintenance of high standards, provision of current and reliable information for planning and decision making, sourcing and disbursing of funds, and adequate linkages with industry.' }}
-                @endif
+              @php
+                $defaultMissionBn = 'মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC)-এর মূল লক্ষ্য হলো উচ্চমান বজায় রাখা, পরিকল্পনা ও সিদ্ধান্ত গ্রহণের জন্য নির্ভরযোগ্য তথ্য নিশ্চিতকরণ, তহবিল সংগ্রহ ও সঠিক বণ্টন এবং শিল্পের সাথে কার্যকর সংযোগ স্থাপনের মাধ্যমে দক্ষ ও আধা-দক্ষ কারিগরি ও পেশাদার জনশক্তি তৈরি করে জাতীয় অর্থনীতিকে পুনরুজ্জীবিত ও টেকসই করা এবং বেকারত্ব ও দারিদ্র্য হ্রাস করা।';
+                $defaultMissionEn = 'Mahmudunnabi Chowdhury Technical School and College (MCTSC) is to promote the production of skilled/semi-skilled technical and professional manpower, to revitalize and sustain the national economy, reduce unemployment and poverty through the setting and maintenance of high standards, provision of current and reliable information for planning and decision making, sourcing and disbursing of funds, and adequate linkages with industry.';
+                $missionText = $isBn ? ($settings->get('vmo_mission_text_bn') ?: $defaultMissionBn) : ($settings->get('vmo_mission_text') ?: $defaultMissionEn);
+              @endphp
+              <p data-live-edit data-live-key="{{ $isBn ? 'vmo_mission_text_bn' : 'vmo_mission_text' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'লক্ষ্য বিবরণ (বাংলা)' : 'Mission (Description)' }}" data-live-location="Vision & Mission" data-live-raw="{{ $missionText }}">
+                {{ $missionText }}
               </p>
             </div>
           </div>
@@ -2587,34 +2555,19 @@
         <!-- Right Column: Objectives Card -->
         <div class="vmo-col vmo-col-right">
           <div class="vmo-card-wrap">
-            <div class="vmo-pill pill-objectives" data-live-edit data-live-key="vmo_objectives_pill" data-live-type="text" data-live-title="Objectives (Pill Tag)" data-live-location="Vision & Mission">{{ $settings->get('vmo_objectives_pill') ?: ($isBn ? 'উদ্দেশ্যসমূহ' : 'Objectives') }}</div>
-            <div class="vmo-box">
+            <div class="vmo-pill pill-objectives" data-live-edit data-live-key="{{ $isBn ? 'vmo_objectives_pill_bn' : 'vmo_objectives_pill' }}" data-live-type="text" data-live-title="{{ $isBn ? 'উদ্দেশ্যসমূহ ট্যাগ' : 'Objectives (Pill Tag)' }}" data-live-location="Vision & Mission">{{ $settings->get($isBn ? 'vmo_objectives_pill_bn' : 'vmo_objectives_pill') ?: ($isBn ? 'উদ্দেশ্যসমূহ' : 'Objectives') }}</div>
+            @php
+              $defaultObjsBn = "সহজলভ্য, বাস্তবমুখী ও কর্মসংস্থানমুখী কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ প্রদান।\nসুবিধাবঞ্চিত ও বেকার যুবসমাজের কারিগরি, পেশাগত ও জীবন দক্ষতার বিকাশ সাধন।\nআত্মকর্মসংস্থান উৎসাহিত করা এবং উপযুক্ত কর্মসংস্থান ও উদ্যোক্তা তৈরির সুযোগ সৃষ্টি।\nশিল্পপ্রতিষ্ঠান ও নিয়োগকারীদের সাথে অংশীদারিত্ব জোরদার করে প্রশিক্ষণের উপযোগিতা ও চাকরি প্রাপ্তি নিশ্চিত করা।\nদক্ষতা উন্নয়ন ও টেকসই জীবিকার মাধ্যমে বেকারত্ব ও দারিদ্র্য হ্রাসকরণে অবদান রাখা।\nপ্রশিক্ষণোত্তর কর্মসংস্থান সহায়তা এবং নিয়মিত ফলোআপের মাধ্যমে ট্রেইনিদের সহায়তা প্রদান।";
+              $defaultObjsEn = "To provide accessible, practical, and employment-oriented technical and vocational education and training.\nTo develop the technical, professional, and life skills of disadvantaged and unemployed youth.\nTo promote self-employment and facilitate access to suitable employment and entrepreneurship development opportunities.\nTo strengthen collaboration with industries and employers to improve training relevance and job placement.\nTo contribute to reducing unemployment and poverty through skills development and sustainable livelihoods.\nTo support trainees through post-training employment assistance and follow-up.";
+
+              $customObjs = $settings->get($isBn ? 'vmo_objectives_text_bn' : 'vmo_objectives_text') ?: ($isBn ? $defaultObjsBn : ($settings->get('vmo_objectives_text') ?: $defaultObjsEn));
+              $objsList = $customObjs ? array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $customObjs)))) : [];
+            @endphp
+            <div class="vmo-box" data-live-edit data-live-key="{{ $isBn ? 'vmo_objectives_text_bn' : 'vmo_objectives_text' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'উদ্দেশ্যসমূহ তালিকা (প্রতি লাইনে একটি)' : 'Objectives List (One per line)' }}" data-live-location="Vision & Mission" data-live-raw="{{ $customObjs }}" style="cursor: pointer;">
               <ul class="vmo-objectives-list">
-                @php
-                  $customObjs = $settings->get($isBn ? 'vmo_objectives_text_bn' : 'vmo_objectives_text') ?: $settings->get('vmo_objectives_text');
-                  $objsList = $customObjs ? array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $customObjs)))) : null;
-                @endphp
-                @if(!empty($objsList))
-                  @foreach($objsList as $objItem)
-                    <li><span>✓</span> <div>{{ $objItem }}</div></li>
-                  @endforeach
-                @else
-                  @if($isBn)
-                    <li><span>✓</span> <div>সহজলভ্য, বাস্তবমুখী ও কর্মসংস্থানমুখী কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ প্রদান।</div></li>
-                    <li><span>✓</span> <div>সুবিধাবঞ্চিত ও বেকার যুবসমাজের কারিগরি, পেশাগত ও জীবন দক্ষতার বিকাশ সাধন।</div></li>
-                    <li><span>✓</span> <div>আত্মকর্মসংস্থান উৎসাহিত করা এবং উপযুক্ত কর্মসংস্থান ও উদ্যোক্তা তৈরির সুযোগ সৃষ্টি।</div></li>
-                    <li><span>✓</span> <div>শিল্পপ্রতিষ্ঠান ও নিয়োগকারীদের সাথে অংশীদারিত্ব জোরদার করে প্রশিক্ষণের উপযোগিতা ও চাকরি প্রাপ্তি নিশ্চিত করা।</div></li>
-                    <li><span>✓</span> <div>দক্ষতা উন্নয়ন ও টেকসই জীবিকার মাধ্যমে বেকারত্ব ও দারিদ্র্য হ্রাসকরণে অবদান রাখা।</div></li>
-                    <li><span>✓</span> <div>প্রশিক্ষণোত্তর কর্মসংস্থান সহায়তা এবং নিয়মিত ফলোআপের মাধ্যমে ট্রেইনিদের সহায়তা প্রদান।</div></li>
-                  @else
-                    <li><span>✓</span> <div>To provide accessible, practical, and employment-oriented technical and vocational education and training.</div></li>
-                    <li><span>✓</span> <div>To develop the technical, professional, and life skills of disadvantaged and unemployed youth.</div></li>
-                    <li><span>✓</span> <div>To promote self-employment and facilitate access to suitable employment and entrepreneurship development opportunities.</div></li>
-                    <li><span>✓</span> <div>To strengthen collaboration with industries and employers to improve training relevance and job placement.</div></li>
-                    <li><span>✓</span> <div>To contribute to reducing unemployment and poverty through skills development and sustainable livelihoods.</div></li>
-                    <li><span>✓</span> <div>To support trainees through post-training employment assistance and follow-up.</div></li>
-                  @endif
-                @endif
+                @foreach($objsList as $objItem)
+                  <li><span>✓</span> <div>{{ $objItem }}</div></li>
+                @endforeach
               </ul>
             </div>
           </div>
@@ -2630,15 +2583,15 @@
         <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 12px;">
           <span style="font-size: 28px;">🤝</span>
           <div>
-            <span data-live-edit data-live-key="strategic_partnership_kicker" data-live-type="text" data-live-title="STRATEGIC PARTNERSHIP (Badge)" data-live-location="STRATEGIC PARTNERSHIP" style="font-size: 12px; font-weight: 700; color: #166534; letter-spacing: 1.5px; text-transform: uppercase;">
-              {{ $settings->get('strategic_partnership_kicker') ?: ($isBn ? 'কৌশলগত অংশীদারিত্ব' : 'STRATEGIC PARTNERSHIP') }}
+            <span data-live-edit data-live-key="{{ $isBn ? 'strategic_partnership_kicker_bn' : 'strategic_partnership_kicker' }}" data-live-type="text" data-live-title="{{ $isBn ? 'কৌশলগত অংশীদারিত্ব কিপার' : 'STRATEGIC PARTNERSHIP (Badge)' }}" data-live-location="STRATEGIC PARTNERSHIP" style="font-size: 12px; font-weight: 700; color: #166534; letter-spacing: 1.5px; text-transform: uppercase;">
+              {{ $settings->get($isBn ? 'strategic_partnership_kicker_bn' : 'strategic_partnership_kicker') ?: ($isBn ? 'কৌশলগত অংশীদারিত্ব' : 'STRATEGIC PARTNERSHIP') }}
             </span>
-            <h3 data-live-edit data-live-key="strategic_partnership_title" data-live-type="text" data-live-title="STRATEGIC PARTNERSHIP (Title)" data-live-location="STRATEGIC PARTNERSHIP" style="font-family: var(--serif); font-size: 22px; color: #14532d; margin: 2px 0 0 0;">
-              {{ $settings->get('strategic_partnership_title') ?: ($isBn ? 'ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative)-এর সাথে অংশীদারিত্ব' : 'Partnership with Impact Initiative') }}
+            <h3 data-live-edit data-live-key="{{ $isBn ? 'strategic_partnership_title_bn' : 'strategic_partnership_title' }}" data-live-type="text" data-live-title="{{ $isBn ? 'কৌশলগত অংশীদারিত্ব শিরোনাম' : 'STRATEGIC PARTNERSHIP (Title)' }}" data-live-location="STRATEGIC PARTNERSHIP" style="font-family: var(--serif); font-size: 22px; color: #14532d; margin: 2px 0 0 0;">
+              {{ $settings->get($isBn ? 'strategic_partnership_title_bn' : 'strategic_partnership_title') ?: ($isBn ? 'ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative)-এর সাথে অংশীদারিত্ব' : 'Partnership with Impact Initiative') }}
             </h3>
           </div>
         </div>
-        <div data-live-edit data-live-key="{{ $isBn ? 'strategic_partnership_body_bn' : 'strategic_partnership_body' }}" data-live-type="textarea" data-live-title="STRATEGIC PARTNERSHIP (Description)" data-live-location="STRATEGIC PARTNERSHIP" style="font-size: 15px; line-height: 1.8; color: #166534; text-align: justify; text-justify: inter-word;">
+        <div style="font-size: 15px; line-height: 1.8; color: #166534;">
           @php
             $hasSpBodyBn = $settings->has('strategic_partnership_body_bn');
             $hasSpBodyEn = $settings->has('strategic_partnership_body');
@@ -2647,14 +2600,14 @@
             } elseif ($hasSpBodyEn) {
                 $spBodyText = $settings->get('strategic_partnership_body');
             } elseif ($isBn) {
-                $spBodyText = '<strong>১৯৯৫ সালে</strong> প্রতিষ্ঠিত <strong>ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI)</strong> গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের প্রধানমন্ত্রীর কার্যালয়াধীন <strong>এনজিও বিষয়ক ব্যুরো (নিবন্ধন নং: ১২২৪)</strong> কর্তৃক নিবন্ধিত একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।';
+                $spBodyText = '১৯৯৫ সালে প্রতিষ্ঠিত ইমপ্যাক্ট ইনিশিয়েটিভ (Impact Initiative - IMI) গণপ্রজাতন্ত্রী বাংলাদেশ সরকারের প্রধানমন্ত্রীর কার্যালয়াধীন এনজিও বিষয়ক ব্যুরো (নিবন্ধন নং: ১২২৪) কর্তৃক নিবন্ধিত একটি শীর্ষস্থানীয় জাতীয় পর্যায়ের মানবিক ও উন্নয়ন সংস্থা। সংস্থাটির কর্মপরিধি যুব উন্নয়ন, শিক্ষা, দক্ষতা বৃদ্ধি এবং জীবিকায়ন সহ বিভিন্ন সামাজিক উন্নয়নমূলক ক্ষেত্রে বিস্তৃত। এর TVET উদ্যোগের মাধ্যমে সংস্থাটি তরুণ সমাজের ব্যবহারিক সক্ষমতা বৃদ্ধি এবং কর্মসংস্থানের সুযোগ সম্প্রসারণে সক্রিয় ভূমিকা পালন করে আসছে।';
             } else {
-                $spBodyText = "Established in <strong>1995</strong>, <strong>Impact Initiative (IMI)</strong> is a national humanitarian and development organization in Bangladesh, registered with the <strong>NGO Affairs Bureau (Registration No: 1224)</strong> under the Prime Minister's Office. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.";
+                $spBodyText = "Established in 1995, Impact Initiative (IMI) is a national humanitarian and development organization in Bangladesh, registered with the NGO Affairs Bureau (Registration No: 1224) under the Prime Minister's Office. Its work spans youth development, education, skills development and livelihoods, among other areas. Through its TVET initiatives, the organization seeks to strengthen young people's practical capabilities and improve their access to employment opportunities.";
             }
           @endphp
 
           @if(filled(trim(strip_tags($spBodyText ?? ''))))
-            <p style="margin-bottom: 12px; text-align: justify; text-justify: inter-word;">{!! nl2br($spBodyText) !!}</p>
+            <p data-live-edit data-live-key="{{ $isBn ? 'strategic_partnership_body_bn' : 'strategic_partnership_body' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'কৌশলগত অংশীদারিত্ব বিবরণ' : 'STRATEGIC PARTNERSHIP (Description)' }}" data-live-location="STRATEGIC PARTNERSHIP" data-live-raw="{{ $spBodyText }}" style="margin-bottom: 12px; text-align: justify; text-justify: inter-word; cursor: pointer;">{!! nl2br($spBodyText) !!}</p>
           @endif
 
           @php
@@ -2672,14 +2625,14 @@
           @endphp
 
           @if(filled(trim($spFootText ?? '')))
-            <p style="margin: 0; font-weight: 600;">{{ $spFootText }}</p>
+            <p data-live-edit data-live-key="{{ $isBn ? 'strategic_partnership_footer_bn' : 'strategic_partnership_footer' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'অংশীদারিত্ব ফুটনোট' : 'Partnership Footer Note' }}" data-live-location="STRATEGIC PARTNERSHIP" data-live-raw="{{ $spFootText }}" style="margin: 0; font-weight: 600; cursor: pointer;">{{ $spFootText }}</p>
           @endif
 
           <!-- Governance / Management Committee for Quality Assurance (CMS Powered & Fully Editable) -->
           <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed #86efac;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
               <h4 style="font-family: var(--serif); font-size: 20px; color: #14532d; margin: 0; display: flex; align-items: center; gap: 8px;">
-                <span>👥</span> <em data-live-edit data-live-key="gov_committee_title" data-live-type="text" data-live-title="Management Committee Title" data-live-location="Management Committee">{{ $settings->get('gov_committee_title') ?: ($isBn ? 'পরিচালনা ও ব্যবস্থাপনা কমিটি (Governance / Management Committee)' : 'Governance / Management Committee') }}</em>
+                <span>👥</span> <em data-live-edit data-live-key="{{ $isBn ? 'gov_committee_title_bn' : 'gov_committee_title' }}" data-live-type="text" data-live-title="{{ $isBn ? 'ম্যানেজমেন্ট কমিটি শিরোনাম' : 'Management Committee Title' }}" data-live-location="Management Committee">{{ $settings->get($isBn ? 'gov_committee_title_bn' : 'gov_committee_title') ?: ($isBn ? 'পরিচালনা ও ব্যবস্থাপনা কমিটি (Governance / Management Committee)' : 'Governance / Management Committee') }}</em>
               </h4>
               <span style="font-size: 12px; font-weight: 700; color: #166534; background: #dcfce7; padding: 4px 10px; border-radius: 4px; border: 1px solid #bbf7d0; text-transform: uppercase; letter-spacing: 0.5px;">
                 {{ $isBn ? 'কোয়ালিটি এস্যুরেন্স বডি' : 'Quality Assurance' }}
@@ -2699,7 +2652,7 @@
               }
             @endphp
             @if(filled(trim($govIntroText ?? '')))
-              <p data-live-edit data-live-key="{{ $isBn ? 'gov_committee_intro_bn' : 'gov_committee_intro' }}" data-live-type="textarea" data-live-title="Management Committee Intro" data-live-location="Management Committee" style="font-size: 14.5px; line-height: 1.65; color: #166534; margin: 0 0 16px 0; text-align: justify; text-justify: inter-word;">
+              <p data-live-edit data-live-key="{{ $isBn ? 'gov_committee_intro_bn' : 'gov_committee_intro' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'ম্যানেজমেন্ট কমিটি ভূমিকা' : 'Management Committee Intro' }}" data-live-location="Management Committee" data-live-raw="{{ $govIntroText }}" style="font-size: 14.5px; line-height: 1.65; color: #166534; margin: 0 0 16px 0; text-align: justify; text-justify: inter-word; cursor: pointer;">
                 {{ $govIntroText }}
               </p>
             @endif
@@ -2757,16 +2710,16 @@
                   @for($m = 1; $m <= 5; $m++)
                     @php
                       $def = $defaultCommittee[$m];
-                      $mName = $settings->get('gov_member_' . $m . '_name', $def['name']);
-                      $mPos = $settings->get('gov_member_' . $m . '_position', ($isBn ? $def['position_bn'] : $def['position']));
+                      $mName = $settings->get('gov_member_' . $m . '_name' . ($isBn ? '_bn' : ''), $def['name']);
+                      $mPos = $settings->get('gov_member_' . $m . '_position' . ($isBn ? '_bn' : ''), ($isBn ? $def['position_bn'] : $def['position']));
                     @endphp
                     <tr style="background: {{ $m % 2 === 0 ? '#f8fdfa' : '#ffffff' }}; border-bottom: 1px solid #e2ebe6;">
                       <td style="padding: 12px 16px; text-align: center; font-weight: 700; color: #166534; border-right: 1px solid #eef4f0;">{{ $m }}</td>
                       <td style="padding: 12px 18px; font-weight: 700; color: #1e293b; border-right: 1px solid #eef4f0;">
-                        <span data-live-edit data-live-key="gov_member_{{ $m }}_name" data-live-type="text" data-live-title="Member #{{ $m }} Name" data-live-location="Management Committee">{{ $mName }}</span>
+                        <span data-live-edit data-live-key="gov_member_{{ $m }}_name{{ $isBn ? '_bn' : '' }}" data-live-type="text" data-live-title="Member #{{ $m }} Name" data-live-location="Management Committee">{{ $mName }}</span>
                       </td>
                       <td style="padding: 12px 18px; font-weight: 600; color: #14532d;">
-                        <span data-live-edit data-live-key="gov_member_{{ $m }}_position" data-live-type="text" data-live-title="Member #{{ $m }} Position" data-live-location="Management Committee">{{ $mPos }}</span>
+                        <span data-live-edit data-live-key="gov_member_{{ $m }}_position{{ $isBn ? '_bn' : '' }}" data-live-type="text" data-live-title="Member #{{ $m }} Position" data-live-location="Management Committee">{{ $mPos }}</span>
                       </td>
                     </tr>
                   @endfor
@@ -2838,8 +2791,8 @@
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
               </svg>
-              <span data-live-edit data-live-key="activities_sidebar_title" data-live-type="text" data-live-title="Recent Activity Sidebar Title" data-live-location="Sidebar">
-                {{ $settings->get('activities_sidebar_title') ?: 'Recent Activity' }}
+              <span data-live-edit data-live-key="{{ $isBn ? 'activities_sidebar_title_bn' : 'activities_sidebar_title' }}" data-live-type="text" data-live-title="{{ $isBn ? 'সাম্প্রতিক কার্যক্রম উইজেট শিরোনাম' : 'Recent Activity Sidebar Title' }}" data-live-location="Sidebar">
+                {{ $settings->get($isBn ? 'activities_sidebar_title_bn' : 'activities_sidebar_title') ?: ($isBn ? 'সাম্প্রতিক কার্যক্রম' : 'Recent Activity') }}
               </span>
             </div>
             <div style="display:flex; align-items:center; gap:6px;">
@@ -2894,21 +2847,16 @@
   <section id="development-partners" class="section partners-marquee-section">
     <div class="container">
       <div class="partners-intro">
-        <p class="section-kicker" style="justify-content: center;">{{ $settings->get('dev_partners_kicker') ?: ($isBn ? 'অংশীদারিত্ব ও কোলাবোরেশন' : 'COLLABORATION & PARTNERSHIPS') }}</p>
-        <h2>{{ $settings->get('dev_partners_title') ?: ($isBn ? 'উন্নয়ন অংশীদারগণ' : 'Development Partners') }}</h2>
+        <p class="section-kicker" data-live-edit data-live-key="{{ $isBn ? 'dev_partners_kicker_bn' : 'dev_partners_kicker' }}" data-live-type="text" data-live-title="{{ $isBn ? 'অংশীদারিত্ব কিপার' : 'Partnership Kicker' }}" data-live-location="Development Partners" style="justify-content: center;">{{ $settings->get($isBn ? 'dev_partners_kicker_bn' : 'dev_partners_kicker') ?: ($isBn ? 'অংশীদারিত্ব ও কোলাবোরেশন' : 'COLLABORATION & PARTNERSHIPS') }}</p>
+        <h2 data-live-edit data-live-key="{{ $isBn ? 'dev_partners_title_bn' : 'dev_partners_title' }}" data-live-type="text" data-live-title="{{ $isBn ? 'উন্নয়ন অংশীদার শিরোনাম' : 'Development Partners Title' }}" data-live-location="Development Partners">{{ $settings->get($isBn ? 'dev_partners_title_bn' : 'dev_partners_title') ?: ($isBn ? 'উন্নয়ন অংশীদারগণ' : 'Development Partners') }}</h2>
         <div class="gold-rule" style="margin: 0 auto 16px auto;"></div>
-        <p>
-          @if($isBn && !empty($settings->get('dev_partners_text_bn')))
-            {{ $settings->get('dev_partners_text_bn') }}
-          @elseif(!empty($settings->get('dev_partners_text')))
-            {{ $settings->get('dev_partners_text') }}
-          @else
-            @if($isBn)
-              MCTSC-এর প্রাতিষ্ঠানিক পথচলায় বিভিন্ন শীর্ষস্থানীয় উন্নয়ন সংস্থা ও কর্মসূচির সাথে যৌথভাবে কাজ করার অভিজ্ঞতা রয়েছে, যার মধ্যে ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO এবং MAA International অন্যতম। এই অংশীদারিত্বগুলো দক্ষ জনশক্তি গড়ে তোলা ও কর্মসংস্থানমুখী প্রশিক্ষণ কার্যক্রম পরিচালনায় প্রতিষ্ঠানের অভিজ্ঞতা ও সফলতার প্রতিফলন।
-            @else
-              MCTSC's institutional profile records collaboration with development organisations and programmes including ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO, and MAA International, among others. These partnerships reflect the institution's experience in delivering skills development and employment-oriented training initiatives.
-            @endif
-          @endif
+        @php
+          $defaultPartnersBn = 'MCTSC-এর প্রাতিষ্ঠানিক পথচলায় বিভিন্ন শীর্ষস্থানীয় উন্নয়ন সংস্থা ও কর্মসূচির সাথে যৌথভাবে কাজ করার অভিজ্ঞতা রয়েছে, যার মধ্যে ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO এবং MAA International অন্যতম। এই অংশীদারিত্বগুলো দক্ষ জনশক্তি গড়ে তোলা ও কর্মসংস্থানমুখী প্রশিক্ষণ কার্যক্রম পরিচালনায় প্রতিষ্ঠানের অভিজ্ঞতা ও সফলতার প্রতিফলন।';
+          $defaultPartnersEn = "MCTSC's institutional profile records collaboration with development organisations and programmes including ASSET, POWER_kfw-BRAC, UPPR-UNDP, SOS, ILO, ECHO, and MAA International, among others. These partnerships reflect the institution's experience in delivering skills development and employment-oriented training initiatives.";
+          $partnersText = $isBn ? ($settings->get('dev_partners_text_bn') ?: $defaultPartnersBn) : ($settings->get('dev_partners_text') ?: $defaultPartnersEn);
+        @endphp
+        <p data-live-edit data-live-key="{{ $isBn ? 'dev_partners_text_bn' : 'dev_partners_text' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'উন্নয়ন অংশীদার বিবরণ' : 'Development Partners Description' }}" data-live-location="Development Partners" data-live-raw="{{ $partnersText }}" style="cursor: pointer;">
+          {{ $partnersText }}
         </p>
       </div>
     </div>
@@ -2986,7 +2934,7 @@
         </svg>
         <div>
           <small>{{ $isBn ? 'আমাদের ঠিকানা' : 'Our address' }}</small>
-          <strong>{{ $settings->get('address', '273/A/520, Chodu Chowdhury Road, Sagorika, Pahartali, Chattogram') }}</strong>
+          <strong data-live-edit data-live-key="{{ $isBn ? 'address_bn' : 'address' }}" data-live-type="text" data-live-title="{{ $isBn ? 'ঠিকানা (বাংলা)' : 'Address (English)' }}" data-live-location="ফুটার (Footer)">{{ $settings->get($isBn ? 'address_bn' : 'address', '273/A/520, Chodu Chowdhury Road, Sagorika, Pahartali, Chattogram') }}</strong>
         </div>
       </div>
 
@@ -2997,7 +2945,7 @@
           </svg>
           <div>
             <small>{{ $isBn ? 'ফোন নম্বর' : 'Phone number' }}</small>
-            <strong>{{ $settings->get('phone', '+8801880919275') }}</strong>
+            <strong data-live-edit data-live-key="phone" data-live-type="text" data-live-title="ফোন নম্বর" data-live-location="ফুটার (Footer)">{{ $settings->get('phone', '+8801880919275') }}</strong>
           </div>
         </div>
 
@@ -3008,7 +2956,7 @@
           </svg>
           <div>
             <small>{{ $isBn ? 'ইমেইল এড্রেস' : 'Email address' }}</small>
-            <strong>{{ $settings->get('email', 'mnctsc@gmail.com') }}</strong>
+            <strong data-live-edit data-live-key="email" data-live-type="text" data-live-title="ইমেইল এড্রেস" data-live-location="ফুটার (Footer)">{{ $settings->get('email', 'mnctsc@gmail.com') }}</strong>
           </div>
         </div>
       </div>
@@ -3035,7 +2983,7 @@
   </div>
   <div class="container footer-bottom">
     <span>© <span id="year">{{ date('Y') }}</span> {{ $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School and College') }}. {{ $isBn ? 'সর্বস্বত্ব সংরক্ষিত।' : 'All rights reserved.' }}</span>
-    <span>{{ $isBn ? 'বাস্তবমুখী স্কিলস · উন্নত কর্মসংস্থান' : $settings->get('tagline', 'Practical Skills · Better Opportunities') }}</span>
+    <span data-live-edit data-live-key="{{ $isBn ? 'tagline_bn' : 'tagline' }}" data-live-type="text" data-live-title="{{ $isBn ? 'ট্যাগলাইন (বাংলা)' : 'Tagline (English)' }}" data-live-location="ফুটার (Footer)">{{ $settings->get($isBn ? 'tagline_bn' : 'tagline') ?: ($isBn ? 'বাস্তবমুখী স্কিলস · উন্নত কর্মসংস্থান' : 'Practical Skills · Better Opportunities') }}</span>
   </div>
 </footer>
 

@@ -720,6 +720,15 @@ body.live-edit-mode-active [data-live-edit]:hover::after {
         currentTarget.setAttribute('data-live-raw', newValue);
         if (currentType === 'rich') {
           currentTarget.innerHTML = newValue;
+        } else if (currentType === 'textarea') {
+          var paragraphs = newValue.split(/\n\s*\n/).filter(function(p) { return p.trim().length > 0; });
+          if (paragraphs.length > 1) {
+            currentTarget.innerHTML = paragraphs.map(function(p) {
+              return '<p style="text-align:justify;text-justify:inter-word;margin-bottom:12px;line-height:1.8;">' + p.replace(/\n/g, '<br>') + '</p>';
+            }).join('');
+          } else {
+            currentTarget.innerHTML = '<p style="text-align:justify;text-justify:inter-word;margin-bottom:12px;line-height:1.8;">' + newValue.replace(/\n/g, '<br>') + '</p>';
+          }
         } else {
           currentTarget.textContent = newValue;
         }
