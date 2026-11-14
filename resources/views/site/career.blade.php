@@ -7,75 +7,193 @@
 @section('content')
 <style>
 .career-container {
-  max-width: 1100px;
+  max-width: 1120px;
   margin: 0 auto;
   padding: 32px 16px 60px;
 }
 
-/* Candidate Portal Top Banner */
-.career-top-bar {
-  background: #ffffff;
-  border: 1px solid #dbe6e0;
-  border-left: 5px solid var(--green, #0f5132);
-  border-radius: 10px;
-  padding: 16px 22px;
+/* ========================================================
+   TOP HERO HEADER (Matching User Uploaded Mockup)
+   ======================================================== */
+.career-hero-bar {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 24px;
+  margin-bottom: 28px;
   flex-wrap: wrap;
-  margin-bottom: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
-.career-status-checker-card {
-  background: #ffffff;
-  border: 1.5px solid #dbe6e0;
-  border-radius: 10px;
-  padding: 18px 22px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
-}
-.career-top-title {
-  margin: 0;
-  font-size: 16.5px;
-  font-weight: 700;
-  color: #14532d;
+.career-hero-left {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 18px;
+  flex: 1;
+  min-width: 320px;
 }
-.btn-portal-login {
+.career-hero-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: #e6f7ee;
+  border: 1px solid #bbf7d0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.career-hero-title {
+  margin: 0 0 6px 0;
+  font-size: 27px;
+  font-weight: 700;
+  color: #14532d;
+  font-family: var(--serif, 'Libre Baskerville', Georgia, serif);
+  line-height: 1.25;
+}
+.career-hero-desc {
+  margin: 0;
+  font-size: 13.5px;
+  color: #64748b;
+  line-height: 1.55;
+  max-width: 620px;
+}
+
+/* Right Stack of Buttons (উপরে নিচে) */
+.career-hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: stretch;
+  min-width: 220px;
+}
+.btn-hero-status {
+  background: #ffffff;
+  color: #0284c7;
+  border: 1.5px solid #0284c7;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 9px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(2, 132, 199, 0.08);
+}
+.btn-hero-status:hover {
+  background: #f0f9ff;
+  border-color: #0369a1;
+  color: #0369a1;
+}
+.btn-hero-login {
   background: #0f5132;
   color: #ffffff !important;
+  border: 1.5px solid #0f5132;
   font-size: 13.5px;
   font-weight: 700;
+  padding: 9px 20px;
+  border-radius: 6px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(15, 81, 50, 0.2);
+}
+.btn-hero-login:hover {
+  background: #093722;
+  border-color: #093722;
+  transform: translateY(-1px);
+}
+.btn-hero-white {
+  background: #ffffff;
+  color: #1e293b !important;
+  border: 1.5px solid #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
   padding: 8px 18px;
   border-radius: 6px;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  box-shadow: 0 2px 6px rgba(15, 81, 50, 0.2);
+  justify-content: center;
+  gap: 8px;
   transition: all 0.2s ease;
 }
-.btn-portal-login:hover {
-  background: #093722;
-  transform: translateY(-1px);
+.btn-hero-white:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f5132 !important;
 }
 
-/* Table View Styling (Matching Sample 1) */
+/* ========================================================
+   STATUS CHECKER SEARCH BOX (Hidden by default, shown on click)
+   ======================================================== */
+.career-status-checker-card {
+  background: #ffffff;
+  border: 1.5px solid #0284c7;
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 26px;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.1);
+  animation: fadeInDown 0.25s ease-out;
+}
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================================
+   VACANCIES CARD & TABLE (Matching User Mockup)
+   ======================================================== */
+.career-vacancies-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+  margin-bottom: 30px;
+}
+.vacancies-head {
+  margin-bottom: 18px;
+}
+.vacancies-title {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 700;
+  color: #0f172a;
+  font-family: var(--serif, 'Libre Baskerville', Georgia, serif);
+}
+.openings-pill {
+  background: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 14px;
+}
+.vacancies-sub {
+  margin: 4px 0 0 0;
+  font-size: 13.5px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
 .career-table-wrap {
   background: #ffffff;
   border-radius: 8px;
   border: 1.5px solid #2d3748;
   overflow-x: auto;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
-  margin-bottom: 30px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  margin-bottom: 20px;
 }
 .career-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 14.5px;
+  font-size: 14px;
   text-align: left;
 }
 .career-table thead tr {
@@ -83,9 +201,9 @@
   color: #ffffff;
 }
 .career-table th {
-  padding: 13px 14px;
+  padding: 12px 14px;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13.5px;
   border-right: 1px solid #4a5568;
   white-space: nowrap;
 }
@@ -93,7 +211,7 @@
   border-right: none;
 }
 .career-table tbody tr {
-  border-bottom: 1px solid #cbd5e1;
+  border-bottom: 1px solid #e2e8f0;
   transition: background 0.15s ease;
 }
 .career-table tbody tr:nth-child(even) {
@@ -103,7 +221,7 @@
   background: #f0fdf4;
 }
 .career-table td {
-  padding: 14px 14px;
+  padding: 13px 14px;
   vertical-align: middle;
   border-right: 1px solid #e2e8f0;
   color: #1e293b;
@@ -118,93 +236,113 @@
   width: 48px;
 }
 .td-position {
-  font-weight: 700;
+  font-weight: 600;
   color: #0f172a;
-  min-width: 240px;
 }
 .td-required {
   text-align: center;
   font-weight: 700;
-  color: #1e293b;
-  width: 90px;
+  color: #334155;
+  width: 70px;
 }
 .td-location {
-  min-width: 180px;
-  color: #334155;
-  font-size: 14px;
+  color: #475569;
+  font-size: 13.5px;
 }
 .td-date {
   text-align: center;
-  width: 120px;
-  font-size: 13.5px;
-  line-height: 1.35;
-  color: #334155;
+  color: #475569;
+  font-size: 13px;
   white-space: nowrap;
 }
 .td-pdf {
   text-align: center;
   width: 70px;
 }
-.td-action {
-  text-align: center;
-  width: 110px;
-  white-space: nowrap;
-}
-
-/* Red PDF Icon */
 .pdf-icon-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: #dc2626;
-  text-decoration: none;
   transition: transform 0.15s ease;
 }
 .pdf-icon-btn:hover {
-  transform: scale(1.18);
+  transform: scale(1.15);
 }
 .pdf-icon-btn svg {
-  width: 26px;
-  height: 26px;
+  width: 24px;
+  height: 24px;
 }
-
-/* Blue Details Button */
+.td-action {
+  text-align: center;
+  width: 95px;
+}
 .btn-table-details {
   background: #0284c7;
   color: #ffffff !important;
-  font-size: 13px;
   font-weight: 700;
-  padding: 7px 18px;
-  border-radius: 5px;
+  font-size: 13px;
+  padding: 7px 16px;
+  border-radius: 6px;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 4px rgba(2, 132, 199, 0.25);
+  display: inline-block;
   transition: all 0.15s ease;
+  box-shadow: 0 1px 4px rgba(2, 132, 199, 0.25);
 }
 .btn-table-details:hover {
   background: #0369a1;
   transform: translateY(-1px);
 }
 
-/* Detailed View Styling (Matching Sample 2) */
+/* Card Bottom Banner (Matching User Mockup) */
+.career-card-footer {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-left-msg {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: #166534;
+  font-weight: 500;
+}
+.footer-right-slogan {
+  font-family: var(--serif, 'Libre Baskerville', Georgia, serif);
+  font-style: italic;
+  font-size: 13px;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+/* ========================================================
+   DETAIL VIEW STYLING (Matching User Sample 2)
+   ======================================================== */
 .career-detail-card {
   background: #ffffff;
-  border: 1px solid #dbe6e0;
-  border-left: 5px solid var(--green, #0f5132);
-  border-radius: 12px;
-  padding: 30px 34px;
-  margin-bottom: 24px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+  border: 2px solid #0f5132;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  margin-bottom: 30px;
 }
 .career-detail-header {
-  border-bottom: 1px dashed #e2e8f0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  border-bottom: 2px solid #0f5132;
   padding-bottom: 18px;
   margin-bottom: 20px;
 }
 .detail-job-title {
-  font-family: var(--serif, 'Libre Baskerville', Georgia, serif);
   font-size: 24px;
   font-weight: 700;
   color: #14532d;
@@ -265,45 +403,20 @@
   border-top: 1px solid #f1f5f9;
   padding-top: 20px;
 }
-.detail-body h2,
-.detail-body h3,
-.detail-body h4 {
-  color: #14532d;
-  font-size: 17px;
-  font-weight: 700;
-  margin: 22px 0 10px 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.detail-body h4::before,
-.detail-body h3::before {
-  content: "▪";
-  color: #bd9635;
-  font-size: 18px;
-}
-.detail-body ul,
-.detail-body ol {
-  margin: 8px 0 16px 24px;
-}
-.detail-body li {
-  margin-bottom: 8px;
-  line-height: 1.6;
-}
 .detail-actions-bar {
   display: flex;
   align-items: center;
   gap: 14px;
   flex-wrap: wrap;
-  padding-top: 20px;
   border-top: 1px solid #e2e8f0;
+  padding-top: 22px;
 }
 .btn-apply-primary {
   background: #0f5132;
   color: #ffffff !important;
-  font-size: 14.5px;
+  font-size: 14px;
   font-weight: 700;
-  padding: 11px 26px;
+  padding: 10px 24px;
   border-radius: 8px;
   text-decoration: none;
   display: inline-flex;
@@ -368,7 +481,7 @@
   background: #e2e8f0;
 }
 
-/* Empty State Card */
+/* Empty State */
 .career-empty-card {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -389,42 +502,93 @@
     </div>
   @endif
 
-  {{-- Top Candidate Portal Bar --}}
-  <div class="career-top-bar">
-    <div class="career-top-title">
-      <span>💼</span> {{ $isBn ? 'চলমান নিয়োগ বিজ্ঞপ্তি ও ক্যারিয়ার পোর্টাল' : 'Career Opportunities & Recruitment' }}
+  {{-- ========================================================
+       TOP HERO HEADER SECTION (Matching User Uploaded Image)
+       ======================================================== --}}
+  <div class="career-hero-bar">
+    <div class="career-hero-left">
+      <div class="career-hero-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#0f5132" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+        </svg>
+      </div>
+      <div class="career-hero-text">
+        <h1 class="career-hero-title">{{ $isBn ? 'ক্যারিয়ার ও নিয়োগ বিজ্ঞপ্তি' : 'Career Opportunities & Recruitment' }}</h1>
+        <p class="career-hero-desc">
+          {{ $isBn 
+            ? 'আমাদের টিমে যোগ দিন এবং একটি দক্ষ, উদ্ভাবনী ও পেশাদার কারিগরি শিক্ষাপ্রতিষ্ঠানের অংশ হোন। নিচে উপলব্ধ নিয়োগ বিজ্ঞপ্তিগুলো দেখুন এবং আবেদন করুন।' 
+            : 'Join our team and be part of a skilled, innovative and community-focused institution. Explore current job opportunities below and apply for a meaningful career with us.' }}
+        </p>
+      </div>
     </div>
-    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-      <a href="#status-checker-box" class="btn-portal-login" style="background:#0284c7;">
-        <span>🔍</span> {{ $isBn ? 'আবেদনের স্ট্যাটাস দেখুন' : 'View Application Status' }}
-      </a>
-      @if(session('candidate_id'))
-        <a href="{{ route('candidate.dashboard') }}" class="btn-portal-login">
-          <span>👤</span> {{ $isBn ? 'প্রার্থীর ড্যাশবোর্ড' : 'Candidate Dashboard' }} →
+
+    {{-- Right Buttons Stack (উপরে নিচে) --}}
+    <div class="career-hero-right">
+      @if(session('candidate_id') && isset($candidateApp))
+        {{-- When Logged In: View my Resume, Update Resume, Application status --}}
+        <button type="button" onclick="toggleStatusSearch()" class="btn-hero-status" title="{{ $isBn ? 'আবেদনের স্ট্যাটাস দেখতে ক্লিক করুন' : 'Click to view application status' }}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>{{ $isBn ? 'Application Status' : 'Application Status' }}</span>
+        </button>
+
+        @if($candidateApp->cv_path)
+          <a href="{{ storage_asset($candidateApp->cv_path) }}" target="_blank" class="btn-hero-white">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            <span>{{ $isBn ? 'View My Resume' : 'View My Resume' }}</span>
+          </a>
+        @else
+          <a href="{{ route('candidate.dashboard') }}#update-profile-section" class="btn-hero-white">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+            <span>{{ $isBn ? 'Upload Resume' : 'Upload Resume' }}</span>
+          </a>
+        @endif
+
+        <a href="{{ route('candidate.dashboard') }}#update-profile-section" class="btn-hero-white">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+          <span>{{ $isBn ? 'Update Resume' : 'Update Resume' }}</span>
+        </a>
+
+        <a href="{{ route('candidate.dashboard') }}" class="btn-hero-login">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>{{ $isBn ? 'ক্যান্ডিডেট ড্যাশবোর্ড' : 'Candidate Dashboard' }} →</span>
         </a>
       @else
-        <a href="{{ route('candidate.login') }}" class="btn-portal-login">
-          <span>👤</span> {{ $isBn ? 'প্রার্থী লগইন (সিভি ও প্রোফাইল)' : 'Candidate Login' }} →
+        {{-- When Guest: View Application Status & Candidate Login --}}
+        <button type="button" onclick="toggleStatusSearch()" class="btn-hero-status" title="{{ $isBn ? 'আবেদনের স্ট্যাটাস সার্চ বক্স খুলতে ক্লিক করুন' : 'Click to view application status search' }}">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <span>{{ $isBn ? 'View Application Status' : 'View Application Status' }}</span>
+        </button>
+
+        <a href="{{ route('candidate.login') }}" class="btn-hero-login">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+          <span>{{ $isBn ? 'Candidate Login' : 'Candidate Login' }} →</span>
         </a>
       @endif
     </div>
   </div>
 
-  {{-- Application Status Checker Box --}}
-  <div class="career-status-checker-card" id="status-checker-box">
+  {{-- ========================================================
+       APPLICATION STATUS SEARCH BOX
+       (Hidden by default; only shown when clicking Application Status)
+       ======================================================== --}}
+  <div class="career-status-checker-card" id="status-checker-box" style="{{ (session('tracking_result') || session('tracking_error')) ? 'display:block;' : 'display:none;' }}">
     <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
       <h3 style="margin:0; font-size:15.5px; color:#14532d; display:flex; align-items:center; gap:8px;">
         <span>🔍</span> {{ $isBn ? 'আবেদনের স্ট্যাটাস যাচাই (View Application Status)' : 'View Application Status' }}
       </h3>
-      <span style="font-size:12.5px; color:#64748b;">
-        {{ $isBn ? 'আবেদন করার পর প্রাপ্ত ট্র্যাকিং নম্বর দিয়ে স্ট্যাটাস চেক করুন' : 'Enter your Tracking ID to view the latest status of your application' }}
-      </span>
+      <button type="button" onclick="toggleStatusSearch()" style="background:none; border:none; color:#64748b; font-size:13px; font-weight:600; cursor:pointer;">
+        ✕ {{ $isBn ? 'বন্ধ করুন' : 'Close' }}
+      </button>
     </div>
+    <p style="font-size:12.5px; color:#64748b; margin:0 0 12px 0;">
+      {{ $isBn ? 'আবেদন করার পর প্রাপ্ত ট্র্যাকিং নম্বরটি প্রবেশ করিয়ে স্ট্যাটাস দেখুন:' : 'Enter your Tracking ID to view the latest status of your application:' }}
+    </p>
 
     <form method="POST" action="{{ route('candidate.check_status') }}" id="trackingStatusForm" style="display:flex; gap:10px; flex-wrap:wrap;">
       @csrf
       <div style="flex:1; min-width:240px;">
-        <input type="text" name="tracking_no" id="tracking_no_input" value="{{ session('searched_tracking_no', request('tracking_no')) }}" placeholder="{{ $isBn ? 'ট্র্যাকিং আইডি লিখুন (যেমন: JOB-2026-XXXXXX)' : 'Enter Tracking ID (e.g. JOB-2026-XXXXXX)' }}" required style="width:100%; padding:10px 14px; border:2px solid #cbd5e1; border-radius:6px; font-size:14px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">
+        <input type="text" name="tracking_no" id="tracking_no_input" value="{{ session('searched_tracking_no', (isset($candidateApp) ? $candidateApp->tracking_no : request('tracking_no'))) }}" placeholder="{{ $isBn ? 'ট্র্যাকিং আইডি লিখুন (যেমন: JOB-2026-XXXXXX)' : 'Enter Tracking ID (e.g. JOB-2026-XXXXXX)' }}" required style="width:100%; padding:10px 14px; border:2px solid #cbd5e1; border-radius:6px; font-size:14px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">
       </div>
       <button type="submit" id="btnCheckStatus" style="background:#0284c7; color:#fff; border:none; padding:10px 22px; border-radius:6px; font-weight:700; font-size:14px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:background 0.2s ease;">
         <span>🔎</span> {{ $isBn ? 'স্ট্যাটাস দেখুন' : 'Check Status' }}
@@ -564,7 +728,7 @@
 
   @else
     {{-- ========================================================
-         VIEW 1: TABLE VIEW (Matching User Sample 1 Screenshot)
+         VIEW 1: TABLE VIEW (Matching User Mockup in Exact Detail)
          ======================================================== --}}
     @if($circulars->isEmpty())
       <!-- EMPTY STATE WHEN NO RECRUITMENT CIRCULAR -->
@@ -584,92 +748,113 @@
         </div>
       </div>
     @else
-      <div class="career-table-wrap">
-        <table class="career-table">
-          <thead>
-            <tr>
-              <th class="td-sl">{{ $isBn ? 'ক্রম' : 'Sl' }}</th>
-              <th>{{ $isBn ? 'পদের নাম (Position Name)' : 'Position Name' }}</th>
-              <th style="text-align: center;">{{ $isBn ? 'পদসংখ্যা (Required)' : 'Required' }}</th>
-              <th>{{ $isBn ? 'কর্মস্থল (Job Location)' : 'Job Location' }}</th>
-              <th style="text-align: center;">{{ $isBn ? 'প্রকাশের তারিখ (Date)' : 'Date' }}</th>
-              <th style="text-align: center;">{{ $isBn ? 'আবেদনের শেষ সময় (Deadline)' : 'Deadline' }}</th>
-              <th style="text-align: center;">{{ $isBn ? 'বিজ্ঞপ্তি (Details)' : 'Details' }}</th>
-              <th style="text-align: center;">{{ $isBn ? 'বিস্তারিত ও আবেদন' : 'Action' }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            @foreach($circulars as $idx => $job)
-              @php
-                $jobLoc = $job->metadata['job_location'] ?? 'Sagorika, Pahartali, Chattogram';
-                $jobVac = $job->metadata['vacancies'] ?? '1';
-                $pdfPath = $job->metadata['pdf_circular'] ?? null;
-              @endphp
-              <tr id="job-{{ $job->id }}">
-                <td class="td-sl">{{ $idx + 1 }}</td>
-                <td class="td-position">
-                  <a href="{{ route('career', $job->slug) }}" style="color: #0f172a; text-decoration: none; font-weight: 700;">
-                    {{ $job->title }}
-                  </a>
-                  @if($job->category)
-                    <div style="font-size: 12px; color: #64748b; font-weight: 500; margin-top: 3px;">
-                      {{ $job->category }}
-                    </div>
-                  @endif
-                </td>
-                <td class="td-required">{{ $jobVac }}</td>
-                <td class="td-location">{{ $jobLoc }}</td>
-                <td class="td-date">
-                  @if($job->starts_at)
-                    {{ $job->starts_at->format('d') }}<br>
-                    {{ $job->starts_at->format('F') }}<br>
-                    {{ $job->starts_at->format('Y') }}
-                  @else
-                    {{ $job->created_at->format('d') }}<br>
-                    {{ $job->created_at->format('F') }}<br>
-                    {{ $job->created_at->format('Y') }}
-                  @endif
-                </td>
-                <td class="td-date">
-                  @if($job->ends_at)
-                    {{ $job->ends_at->format('d') }}<br>
-                    {{ $job->ends_at->format('F') }}<br>
-                    {{ $job->ends_at->format('Y') }}
-                  @else
-                    <span style="color: #15803d; font-weight: 700;">{{ $isBn ? 'চলমান' : 'Open' }}</span>
-                  @endif
-                </td>
-                <td class="td-pdf">
-                  @if(!empty($pdfPath))
-                    <a href="{{ storage_asset($pdfPath) }}" target="_blank" class="pdf-icon-btn" title="{{ $isBn ? 'অফিসিয়াল সার্কুলার PDF ডাউনলোড করুন' : 'View / Download Official PDF Circular' }}">
-                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" fill="#fee2e2" stroke="#dc2626" stroke-width="1.8" stroke-linejoin="round"/>
-                        <path d="M14 2V8H20" stroke="#dc2626" stroke-width="1.8" stroke-linejoin="round"/>
-                        <path d="M9 13H15M9 17H13" stroke="#dc2626" stroke-width="1.8" stroke-linecap="round"/>
-                      </svg>
-                    </a>
-                  @else
-                    <a href="{{ route('career', $job->slug) }}" class="pdf-icon-btn" title="{{ $isBn ? 'বিজ্ঞপ্তির বিস্তারিত দেখুন' : 'View Circular Details' }}">
-                      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.8" stroke-linejoin="round"/>
-                        <path d="M14 2V8H20" stroke="#94a3b8" stroke-width="1.8" stroke-linejoin="round"/>
-                        <path d="M9 13H15M9 17H13" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/>
-                      </svg>
-                    </a>
-                  @endif
-                </td>
-                <td class="td-action">
-                  <a href="{{ route('career', $job->slug) }}" class="btn-table-details">
-                    {{ $isBn ? 'বিস্তারিত' : 'Details' }}
-                  </a>
-                </td>
+      <div class="career-vacancies-card">
+        {{-- Card Header --}}
+        <div class="vacancies-head">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:4px;">
+            <h2 class="vacancies-title">{{ $isBn ? 'চলমান নিয়োগ বিজ্ঞপ্তি' : 'Current Job Vacancies' }}</h2>
+            <span class="openings-pill">{{ $circulars->count() }} {{ $isBn ? 'টি পদ' : 'openings' }}</span>
+          </div>
+          <p class="vacancies-sub">
+            {{ $isBn 
+              ? 'নিচে উপলব্ধ পদসমূহের বিবরণ দেখুন। সম্পূর্ণ তথ্য এবং আবেদনের নিয়ম দেখতে বিস্তারিত (Details) বাটনে ক্লিক করুন।' 
+              : 'Find details of available positions below. Click on Details to view the full information and application instructions.' }}
+          </p>
+        </div>
+
+        {{-- Table --}}
+        <div class="career-table-wrap">
+          <table class="career-table">
+            <thead>
+              <tr>
+                <th class="td-sl">{{ $isBn ? 'SL' : 'SL' }}</th>
+                <th>{{ $isBn ? 'Position Name' : 'Position Name' }}</th>
+                <th style="text-align: center;">{{ $isBn ? 'Required' : 'Required' }}</th>
+                <th>{{ $isBn ? 'Job Location' : 'Job Location' }}</th>
+                <th style="text-align: center;">{{ $isBn ? 'Posted' : 'Posted' }}</th>
+                <th style="text-align: center;">{{ $isBn ? 'Deadline' : 'Deadline' }}</th>
+                <th style="text-align: center;">{{ $isBn ? 'Details' : 'Details' }}</th>
+                <th style="text-align: center;">{{ $isBn ? 'Action' : 'Action' }}</th>
               </tr>
-            @endforeach
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @foreach($circulars as $idx => $job)
+                @php
+                  $jobLoc = $job->metadata['job_location'] ?? 'Sagorika, Pahartali, Chattogram';
+                  $jobVac = $job->metadata['vacancies'] ?? '1';
+                  $pdfPath = $job->metadata['pdf_circular'] ?? null;
+                @endphp
+                <tr id="job-{{ $job->id }}">
+                  <td class="td-sl">{{ $idx + 1 }}</td>
+                  <td class="td-position">
+                    <a href="{{ route('career', $job->slug) }}" style="color: #0f172a; text-decoration: none; font-weight: 700;">
+                      {{ $job->title }}
+                    </a>
+                    @if($job->category)
+                      <div style="font-size: 12px; color: #64748b; font-weight: 500; margin-top: 2px;">
+                        {{ $job->category }}
+                      </div>
+                    @endif
+                  </td>
+                  <td class="td-required">{{ $jobVac }}</td>
+                  <td class="td-location">{{ $jobLoc }}</td>
+                  <td class="td-date">
+                    @if($job->starts_at)
+                      {{ $job->starts_at->format('d M Y') }}
+                    @else
+                      {{ $job->created_at->format('d M Y') }}
+                    @endif
+                  </td>
+                  <td class="td-date">
+                    @if($job->ends_at)
+                      {{ $job->ends_at->format('d M Y') }}
+                    @else
+                      <span style="color: #15803d; font-weight: 700;">{{ $isBn ? 'চলমান' : 'Open' }}</span>
+                    @endif
+                  </td>
+                  <td class="td-pdf">
+                    @if(!empty($pdfPath))
+                      <a href="{{ storage_asset($pdfPath) }}" target="_blank" class="pdf-icon-btn" title="{{ $isBn ? 'অফিসিয়াল সার্কুলার PDF ডাউনলোড করুন' : 'View / Download Official PDF Circular' }}">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.8" stroke-linejoin="round"/>
+                          <path d="M14 2V8H20" stroke="#94a3b8" stroke-width="1.8" stroke-linejoin="round"/>
+                          <path d="M9 13H15M9 17H13" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                      </a>
+                    @else
+                      <a href="{{ route('career', $job->slug) }}" class="pdf-icon-btn" title="{{ $isBn ? 'বিজ্ঞপ্তির বিস্তারিত দেখুন' : 'View Circular Details' }}">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M14 2H6C4.89543 2 4 2.89543 4 4V20C4 21.1046 4.89543 22 6 22H18C19.1046 22 20 21.1046 20 20V8L14 2Z" fill="#ffffff" stroke="#94a3b8" stroke-width="1.8" stroke-linejoin="round"/>
+                          <path d="M14 2V8H20" stroke="#94a3b8" stroke-width="1.8" stroke-linejoin="round"/>
+                          <path d="M9 13H15M9 17H13" stroke="#94a3b8" stroke-width="1.8" stroke-linecap="round"/>
+                        </svg>
+                      </a>
+                    @endif
+                  </td>
+                  <td class="td-action">
+                    <a href="{{ route('career', $job->slug) }}" class="btn-table-details">
+                      {{ $isBn ? 'Details' : 'Details' }}
+                    </a>
+                  </td>
+                </tr>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+
+        {{-- Footer Banner inside Card --}}
+        <div class="career-card-footer">
+          <div class="footer-left-msg">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <span>{{ $isBn ? 'আমরা যোগ্য ও উদ্যমী ব্যক্তিদের কারিগরি শিক্ষা ও দক্ষতা উন্নয়নে আবেদন করার জন্য উৎসাহিত করি।' : 'We encourage qualified and motivated individuals to apply and contribute to technical education and skills development in Bangladesh.' }}</span>
+          </div>
+          <div class="footer-right-slogan">
+            Build Skills. Build Futures.
+          </div>
+        </div>
       </div>
 
-      {{-- Quick Apply Now pill for accessibility & test assertion --}}
+      {{-- Hidden accessible link for direct application --}}
       <div style="text-align: right; margin-top: -10px; margin-bottom: 20px;">
         <span style="font-size: 13px; color: #64748b;">
           {{ $isBn ? 'সরাসরি অনলাইনে আবেদন করতে চান?' : 'Want to submit direct online application?' }}
@@ -683,6 +868,21 @@
 </div>
 
 <script>
+function toggleStatusSearch() {
+  const box = document.getElementById('status-checker-box');
+  if (!box) return;
+  if (box.style.display === 'none' || getComputedStyle(box).display === 'none') {
+    box.style.display = 'block';
+    box.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const inp = document.getElementById('tracking_no_input');
+    if (inp) {
+      setTimeout(function() { inp.focus(); }, 150);
+    }
+  } else {
+    box.style.display = 'none';
+  }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   const form = document.getElementById('trackingStatusForm');
   const resContainer = document.getElementById('statusResultContainer');
@@ -696,7 +896,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!trackingNo) return;
 
       btn.disabled = true;
-      btn.innerHTML = '<span>⏳</span> {{ $isBn ? "যাচাই করা হচ্ছে..." : "Checking..." }}';
+      btn.innerHTML = '<span>⏳</span> {{ $isBn ? "যাচাই হচ্ছে..." : "Checking..." }}';
       resContainer.style.display = 'block';
       resContainer.innerHTML = '<div style="background:#f8fafc; border:1px solid #cbd5e1; padding:12px; border-radius:6px; color:#475569; font-size:13px;">🔎 {{ $isBn ? "স্ট্যাটাস অনুসন্ধান করা হচ্ছে..." : "Searching application status..." }}</div>';
 
@@ -751,7 +951,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .catch(err => {
         btn.disabled = false;
         btn.innerHTML = '<span>🔎</span> {{ $isBn ? "স্ট্যাটাস দেখুন" : "Check Status" }}';
-        form.submit(); // fallback to standard submit
+        form.submit();
       });
     });
   }

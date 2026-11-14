@@ -1111,6 +1111,13 @@ class WebsiteCmsTest extends TestCase
         $this->assertEquals('FATHER NAME UPDATED', $newApp->fresh()->father_name);
         $this->assertEquals('newapp_updated@example.test', $newApp->fresh()->email);
 
+        // Verify Candidate sees Stacked buttons on /career (View/Upload Resume, Update Resume, Application Status)
+        $candCareerResp = $this->withSession(['locale' => 'en'])->get(route('career'));
+        $candCareerResp->assertOk();
+        $candCareerResp->assertSee('Application Status');
+        $candCareerResp->assertSee('Update Resume');
+        $candCareerResp->assertSee('display:none');
+
         // Cleanup
         $job->delete();
         $app->delete();

@@ -95,7 +95,12 @@ class SitePageController extends Controller
                 ?? $circulars->firstWhere('id', (int)$jobParam);
         }
 
-        return view('site.career', compact('settings', 'circulars', 'selectedJob'));
+        $candidateApp = null;
+        if (session('candidate_id')) {
+            $candidateApp = \App\Models\JobApplication::find(session('candidate_id'));
+        }
+
+        return view('site.career', compact('settings', 'circulars', 'selectedJob', 'candidateApp'));
     }
 
     public function activities(): View
