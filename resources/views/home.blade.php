@@ -1142,6 +1142,56 @@
       transform: translateY(-1px);
     }
 
+    /* Drag & Drop Reordering for Management Committee Rows & Columns */
+    body.live-edit-mode-active .gov-row-drag-handle,
+    body.live-edit-mode-active .gov-col-drag-handle {
+      display: inline-flex !important;
+      align-items: center;
+      justify-content: center;
+      cursor: grab;
+      user-select: none;
+      font-size: 15px;
+      line-height: 1;
+      padding: 0 4px;
+      opacity: 0.65;
+      transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+    body.live-edit-mode-active .gov-row-drag-handle {
+      color: #166534;
+    }
+    body.live-edit-mode-active .gov-col-drag-handle {
+      color: #bbf7d0;
+    }
+    body.live-edit-mode-active .gov-row-drag-handle:hover,
+    body.live-edit-mode-active .gov-col-drag-handle:hover {
+      opacity: 1;
+      transform: scale(1.15);
+    }
+    body.live-edit-mode-active .gov-row-drag-handle:active,
+    body.live-edit-mode-active .gov-col-drag-handle:active {
+      cursor: grabbing;
+    }
+    tr.gov-row-dragging {
+      opacity: 0.45 !important;
+      background: #dcfce7 !important;
+    }
+    tr.gov-row-dragover-top {
+      border-top: 3px solid #16a34a !important;
+    }
+    tr.gov-row-dragover-bottom {
+      border-bottom: 3px solid #16a34a !important;
+    }
+    th.gov-col-dragging {
+      opacity: 0.45 !important;
+      background: #166534 !important;
+    }
+    th.gov-col-dragover-left {
+      border-left: 3px solid #38bdf8 !important;
+    }
+    th.gov-col-dragover-right {
+      border-right: 3px solid #38bdf8 !important;
+    }
+
     /* Hero Image Carousel Slider (1920x720 Resolution Aspect Ratio & Non-Squishing) */
     .hero-slider-wrap {
       position: relative;
@@ -2790,9 +2840,14 @@
                   <thead>
                     <tr style="background: #14532d; color: #ffffff;">
                       @foreach($committeeData['headers'] as $colIdx => $headerText)
-                        <th class="gov-header-th" data-col="{{ $colIdx }}" style="padding: 12px 16px; border-right: 1px solid rgba(255,255,255,0.15); position: relative; {{ $colIdx === 0 ? 'width: 60px; text-align: center;' : ($colIdx === 1 ? 'min-width: 220px;' : 'min-width: 180px;') }}">
+                        <th class="gov-header-th" data-col="{{ $colIdx }}" style="padding: 12px 16px; border-right: 1px solid rgba(255,255,255,0.15); position: relative; {{ $colIdx === 0 ? 'width: 75px; text-align: center;' : ($colIdx === 1 ? 'min-width: 220px;' : 'min-width: 180px;') }}">
                           <div style="display: flex; align-items: center; justify-content: {{ $colIdx === 0 ? 'center' : 'space-between' }}; gap: 6px;">
-                            <span class="gov-header-text" contenteditable="false">{{ $headerText }}</span>
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                              @if($colIdx > 0)
+                                <span class="gov-col-drag-handle" title="{{ $isBn ? 'ড্র্যাগ করে কলাম সাজান' : 'Drag to reorder column' }}" style="display: none;">⋮⋮</span>
+                              @endif
+                              <span class="gov-header-text" contenteditable="false">{{ $headerText }}</span>
+                            </div>
                             @if($colIdx >= 3)
                               <button type="button" class="gov-del-col-btn" data-col="{{ $colIdx }}" title="{{ $isBn ? 'কলাম মুছুন' : 'Delete column' }}" style="display: none; background: #ef4444; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; line-height: 1; cursor: pointer; align-items: center; justify-content: center;">✕</button>
                             @endif
@@ -2809,6 +2864,9 @@
                       <tr data-row-idx="{{ $rIdx }}" style="background: {{ $rIdx % 2 === 1 ? '#f8fdfa' : '#ffffff' }}; border-bottom: 1px solid #e2ebe6;">
                         @foreach($rCells as $cIdx => $cellVal)
                           <td class="gov-cell-td" data-col="{{ $cIdx }}" style="padding: 12px 16px; border-right: 1px solid #eef4f0; {{ $cIdx === 0 ? 'text-align: center; font-weight: 700; color: #166534;' : ($cIdx === 1 ? 'font-weight: 700; color: #1e293b;' : ($cIdx === 2 ? 'font-weight: 600; color: #14532d;' : 'color: #334155;')) }}">
+                            @if($cIdx === 0)
+                              <span class="gov-row-drag-handle" title="{{ $isBn ? 'ড্র্যাগ করে রো সাজান' : 'Drag to reorder row' }}" style="display: none;">⋮⋮</span>
+                            @endif
                             <span class="gov-cell-text" contenteditable="false">{{ $cellVal }}</span>
                           </td>
                         @endforeach
@@ -3542,6 +3600,202 @@
 
           saveTable();
         }
+      });
+
+      // ========================================================
+      // DRAG & DROP REORDERING (ROWS & COLUMNS)
+      // ========================================================
+      var draggedRow = null;
+      var draggedCol = -1;
+
+      // Enable row dragging on handle mousedown
+      tbody.addEventListener('mousedown', function(e) {
+        if (!isLiveEditActive()) return;
+        var handle = e.target.closest('.gov-row-drag-handle');
+        if (handle) {
+          var tr = handle.closest('tr');
+          if (tr) {
+            tr.setAttribute('draggable', 'true');
+          }
+        }
+      });
+
+      tbody.addEventListener('dragstart', function(e) {
+        if (!isLiveEditActive()) return;
+        var tr = e.target.closest('tr');
+        if (!tr) return;
+        draggedRow = tr;
+        tr.classList.add('gov-row-dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', tr.getAttribute('data-row-idx'));
+      });
+
+      tbody.addEventListener('dragover', function(e) {
+        if (!draggedRow || !isLiveEditActive()) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        var targetTr = e.target.closest('tr');
+        if (!targetTr || targetTr === draggedRow) return;
+
+        var rect = targetTr.getBoundingClientRect();
+        var next = (e.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
+        tbody.querySelectorAll('tr').forEach(function(r) {
+          r.classList.remove('gov-row-dragover-top', 'gov-row-dragover-bottom');
+        });
+        targetTr.classList.add(next ? 'gov-row-dragover-bottom' : 'gov-row-dragover-top');
+      });
+
+      tbody.addEventListener('dragleave', function(e) {
+        var tr = e.target.closest('tr');
+        if (tr) {
+          tr.classList.remove('gov-row-dragover-top', 'gov-row-dragover-bottom');
+        }
+      });
+
+      tbody.addEventListener('drop', function(e) {
+        if (!draggedRow || !isLiveEditActive()) return;
+        e.preventDefault();
+        var targetTr = e.target.closest('tr');
+        if (targetTr && targetTr !== draggedRow) {
+          var rect = targetTr.getBoundingClientRect();
+          var next = (e.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
+          tbody.insertBefore(draggedRow, next ? targetTr.nextSibling : targetTr);
+          reindexRows();
+          saveTable();
+          notify(isBn ? 'সদস্যদের ক্রম সফলভাবে পুনর্বিন্যাস ও সংরক্ষিত হয়েছে!' : 'Row order rearranged and saved successfully!');
+        }
+        tbody.querySelectorAll('tr').forEach(function(r) {
+          r.classList.remove('gov-row-dragover-top', 'gov-row-dragover-bottom', 'gov-row-dragging');
+          r.removeAttribute('draggable');
+        });
+        draggedRow = null;
+      });
+
+      tbody.addEventListener('dragend', function() {
+        if (draggedRow) {
+          draggedRow.classList.remove('gov-row-dragging');
+          draggedRow.removeAttribute('draggable');
+          draggedRow = null;
+        }
+        tbody.querySelectorAll('tr').forEach(function(r) {
+          r.classList.remove('gov-row-dragover-top', 'gov-row-dragover-bottom');
+        });
+      });
+
+      // Column Drag & Drop
+      var thead = table.querySelector('thead');
+      thead.addEventListener('mousedown', function(e) {
+        if (!isLiveEditActive()) return;
+        var handle = e.target.closest('.gov-col-drag-handle');
+        if (handle) {
+          var th = handle.closest('th.gov-header-th');
+          if (th && parseInt(th.getAttribute('data-col'), 10) > 0) {
+            th.setAttribute('draggable', 'true');
+          }
+        }
+      });
+
+      thead.addEventListener('dragstart', function(e) {
+        if (!isLiveEditActive()) return;
+        var th = e.target.closest('th.gov-header-th');
+        if (!th) return;
+        var col = parseInt(th.getAttribute('data-col'), 10);
+        if (isNaN(col) || col <= 0) return; // Keep SN fixed
+        draggedCol = col;
+        th.classList.add('gov-col-dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', String(col));
+      });
+
+      thead.addEventListener('dragover', function(e) {
+        if (draggedCol < 1 || !isLiveEditActive()) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        var targetTh = e.target.closest('th.gov-header-th');
+        if (!targetTh) return;
+        var targetCol = parseInt(targetTh.getAttribute('data-col'), 10);
+        if (isNaN(targetCol) || targetCol <= 0 || targetCol === draggedCol) return;
+
+        var rect = targetTh.getBoundingClientRect();
+        var next = (e.clientX - rect.left) / (rect.right - rect.left) > 0.5;
+        thead.querySelectorAll('th.gov-header-th').forEach(function(h) {
+          h.classList.remove('gov-col-dragover-left', 'gov-col-dragover-right');
+        });
+        targetTh.classList.add(next ? 'gov-col-dragover-right' : 'gov-col-dragover-left');
+      });
+
+      thead.addEventListener('dragleave', function(e) {
+        var th = e.target.closest('th.gov-header-th');
+        if (th) {
+          th.classList.remove('gov-col-dragover-left', 'gov-col-dragover-right');
+        }
+      });
+
+      thead.addEventListener('drop', function(e) {
+        if (draggedCol < 1 || !isLiveEditActive()) return;
+        e.preventDefault();
+        var targetTh = e.target.closest('th.gov-header-th');
+        if (targetTh) {
+          var targetCol = parseInt(targetTh.getAttribute('data-col'), 10);
+          if (!isNaN(targetCol) && targetCol > 0 && targetCol !== draggedCol) {
+            var rect = targetTh.getBoundingClientRect();
+            var next = (e.clientX - rect.left) / (rect.right - rect.left) > 0.5;
+            var fromTh = thead.querySelector('th.gov-header-th[data-col="' + draggedCol + '"]');
+            var theadTr = thead.querySelector('tr');
+
+            if (next) {
+              theadTr.insertBefore(fromTh, targetTh.nextSibling);
+            } else {
+              theadTr.insertBefore(fromTh, targetTh);
+            }
+
+            tbody.querySelectorAll('tr').forEach(function(rowTr) {
+              var fromTd = rowTr.querySelector('td.gov-cell-td[data-col="' + draggedCol + '"]');
+              var toTd = rowTr.querySelector('td.gov-cell-td[data-col="' + targetCol + '"]');
+              if (fromTd && toTd) {
+                if (next) {
+                  rowTr.insertBefore(fromTd, toTd.nextSibling);
+                } else {
+                  rowTr.insertBefore(fromTd, toTd);
+                }
+              }
+            });
+
+            thead.querySelectorAll('th.gov-header-th').forEach(function(h, idx) {
+              h.setAttribute('data-col', idx);
+              var btn = h.querySelector('.gov-del-col-btn');
+              if (btn) btn.setAttribute('data-col', idx);
+            });
+            tbody.querySelectorAll('tr').forEach(function(r) {
+              r.querySelectorAll('td.gov-cell-td').forEach(function(c, idx) {
+                c.setAttribute('data-col', idx);
+              });
+            });
+
+            saveTable();
+            notify(isBn ? 'কলামের ক্রম সফলভাবে পুনর্বিন্যাস ও সংরক্ষিত হয়েছে!' : 'Column order rearranged and saved successfully!');
+          }
+        }
+
+        thead.querySelectorAll('th.gov-header-th').forEach(function(h) {
+          h.classList.remove('gov-col-dragover-left', 'gov-col-dragover-right', 'gov-col-dragging');
+          h.removeAttribute('draggable');
+        });
+        draggedCol = -1;
+      });
+
+      thead.addEventListener('dragend', function() {
+        if (draggedCol > 0) {
+          var th = thead.querySelector('th.gov-header-th[data-col="' + draggedCol + '"]');
+          if (th) {
+            th.classList.remove('gov-col-dragging');
+            th.removeAttribute('draggable');
+          }
+          draggedCol = -1;
+        }
+        thead.querySelectorAll('th.gov-header-th').forEach(function(h) {
+          h.classList.remove('gov-col-dragover-left', 'gov-col-dragover-right');
+        });
       });
 
     })();

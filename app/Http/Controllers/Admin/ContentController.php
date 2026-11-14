@@ -73,6 +73,23 @@ class ContentController extends Controller
             $data['image'] = $request->file('image')->store('site-content', 'public');
             $this->mirrorToPublic($data['image']);
         }
+
+        $metadata = [];
+        if ($request->hasFile('pdf_circular')) {
+            $pdfPath = $request->file('pdf_circular')->store('circulars', 'public');
+            $this->mirrorToPublic($pdfPath);
+            $metadata['pdf_circular'] = $pdfPath;
+        }
+        if ($request->filled('vacancies')) {
+            $metadata['vacancies'] = $request->input('vacancies');
+        }
+        if ($request->filled('job_location')) {
+            $metadata['job_location'] = $request->input('job_location');
+        }
+        if (!empty($metadata)) {
+            $data['metadata'] = $metadata;
+        }
+
         $data['section'] = $section;
         $data['slug'] = $this->uniqueSlug($data['title']);
         $data['last_edited_by'] = auth()->id();
@@ -111,6 +128,34 @@ class ContentController extends Controller
             $data['image'] = $request->file('image')->store('site-content', 'public');
             $this->mirrorToPublic($data['image']);
         }
+
+        $metadata = $content->metadata ?? [];
+        if ($request->hasFile('pdf_circular')) {
+            if (!empty($metadata['pdf_circular'])) {
+                Storage::disk('public')->delete($metadata['pdf_circular']);
+                $oldPdfPub = public_path('storage/' . $metadata['pdf_circular']);
+                if (file_exists($oldPdfPub)) @unlink($oldPdfPub);
+            }
+            $pdfPath = $request->file('pdf_circular')->store('circulars', 'public');
+            $this->mirrorToPublic($pdfPath);
+            $metadata['pdf_circular'] = $pdfPath;
+        } elseif ($request->boolean('remove_pdf_circular')) {
+            if (!empty($metadata['pdf_circular'])) {
+                Storage::disk('public')->delete($metadata['pdf_circular']);
+                $oldPdfPub = public_path('storage/' . $metadata['pdf_circular']);
+                if (file_exists($oldPdfPub)) @unlink($oldPdfPub);
+            }
+            unset($metadata['pdf_circular']);
+        }
+
+        if ($request->has('vacancies')) {
+            $metadata['vacancies'] = $request->input('vacancies');
+        }
+        if ($request->has('job_location')) {
+            $metadata['job_location'] = $request->input('job_location');
+        }
+        $data['metadata'] = $metadata;
+
         $data['slug'] = $this->uniqueSlug($data['title'], $content->id);
         $data['last_edited_by'] = auth()->id();
         $data['last_editor_name'] = auth()->user()?->name ?? 'Administrator';
@@ -199,6 +244,10 @@ class ContentController extends Controller
             'starts_at' => ['nullable', 'date'],
             'ends_at' => ['nullable', 'date', 'after_or_equal:starts_at'],
             'image' => ['nullable', 'file', 'mimes:jpeg,png,jpg,gif,svg,webp', 'max:5120'],
+            'vacancies' => ['nullable', 'string', 'max:50'],
+            'job_location' => ['nullable', 'string', 'max:200'],
+            'pdf_circular' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
+            'remove_pdf_circular' => ['nullable', 'boolean'],
         ]) + ['sort_order' => $request->integer('sort_order', 0)];
     }
 

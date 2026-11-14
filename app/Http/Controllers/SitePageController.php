@@ -79,17 +79,23 @@ class SitePageController extends Controller
         return view('site.gallery', compact('settings', 'gallery'));
     }
 
-    public function career(): View
+    public function career(Request $request, ?string $slug = null): View
     {
         $settings = $this->getSettings();
         $circulars = SiteContent::query()
             ->published()
             ->where('section', 'career')
-            ->orderBy('sort_order')
-            ->orderByDesc('created_at')
+            ->ordered()
             ->get();
 
-        return view('site.career', compact('settings', 'circulars'));
+        $selectedJob = null;
+        $jobParam = $slug ?: $request->query('job');
+        if ($jobParam) {
+            $selectedJob = $circulars->firstWhere('slug', $jobParam) 
+                ?? $circulars->firstWhere('id', (int)$jobParam);
+        }
+
+        return view('site.career', compact('settings', 'circulars', 'selectedJob'));
     }
 
     public function activities(): View

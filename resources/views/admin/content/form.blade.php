@@ -180,6 +180,45 @@
       </div>
     @endif
 
+    @if($section === 'career')
+      <div style="background:#f0fdf4;border:1px solid #86efac;padding:16px;border-radius:8px;margin-bottom:16px;">
+        <h4 style="margin:0 0 10px 0;color:#14532d;font-size:14px;display:flex;align-items:center;gap:6px;">
+          <span>💼</span> Career Circular Details (নিয়োগ বিজ্ঞপ্তির অতিরিক্ত তথ্য ও পিডিএফ)
+        </h4>
+        <div class="field-grid">
+          <label>
+            Required Vacancies / পদসংখ্যা
+            <input type="text" name="vacancies" value="{{ old('vacancies', $item->metadata['vacancies'] ?? '1') }}" placeholder="e.g. 1, 2, or 5">
+          </label>
+          <label>
+            Job Location / কর্মস্থল
+            <input type="text" name="job_location" value="{{ old('job_location', $item->metadata['job_location'] ?? 'Sagorika, Pahartali, Chattogram') }}" placeholder="e.g. Sagorika, Pahartali, Chattogram">
+          </label>
+        </div>
+        <div style="margin-top:12px;">
+          <label style="margin:0; display:block;">
+            <strong style="color:#14532d; font-size:13px;">Official PDF Circular / মূল বিজ্ঞপ্তি (PDF ফাইল)</strong>
+            <span style="display:block; font-size:12px; color:#475569; margin:2px 0 6px 0;">
+              বিজ্ঞপ্তির অফিসিয়াল পিডিএফ ফাইল আপলোড করুন (সর্বোচ্চ ১০ এমবি)। এটি ক্যারিয়ার পেইজের টেবিলে পিডিএফ আইকনে ক্লিকেবল থাকবে।
+            </span>
+            <input type="file" name="pdf_circular" accept="application/pdf,.pdf" style="padding:6px; font-size:13px;">
+          </label>
+          @if(!empty($item->metadata['pdf_circular']))
+            <div style="margin-top:8px; display:flex; align-items:center; gap:12px; background:#fff; padding:8px 12px; border-radius:6px; border:1px solid #bbf7d0;">
+              <span style="font-size:16px;">📄</span>
+              <a href="{{ storage_asset($item->metadata['pdf_circular']) }}" target="_blank" style="color:#0f5132; font-weight:700; font-size:13px; text-decoration:underline;">
+                বর্তমান পিডিএফ বিজ্ঞপ্তি দেখুন ({{ basename($item->metadata['pdf_circular']) }}) ↗
+              </a>
+              <label style="margin:0; margin-left:auto; font-size:12.5px; color:#dc2626; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                <input type="checkbox" name="remove_pdf_circular" value="1">
+                মুছে ফেলুন (Remove PDF)
+              </label>
+            </div>
+          @endif
+        </div>
+      </div>
+    @endif
+
     <div class="field-grid">
       <label>
         Display Order

@@ -945,4 +945,96 @@ class WebsiteCmsTest extends TestCase
         \App\Models\SiteSetting::where('key', 'about_summary_home')->delete();
         \App\Models\SiteSetting::where('key', 'gov_committee_table')->delete();
     }
+
+    public function test_career_table_view_and_candidate_portal_login_and_cv_update(): void
+    {
+        $this->seed();
+
+        // 1. Create a test career circular with metadata
+        $job = \App\Models\SiteContent::create([
+            'section' => 'career',
+            'title' => 'Trainer - Beautification, MUSTI Project',
+            'slug' => 'trainer-beautification-musti-project',
+            'category' => 'TVET Training Project',
+            'status' => 'published',
+            'starts_at' => now()->subDays(5),
+            'ends_at' => now()->addDays(20),
+            'metadata' => [
+                'vacancies' => '2',
+                'job_location' => 'Mymensingh under UCEP Gazipur Region',
+                'pdf_circular' => 'circulars/sample_circular.pdf',
+            ],
+            'body' => '<p>Job description and requirements for Trainer - Beautification.</p>',
+        ]);
+
+        // 2. Verify Table View on /career
+        $careerTableResp = $this->withSession(['locale' => 'en'])->get(route('career'));
+        $careerTableResp->assertOk();
+        $careerTableResp->assertSee('Trainer - Beautification, MUSTI Project');
+        $careerTableResp->assertSee('Mymensingh under UCEP Gazipur Region');
+        $careerTableResp->assertSee('Position Name');
+        $careerTableResp->assertSee('Required');
+        $careerTableResp->assertSee('Job Location');
+        $careerTableResp->assertSee('Details');
+        $careerTableResp->assertSee('Apply Now');
+
+        // 3. Verify Details View on /career/{slug}
+        $careerDetailResp = $this->withSession(['locale' => 'en'])->get(route('career', $job->slug));
+        $careerDetailResp->assertOk();
+        $careerDetailResp->assertSee('Trainer - Beautification, MUSTI Project');
+        $careerDetailResp->assertSee('DEADLINE:');
+        $careerDetailResp->assertSee('Mymensingh under UCEP Gazipur Region');
+        $careerDetailResp->assertSee('Apply via Email');
+        $careerDetailResp->assertSee('Download Circular PDF');
+        $careerDetailResp->assertSee('Back to Circulars');
+
+        // 4. Create an application and test Candidate Portal Login
+        $app = \App\Models\JobApplication::create([
+            'tracking_no' => 'JOB-2026-TEST99',
+            'site_content_id' => $job->id,
+            'post_name' => $job->title,
+            'applicant_name' => 'MD. SHAKIL HOSSAIN',
+            'father_name' => 'MD. RAFIQUL ISLAM',
+            'mother_name' => 'SHAHANARA BEGUM',
+            'dob' => '1998-05-15',
+            'gender' => 'Male',
+            'nationality' => 'Bangladeshi',
+            'religion' => 'Islam',
+            'marital_status' => 'Single',
+            'mobile_no' => '01880919999',
+            'email' => 'shakil@example.test',
+            'status' => 'shortlisted',
+            'admin_notes' => 'Selected for initial written test and interview.',
+        ]);
+
+        // Login with Tracking ID & Mobile Number
+        $loginResp = $this->post(route('candidate.login.submit'), [
+            'tracking_no' => 'JOB-2026-TEST99',
+            'mobile_no' => '01880919999',
+        ]);
+        $loginResp->assertRedirect(route('candidate.dashboard'));
+
+        // Dashboard renders with status and application details
+        $dashResp = $this->get(route('candidate.dashboard'));
+        $dashResp->assertOk();
+        $dashResp->assertSee('MD. SHAKIL HOSSAIN');
+        $dashResp->assertSee('JOB-2026-TEST99');
+        $dashResp->assertSee('Shortlisted');
+        $dashResp->assertSee('Selected for initial written test and interview.');
+
+        // Update CV
+        \Illuminate\Support\Facades\Storage::fake('public');
+        $fakeCv = \Illuminate\Http\UploadedFile::fake()->create('updated_cv.pdf', 200, 'application/pdf');
+
+        $cvUpdateResp = $this->post(route('candidate.update_cv'), [
+            'application_id' => $app->id,
+            'cv_file' => $fakeCv,
+        ]);
+        $cvUpdateResp->assertRedirect();
+        $this->assertNotNull($app->fresh()->cv_path);
+
+        // Cleanup
+        $job->delete();
+        $app->delete();
+    }
 }
