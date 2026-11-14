@@ -1033,8 +1033,87 @@ class WebsiteCmsTest extends TestCase
         $cvUpdateResp->assertRedirect();
         $this->assertNotNull($app->fresh()->cv_path);
 
+        // 4. Verify Applicant's Copy does not contain Bangla "(চাকরির আবেদন কপি)"
+        $confResp = $this->get(route('career.apply.confirmation', $app->tracking_no));
+        $confResp->assertOk();
+        $confResp->assertSee("Applicant's Copy");
+        $confResp->assertDontSee("(চাকরির আবেদন কপি)");
+
+        // 5. Create a new application with default status 'new'
+        $newApp = \App\Models\JobApplication::create([
+            'tracking_no' => 'JOB-2026-SUBMIT01',
+            'site_content_id' => $job->id,
+            'post_name' => $job->title,
+            'applicant_name' => 'NEW SUBMITTED APPLICANT',
+            'father_name' => 'FATHER NAME',
+            'mother_name' => 'MOTHER NAME',
+            'dob' => '2000-01-01',
+            'gender' => 'Female',
+            'nationality' => 'Bangladeshi',
+            'religion' => 'Islam',
+            'marital_status' => 'Single',
+            'mobile_no' => '01880918888',
+            'email' => 'newapp@example.test',
+            'status' => 'new',
+        ]);
+
+        // Status check returns "Application Submitted"
+        $statusCheckResp = $this->postJson(route('candidate.check_status'), [
+            'tracking_no' => 'JOB-2026-SUBMIT01',
+        ]);
+        $statusCheckResp->assertOk();
+        $statusCheckResp->assertJsonFragment([
+            'success' => true,
+            'tracking_no' => 'JOB-2026-SUBMIT01',
+            'status_label' => 'Application Submitted',
+        ]);
+
+        // Invalid tracking ID returns 404
+        $invalidCheckResp = $this->postJson(route('candidate.check_status'), [
+            'tracking_no' => 'JOB-INVALID-0000',
+        ]);
+        $invalidCheckResp->assertStatus(404);
+
+        // Login as new applicant and verify dashboard displays "Application Submitted" (not "Under Review")
+        $this->post(route('candidate.login.submit'), [
+            'tracking_no' => 'JOB-2026-SUBMIT01',
+            'mobile_no' => '01880918888',
+        ]);
+        $newDashResp = $this->get(route('candidate.dashboard'));
+        $newDashResp->assertOk();
+        $newDashResp->assertSee('Application Submitted');
+        $newDashResp->assertDontSee('Under Review / New');
+
+        // Test Profile Update
+        $profileUpdateResp = $this->post(route('candidate.update_profile'), [
+            'application_id' => $newApp->id,
+            'applicant_name' => 'NEW SUBMITTED APPLICANT UPDATED',
+            'father_name' => 'FATHER NAME UPDATED',
+            'mother_name' => 'MOTHER NAME',
+            'dob' => '2000-01-01',
+            'gender' => 'Female',
+            'nationality' => 'Bangladeshi',
+            'religion' => 'Islam',
+            'marital_status' => 'Single',
+            'present_care_of' => 'Father',
+            'present_village' => 'Road 5, Pahartali',
+            'present_district' => 'Chattogram',
+            'present_upazila' => 'Pahartali',
+            'present_post_office' => 'Pahartali',
+            'present_post_code' => '4202',
+            'same_as_present' => 1,
+            'mobile_no' => '01880918888',
+            'email' => 'newapp_updated@example.test',
+            'other_qualifications' => 'Certified Auto Mechanic',
+        ]);
+        $profileUpdateResp->assertRedirect(route('candidate.dashboard'));
+        $this->assertEquals('NEW SUBMITTED APPLICANT UPDATED', $newApp->fresh()->applicant_name);
+        $this->assertEquals('FATHER NAME UPDATED', $newApp->fresh()->father_name);
+        $this->assertEquals('newapp_updated@example.test', $newApp->fresh()->email);
+
         // Cleanup
         $job->delete();
         $app->delete();
+        $newApp->delete();
     }
 }

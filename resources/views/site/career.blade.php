@@ -24,8 +24,16 @@
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
+  margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+.career-status-checker-card {
+  background: #ffffff;
+  border: 1.5px solid #dbe6e0;
+  border-radius: 10px;
+  padding: 18px 22px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
 }
 .career-top-title {
   margin: 0;
@@ -386,15 +394,76 @@
     <div class="career-top-title">
       <span>💼</span> {{ $isBn ? 'চলমান নিয়োগ বিজ্ঞপ্তি ও ক্যারিয়ার পোর্টাল' : 'Career Opportunities & Recruitment' }}
     </div>
-    <div style="display:flex; align-items:center; gap:10px;">
+    <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+      <a href="#status-checker-box" class="btn-portal-login" style="background:#0284c7;">
+        <span>🔍</span> {{ $isBn ? 'আবেদনের স্ট্যাটাস দেখুন' : 'View Application Status' }}
+      </a>
       @if(session('candidate_id'))
         <a href="{{ route('candidate.dashboard') }}" class="btn-portal-login">
-          <span>👤</span> {{ $isBn ? 'প্রার্থীর ড্যাশবোর্ড (My Applications)' : 'Candidate Dashboard' }} →
+          <span>👤</span> {{ $isBn ? 'প্রার্থীর ড্যাশবোর্ড' : 'Candidate Dashboard' }} →
         </a>
       @else
         <a href="{{ route('candidate.login') }}" class="btn-portal-login">
-          <span>👤</span> {{ $isBn ? 'প্রার্থী লগইন (স্ট্যাটাস ও সিভি আপডেট)' : 'Candidate Login & Status' }} →
+          <span>👤</span> {{ $isBn ? 'প্রার্থী লগইন (সিভি ও প্রোফাইল)' : 'Candidate Login' }} →
         </a>
+      @endif
+    </div>
+  </div>
+
+  {{-- Application Status Checker Box --}}
+  <div class="career-status-checker-card" id="status-checker-box">
+    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+      <h3 style="margin:0; font-size:15.5px; color:#14532d; display:flex; align-items:center; gap:8px;">
+        <span>🔍</span> {{ $isBn ? 'আবেদনের স্ট্যাটাস যাচাই (View Application Status)' : 'View Application Status' }}
+      </h3>
+      <span style="font-size:12.5px; color:#64748b;">
+        {{ $isBn ? 'আবেদন করার পর প্রাপ্ত ট্র্যাকিং নম্বর দিয়ে স্ট্যাটাস চেক করুন' : 'Enter your Tracking ID to view the latest status of your application' }}
+      </span>
+    </div>
+
+    <form method="POST" action="{{ route('candidate.check_status') }}" id="trackingStatusForm" style="display:flex; gap:10px; flex-wrap:wrap;">
+      @csrf
+      <div style="flex:1; min-width:240px;">
+        <input type="text" name="tracking_no" id="tracking_no_input" value="{{ session('searched_tracking_no', request('tracking_no')) }}" placeholder="{{ $isBn ? 'ট্র্যাকিং আইডি লিখুন (যেমন: JOB-2026-XXXXXX)' : 'Enter Tracking ID (e.g. JOB-2026-XXXXXX)' }}" required style="width:100%; padding:10px 14px; border:2px solid #cbd5e1; border-radius:6px; font-size:14px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">
+      </div>
+      <button type="submit" id="btnCheckStatus" style="background:#0284c7; color:#fff; border:none; padding:10px 22px; border-radius:6px; font-weight:700; font-size:14px; cursor:pointer; display:inline-flex; align-items:center; gap:6px; transition:background 0.2s ease;">
+        <span>🔎</span> {{ $isBn ? 'স্ট্যাটাস দেখুন' : 'Check Status' }}
+      </button>
+    </form>
+
+    {{-- Result Area (Dynamic via JS and Session Fallback) --}}
+    <div id="statusResultContainer" style="{{ session('tracking_result') || session('tracking_error') ? '' : 'display:none;' }} margin-top:16px;">
+      @if(session('tracking_error'))
+        <div style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:12px 16px; border-radius:8px; font-size:13.5px;">
+          ❌ {{ session('tracking_error') }}
+        </div>
+      @endif
+
+      @if(session('tracking_result'))
+        @php $res = session('tracking_result'); @endphp
+        <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:16px; box-shadow:0 2px 8px rgba(16,185,129,0.08);">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+            <div style="font-size:16px; font-weight:700; color:#14532d;">
+              {{ $res['post_name'] }}
+            </div>
+            <span style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:4px 12px; border-radius:20px; font-size:12.5px; font-weight:700; text-transform:uppercase;">
+              ● {{ $res['status_label'] }}
+            </span>
+          </div>
+          <div style="font-size:13px; color:#334155; display:flex; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
+            <span>👤 <strong>{{ $res['applicant_name'] }}</strong></span>
+            <span>🆔 <strong>{{ $res['tracking_no'] }}</strong></span>
+            <span>📅 {{ $res['created_at'] }}</span>
+          </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <a href="{{ $res['confirmation_url'] }}" target="_blank" style="background:#15803d; color:#fff; padding:6px 14px; border-radius:6px; text-decoration:none; font-size:12.5px; font-weight:600;">
+              📄 {{ $isBn ? 'আবেদনপত্র দেখুন / প্রিন্ট' : 'View Application Copy' }} ↗
+            </a>
+            <a href="{{ $res['portal_url'] }}" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; padding:6px 14px; border-radius:6px; text-decoration:none; font-size:12.5px; font-weight:600;">
+              🔑 {{ $isBn ? 'প্রার্থী পোর্টালে লগইন ও সিভি আপডেট' : 'Login to Portal' }} →
+            </a>
+          </div>
+        </div>
       @endif
     </div>
   </div>
@@ -612,4 +681,80 @@
     @endif
   @endif
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.getElementById('trackingStatusForm');
+  const resContainer = document.getElementById('statusResultContainer');
+  const btn = document.getElementById('btnCheckStatus');
+  const input = document.getElementById('tracking_no_input');
+
+  if (form && resContainer) {
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const trackingNo = (input.value || '').trim();
+      if (!trackingNo) return;
+
+      btn.disabled = true;
+      btn.innerHTML = '<span>⏳</span> {{ $isBn ? "যাচাই করা হচ্ছে..." : "Checking..." }}';
+      resContainer.style.display = 'block';
+      resContainer.innerHTML = '<div style="background:#f8fafc; border:1px solid #cbd5e1; padding:12px; border-radius:6px; color:#475569; font-size:13px;">🔎 {{ $isBn ? "স্ট্যাটাস অনুসন্ধান করা হচ্ছে..." : "Searching application status..." }}</div>';
+
+      fetch('{{ route("candidate.check_status") }}', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({ tracking_no: trackingNo })
+      })
+      .then(res => res.json().then(data => ({ status: res.status, body: data })))
+      .then(res => {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🔎</span> {{ $isBn ? "স্ট্যাটাস দেখুন" : "Check Status" }}';
+        if (res.status === 200 && res.body.success) {
+          const d = res.body;
+          resContainer.innerHTML = `
+            <div style="background:#f0fdf4; border:1.5px solid #86efac; border-radius:8px; padding:16px; box-shadow:0 2px 8px rgba(16,185,129,0.08);">
+              <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; margin-bottom:10px;">
+                <div style="font-size:16px; font-weight:700; color:#14532d;">
+                  ${d.post_name}
+                </div>
+                <span style="background:#dcfce7; color:#15803d; border:1px solid #86efac; padding:4px 12px; border-radius:20px; font-size:12.5px; font-weight:700; text-transform:uppercase;">
+                  ● ${d.status_label}
+                </span>
+              </div>
+              <div style="font-size:13px; color:#334155; display:flex; gap:16px; flex-wrap:wrap; margin-bottom:12px;">
+                <span>👤 <strong>${d.applicant_name}</strong></span>
+                <span>🆔 <strong>${d.tracking_no}</strong></span>
+                <span>📅 ${d.created_at}</span>
+              </div>
+              <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <a href="${d.confirmation_url}" target="_blank" style="background:#15803d; color:#fff; padding:6px 14px; border-radius:6px; text-decoration:none; font-size:12.5px; font-weight:600;">
+                  📄 {{ $isBn ? 'আবেদনপত্র দেখুন / প্রিন্ট' : 'View Application Copy' }} ↗
+                </a>
+                <a href="${d.portal_url}" style="background:#f1f5f9; color:#334155; border:1px solid #cbd5e1; padding:6px 14px; border-radius:6px; text-decoration:none; font-size:12.5px; font-weight:600;">
+                  🔑 {{ $isBn ? 'প্রার্থী পোর্টালে লগইন ও সিভি আপডেট' : 'Login to Portal' }} →
+                </a>
+              </div>
+            </div>
+          `;
+        } else {
+          resContainer.innerHTML = `
+            <div style="background:#fef2f2; border:1px solid #fecaca; color:#991b1b; padding:12px 16px; border-radius:8px; font-size:13.5px;">
+              ❌ ${res.body.message || 'No application found with this Tracking ID.'}
+            </div>
+          `;
+        }
+      })
+      .catch(err => {
+        btn.disabled = false;
+        btn.innerHTML = '<span>🔎</span> {{ $isBn ? "স্ট্যাটাস দেখুন" : "Check Status" }}';
+        form.submit(); // fallback to standard submit
+      });
+    });
+  }
+});
+</script>
 @endsection

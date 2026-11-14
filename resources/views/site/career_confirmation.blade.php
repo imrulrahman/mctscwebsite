@@ -1,7 +1,7 @@
 @extends('site.layout')
 
 @section('title', 'Applicant\'s Copy · ' . $application->tracking_no)
-@section('page_title', $isBn ? 'চাকরির আবেদন কপি (Applicant\'s Copy)' : 'Applicant\'s Copy')
+@section('page_title', 'Applicant\'s Copy')
 @section('page_subtitle', 'Tracking ID: ' . $application->tracking_no)
 
 @section('content')
@@ -86,7 +86,7 @@
   <div class="ac-card">
     <div class="ac-top">
       <div>
-        <div style="font-size:11.5px;font-weight:700;color:#0f5132;text-transform:uppercase;letter-spacing:0.6px;">Applicant's Copy (চাকরির আবেদন কপি)</div>
+        <div style="font-size:11.5px;font-weight:700;color:#0f5132;text-transform:uppercase;letter-spacing:0.6px;">Applicant's Copy</div>
         <h2 style="margin:4px 0;font-size:20px;color:#0f172a;">{{ $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School & College') }}</h2>
         <div style="font-size:13.5px;color:#334155;margin-top:6px;">
           <strong>Name of the Post:</strong> <span style="color:#0f5132;font-weight:700;">{{ $application->post_name }}</span>

@@ -36,12 +36,14 @@ Route::post('/career/apply', [CareerApplicationController::class, 'submit'])->mi
 Route::get('/career/apply/confirmation/{tracking_no}', [CareerApplicationController::class, 'confirmation'])->name('career.apply.confirmation');
 Route::post('/career/email-apply', [CareerApplicationController::class, 'sendEmailApplication'])->middleware('throttle:10,1')->name('career.email.send');
 
-// Candidate Portal (Job Applicant Login, Application Status & CV Update)
+// Candidate Portal (Job Applicant Login, Application Status & Profile/CV Update)
+Route::match(['get', 'post'], '/career/check-status', [CandidatePortalController::class, 'checkStatus'])->name('candidate.check_status');
 Route::get('/career/portal/login', [CandidatePortalController::class, 'showLogin'])->name('candidate.login');
 Route::post('/career/portal/login', [CandidatePortalController::class, 'login'])->middleware('throttle:10,1')->name('candidate.login.submit');
 Route::post('/career/portal/logout', [CandidatePortalController::class, 'logout'])->name('candidate.logout');
 Route::get('/career/portal/dashboard', [CandidatePortalController::class, 'dashboard'])->name('candidate.dashboard');
 Route::post('/career/portal/update-cv', [CandidatePortalController::class, 'updateCv'])->middleware('throttle:15,1')->name('candidate.update_cv');
+Route::post('/career/portal/update-profile', [CandidatePortalController::class, 'updateProfile'])->middleware('throttle:15,1')->name('candidate.update_profile');
 
 Route::get('/career/{slug?}', [SitePageController::class, 'career'])->name('career');
 Route::get('/activities', [SitePageController::class, 'activities'])->name('activities');
