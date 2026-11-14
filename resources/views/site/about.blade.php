@@ -484,31 +484,6 @@
         </h2>
         <div class="gold-rule" style="width: 45px; height: 3px; background: var(--gold); margin: 0 0 18px 0;"></div>
       </div>
-        @elseif(!empty($settings['patron_text']))
-          {!! nl2br(e($settings['patron_text'])) !!}
-        @else
-          @if($isBn)
-            <strong>মাহমুদুন্নবী চৌধুরী (১৯০৮–১৯৯৫)</strong> ছিলেন চট্টগ্রামের একজন প্রখ্যাত শিল্পপতি, দানবীর ও রাজনীতিবিদ। তিনি তৎকালীন পূর্ব পাকিস্তান প্রাদেশিক পরিষদের সম্মানিত সদস্য হিসেবে দায়িত্ব পালন করেন এবং প্রাদেশিক সরকারের মন্ত্রী হিসেবে গুরুত্বপূর্ণ ভূমিকা রেখেছিলেন। তাঁর জনকল্যাণমুখী চিন্তা, শিক্ষা বিস্তার এবং সমাজ প্রগতির আজীবন অঙ্গীকারকে ধারণ করেই এ প্রতিষ্ঠানটি নতুন প্রজন্মের জন্য বাস্তবমুখী দক্ষতা বিনির্মাণে নিরলস কাজ করে যাচ্ছে।
-          @else
-            <strong>Mahmudunnabi Chowdhury (1908–1995)</strong> was a prominent businessman and politician from Chattogram who served as a member of the East Pakistan Legislative Assembly and held ministerial responsibilities. The institution carries forward a commitment to human development and community progress in remembrance of his legacy.
-          @endif
-        @endif
-      </p>
-    </div>
-
-    <!-- 7. INDUSTRY PARTNERSHIPS FOR EMPLOYMENT AND CAREER DEVELOPMENT -->
-    @php
-      $indListRaw = $settings['industry_partners_list'] ?? "Alert Fashion Ltd.\nMellow Fashion Ltd.\nSalim & Brothers Ltd.\nAstech Ltd.\nHB Group\nHB Intimates Ltd.\nFashion of Wales Ltd.\nHotel New View";
-      $indPartners = array_values(array_filter(array_map('trim', preg_split('/\r\n|\r|\n/', $indListRaw))));
-    @endphp
-    <div style="background: #ffffff; border: 1px solid #e2e8f0; border-top: 4px solid var(--green); border-radius: 10px; padding: 34px 36px; margin-bottom: 48px; box-shadow: 0 4px 16px rgba(0,0,0,0.03);">
-      <div style="margin-bottom: 18px;">
-        <span class="section-kicker" style="color: var(--gold);">{{ $settings['industry_partners_kicker'] ?? ($isBn ? 'শিল্প সংযোগ ও ক্যারিয়ার উন্নয়ন' : 'EMPLOYMENT & CAREER DEVELOPMENT') }}</span>
-        <h2 style="font-family: var(--serif); font-size: 26px; color: var(--green); margin: 6px 0 10px 0; line-height: 1.3;">
-          <em>{{ $settings['industry_partners_title'] ?? ($isBn ? 'কর্মসংস্থান ও ক্যারিয়ার উন্নয়নে শিল্প অংশীদারিত্ব' : 'Industry Partnerships for Employment and Career Development') }}</em>
-        </h2>
-        <div class="gold-rule" style="width: 45px; height: 3px; background: var(--gold); margin: 0 0 18px 0;"></div>
-      </div>
 
       <div style="font-size: 15px; line-height: 1.8; color: #334155; text-align: justify; margin-bottom: 24px;">
         <p style="margin-bottom: 14px;">
