@@ -882,4 +882,67 @@ class WebsiteCmsTest extends TestCase
         ]);
         $guestResp->assertUnauthorized();
     }
+
+    public function test_homepage_institute_background_summary_and_dynamic_committee_table(): void
+    {
+        $this->seed();
+
+        $admin = User::firstOrCreate(
+            ['email' => 'admin_table_test@mctsc.test'],
+            ['name' => 'Admin Table', 'password' => 'Passw0rd!123', 'is_admin' => true]
+        );
+
+        // 1. Test homepage uses about_summary_home independently from about_intro_body
+        \App\Models\SiteSetting::updateOrCreate(
+            ['key' => 'about_intro_body'],
+            ['value' => 'Long About Page Body from About Us page only.']
+        );
+        \App\Models\SiteSetting::updateOrCreate(
+            ['key' => 'about_summary_home'],
+            ['value' => "Custom Home Summary Par 1.\n\nCustom Home Summary Par 2."]
+        );
+
+        $homeResp = $this->withSession(['locale' => 'en'])->get(route('home'));
+        $homeResp->assertOk();
+        $homeResp->assertSee('Custom Home Summary Par 1.');
+        $homeResp->assertSee('Custom Home Summary Par 2.');
+
+        // About page should see its own about_intro_body
+        $aboutResp = $this->withSession(['locale' => 'en'])->get(route('about'));
+        $aboutResp->assertOk();
+        $aboutResp->assertSee('Long About Page Body from About Us page only.');
+        $aboutResp->assertDontSee('Custom Home Summary Par 1.');
+
+        // 2. Test saving and rendering dynamic management committee table JSON
+        $customCommittee = [
+            'headers' => ['SN', 'Member Name', 'Official Position', 'Remarks'],
+            'rows' => [
+                ['1', 'Engr. A. K. M. Shamsuddin', 'Chief Advisor', 'Distinguished TVET Specialist'],
+                ['2', 'Dr. Md Shaif Ullah Mansur', 'Executive Chairman', 'Constitutional Expert'],
+                ['3', 'Md. Enayet Hossain', 'Member Secretary', 'Senior Educationist'],
+                ['4', 'Sultana Razia', 'Director (Academic)', 'Women in STEM Advocate'],
+                ['5', 'Md. Mosarrof Hossain', 'Member', 'Community Specialist'],
+                ['6', 'Tariqul Islam', 'Co-Opted Member', 'Industry Partner Liaison'],
+            ],
+        ];
+
+        $saveResp = $this->actingAs($admin)->postJson(route('admin.live-edit.setting'), [
+            'key' => 'gov_committee_table',
+            'value' => json_encode($customCommittee),
+        ]);
+        $saveResp->assertOk()->assertJson(['success' => true]);
+
+        $homeTableResp = $this->withSession(['locale' => 'en'])->get(route('home'));
+        $homeTableResp->assertOk();
+        $homeTableResp->assertSee('Engr. A. K. M. Shamsuddin');
+        $homeTableResp->assertSee('Chief Advisor');
+        $homeTableResp->assertSee('Distinguished TVET Specialist');
+        $homeTableResp->assertSee('Tariqul Islam');
+        $homeTableResp->assertSee('Industry Partner Liaison');
+
+        // Cleanup
+        \App\Models\SiteSetting::where('key', 'about_intro_body')->delete();
+        \App\Models\SiteSetting::where('key', 'about_summary_home')->delete();
+        \App\Models\SiteSetting::where('key', 'gov_committee_table')->delete();
+    }
 }

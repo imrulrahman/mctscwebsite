@@ -28,7 +28,8 @@ class SettingsController extends Controller
         // About
         'about_title', 'about_title_bn', 'about', 'about_bn', 'about_aside',
         'about_intro_kicker', 'about_intro_kicker_bn', 'about_intro_title', 'about_intro_title_bn', 'about_intro_subtitle',
-        'about_intro_body', 'about_intro_body_bn', 'about_btn_text', 'about_btn_text_bn', 'about_modal_title', 'about_modal_title_bn',
+        'about_intro_body', 'about_intro_body_bn', 'about_summary_home', 'about_summary_home_bn',
+        'about_btn_text', 'about_btn_text_bn', 'about_modal_title', 'about_modal_title_bn',
         'about_commitment', 'about_commitment_bn',
         // Vision, Mission, Objectives
         'vmo_vision_pill', 'vmo_vision_pill_bn', 'vmo_vision_text', 'vmo_vision_text_bn',
@@ -39,6 +40,7 @@ class SettingsController extends Controller
         'strategic_partnership_body', 'strategic_partnership_body_bn', 'strategic_partnership_footer', 'strategic_partnership_footer_bn',
         // Governance
         'gov_committee_title', 'gov_committee_title_bn', 'gov_committee_intro', 'gov_committee_intro_bn',
+        'gov_committee_table', 'gov_committee_table_bn',
         // Development Partners & Activities
         'dev_partners_kicker', 'dev_partners_kicker_bn', 'dev_partners_title', 'dev_partners_title_bn', 'dev_partners_text', 'dev_partners_text_bn',
         'activities_sidebar_title', 'activities_sidebar_title_bn',

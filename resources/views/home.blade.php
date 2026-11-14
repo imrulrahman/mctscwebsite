@@ -1099,6 +1099,49 @@
       transform: translateY(-1px);
     }
 
+    /* Management Committee Dynamic Table Live Edit Styling */
+    body.live-edit-mode-active .gov-table-live-toolbar {
+      display: flex !important;
+    }
+    body.live-edit-mode-active .gov-action-header,
+    body.live-edit-mode-active .gov-action-cell {
+      display: table-cell !important;
+    }
+    body.live-edit-mode-active .gov-del-col-btn {
+      display: inline-flex !important;
+    }
+    body.live-edit-mode-active .gov-cell-text,
+    body.live-edit-mode-active .gov-header-text {
+      cursor: text;
+      outline: none;
+      min-height: 22px;
+      display: inline-block;
+      width: calc(100% - 4px);
+      padding: 3px 6px;
+      border-radius: 4px;
+      transition: all 0.15s ease;
+    }
+    body.live-edit-mode-active .gov-cell-text:hover,
+    body.live-edit-mode-active .gov-header-text:hover {
+      background: rgba(16, 185, 129, 0.14);
+      box-shadow: 0 0 0 1px #10b981;
+    }
+    body.live-edit-mode-active .gov-cell-text:focus,
+    body.live-edit-mode-active .gov-header-text:focus {
+      background: #ffffff;
+      box-shadow: 0 0 0 2px #0284c7;
+      color: #0f172a !important;
+    }
+    .gov-del-row-btn:hover {
+      background: #dc2626 !important;
+      color: #ffffff !important;
+      transform: scale(1.1);
+    }
+    .gov-tool-btn:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
     /* Hero Image Carousel Slider (1920x720 Resolution Aspect Ratio & Non-Squishing) */
     .hero-slider-wrap {
       position: relative;
@@ -2443,24 +2486,24 @@
                 $aboutImgSrc = asset('assets/about_mahmudunnabi_legacy.jpg');
             }
 
-            $defaultAboutBn = "মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত মাহমুদুন্নবী ফাউন্ডেশন এবং ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ。\n\n২০১৮ সাল থেকে MCTSC কারিগরি ও বৃত্তিমূলক শিক্ষা এবং প্রশিক্ষণে (TVET) সুদীর্ঘ অভিজ্ঞতাসম্পন্ন উন্নয়ন সংস্থা ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)-এর সাথে যৌথভাবে কার্যক্রম পরিচালনা করে আসছে...";
+            $defaultAboutBn = "মাহমুদুন্নবী চৌধুরী টেকনিক্যাল স্কুল এন্ড কলেজ (MCTSC) বাংলাদেশের চট্টগ্রামের পাহাড়তলী থানার সাগরিকা এলাকায় অবস্থিত একটি কারিগরি ও বৃত্তিমূলক শিক্ষা ও প্রশিক্ষণ (TVET) প্রতিষ্ঠান। মরহুম মাহমুদুন্নবী চৌধুরীর স্মরণে প্রতিষ্ঠিত মাহমুদুন্নবী ফাউন্ডেশন এবং ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)-এর যৌথ উদ্যোগে ২০০৬ সালে প্রতিষ্ঠিত এ প্রতিষ্ঠানটি দক্ষ মানবসম্পদ গড়ে তুলতে এবং সামাজিক ও অর্থনৈতিকভাবে পিছিয়ে পড়া জনগোষ্ঠীর জন্য কর্মসংস্থানের সুযোগ সৃষ্টি করতে প্রতিশ্রুতিবদ্ধ।\n\n২০১৮ সাল থেকে MCTSC কারিগরি ও বৃত্তিমূলক শিক্ষা এবং প্রশিক্ষণে (TVET) সুদীর্ঘ অভিজ্ঞতাসম্পন্ন উন্নয়ন সংস্থা ইমপ্যাক্ট ইনিশিয়েটিভ (IMI)-এর সাথে যৌথভাবে কার্যক্রম পরিচালনা করে আসছে...";
 
             $defaultAboutEn = "Mahmudunnabi Chowdhury Technical School and College (MCTSC) is a Technical and Vocational Education and Training (TVET) institution located in Sagorika, Pahartali, Chattogram, Bangladesh. Established in 2006, the institution was founded as a joint initiative of the Mahmudunnabi Foundation, established in memory of Mahmudunnabi Chowdhury, a Bangladeshi politician, businessman, former minister and father of Amir Khasru Mahmud Chowdhury, the Minister, Ministry of Finance and Ministry of Planning, Government of the People's Republic of Bangladesh.\n\nSince 2018, MCTSC has been working jointly with Impact Initiative (IMI), a development organization with extensive experience in Technical and Vocational Education and Training (TVET)...";
 
-            $hasCustomIntroBn = $settings->has('about_intro_body_bn') && filled(trim($settings->get('about_intro_body_bn')));
-            $hasCustomIntroEn = $settings->has('about_intro_body') && filled(trim($settings->get('about_intro_body')));
+            $hasCustomIntroBn = $settings->has('about_summary_home_bn') && filled(trim($settings->get('about_summary_home_bn')));
+            $hasCustomIntroEn = $settings->has('about_summary_home') && filled(trim($settings->get('about_summary_home')));
 
             if ($isBn) {
-                $aboutIntroCurrent = $hasCustomIntroBn ? $settings->get('about_intro_body_bn') : $defaultAboutBn;
+                $aboutIntroCurrent = $hasCustomIntroBn ? $settings->get('about_summary_home_bn') : $defaultAboutBn;
             } else {
-                $aboutIntroCurrent = $hasCustomIntroEn ? $settings->get('about_intro_body') : $defaultAboutEn;
+                $aboutIntroCurrent = $hasCustomIntroEn ? $settings->get('about_summary_home') : $defaultAboutEn;
             }
           @endphp
           <div class="about-image-floated">
             <img src="{{ $aboutImgSrc }}" alt="Mahmudunnabi Chowdhury Legacy & Campus" data-live-edit data-live-key="about_image" data-live-type="image" data-live-title="{{ $isBn ? 'ক্যাম্পাস ও পটভূমি ছবি' : 'Campus & Background Image' }}" data-live-location="হোমপেজ - পটভূমি">
           </div>
 
-          <div class="about-summary-paragraphs" data-live-edit data-live-key="{{ $isBn ? 'about_intro_body_bn' : 'about_intro_body' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'ইনস্টিটিউটের পটভূমি বিবরণ (বাংলা)' : 'Institute Background Body Text (English)' }}" data-live-location="হোমপেজ - পটভূমি" data-live-raw="{{ $aboutIntroCurrent }}" style="display: block; cursor: pointer;">
+          <div class="about-summary-paragraphs" data-live-edit data-live-key="{{ $isBn ? 'about_summary_home_bn' : 'about_summary_home' }}" data-live-type="textarea" data-live-title="{{ $isBn ? 'ইনস্টিটিউটের পটভূমি সংক্ষিপ্ত বিবরণ (বাংলা)' : 'Institute Background Summary (English)' }}" data-live-location="হোমপেজ - পটভূমি" data-live-raw="{{ $aboutIntroCurrent }}" style="display: block; cursor: pointer;">
             @foreach(explode("\n\n", str_replace("\r\n", "\n", $aboutIntroCurrent)) as $par)
               @if(trim($par))
                 <p style="text-align: justify; text-justify: inter-word; margin-bottom: 12px; line-height: 1.8;">{!! nl2br(trim($par)) !!}</p>
@@ -2658,73 +2701,127 @@
             @endif
 
             @php
+              $tableKey = $isBn ? 'gov_committee_table_bn' : 'gov_committee_table';
+              $rawTableJson = $settings->get($tableKey);
+              $committeeData = null;
+              if (!empty($rawTableJson)) {
+                  $decoded = json_decode($rawTableJson, true);
+                  if (is_array($decoded) && !empty($decoded['headers']) && !empty($decoded['rows'])) {
+                      $committeeData = $decoded;
+                  }
+              }
+
               $defaultCommittee = [
                 1 => [
                   'name' => 'Md. Enayet Hossain',
-                  'position' => 'Chair',
-                  'position_bn' => 'চেয়ারম্যান / সভাপতি (Chair)',
+                  'position' => 'Chairman',
+                  'position_bn' => 'চেয়ারম্যান / সভাপতি',
                   'qualification' => 'M.Sc. in Psychology',
                   'experience' => '27 years in Education and TVET management',
                 ],
                 2 => [
                   'name' => 'Dr. Md Shaif Ullah Mansur',
-                  'position' => 'Vice Chair',
-                  'position_bn' => 'ভাইস চেয়ারম্যান (Vice Chair)',
+                  'position' => 'Vice Chairman',
+                  'position_bn' => 'ভাইস চেয়ারম্যান',
                   'qualification' => 'Ph.D. in the Bangladesh Constitution, M.Com in Finance',
                   'experience' => 'BGMEA Director',
                 ],
                 3 => [
                   'name' => 'Md. Mozammel Haque',
                   'position' => 'Member Secretary',
-                  'position_bn' => 'সদস্য সচিব (Member Secretary)',
+                  'position_bn' => 'সদস্য সচিব',
                   'qualification' => 'BA Hons MA',
                   'experience' => '28 years of experience working in Social work',
                 ],
                 4 => [
                   'name' => 'Shakh Nur Alam',
                   'position' => 'Treasurer',
-                  'position_bn' => 'কোষাধ্যক্ষ (Treasurer)',
+                  'position_bn' => 'কোষাধ্যক্ষ',
                   'qualification' => 'B. Com Hons, M. Com',
                   'experience' => "20 years' social work experience",
                 ],
                 5 => [
                   'name' => 'Md. Mosarrof Hossain',
                   'position' => 'Member',
-                  'position_bn' => 'সদস্য (Member)',
+                  'position_bn' => 'সদস্য',
                   'qualification' => 'MSS',
                   'experience' => '20 years of working experience in community development, 2 years in TVET',
                 ],
               ];
-            @endphp
 
-            <div style="overflow-x: auto; background: #ffffff; border-radius: 8px; border: 1px solid #bbf7d0; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.06); max-width: 780px; margin: 0 auto;">
-              <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
-                <thead>
-                  <tr style="background: #14532d; color: #ffffff;">
-                    <th style="padding: 12px 16px; width: 60px; text-align: center; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'নং' : 'SN' }}</th>
-                    <th style="padding: 12px 18px; min-width: 220px; border-right: 1px solid rgba(255,255,255,0.15);">{{ $isBn ? 'নাম' : 'Name' }}</th>
-                    <th style="padding: 12px 18px; min-width: 200px;">{{ $isBn ? 'পদবী' : 'Position' }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  @for($m = 1; $m <= 5; $m++)
-                    @php
+              if (!$committeeData) {
+                  $headers = [$isBn ? 'নং' : 'SN', $isBn ? 'নাম' : 'Name', $isBn ? 'পদবী' : 'Position'];
+                  $rows = [];
+                  for ($m = 1; $m <= 5; $m++) {
                       $def = $defaultCommittee[$m];
                       $mName = $settings->get('gov_member_' . $m . '_name' . ($isBn ? '_bn' : ''), $def['name']);
                       $mPos = $settings->get('gov_member_' . $m . '_position' . ($isBn ? '_bn' : ''), ($isBn ? $def['position_bn'] : $def['position']));
-                    @endphp
-                    <tr style="background: {{ $m % 2 === 0 ? '#f8fdfa' : '#ffffff' }}; border-bottom: 1px solid #e2ebe6;">
-                      <td style="padding: 12px 16px; text-align: center; font-weight: 700; color: #166534; border-right: 1px solid #eef4f0;">{{ $m }}</td>
-                      <td style="padding: 12px 18px; font-weight: 700; color: #1e293b; border-right: 1px solid #eef4f0;">
-                        <span data-live-edit data-live-key="gov_member_{{ $m }}_name{{ $isBn ? '_bn' : '' }}" data-live-type="text" data-live-title="Member #{{ $m }} Name" data-live-location="Management Committee">{{ $mName }}</span>
-                      </td>
-                      <td style="padding: 12px 18px; font-weight: 600; color: #14532d;">
-                        <span data-live-edit data-live-key="gov_member_{{ $m }}_position{{ $isBn ? '_bn' : '' }}" data-live-type="text" data-live-title="Member #{{ $m }} Position" data-live-location="Management Committee">{{ $mPos }}</span>
-                      </td>
+                      $rows[] = [(string)$m, $mName, $mPos];
+                  }
+                  $committeeData = [
+                      'headers' => $headers,
+                      'rows' => $rows,
+                  ];
+              }
+            @endphp
+
+            <div id="govCommitteeWrap" class="gov-committee-wrap" data-table-key="{{ $tableKey }}" data-save-url="{{ route('admin.live-edit.setting') }}" data-csrf="{{ csrf_token() }}" style="max-width: 820px; margin: 0 auto; position: relative;">
+
+              @if(auth()->check() && (auth()->user()->is_admin || auth()->user()->can('settings.manage')))
+                {{-- Live Edit Toolbar for Management Committee Table (Visible only in Live Edit Mode) --}}
+                <div class="gov-table-live-toolbar" style="display: none; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; flex-wrap: wrap; background: #f0fdf4; border: 1px solid #86efac; border-radius: 8px; padding: 10px 14px; box-shadow: 0 2px 6px rgba(16,185,129,0.08);">
+                  <div style="display: flex; align-items: center; gap: 8px; font-weight: 700; color: #14532d; font-size: 13.5px;">
+                    <span>⚙️ {{ $isBn ? 'কমিটি টেবিল কন্ট্রোল (লাইভ এডিট মুড)' : 'Committee Table Controls (Live Edit Mode)' }}</span>
+                    <span style="font-size: 11.5px; font-weight: 500; color: #166534; background: #dcfce7; padding: 2px 8px; border-radius: 10px;">{{ $isBn ? 'রো/কলাম বাড়ান বা কমান' : 'Add/Remove Rows & Columns' }}</span>
+                  </div>
+                  <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                    <button type="button" id="govAddRowBtn" class="gov-tool-btn" title="{{ $isBn ? 'নতুন রো যোগ করুন' : 'Add New Member Row' }}" style="background: #15803d; color: #ffffff; border: none; padding: 7px 14px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(21,128,61,0.25); transition: all 0.15s ease;">
+                      <span style="font-size: 16px; font-weight: bold; line-height: 1;">+</span> {{ $isBn ? 'রো যোগ করুন (+ Row)' : '+ Add Row' }}
+                    </button>
+                    <button type="button" id="govAddColBtn" class="gov-tool-btn" title="{{ $isBn ? 'নতুন কলাম যোগ করুন' : 'Add New Column' }}" style="background: #0284c7; color: #ffffff; border: none; padding: 7px 14px; border-radius: 6px; font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(2,132,199,0.25); transition: all 0.15s ease;">
+                      <span style="font-size: 16px; font-weight: bold; line-height: 1;">+</span> {{ $isBn ? 'কলাম যোগ করুন (+ Column)' : '+ Add Column' }}
+                    </button>
+                  </div>
+                </div>
+              @endif
+
+              <div style="overflow-x: auto; background: #ffffff; border-radius: 8px; border: 1px solid #bbf7d0; box-shadow: 0 4px 14px rgba(16, 185, 129, 0.06);">
+                <table id="govCommitteeTable" style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
+                  <thead>
+                    <tr style="background: #14532d; color: #ffffff;">
+                      @foreach($committeeData['headers'] as $colIdx => $headerText)
+                        <th class="gov-header-th" data-col="{{ $colIdx }}" style="padding: 12px 16px; border-right: 1px solid rgba(255,255,255,0.15); position: relative; {{ $colIdx === 0 ? 'width: 60px; text-align: center;' : ($colIdx === 1 ? 'min-width: 220px;' : 'min-width: 180px;') }}">
+                          <div style="display: flex; align-items: center; justify-content: {{ $colIdx === 0 ? 'center' : 'space-between' }}; gap: 6px;">
+                            <span class="gov-header-text" contenteditable="false">{{ $headerText }}</span>
+                            @if($colIdx >= 3)
+                              <button type="button" class="gov-del-col-btn" data-col="{{ $colIdx }}" title="{{ $isBn ? 'কলাম মুছুন' : 'Delete column' }}" style="display: none; background: #ef4444; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; line-height: 1; cursor: pointer; align-items: center; justify-content: center;">✕</button>
+                            @endif
+                          </div>
+                        </th>
+                      @endforeach
+                      <th class="gov-action-header" style="display: none; padding: 12px 14px; width: 70px; text-align: center; background: #0f3d21; font-size: 13px;">
+                        {{ $isBn ? 'একশন' : 'Action' }}
+                      </th>
                     </tr>
-                  @endfor
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody id="govCommitteeTbody">
+                    @foreach($committeeData['rows'] as $rIdx => $rCells)
+                      <tr data-row-idx="{{ $rIdx }}" style="background: {{ $rIdx % 2 === 1 ? '#f8fdfa' : '#ffffff' }}; border-bottom: 1px solid #e2ebe6;">
+                        @foreach($rCells as $cIdx => $cellVal)
+                          <td class="gov-cell-td" data-col="{{ $cIdx }}" style="padding: 12px 16px; border-right: 1px solid #eef4f0; {{ $cIdx === 0 ? 'text-align: center; font-weight: 700; color: #166534;' : ($cIdx === 1 ? 'font-weight: 700; color: #1e293b;' : ($cIdx === 2 ? 'font-weight: 600; color: #14532d;' : 'color: #334155;')) }}">
+                            <span class="gov-cell-text" contenteditable="false">{{ $cellVal }}</span>
+                          </td>
+                        @endforeach
+                        <td class="gov-action-cell" style="display: none; padding: 8px 12px; text-align: center; vertical-align: middle;">
+                          <button type="button" class="gov-del-row-btn" data-row="{{ $rIdx }}" title="{{ $isBn ? 'রো মুছুন (- Delete)' : 'Delete Row (-)' }}" style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; width: 28px; height: 28px; border-radius: 50%; font-size: 16px; font-weight: bold; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease;">
+                            &minus;
+                          </button>
+                        </td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -3185,6 +3282,269 @@
         closeAboutDialog();
       }
     });
+
+    // Management Committee Dynamic Table Live Editor (Add/Remove Rows & Columns, Inline Editing)
+    (function() {
+      var wrap = document.getElementById('govCommitteeWrap');
+      if (!wrap) return;
+
+      var tableKey = wrap.getAttribute('data-table-key') || 'gov_committee_table';
+      var saveUrl = wrap.getAttribute('data-save-url');
+      var csrf = wrap.getAttribute('data-csrf');
+      var table = document.getElementById('govCommitteeTable');
+      var tbody = document.getElementById('govCommitteeTbody');
+      var addRowBtn = document.getElementById('govAddRowBtn');
+      var addColBtn = document.getElementById('govAddColBtn');
+      var isBn = {{ $isBn ? 'true' : 'false' }};
+
+      function isLiveEditActive() {
+        return document.body.classList.contains('live-edit-mode-active');
+      }
+
+      function syncEditableState() {
+        var active = isLiveEditActive();
+        var cells = wrap.querySelectorAll('.gov-cell-text, .gov-header-text');
+        cells.forEach(function(el) {
+          el.contentEditable = active ? 'true' : 'false';
+        });
+      }
+
+      var observer = new MutationObserver(function() {
+        syncEditableState();
+      });
+      observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+      syncEditableState();
+
+      function notify(msg) {
+        var toast = document.getElementById('liveToast');
+        var toastMsg = document.getElementById('liveToastMsg');
+        if (toast && toastMsg) {
+          toastMsg.textContent = msg;
+          toast.style.display = 'flex';
+          setTimeout(function() { toast.style.display = 'none'; }, 3000);
+        }
+      }
+
+      function saveTable() {
+        var headers = [];
+        var ths = table.querySelectorAll('thead th.gov-header-th');
+        ths.forEach(function(th) {
+          var txt = th.querySelector('.gov-header-text');
+          headers.push(txt ? txt.innerText.trim() : '');
+        });
+
+        var rows = [];
+        var trs = tbody.querySelectorAll('tr');
+        trs.forEach(function(tr, rIdx) {
+          var cells = tr.querySelectorAll('td.gov-cell-td');
+          var rowData = [];
+          cells.forEach(function(td, cIdx) {
+            var span = td.querySelector('.gov-cell-text');
+            var val = span ? span.innerText.trim() : '';
+            if (cIdx === 0) {
+              val = String(rIdx + 1);
+              if (span) span.innerText = val;
+            }
+            rowData.push(val);
+          });
+          rows.push(rowData);
+        });
+
+        var payloadData = {
+          headers: headers,
+          rows: rows
+        };
+
+        fetch(saveUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrf,
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            key: tableKey,
+            value: JSON.stringify(payloadData)
+          })
+        })
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          if (data.success) {
+            notify(isBn ? 'ম্যানেজমেন্ট কমিটি টেবিল সংরক্ষিত হয়েছে!' : 'Management Committee table saved successfully!');
+          }
+        })
+        .catch(function(err) {
+          console.error('Error saving table:', err);
+        });
+      }
+
+      wrap.addEventListener('blur', function(e) {
+        if (e.target && (e.target.classList.contains('gov-cell-text') || e.target.classList.contains('gov-header-text'))) {
+          saveTable();
+        }
+      }, true);
+
+      wrap.addEventListener('keydown', function(e) {
+        if (e.target && (e.target.classList.contains('gov-cell-text') || e.target.classList.contains('gov-header-text'))) {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            e.target.blur();
+          }
+        }
+      });
+
+      function reindexRows() {
+        var trs = tbody.querySelectorAll('tr');
+        trs.forEach(function(tr, idx) {
+          tr.setAttribute('data-row-idx', idx);
+          tr.style.background = (idx % 2 === 1) ? '#f8fdfa' : '#ffffff';
+          var snSpan = tr.querySelector('td.gov-cell-td[data-col="0"] .gov-cell-text');
+          if (snSpan) snSpan.innerText = String(idx + 1);
+          var delBtn = tr.querySelector('.gov-del-row-btn');
+          if (delBtn) delBtn.setAttribute('data-row', idx);
+        });
+      }
+
+      if (addRowBtn) {
+        addRowBtn.addEventListener('click', function() {
+          var colCount = table.querySelectorAll('thead th.gov-header-th').length;
+          var newIdx = tbody.querySelectorAll('tr').length;
+          var newTr = document.createElement('tr');
+          newTr.setAttribute('data-row-idx', newIdx);
+          newTr.style.background = (newIdx % 2 === 1) ? '#f8fdfa' : '#ffffff';
+          newTr.style.borderBottom = '1px solid #e2ebe6';
+
+          var html = '';
+          for (var c = 0; c < colCount; c++) {
+            var defaultVal = '';
+            var style = 'padding: 12px 16px; border-right: 1px solid #eef4f0; ';
+            if (c === 0) {
+              defaultVal = String(newIdx + 1);
+              style += 'text-align: center; font-weight: 700; color: #166534;';
+            } else if (c === 1) {
+              defaultVal = isBn ? 'নতুন সদস্য' : 'New Member';
+              style += 'font-weight: 700; color: #1e293b;';
+            } else if (c === 2) {
+              defaultVal = isBn ? 'সদস্য' : 'Member';
+              style += 'font-weight: 600; color: #14532d;';
+            } else {
+              defaultVal = '';
+              style += 'color: #334155;';
+            }
+            html += '<td class="gov-cell-td" data-col="' + c + '" style="' + style + '">';
+            html += '<span class="gov-cell-text" contenteditable="true">' + defaultVal + '</span>';
+            html += '</td>';
+          }
+
+          html += '<td class="gov-action-cell" style="display: table-cell; padding: 8px 12px; text-align: center; vertical-align: middle;">';
+          html += '<button type="button" class="gov-del-row-btn" data-row="' + newIdx + '" title="' + (isBn ? 'রো মুছুন (- Delete)' : 'Delete Row (-)') + '" style="background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; width: 28px; height: 28px; border-radius: 50%; font-size: 16px; font-weight: bold; line-height: 1; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease;">&minus;</button>';
+          html += '</td>';
+
+          newTr.innerHTML = html;
+          tbody.appendChild(newTr);
+          reindexRows();
+          saveTable();
+
+          var nameSpan = newTr.querySelector('td[data-col="1"] .gov-cell-text');
+          if (nameSpan) {
+            nameSpan.focus();
+            var range = document.createRange();
+            range.selectNodeContents(nameSpan);
+            var sel = window.getSelection();
+            sel.removeAllRanges();
+            sel.addRange(range);
+          }
+        });
+      }
+
+      tbody.addEventListener('click', function(e) {
+        var delBtn = e.target.closest('.gov-del-row-btn');
+        if (!delBtn) return;
+        var rowTr = delBtn.closest('tr');
+        if (!rowTr) return;
+
+        var rowCount = tbody.querySelectorAll('tr').length;
+        if (rowCount <= 1) {
+          alert(isBn ? 'কমপক্ষে একটি রো থাকতে হবে।' : 'At least one row must be kept.');
+          return;
+        }
+
+        if (confirm(isBn ? 'আপনি কি এই সদস্যের রো মুছে ফেলতে চান?' : 'Are you sure you want to delete this row?')) {
+          rowTr.remove();
+          reindexRows();
+          saveTable();
+        }
+      });
+
+      if (addColBtn) {
+        addColBtn.addEventListener('click', function() {
+          var colTitle = prompt(isBn ? 'নতুন কলামের শিরোনাম লিখুন:' : 'Enter title for the new column:', isBn ? 'যোগ্যতা' : 'Qualification');
+          if (!colTitle || !colTitle.trim()) return;
+          colTitle = colTitle.trim();
+
+          var theadTr = table.querySelector('thead tr');
+          var actionTh = theadTr.querySelector('.gov-action-header');
+          var newColIdx = table.querySelectorAll('thead th.gov-header-th').length;
+
+          var newTh = document.createElement('th');
+          newTh.className = 'gov-header-th';
+          newTh.setAttribute('data-col', newColIdx);
+          newTh.style.cssText = 'padding: 12px 16px; border-right: 1px solid rgba(255,255,255,0.15); min-width: 160px; position: relative;';
+          newTh.innerHTML = '<div style="display: flex; align-items: center; justify-content: space-between; gap: 6px;">' +
+            '<span class="gov-header-text" contenteditable="true">' + colTitle + '</span>' +
+            '<button type="button" class="gov-del-col-btn" data-col="' + newColIdx + '" title="' + (isBn ? 'কলাম মুছুন' : 'Delete column') + '" style="display: inline-flex; background: #ef4444; color: #fff; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 11px; line-height: 1; cursor: pointer; align-items: center; justify-content: center;">✕</button>' +
+            '</div>';
+
+          theadTr.insertBefore(newTh, actionTh);
+
+          var trs = tbody.querySelectorAll('tr');
+          trs.forEach(function(tr) {
+            var actionTd = tr.querySelector('.gov-action-cell');
+            var newTd = document.createElement('td');
+            newTd.className = 'gov-cell-td';
+            newTd.setAttribute('data-col', newColIdx);
+            newTd.style.cssText = 'padding: 12px 16px; border-right: 1px solid #eef4f0; color: #334155;';
+            newTd.innerHTML = '<span class="gov-cell-text" contenteditable="true">-</span>';
+            tr.insertBefore(newTd, actionTd);
+          });
+
+          saveTable();
+        });
+      }
+
+      table.querySelector('thead').addEventListener('click', function(e) {
+        var delColBtn = e.target.closest('.gov-del-col-btn');
+        if (!delColBtn) return;
+        var colIdx = parseInt(delColBtn.getAttribute('data-col'), 10);
+        if (isNaN(colIdx) || colIdx < 3) return;
+
+        if (confirm(isBn ? 'আপনি কি এই কলামটি মুছে ফেলতে চান?' : 'Are you sure you want to delete this column?')) {
+          var th = table.querySelector('thead th.gov-header-th[data-col="' + colIdx + '"]');
+          if (th) th.remove();
+
+          var trs = tbody.querySelectorAll('tr');
+          trs.forEach(function(tr) {
+            var td = tr.querySelector('td.gov-cell-td[data-col="' + colIdx + '"]');
+            if (td) td.remove();
+          });
+
+          var ths = table.querySelectorAll('thead th.gov-header-th');
+          ths.forEach(function(curTh, i) {
+            curTh.setAttribute('data-col', i);
+            var btn = curTh.querySelector('.gov-del-col-btn');
+            if (btn) btn.setAttribute('data-col', i);
+          });
+          tbody.querySelectorAll('tr').forEach(function(tr) {
+            tr.querySelectorAll('td.gov-cell-td').forEach(function(curTd, i) {
+              curTd.setAttribute('data-col', i);
+            });
+          });
+
+          saveTable();
+        }
+      });
+
+    })();
   });
 </script>
 @include('partials.live_editor')
