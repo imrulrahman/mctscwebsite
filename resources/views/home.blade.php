@@ -2203,12 +2203,6 @@
                 <span class="badge-title badge-title-short">BTEB Code:</span>
                 <span class="badge-chips"><code>70102</code></span>
               </span>
-              <span class="badge-accred badge-nsda" title="জাতীয় দক্ষতা উন্নয়ন কর্তৃপক্ষ অনুমোদিত - নিবন্ধন: STP-CHA-000135">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="badge-icon"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
-                <span class="badge-title badge-title-full">NSDA Registration:</span>
-                <span class="badge-title badge-title-short">NSDA Reg:</span>
-                <span class="badge-chips"><code>STP-CHA-000135</code></span>
-              </span>
             </div>
           </div>
         </a>
