@@ -1206,7 +1206,7 @@
         </div>
 
         <div class="header-quick-call">
-          <a href="{{ route('apply') }}" class="badge-admission-live" title="{{ $isBn ? 'ভর্তি আবেদন করুন' : 'Apply for Admission' }}">
+          <a href="{{ route('apply') }}" class="badge-admission-live" title="{{ $isBn ? 'ভর্তি আবেদন করুন' : 'Apply for Admission' }}" onclick="openAdmissionChoiceModal(event)">
             <span class="pulse-dot"></span>
             {{ $isBn ? 'ভর্তি আবেদন' : 'Apply for Admission' }}
           </a>
@@ -1263,7 +1263,7 @@
           <span class="menu-btn-label">{{ $isBn ? 'মেনু ব্রাউজ করুন' : 'Browse Menu' }}</span>
           <span class="menu-caret">▾</span>
         </button>
-        <a href="{{ route('apply') }}" class="mobile-nav-apply-btn">
+        <a href="{{ route('apply') }}" class="mobile-nav-apply-btn" onclick="openAdmissionChoiceModal(event)">
           <span class="pulse-dot-gold"></span>
           <span>{{ $isBn ? 'ভর্তি আবেদন' : 'Apply Online' }}</span>
         </a>
@@ -1444,6 +1444,7 @@
 
 <script src="{{ asset('js/site.js') }}"></script>
 @yield('scripts')
+@include('site.partials.admission_choice_modal')
 @include('partials.live_editor')
 </body>
 </html>

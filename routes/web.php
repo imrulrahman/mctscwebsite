@@ -49,12 +49,15 @@ Route::get('/career/{slug?}', [SitePageController::class, 'career'])->name('care
 Route::get('/activities', [SitePageController::class, 'activities'])->name('activities');
 Route::get('/activities/{slug}', [SitePageController::class, 'activityShow'])->name('activities.show');
 Route::get('/contact', [SitePageController::class, 'contact'])->name('contact');
-Route::get('/admissions', function () {
-    return redirect()->route('apply');
-})->name('admissions');
+Route::get('/admissions', [SiteFormsController::class, 'admissionChoice'])->name('admissions');
 
+// Admission Forms: Regular and NHRDF Project
 Route::get('/apply', [SiteFormsController::class, 'showApplyForm'])->name('apply');
+Route::get('/apply/NHRDF', [SiteFormsController::class, 'showNhrdfApplyForm'])->name('apply.nhrdf');
+Route::get('/apply/nhrdf', [SiteFormsController::class, 'showNhrdfApplyForm']);
 Route::post('/apply', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1')->name('apply.store');
+Route::post('/apply/NHRDF', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1')->name('apply.nhrdf.store');
+Route::post('/apply/nhrdf', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1');
 Route::get('/apply/confirmation/{tracking_no}', [SiteFormsController::class, 'applyConfirmation'])->name('apply.confirmation');
 Route::post('/apply/confirm-payment/{tracking_no}', [SiteFormsController::class, 'confirmPayment'])->name('apply.payment.confirm');
 Route::post('/contact', [SiteFormsController::class, 'contact'])->middleware('throttle:8,1')->name('contact.store');
@@ -122,11 +125,13 @@ Route::prefix('MNCTSC')->group(function () {
     Route::get('/activities', [SitePageController::class, 'activities']);
     Route::get('/activities/{slug}', [SitePageController::class, 'activityShow']);
     Route::get('/contact', [SitePageController::class, 'contact']);
-    Route::get('/admissions', function () {
-        return redirect('/MNCTSC/apply');
-    });
+    Route::get('/admissions', [SiteFormsController::class, 'admissionChoice']);
     Route::get('/apply', [SiteFormsController::class, 'showApplyForm']);
+    Route::get('/apply/NHRDF', [SiteFormsController::class, 'showNhrdfApplyForm']);
+    Route::get('/apply/nhrdf', [SiteFormsController::class, 'showNhrdfApplyForm']);
     Route::post('/apply', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1');
+    Route::post('/apply/NHRDF', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1');
+    Route::post('/apply/nhrdf', [SiteFormsController::class, 'apply'])->middleware('throttle:15,1');
     Route::get('/apply/confirmation/{tracking_no}', [SiteFormsController::class, 'applyConfirmation']);
     Route::post('/contact', [SiteFormsController::class, 'contact'])->middleware('throttle:8,1');
     Route::get('/lang/{locale}', function (string $locale) {
@@ -232,6 +237,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::delete('/content/{section}/{content}', [ContentController::class, 'destroy'])->where('section', 'courses|projects|notices|events|gallery|partners|hero_slides|career|activities|stories')->name('content.destroy');
         // Trainee Admissions Management
         Route::get('/applications', [InboxController::class, 'applications'])->name('applications');
+        Route::get('/applications/export', [InboxController::class, 'exportApplications'])->name('applications.export');
         Route::get('/applications/create', [InboxController::class, 'createApplication'])->name('applications.create');
         Route::post('/applications', [InboxController::class, 'storeApplication'])->name('applications.store');
         Route::get('/applications/{application}', [InboxController::class, 'showApplication'])->name('applications.show');

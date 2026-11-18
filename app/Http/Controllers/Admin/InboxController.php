@@ -10,6 +10,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class InboxController extends Controller
 {
@@ -72,6 +73,130 @@ class InboxController extends Controller
         $projects = SiteContent::where('section', 'projects')->where('status', 'published')->orderBy('sort_order')->get();
 
         return view('admin.inbox.applications', compact('items', 'courses', 'projects'));
+    }
+
+    public function exportApplications(Request $request): StreamedResponse
+    {
+        abort_unless(auth()->user()?->can('admissions.view'), 403, 'Unauthorized access to admission applications.');
+
+        $query = AdmissionApplication::latest();
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+        if ($request->filled('project')) {
+            $query->where('project_name', $request->input('project'));
+        }
+        if ($request->filled('course')) {
+            $query->where('course', $request->input('course'));
+        }
+        if ($request->filled('payment_status')) {
+            $query->where('payment_status', $request->input('payment_status'));
+        }
+        if ($request->filled('q')) {
+            $q = trim($request->input('q'));
+            $query->where(function ($sub) use ($q) {
+                $sub->where('tracking_no', 'like', "%{$q}%")
+                    ->orWhere('trainee_name_en', 'like', "%{$q}%")
+                    ->orWhere('trainee_name_bn', 'like', "%{$q}%")
+                    ->orWhere('contact_no', 'like', "%{$q}%")
+                    ->orWhere('phone', 'like', "%{$q}%")
+                    ->orWhere('emergency_contact', 'like', "%{$q}%")
+                    ->orWhere('voucher_no', 'like', "%{$q}%")
+                    ->orWhere('ident_no', 'like', "%{$q}%")
+                    ->orWhere('project_name', 'like', "%{$q}%");
+            });
+        }
+
+        $projectLabel = $request->filled('project') ? preg_replace('/[^a-zA-Z0-9_-]/', '_', $request->input('project')) : 'All';
+        $filename = 'MCTSC_Admissions_' . $projectLabel . '_' . date('Ymd_His') . '.csv';
+
+        return response()->streamDownload(function () use ($query) {
+            $handle = fopen('php://output', 'w');
+            // Write UTF-8 BOM for Microsoft Excel compatibility with Bengali & English
+            fwrite($handle, "\xEF\xBB\xBF");
+
+            // CSV Header
+            fputcsv($handle, [
+                'SL',
+                'Tracking No',
+                'Project / Batch',
+                'Course / Trade',
+                'Preferred Shift',
+                'Trainee Name (English)',
+                'Trainee Name (Bangla)',
+                'Contact No',
+                'Emergency Contact',
+                'Email',
+                'Gender',
+                'Date of Birth',
+                'Blood Group',
+                'National ID / Birth Cert No',
+                'Father Name',
+                'Mother Name',
+                'Guardian Contact',
+                'Highest Education',
+                'Present Address',
+                'Permanent Address',
+                'Course Fee',
+                'Discount',
+                'Payable Fee',
+                'Paid Amount',
+                'Payment Status',
+                'Payment Method',
+                'Trx ID / Voucher',
+                'Application Status',
+                'Applied Date',
+            ]);
+
+            $sl = 1;
+            $query->chunk(200, function ($apps) use ($handle, &$sl) {
+                foreach ($apps as $app) {
+                    $tracking = $app->tracking_no ?? (string)$app->id;
+                    $phone = $app->contact_no ?: $app->phone;
+                    $emergency = $app->emergency_contact ?: '';
+                    $ident = $app->ident_no ?: '';
+
+                    fputcsv($handle, [
+                        $sl++,
+                        '="' . $tracking . '"',
+                        $app->project_name ?: 'Paid Batch',
+                        $app->course,
+                        $app->preferred_shift ?: 'N/A',
+                        $app->trainee_name_en ?: $app->name,
+                        $app->trainee_name_bn ?: '',
+                        $phone ? '="' . $phone . '"' : '',
+                        $emergency ? '="' . $emergency . '"' : '',
+                        $app->email ?: '',
+                        $app->sex ?: '',
+                        $app->dob ? (is_string($app->dob) ? $app->dob : $app->dob->format('Y-m-d')) : '',
+                        $app->blood_group ?: '',
+                        $ident ? '="' . $ident . '"' : '',
+                        $app->father_name_en ?: $app->father_name,
+                        $app->mother_name_en ?: $app->mother_name,
+                        $app->guardian_contact ? '="' . $app->guardian_contact . '"' : '',
+                        $app->education_level ?: '',
+                        $app->pres_address ?: '',
+                        $app->perm_address ?: '',
+                        $app->course_fee !== null ? number_format((float)$app->course_fee, 2, '.', '') : '0.00',
+                        $app->discount !== null ? number_format((float)$app->discount, 2, '.', '') : '0.00',
+                        $app->payable_amount !== null ? number_format((float)$app->payable_amount, 2, '.', '') : '0.00',
+                        $app->paid_amount !== null ? number_format((float)$app->paid_amount, 2, '.', '') : '0.00',
+                        strtoupper($app->payment_status ?: 'unpaid'),
+                        $app->payment_method ?: '',
+                        $app->payment_trx_id ?: ($app->voucher_no ?: ''),
+                        strtoupper($app->status ?: 'new'),
+                        $app->created_at ? $app->created_at->format('Y-m-d H:i') : '',
+                    ]);
+                }
+            });
+
+            fclose($handle);
+        }, $filename, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+            'Cache-Control' => 'no-store, no-cache',
+        ]);
     }
 
     public function createApplication(): View

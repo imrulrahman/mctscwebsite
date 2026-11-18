@@ -228,7 +228,7 @@ class WebsiteCmsTest extends TestCase
         $this->get(route('gallery'))->assertOk()->assertSee('Gallery');
         $this->get(route('career'))->assertOk()->assertSee('Career');
         $this->get(route('contact'))->assertOk()->assertSee('Contact');
-        $this->get(route('admissions'))->assertRedirect(route('apply'));
+        $this->get(route('admissions'))->assertOk()->assertSee(route('apply'));
     }
 
     public function test_notice_transparency_hero_banner_and_about_layout_settings(): void
@@ -1122,5 +1122,106 @@ class WebsiteCmsTest extends TestCase
         $job->delete();
         $app->delete();
         $newApp->delete();
+    }
+
+    public function test_nhrdf_application_form_shows_the_three_specific_trades_and_submits(): void
+    {
+        $this->seed();
+
+        // 1. Visit /apply/NHRDF
+        $nhrdfFormResp = $this->get('/apply/NHRDF');
+        $nhrdfFormResp->assertOk();
+        $nhrdfFormResp->assertSee('Plumbing, Level-02');
+        $nhrdfFormResp->assertSee('Tailoring & Dress Making, Level-02', false);
+        $nhrdfFormResp->assertSee('Driving, Level-03');
+        $nhrdfFormResp->assertSee('NHRDF');
+
+        // Case-insensitive route /apply/nhrdf also works
+        $this->get('/apply/nhrdf')->assertOk();
+
+        // 2. Submit application via /apply/NHRDF
+        $postData = [
+            'is_nhrdf' => 1,
+            'project_name' => 'NHRDF',
+            'course' => 'Driving, Level-03',
+            'preferred_shift' => 'Morning',
+            'name' => 'Md Karim Nhrdf',
+            'trainee_name_en' => 'Md Karim Nhrdf',
+            'trainee_name_bn' => 'মোঃ করিম',
+            'phone' => '01880919275',
+            'contact_no' => '01880919275',
+            'email' => 'karim.nhrdf@test.local',
+        ];
+
+        $submitResp = $this->post('/apply/NHRDF', $postData);
+        $submitResp->assertRedirect();
+
+        $this->assertDatabaseHas('admission_applications', [
+            'trainee_name_en' => 'Md Karim Nhrdf',
+            'project_name' => 'NHRDF',
+            'course' => 'Driving, Level-03',
+            'payment_status' => 'free',
+            'status' => 'new',
+        ]);
+    }
+
+    public function test_admission_choice_page_and_modal(): void
+    {
+        $this->seed();
+
+        // Dedicated choice page
+        $choiceResp = $this->get('/admissions');
+        $choiceResp->assertOk();
+        $choiceResp->assertSee(route('apply'));
+        $choiceResp->assertSee(route('apply.nhrdf'));
+        $choiceResp->assertSee('Plumbing, Level-02');
+
+        // Homepage contains modal trigger and include
+        $homeResp = $this->get('/');
+        $homeResp->assertOk();
+        $homeResp->assertSee('openAdmissionChoiceModal');
+        $homeResp->assertSee('admissionChoiceModal');
+    }
+
+    public function test_admin_can_filter_and_export_applications_to_excel(): void
+    {
+        $admin = User::create([
+            'name' => 'Admin Exporter',
+            'email' => 'admin_export@test.local',
+            'password' => 'Passw0rd!123',
+            'is_admin' => true,
+        ]);
+
+        AdmissionApplication::create([
+            'tracking_no' => 'MCTSC-2026-9901',
+            'project_name' => 'NHRDF',
+            'course' => 'Plumbing, Level-02',
+            'trainee_name_en' => 'NHRDF Test Student',
+            'contact_no' => '01811223344',
+            'status' => 'new',
+            'payment_status' => 'free',
+        ]);
+
+        AdmissionApplication::create([
+            'tracking_no' => 'MCTSC-2026-9902',
+            'project_name' => 'Paid Batch',
+            'course' => 'Computer Operation',
+            'trainee_name_en' => 'Regular Test Student',
+            'contact_no' => '01711223344',
+            'status' => 'new',
+            'payment_status' => 'unpaid',
+        ]);
+
+        // Admin filters applications by project
+        $filterResp = $this->actingAs($admin)->get(route('admin.applications', ['project' => 'NHRDF']));
+        $filterResp->assertOk();
+        $filterResp->assertSee('MCTSC-2026-9901');
+        $filterResp->assertSee('NHRDF');
+
+        // Admin exports NHRDF to CSV / Excel
+        $exportResp = $this->actingAs($admin)->get(route('admin.applications.export', ['project' => 'NHRDF']));
+        $exportResp->assertOk();
+        $this->assertStringContainsString('text/csv', $exportResp->headers->get('content-type'));
+        $this->assertStringContainsString('MCTSC_Admissions_NHRDF_', $exportResp->headers->get('content-disposition'));
     }
 }

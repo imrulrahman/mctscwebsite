@@ -6,13 +6,29 @@
 <div class="page-head">
   <div>
     <h1>Trainee Admission Applications</h1>
-    <p>Manage, review, search, and print trainee admission applications.</p>
+    <p>Manage, review, search, and export trainee admission applications.</p>
   </div>
-  @can('admissions.create')
-    <div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <a class="btn" href="{{ route('admin.applications.export', request()->query()) }}" style="background:#0f5132;color:#fff;display:inline-flex;align-items:center;gap:6px;font-weight:600;" title="Export current filtered list to Excel (CSV)">
+      <svg style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+      Export to Excel
+    </a>
+    @can('admissions.create')
       <a class="btn gold" href="{{ route('admin.applications.create') }}">+ Add New Student</a>
-    </div>
-  @endcan
+    @endcan
+  </div>
+</div>
+
+<div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+  <a href="{{ route('admin.applications', array_merge(request()->except(['project', 'page']))) }}" style="padding:6px 14px;border-radius:20px;font-size:12.5px;font-weight:600;text-decoration:none;border:1px solid {{ !request('project') ? '#0f5132' : '#cbd5e1' }};background:{{ !request('project') ? '#0f5132' : '#fff' }};color:{{ !request('project') ? '#fff' : '#475569' }};">
+    All Applications ({{ \App\Models\AdmissionApplication::count() }})
+  </a>
+  <a href="{{ route('admin.applications', array_merge(request()->except(['project', 'page']), ['project' => 'NHRDF'])) }}" style="padding:6px 14px;border-radius:20px;font-size:12.5px;font-weight:700;text-decoration:none;border:1px solid {{ request('project') === 'NHRDF' ? '#059669' : '#a7f3d0' }};background:{{ request('project') === 'NHRDF' ? '#059669' : '#ecfdf5' }};color:{{ request('project') === 'NHRDF' ? '#fff' : '#065f46' }};display:inline-flex;align-items:center;gap:5px;">
+    🏛️ NHRDF Project ({{ \App\Models\AdmissionApplication::where('project_name', 'NHRDF')->count() }})
+  </a>
+  <a href="{{ route('admin.applications', array_merge(request()->except(['project', 'page']), ['project' => 'Paid Batch'])) }}" style="padding:6px 14px;border-radius:20px;font-size:12.5px;font-weight:600;text-decoration:none;border:1px solid {{ request('project') === 'Paid Batch' ? '#0284c7' : '#cbd5e1' }};background:{{ request('project') === 'Paid Batch' ? '#0284c7' : '#fff' }};color:{{ request('project') === 'Paid Batch' ? '#fff' : '#0369a1' }};display:inline-flex;align-items:center;gap:5px;">
+    🎓 Regular / Paid Batch ({{ \App\Models\AdmissionApplication::where(function($q){ $q->where('project_name', 'Paid Batch')->orWhereNull('project_name')->orWhere('project_name', ''); })->count() }})
+  </a>
 </div>
 
 <section class="panel" style="margin-bottom: 20px; padding: 18px 24px;">
@@ -31,9 +47,12 @@
     <div style="min-width: 170px;">
       <select name="project" style="width: 100%; padding: 8px 12px; border: 1px solid #cbd5e1; border-radius: 6px;">
         <option value="">All Projects / Batches</option>
+        <option value="NHRDF" @selected(request('project') == 'NHRDF')>🏛️ NHRDF Project</option>
         <option value="Paid Batch" @selected(request('project') == 'Paid Batch')>Paid Batch</option>
         @foreach($projects as $p)
-          <option value="{{ $p->title }}" @selected(request('project') == $p->title)>{{ $p->title }}</option>
+          @if($p->title !== 'NHRDF')
+            <option value="{{ $p->title }}" @selected(request('project') == $p->title)>{{ $p->title }}</option>
+          @endif
         @endforeach
       </select>
     </div>
@@ -96,9 +115,15 @@
               @endif
             </td>
             <td>
-              <span style="display:inline-block;background:#f8fafc;border:1px solid #cbd5e1;padding:2px 8px;border-radius:4px;font-weight:600;font-size:12px;color:#0f172a;">
-                {{ $item->project_name ?: '— (অনির্ধারিত)' }}
-              </span>
+              @if(strtoupper($item->project_name ?? '') === 'NHRDF')
+                <span style="display:inline-block;background:#ecfdf5;border:1px solid #10b981;color:#065f46;padding:3px 9px;border-radius:999px;font-weight:700;font-size:11.5px;letter-spacing:0.3px;">
+                  🏛️ NHRDF
+                </span>
+              @else
+                <span style="display:inline-block;background:#f8fafc;border:1px solid #cbd5e1;padding:2px 8px;border-radius:4px;font-weight:600;font-size:12px;color:#0f172a;">
+                  {{ $item->project_name ?: 'Paid Batch' }}
+                </span>
+              @endif
             </td>
             <td>
               <div>

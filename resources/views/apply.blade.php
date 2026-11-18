@@ -1,5 +1,6 @@
 @php
   $isBn = ($currentLocale ?? 'en') === 'bn';
+  $isNhrdf = !empty($isNhrdf);
   $primaryColor = $settings->get('primary_color', '#0f5132');
   $primaryHover = $settings->get('primary_hover', '#093722');
   $secondaryColor = $settings->get('secondary_color', '#c59b27');
@@ -10,7 +11,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ $isBn ? 'অনলাইন ট্রেইনী ভর্তি আবেদন ফরম' : 'Online Trainee Admission Form' }} · {{ $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School and College') }}</title>
+  <title>{{ $isNhrdf ? ($isBn ? 'NHRDF প্রশিক্ষণ প্রকল্পে ভর্তির আবেদন ফরম' : 'NHRDF Project Trainee Admission Form') : ($isBn ? 'অনলাইন ট্রেইনী ভর্তি আবেদন ফরম' : 'Online Trainee Admission Form') }} · {{ $settings->get('institution_name', 'Mahmudunnabi Chowdhury Technical School and College') }}</title>
   <link rel="stylesheet" href="{{ asset('css/site.css') }}">
   <link rel="stylesheet" href="{{ asset('css/forms.css') }}">
   <style>
@@ -691,20 +692,52 @@
 <section class="page-hero-banner" style="background: linear-gradient(135deg, {{ $primaryHover }} 0%, {{ $primaryColor }} 100%); color: #ffffff; padding: 16px 0 14px 0; border-bottom: 3px solid {{ $secondaryColor }}; box-shadow: 0 3px 12px rgba(0,0,0,0.06);">
   <div class="container" style="max-width: 1050px; margin: 0 auto; padding: 0 20px;">
     <h1 style="margin: 0 0 4px 0; font-family: var(--serif, 'Libre Baskerville', Georgia, serif); font-size: 22px; font-weight: 700; color: #ffffff;">
-      {{ $isBn ? 'অনলাইন ট্রেইনী ভর্তি ও প্রশিক্ষণ আবেদন ফরম' : 'Online Trainee Admission & Training Application Form' }}
+      {{ $isNhrdf ? ($isBn ? 'জাতীয় মানবসম্পদ উন্নয়ন তহবিল (NHRDF) বিশেষ প্রশিক্ষণ প্রকল্প ভর্তি ফরম' : 'NHRDF Special Vocational Project Trainee Admission Form') : ($isBn ? 'অনলাইন ট্রেইনী ভর্তি ও প্রশিক্ষণ আবেদন ফরম' : 'Online Trainee Admission & Training Application Form') }}
     </h1>
     <div class="page-breadcrumbs" style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255, 255, 255, 0.8); margin-top: 6px;">
       <a href="{{ route('home') }}" style="color: #ffffff; text-decoration: none; font-weight: 600;">{{ $isBn ? 'হোম' : 'Home' }}</a>
       <span>›</span>
-      <a href="{{ route('courses') }}" style="color: #ffffff; text-decoration: none; font-weight: 600;">{{ $isBn ? 'কোর্সসমূহ' : 'Courses' }}</a>
+      <a href="{{ route('admissions') }}" style="color: #ffffff; text-decoration: none; font-weight: 600;">{{ $isBn ? 'ভর্তি' : 'Admissions' }}</a>
       <span>›</span>
-      <span>{{ $isBn ? 'ভর্তি আবেদন' : 'Apply for Admission' }}</span>
+      <span>{{ $isNhrdf ? 'NHRDF Form' : ($isBn ? 'রেগুলার ভর্তি' : 'Regular Admission') }}</span>
     </div>
   </div>
 </section>
 
 <main class="apply-container">
   <div class="form-card">
+    {{-- Form Type Switcher Tabs --}}
+    <div style="display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap;">
+      <a href="{{ route('apply') }}" style="flex: 1; min-width: 240px; padding: 12px 18px; border-radius: 8px; text-decoration: none; border: 2px solid {{ !$isNhrdf ? 'var(--primary-green)' : '#cbd5e1' }}; background: {{ !$isNhrdf ? '#ecfdf5' : '#ffffff' }}; color: {{ !$isNhrdf ? '#065f46' : '#64748b' }}; font-weight: 700; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s ease;">
+        <span>🎓 {{ $isBn ? 'রেগুলার ভর্তি আবেদন ফরম' : 'Regular Admission Form' }}</span>
+        @if(!$isNhrdf)
+          <span style="font-size: 11px; background: #065f46; color: #fff; padding: 2px 8px; border-radius: 12px;">Active</span>
+        @endif
+      </a>
+      <a href="{{ route('apply.nhrdf') }}" style="flex: 1; min-width: 240px; padding: 12px 18px; border-radius: 8px; text-decoration: none; border: 2px solid {{ $isNhrdf ? '#059669' : '#cbd5e1' }}; background: {{ $isNhrdf ? '#ecfdf5' : '#ffffff' }}; color: {{ $isNhrdf ? '#047857' : '#64748b' }}; font-weight: 700; display: flex; align-items: center; justify-content: space-between; transition: all 0.2s ease;">
+        <span>🏛️ {{ $isBn ? 'NHRDF প্রজেক্ট ভর্তি ফরম' : 'NHRDF Project Form' }}</span>
+        <span style="font-size: 11px; background: {{ $isNhrdf ? '#047857' : '#f1f5f9' }}; color: {{ $isNhrdf ? '#fff' : '#475569' }}; padding: 2px 8px; border-radius: 12px;">
+          {{ $isNhrdf ? 'Active' : 'Special Project' }}
+        </span>
+      </a>
+    </div>
+
+    @if($isNhrdf)
+      {{-- NHRDF Project Top Banner --}}
+      <div style="background: linear-gradient(135deg, #064e3b, #0f5132); color: #fff; padding: 18px 22px; border-radius: 10px; margin-bottom: 24px; box-shadow: 0 4px 14px rgba(6,78,59,0.15); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 48px; height: 48px; border-radius: 10px; background: rgba(255,255,255,0.15); display: flex; align-items: center; justify-content: center; font-size: 24px;">🏛️</div>
+          <div>
+            <div style="font-size: 11.5px; text-transform: uppercase; letter-spacing: 1px; color: #a7f3d0; font-weight: 700;">Government Subsidized Training Project</div>
+            <h2 style="margin: 2px 0 0 0; font-size: 18px; font-weight: 700; color: #ffffff;">জাতীয় মানবসম্পদ উন্নয়ন তহবিল (NHRDF) বিশেষ প্রশিক্ষণ প্রকল্প</h2>
+          </div>
+        </div>
+        <div style="background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.3); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; color: #ecfdf5;">
+          ✓ সম্পূর্ণ সরকারি খরচে ও বৃত্তিসহ
+        </div>
+      </div>
+    @endif
+
     @if ($errors->any())
       <div class="alert-error">
         <strong>আবেদনে কিছু তথ্য সংশোধন প্রয়োজন:</strong>
@@ -721,30 +754,47 @@
       $isReq = fn(string $f): bool => in_array($f, $reqList);
     @endphp
 
-    <form method="POST" action="{{ route('apply.store') }}" enctype="multipart/form-data" id="traineeApplicationForm">
+    <form method="POST" action="{{ $isNhrdf ? route('apply.nhrdf.store') : route('apply.store') }}" enctype="multipart/form-data" id="traineeApplicationForm">
       @csrf
+
+      @if($isNhrdf)
+        <input type="hidden" name="is_nhrdf" value="1">
+        <input type="hidden" name="project_name" value="NHRDF">
+      @endif
 
       <!-- 1. COURSE SELECTION -->
       <div class="section-title">
-        <span>১. পছন্দের কোর্স নির্বাচন (Course Selection)</span>
+        <span>১. পছন্দের ট্রেড / কোর্স নির্বাচন (Trade / Course Selection)</span>
       </div>
 
       <div class="form-group" style="max-width: 650px; margin-bottom: 22px;">
-        <label><span class="req">*</span> পছন্দের ট্রেড / কোর্স (Desired Course/Trade):</label>
-        <select name="course" required id="courseSelect" style="font-size: 15px; padding: 11px 14px; font-weight: 500;">
-          <option value="">-- কোর্স সিলেক্ট করুন (Select Course) --</option>
-          @foreach($courses as $c)
-            <option value="{{ $c->title }}" @selected(old('course', $selectedCourse) == $c->title)>{{ $c->title }}</option>
-          @endforeach
-          @if($courses->isEmpty())
-            <option value="Computer Operation & IT Support" @selected(old('course', $selectedCourse) == 'Computer Operation & IT Support')>Computer Operation & IT Support</option>
-            <option value="Electrical Installation & Maintenance (EIM)" @selected(old('course', $selectedCourse) == 'Electrical Installation & Maintenance (EIM)')>Electrical Installation & Maintenance (EIM)</option>
-            <option value="Refrigeration & Air Conditioning (RAC)" @selected(old('course', $selectedCourse) == 'Refrigeration & Air Conditioning (RAC)')>Refrigeration & Air Conditioning (RAC)</option>
-            <option value="Plumbing & Pipe Fitting" @selected(old('course', $selectedCourse) == 'Plumbing & Pipe Fitting')>Plumbing & Pipe Fitting</option>
-            <option value="Sewing Machine Operation (SMO)" @selected(old('course', $selectedCourse) == 'Sewing Machine Operation (SMO)')>Sewing Machine Operation (SMO)</option>
-            <option value="Driving & Auto Mechanics" @selected(old('course', $selectedCourse) == 'Driving & Auto Mechanics')>Driving & Auto Mechanics</option>
-          @endif
-        </select>
+        <label><span class="req">*</span> {{ $isNhrdf ? ($isBn ? 'পছন্দের ট্রেড / অকুপেশন (Desired NHRDF Trade):' : 'Desired NHRDF Trade / Occupation:') : ($isBn ? 'পছন্দের ট্রেড / কোর্স (Desired Course/Trade):' : 'Desired Course/Trade:') }}</label>
+        @if($isNhrdf)
+          <select name="course" required id="courseSelect" style="font-size: 15px; padding: 11px 14px; font-weight: 600; border: 2px solid #059669; border-radius: 6px; background: #f0fdf4;">
+            <option value="">-- NHRDF ট্রেড সিলেক্ট করুন (Select Trade) --</option>
+            <option value="Plumbing, Level-02" @selected(old('course', $selectedCourse) == 'Plumbing, Level-02')>Plumbing, Level-02</option>
+            <option value="Tailoring & Dress Making, Level-02" @selected(old('course', $selectedCourse) == 'Tailoring & Dress Making, Level-02')>Tailoring & Dress Making, Level-02</option>
+            <option value="Driving, Level-03" @selected(old('course', $selectedCourse) == 'Driving, Level-03')>Driving, Level-03</option>
+          </select>
+          <small style="color: #047857; font-weight: 600; display: block; margin-top: 6px; font-size: 12.5px;">
+            ℹ️ NHRDF প্রকল্পের অধীনে শুধুমাত্র এই ৩টি নির্ধারিত অকুপেশনে আবেদন গ্রহণ করা হচ্ছে।
+          </small>
+        @else
+          <select name="course" required id="courseSelect" style="font-size: 15px; padding: 11px 14px; font-weight: 500;">
+            <option value="">-- কোর্স সিলেক্ট করুন (Select Course) --</option>
+            @foreach($courses as $c)
+              <option value="{{ $c->title }}" @selected(old('course', $selectedCourse) == $c->title)>{{ $c->title }}</option>
+            @endforeach
+            @if($courses->isEmpty())
+              <option value="Computer Operation & IT Support" @selected(old('course', $selectedCourse) == 'Computer Operation & IT Support')>Computer Operation & IT Support</option>
+              <option value="Electrical Installation & Maintenance (EIM)" @selected(old('course', $selectedCourse) == 'Electrical Installation & Maintenance (EIM)')>Electrical Installation & Maintenance (EIM)</option>
+              <option value="Refrigeration & Air Conditioning (RAC)" @selected(old('course', $selectedCourse) == 'Refrigeration & Air Conditioning (RAC)')>Refrigeration & Air Conditioning (RAC)</option>
+              <option value="Plumbing & Pipe Fitting" @selected(old('course', $selectedCourse) == 'Plumbing & Pipe Fitting')>Plumbing & Pipe Fitting</option>
+              <option value="Sewing Machine Operation (SMO)" @selected(old('course', $selectedCourse) == 'Sewing Machine Operation (SMO)')>Sewing Machine Operation (SMO)</option>
+              <option value="Driving & Auto Mechanics" @selected(old('course', $selectedCourse) == 'Driving & Auto Mechanics')>Driving & Auto Mechanics</option>
+            @endif
+          </select>
+        @endif
       </div>
 
       <!-- 2. PERSONAL DATA -->

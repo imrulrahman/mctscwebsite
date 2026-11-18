@@ -11,6 +11,12 @@ use Illuminate\View\View;
 
 class SiteFormsController extends Controller
 {
+    public function admissionChoice(Request $request): View
+    {
+        $settings = \App\Models\SiteSetting::query()->pluck('value', 'key');
+        return view('site.admission_choice', compact('settings'));
+    }
+
     public function showApplyForm(Request $request): View
     {
         $courses = SiteContent::where('section', 'courses')
@@ -24,8 +30,33 @@ class SiteFormsController extends Controller
             ->get();
 
         $selectedCourse = $request->query('course', '');
+        $isNhrdf = false;
 
-        return view('apply', compact('courses', 'projects', 'selectedCourse'));
+        return view('apply', compact('courses', 'projects', 'selectedCourse', 'isNhrdf'));
+    }
+
+    public function showNhrdfApplyForm(Request $request): View
+    {
+        $courses = SiteContent::where('section', 'courses')
+            ->where('status', 'published')
+            ->orderBy('sort_order')
+            ->get();
+
+        $projects = SiteContent::where('section', 'projects')
+            ->where('status', 'published')
+            ->orderBy('sort_order')
+            ->get();
+
+        $nhrdfTrades = [
+            'Plumbing, Level-02',
+            'Tailoring & Dress Making, Level-02',
+            'Driving, Level-03',
+        ];
+
+        $selectedCourse = $request->query('course', '');
+        $isNhrdf = true;
+
+        return view('apply', compact('courses', 'projects', 'selectedCourse', 'isNhrdf', 'nhrdfTrades'));
     }
 
     public function apply(Request $request): RedirectResponse
@@ -130,13 +161,27 @@ class SiteFormsController extends Controller
             $validated['yearly_income'] = $validated['yearly_income'] ?? round(((float)$validated['monthly_income']) * 12, 2);
         }
 
-        // Project & fee are decided by institute admin during approval
-        $validated['project_name'] = null;
-        $validated['course_fee'] = 0.00;
-        $validated['discount'] = 0.00;
-        $validated['payable_amount'] = 0.00;
-        $validated['paid_amount'] = 0.00;
-        $validated['payment_status'] = 'unpaid';
+        // Project & fee handling for Regular vs NHRDF
+        $isNhrdf = $request->boolean('is_nhrdf')
+            || strtoupper(trim((string)$request->input('project_name'))) === 'NHRDF'
+            || $request->is('*nhrdf*')
+            || $request->is('*NHRDF*');
+
+        if ($isNhrdf) {
+            $validated['project_name'] = 'NHRDF';
+            $validated['course_fee'] = 0.00;
+            $validated['discount'] = 0.00;
+            $validated['payable_amount'] = 0.00;
+            $validated['paid_amount'] = 0.00;
+            $validated['payment_status'] = 'free';
+        } else {
+            $validated['project_name'] = $request->input('project_name') ?: null;
+            $validated['course_fee'] = 0.00;
+            $validated['discount'] = 0.00;
+            $validated['payable_amount'] = 0.00;
+            $validated['paid_amount'] = 0.00;
+            $validated['payment_status'] = 'unpaid';
+        }
         $validated['status'] = 'new'; // Pending admin approval
 
         $application = AdmissionApplication::create($validated);
