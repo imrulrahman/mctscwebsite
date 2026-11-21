@@ -58,14 +58,11 @@ class JobApplication extends Model
     public function getDownloadCvFilename(): string
     {
         $ext = pathinfo($this->cv_path ?? '', PATHINFO_EXTENSION) ?: 'pdf';
-        $applicant = trim(preg_replace('/[^\p{L}\p{N}]+/u', '_', (string)$this->applicant_name), '_');
         $post = trim(preg_replace('/[^\p{L}\p{N}]+/u', '_', (string)$this->post_name), '_');
+        $applicant = trim(preg_replace('/[^\p{L}\p{N}]+/u', '_', (string)$this->applicant_name), '_');
 
-        $parts = array_filter([$applicant, $post]);
-        if (empty($parts)) {
-            return "Applicant_CV.{$ext}";
-        }
+        $parts = array_filter(['CV', $post, $applicant]);
 
-        return implode('_', $parts) . "_CV.{$ext}";
+        return implode('_', $parts) . ".{$ext}";
     }
 }

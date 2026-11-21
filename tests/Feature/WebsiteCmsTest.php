@@ -1400,15 +1400,15 @@ class WebsiteCmsTest extends TestCase
         $this->assertStringContainsString('text/csv', $exportResp->headers->get('content-type'));
         $this->assertStringContainsString('MCTSC_Job_Applications_', $exportResp->headers->get('content-disposition'));
 
-        // 5. Test Download CV with formatted filename: {Name}_{Occupation_Post}_CV.pdf
+        // 5. Test Download CV with formatted filename: CV_{Post}_{Name}.pdf
         \Illuminate\Support\Facades\Storage::fake('public');
         \Illuminate\Support\Facades\Storage::disk('public')->put('cvs/test_cv.pdf', '%PDF-1.4 test cv');
         $app1->update(['cv_path' => 'cvs/test_cv.pdf']);
 
         $dlResp = $this->actingAs($admin)->get(route('admin.job-applications.download-cv', $app1));
         $dlResp->assertOk();
-        $this->assertEquals('MD_RAHIM_CHOWDHURY_Driving_Instructor_CV.pdf', $app1->getDownloadCvFilename());
-        $this->assertStringContainsString('MD_RAHIM_CHOWDHURY_Driving_Instructor_CV.pdf', (string)$dlResp->headers->get('content-disposition'));
+        $this->assertEquals('CV_Driving_Instructor_MD_RAHIM_CHOWDHURY.pdf', $app1->getDownloadCvFilename());
+        $this->assertStringContainsString('CV_Driving_Instructor_MD_RAHIM_CHOWDHURY.pdf', (string)$dlResp->headers->get('content-disposition'));
 
         // Cleanup
         $app1->delete();
