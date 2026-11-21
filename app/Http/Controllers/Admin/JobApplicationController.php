@@ -77,7 +77,7 @@ class JobApplicationController extends Controller
         $this->authorizeAccess();
 
         $query = $this->buildFilteredQuery($request);
-        $applications = $query->paginate(20)->withQueryString();
+        $applications = $query->paginate(100)->withQueryString();
 
         // Get unique post / occupation names
         $posts = JobApplication::select('post_name')
