@@ -54,4 +54,18 @@ class JobApplication extends Model
     {
         return $this->belongsTo(SiteContent::class, 'site_content_id');
     }
+
+    public function getDownloadCvFilename(): string
+    {
+        $ext = pathinfo($this->cv_path ?? '', PATHINFO_EXTENSION) ?: 'pdf';
+        $applicant = trim(preg_replace('/[^\p{L}\p{N}]+/u', '_', (string)$this->applicant_name), '_');
+        $post = trim(preg_replace('/[^\p{L}\p{N}]+/u', '_', (string)$this->post_name), '_');
+
+        $parts = array_filter([$applicant, $post]);
+        if (empty($parts)) {
+            return "Applicant_CV.{$ext}";
+        }
+
+        return implode('_', $parts) . "_CV.{$ext}";
+    }
 }

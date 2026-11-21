@@ -27,7 +27,7 @@
             <p style="margin:0;color:#475569;">📞 {{ $application->mobile_no }} · ✉️ {{ $application->email }}</p>
             <p style="margin:4px 0 0;color:#64748b;font-size:13px;">Father: {{ $application->father_name }} · Mother: {{ $application->mother_name }}</p>
             @if($application->cv_path)
-              <a href="{{ storage_asset($application->cv_path) }}" target="_blank" class="btn gold" style="margin-top:10px;display:inline-block;padding:6px 14px;font-size:12.5px;">📄 Download Attached CV / Resume</a>
+              <a href="{{ route('admin.job-applications.download-cv', $application) }}" class="btn gold" style="margin-top:10px;display:inline-block;padding:6px 14px;font-size:12.5px;">📄 Download Attached CV / Resume</a>
             @endif
           </div>
         </div>

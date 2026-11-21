@@ -346,6 +346,43 @@ class JobApplicationController extends Controller
         ]);
     }
 
+    public function downloadCv(JobApplication $jobApplication): \Symfony\Component\HttpFoundation\BinaryFileResponse|RedirectResponse
+    {
+        $this->authorizeAccess();
+
+        if (empty($jobApplication->cv_path)) {
+            return back()->with('error', 'No CV file attached to this application.');
+        }
+
+        $candidates = [
+            storage_path('app/public/' . $jobApplication->cv_path),
+            public_path('storage/' . $jobApplication->cv_path),
+            '/home/mctscedu/public_html/storage/' . $jobApplication->cv_path,
+        ];
+
+        $filePath = null;
+        foreach ($candidates as $candidate) {
+            if (file_exists($candidate) && !is_dir($candidate)) {
+                $filePath = $candidate;
+                break;
+            }
+        }
+
+        if (!$filePath && Storage::disk('public')->exists($jobApplication->cv_path)) {
+            $filePath = Storage::disk('public')->path($jobApplication->cv_path);
+        }
+
+        if (!$filePath || !file_exists($filePath)) {
+            abort(404, 'CV file not found on server.');
+        }
+
+        $filename = $jobApplication->getDownloadCvFilename();
+
+        return response()->download($filePath, $filename, [
+            'Content-Type' => mime_content_type($filePath) ?: 'application/pdf',
+        ]);
+    }
+
     public function show(JobApplication $jobApplication): View
     {
         $this->authorizeAccess();

@@ -313,16 +313,15 @@
               @if($app->cv_path)
                 <div style="display:inline-flex;align-items:center;gap:6px;">
                   <button type="button" 
-                          onclick="openCvModal('{{ storage_asset($app->cv_path) }}', '{{ e($app->applicant_name) }} — {{ e($app->post_name) }} (CV Preview)')" 
+                          onclick="openCvModal('{{ storage_asset($app->cv_path) }}', '{{ e($app->applicant_name) }} — {{ e($app->post_name) }} (CV Preview)', '{{ route('admin.job-applications.download-cv', $app) }}')" 
                           style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;padding:4px 9px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;"
                           title="পপআপে সিভি প্রিভিউ দেখুন (View CV)">
                     <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                     <span>View</span>
                   </button>
-                  <a href="{{ storage_asset($app->cv_path) }}" 
-                     download 
+                  <a href="{{ route('admin.job-applications.download-cv', $app) }}" 
                      style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:26px;background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;border-radius:4px;text-decoration:none;" 
-                     title="সিভি ডাউনলোড করুন (Download CV)">
+                     title="সিভি ডাউনলোড করুন ({{ $app->getDownloadCvFilename() }})">
                     <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                   </a>
                 </div>
@@ -385,7 +384,7 @@
 
 <script>
 // --- CV Preview Modal Functions ---
-function openCvModal(url, title) {
+function openCvModal(url, title, downloadUrl) {
   const modal = document.getElementById('cvPreviewModal');
   const iframe = document.getElementById('cvModalIframe');
   const titleEl = document.getElementById('cvModalTitle');
@@ -394,7 +393,7 @@ function openCvModal(url, title) {
   if (modal && iframe) {
     if (titleEl) titleEl.textContent = title || 'Candidate CV Preview';
     iframe.src = url;
-    if (dlBtn) dlBtn.href = url;
+    if (dlBtn) dlBtn.href = downloadUrl || url;
     if (tabBtn) tabBtn.href = url;
     modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
