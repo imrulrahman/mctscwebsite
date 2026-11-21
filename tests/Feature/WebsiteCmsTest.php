@@ -1224,4 +1224,181 @@ class WebsiteCmsTest extends TestCase
         $this->assertStringContainsString('text/csv', $exportResp->headers->get('content-type'));
         $this->assertStringContainsString('MCTSC_Admissions_NHRDF_', $exportResp->headers->get('content-disposition'));
     }
+
+    public function test_expired_circular_is_hidden_from_active_list_and_cannot_be_applied_for(): void
+    {
+        $this->seed();
+
+        // 1. Create an expired circular and an active circular
+        $expiredJob = \App\Models\SiteContent::create([
+            'section' => 'career',
+            'title' => 'Expired Welding Trainer',
+            'slug' => 'expired-welding-trainer',
+            'status' => 'published',
+            'starts_at' => now()->subDays(20),
+            'ends_at' => now()->subDays(2),
+            'body' => 'Welding Trainer Position Description',
+        ]);
+
+        $activeJob = \App\Models\SiteContent::create([
+            'section' => 'career',
+            'title' => 'Active Solar Technician Trainer',
+            'slug' => 'active-solar-technician-trainer',
+            'status' => 'published',
+            'starts_at' => now()->subDays(2),
+            'ends_at' => now()->addDays(15),
+            'body' => 'Solar Technician Position Description',
+        ]);
+
+        // 2. Main career vacancies list should ONLY show active circulars
+        $careerResp = $this->get(route('career'));
+        $careerResp->assertOk();
+        $careerResp->assertSee('Active Solar Technician Trainer');
+        $careerResp->assertDontSee('Expired Welding Trainer');
+
+        // 3. Directly visiting the expired circular's detail URL displays expired deadline notice and blocks application
+        $detailResp = $this->get(route('career', ['slug' => $expiredJob->slug]));
+        $detailResp->assertOk();
+        $detailResp->assertSee('Expired Welding Trainer');
+        $detailResp->assertSee('DEADLINE EXPIRED');
+        $detailResp->assertDontSee('অনলাইনে আবেদন করুন (Apply Now)');
+
+        // 4. Directly attempting to open the application form for an expired circular redirects back with error
+        $applyFormResp = $this->get(route('career.apply', ['job' => $expiredJob->slug]));
+        $applyFormResp->assertRedirect(route('career', ['slug' => $expiredJob->slug]));
+        $applyFormResp->assertSessionHas('error');
+
+        // 5. Attempting to submit application for the expired circular is blocked
+        $submitResp = $this->post(route('career.apply.submit'), [
+            'site_content_id' => $expiredJob->id,
+            'post_name' => $expiredJob->title,
+            'applicant_name' => 'MD EXPIRED APPLICANT',
+            'father_name' => 'FATHER',
+            'mother_name' => 'MOTHER',
+            'dob' => '1998-05-10',
+            'gender' => 'Male',
+            'nationality' => 'Bangladeshi',
+            'religion' => 'Islam',
+            'marital_status' => 'Single',
+            'present_care_of' => 'Father',
+            'present_village' => 'Village 1',
+            'present_district' => 'Chattogram',
+            'present_upazila' => 'Pahartali',
+            'present_post_office' => 'Pahartali',
+            'present_post_code' => '4202',
+            'same_as_present' => 1,
+            'mobile_no' => '01811223399',
+            'confirm_mobile_no' => '01811223399',
+            'email' => 'expired_app@example.test',
+            'photo' => \Illuminate\Http\UploadedFile::fake()->image('photo.jpg', 300, 300),
+            'signature' => \Illuminate\Http\UploadedFile::fake()->image('sig.jpg', 300, 80),
+            'declaration' => 1,
+        ]);
+
+        $submitResp->assertSessionHasErrors('post_name');
+        $this->assertDatabaseMissing('job_applications', [
+            'applicant_name' => 'MD EXPIRED APPLICANT',
+        ]);
+
+        // Cleanup
+        $expiredJob->delete();
+        $activeJob->delete();
+    }
+
+    public function test_admin_job_applications_filtering_and_excel_export(): void
+    {
+        $admin = \App\Models\User::create([
+            'name' => 'Career Admin',
+            'email' => 'career_admin@test.local',
+            'password' => 'Passw0rd!123',
+            'is_admin' => true,
+        ]);
+
+        $app1 = \App\Models\JobApplication::create([
+            'tracking_no' => 'JOB-2026-AAA111',
+            'post_name' => 'Driving Instructor',
+            'applicant_name' => 'MD RAHIM CHOWDHURY',
+            'father_name' => 'LATE KASHEM',
+            'mother_name' => 'FATEMA',
+            'dob' => '1995-02-15',
+            'gender' => 'Male',
+            'nationality' => 'Bangladeshi',
+            'religion' => 'Islam',
+            'marital_status' => 'Married',
+            'mobile_no' => '01811000111',
+            'email' => 'rahim@test.local',
+            'present_address' => [
+                'district' => 'Chattogram',
+                'upazila' => 'Pahartali',
+                'village' => 'Sagorika Road',
+                'care_of' => 'Self',
+                'post_office' => 'Pahartali',
+                'post_code' => '4202',
+            ],
+            'education' => [
+                'ssc' => ['exam' => 'SSC', 'board' => 'Chattogram', 'group' => 'Humanities', 'passing_year' => '2011', 'result' => '4.20'],
+                'hsc' => ['exam' => 'HSC', 'board' => 'Chattogram', 'group' => 'Humanities', 'passing_year' => '2013', 'result' => '3.80'],
+            ],
+            'status' => 'new',
+        ]);
+
+        $app2 = \App\Models\JobApplication::create([
+            'tracking_no' => 'JOB-2026-BBB222',
+            'post_name' => 'Electrical Installation Instructor',
+            'applicant_name' => 'MD HASAN MAHMUD',
+            'father_name' => 'ABDUL ALI',
+            'mother_name' => 'AMINA',
+            'dob' => '1998-08-20',
+            'gender' => 'Male',
+            'nationality' => 'Bangladeshi',
+            'religion' => 'Islam',
+            'marital_status' => 'Single',
+            'mobile_no' => '01711000222',
+            'email' => 'hasan@test.local',
+            'present_address' => [
+                'district' => 'Kushtia',
+                'upazila' => 'Kushtia Sadar',
+                'village' => 'Court Para',
+                'care_of' => 'Father',
+                'post_office' => 'Kushtia',
+                'post_code' => '7000',
+            ],
+            'education' => [
+                'ssc' => ['exam' => 'SSC', 'board' => 'Jashore', 'group' => 'Science', 'passing_year' => '2014', 'result' => '5.00'],
+                'graduation' => ['exam' => 'B.Sc in EEE', 'board' => 'KUET', 'group' => 'EEE', 'passing_year' => '2019', 'result' => '3.75'],
+            ],
+            'status' => 'shortlisted',
+        ]);
+
+        // 1. Filter by Post
+        $postFilterResp = $this->actingAs($admin)->get(route('admin.job-applications.index', ['post' => 'Driving Instructor']));
+        $postFilterResp->assertOk();
+        $postFilterResp->assertSee('JOB-2026-AAA111');
+        $postFilterResp->assertDontSee('JOB-2026-BBB222');
+
+        // 2. Filter by District
+        $distFilterResp = $this->actingAs($admin)->get(route('admin.job-applications.index', ['district' => 'Kushtia']));
+        $distFilterResp->assertOk();
+        $distFilterResp->assertSee('JOB-2026-BBB222');
+        $distFilterResp->assertDontSee('JOB-2026-AAA111');
+
+        // 3. Filter by Education
+        $eduFilterResp = $this->actingAs($admin)->get(route('admin.job-applications.index', ['education' => 'graduation']));
+        $eduFilterResp->assertOk();
+        $eduFilterResp->assertSee('JOB-2026-BBB222');
+        $eduFilterResp->assertDontSee('JOB-2026-AAA111');
+
+        // 4. Export to Excel (CSV)
+        $exportResp = $this->actingAs($admin)->get(route('admin.job-applications.export', [
+            'post' => 'Driving Instructor',
+            'district' => 'Chattogram',
+        ]));
+        $exportResp->assertOk();
+        $this->assertStringContainsString('text/csv', $exportResp->headers->get('content-type'));
+        $this->assertStringContainsString('MCTSC_Job_Applications_', $exportResp->headers->get('content-disposition'));
+
+        // Cleanup
+        $app1->delete();
+        $app2->delete();
+    }
 }

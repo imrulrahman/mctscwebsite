@@ -256,6 +256,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Job Applications Management
         Route::get('/job-applications', [JobApplicationController::class, 'index'])->name('job-applications.index');
+        Route::get('/job-applications/export', [JobApplicationController::class, 'export'])->name('job-applications.export');
         Route::get('/job-applications/{jobApplication}', [JobApplicationController::class, 'show'])->name('job-applications.show');
         Route::patch('/job-applications/{jobApplication}', [JobApplicationController::class, 'update'])->name('job-applications.update');
         Route::delete('/job-applications/{jobApplication}', [JobApplicationController::class, 'destroy'])->name('job-applications.destroy');

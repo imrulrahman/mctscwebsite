@@ -82,9 +82,15 @@ class SitePageController extends Controller
     public function career(Request $request, ?string $slug = null): View
     {
         $settings = $this->getSettings();
+
+        // Only active circulars whose deadline has not passed (ends_at is null or >= today)
         $circulars = SiteContent::query()
             ->published()
             ->where('section', 'career')
+            ->where(function ($q) {
+                $q->whereNull('ends_at')
+                  ->orWhere('ends_at', '>=', now()->startOfDay());
+            })
             ->ordered()
             ->get();
 
@@ -93,6 +99,17 @@ class SitePageController extends Controller
         if ($jobParam) {
             $selectedJob = $circulars->firstWhere('slug', $jobParam) 
                 ?? $circulars->firstWhere('id', (int)$jobParam);
+
+            if (!$selectedJob) {
+                // If not in active circulars, check if it was an expired circular to view details
+                $selectedJob = SiteContent::query()
+                    ->published()
+                    ->where('section', 'career')
+                    ->where(function ($q) use ($jobParam) {
+                        $q->where('slug', $jobParam)->orWhere('id', (int)$jobParam);
+                    })
+                    ->first();
+            }
         }
 
         $candidateApp = null;

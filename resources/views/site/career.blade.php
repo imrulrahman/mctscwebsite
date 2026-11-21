@@ -646,9 +646,15 @@
       <div class="career-detail-header">
         <h1 class="detail-job-title" data-live-edit data-live-content-id="{{ $selectedJob->id }}" data-live-content-field="title" data-live-type="text" data-live-title="Job: {{ $selectedJob->title }}" data-live-location="Career">{{ $selectedJob->title }}</h1>
         @if($selectedJob->ends_at)
-          <div class="badge-deadline-pill">
-            ⏰ {{ $isBn ? 'DEADLINE:' : 'DEADLINE:' }} {{ $selectedJob->ends_at->format('d M, Y') }}
-          </div>
+          @if($selectedJob->ends_at->endOfDay()->isPast())
+            <div class="badge-deadline-pill" style="background:#fee2e2; color:#991b1b; border-color:#fca5a5;">
+              ⏰ {{ $isBn ? 'সময়সীমা উত্তীর্ণ (DEADLINE EXPIRED):' : 'DEADLINE EXPIRED:' }} {{ $selectedJob->ends_at->format('d M, Y') }}
+            </div>
+          @else
+            <div class="badge-deadline-pill">
+              ⏰ {{ $isBn ? 'DEADLINE:' : 'DEADLINE:' }} {{ $selectedJob->ends_at->format('d M, Y') }}
+            </div>
+          @endif
         @else
           <div class="badge-deadline-pill" style="background:#eff6ff; color:#1e40af; border-color:#bfdbfe;">
             ● {{ $isBn ? 'আবেদন চলছে' : 'ACTIVE / OPEN' }}
@@ -699,19 +705,26 @@
       @endif
 
       <div class="detail-actions-bar">
-        <a href="{{ route('career.apply', ['job' => $selectedJob->slug]) }}" class="btn-apply-primary">
-          <span>📝</span> {{ $isBn ? 'অনলাইনে আবেদন করুন (Apply Now)' : 'Apply Now' }}
-        </a>
+        @if($selectedJob->ends_at && $selectedJob->ends_at->endOfDay()->isPast())
+          <div style="background:#fee2e2; border:1.5px solid #f87171; color:#991b1b; padding:12px 18px; border-radius:8px; font-weight:700; font-size:13.5px; display:inline-flex; align-items:center; gap:8px;">
+            <span>⛔</span>
+            <span>{{ $isBn ? 'এই নিয়োগ বিজ্ঞপ্তির আবেদনের নির্ধারিত সময়সীমা (' . $selectedJob->ends_at->format('d M, Y') . ') শেষ হয়ে গেছে। বর্তমানে আর আবেদন গ্রহণ করা হচ্ছে না।' : 'The application deadline for this position (' . $selectedJob->ends_at->format('d M, Y') . ') has expired. New applications are no longer accepted.' }}</span>
+          </div>
+        @else
+          <a href="{{ route('career.apply', ['job' => $selectedJob->slug]) }}" class="btn-apply-primary">
+            <span>📝</span> {{ $isBn ? 'অনলাইনে আবেদন করুন (Apply Now)' : 'Apply Now' }}
+          </a>
 
-        @php
-          $gmailTo = 'mnctsc@gmail.com';
-          $gmailSubject = 'Application for ' . $selectedJob->title;
-          $gmailBody = "Dear Hiring Committee,\n\nI am writing to apply for the position of {$selectedJob->title} at Mahmudunnabi Chowdhury Technical School and College.\n\nPlease find my CV/resume attached.\n\nSincerely,\n[Your Name]\n[Your Phone Number]";
-          $gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=' . urlencode($gmailTo) . '&su=' . urlencode($gmailSubject) . '&body=' . urlencode($gmailBody);
-        @endphp
-        <a href="{{ $gmailUrl }}" target="_blank" rel="noopener" class="btn-apply-email">
-          <span>✉️</span> {{ $isBn ? 'Apply via Email' : 'Apply via Email' }}
-        </a>
+          @php
+            $gmailTo = 'mnctsc@gmail.com';
+            $gmailSubject = 'Application for ' . $selectedJob->title;
+            $gmailBody = "Dear Hiring Committee,\n\nI am writing to apply for the position of {$selectedJob->title} at Mahmudunnabi Chowdhury Technical School and College.\n\nPlease find my CV/resume attached.\n\nSincerely,\n[Your Name]\n[Your Phone Number]";
+            $gmailUrl = 'https://mail.google.com/mail/?view=cm&fs=1&to=' . urlencode($gmailTo) . '&su=' . urlencode($gmailSubject) . '&body=' . urlencode($gmailBody);
+          @endphp
+          <a href="{{ $gmailUrl }}" target="_blank" rel="noopener" class="btn-apply-email">
+            <span>✉️</span> {{ $isBn ? 'Apply via Email' : 'Apply via Email' }}
+          </a>
+        @endif
 
         @if(!empty($pdfPath))
           <a href="{{ storage_asset($pdfPath) }}" target="_blank" class="btn-download-pdf">

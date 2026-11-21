@@ -14,17 +14,37 @@ use Illuminate\View\View;
 
 class CareerApplicationController extends Controller
 {
-    public function showForm(Request $request, ?string $slug = null): View
+    public function showForm(Request $request, ?string $slug = null): View|RedirectResponse
     {
         $settings = SiteSetting::query()->pluck('value', 'key');
+
+        $jobParam = $slug ?: $request->query('job');
+        if ($jobParam) {
+            $targetJob = SiteContent::query()
+                ->where('section', 'career')
+                ->where(function ($q) use ($jobParam) {
+                    $q->where('slug', $jobParam)->orWhere('id', (int)$jobParam);
+                })
+                ->first();
+
+            if ($targetJob && $targetJob->ends_at && $targetJob->ends_at->endOfDay()->isPast()) {
+                return redirect()->route('career', ['slug' => $targetJob->slug])
+                    ->with('error', 'এই নিয়োগ বিজ্ঞপ্তির আবেদনের নির্ধারিত সময়সীমা (' . $targetJob->ends_at->format('d M, Y') . ') উত্তীর্ণ হয়ে গেছে। নতুন কোনো আবেদন গ্রহণ করা হচ্ছে না।');
+            }
+        }
+
+        // Only active/unexpired circulars
         $circulars = SiteContent::query()
             ->published()
             ->where('section', 'career')
+            ->where(function ($q) {
+                $q->whereNull('ends_at')
+                  ->orWhere('ends_at', '>=', now()->startOfDay());
+            })
             ->orderBy('sort_order')
             ->orderByDesc('created_at')
             ->get();
 
-        $jobParam = $slug ?: $request->query('job');
         $selectedJob = null;
         if ($jobParam) {
             $selectedJob = $circulars->firstWhere('slug', $jobParam)
@@ -36,6 +56,20 @@ class CareerApplicationController extends Controller
 
     public function submit(Request $request): RedirectResponse
     {
+        // Check if the targeted job circular's application deadline has expired
+        $circular = null;
+        if ($request->filled('site_content_id')) {
+            $circular = SiteContent::where('section', 'career')->find($request->input('site_content_id'));
+        }
+        if (!$circular && $request->filled('post_name')) {
+            $circular = SiteContent::where('section', 'career')->where('title', $request->input('post_name'))->first();
+        }
+        if ($circular && $circular->ends_at && $circular->ends_at->endOfDay()->isPast()) {
+            return back()->withInput()->withErrors([
+                'post_name' => 'এই নিয়োগ বিজ্ঞপ্তির আবেদনের নির্ধারিত সময়সীমা (' . $circular->ends_at->format('d M, Y') . ') শেষ হয়ে গেছে। বর্তমানে আর আবেদন গ্রহণ করা হচ্ছে না।'
+            ]);
+        }
+
         $validated = $request->validate([
             'site_content_id' => ['nullable', 'integer', 'exists:site_contents,id'],
             'post_name' => ['required', 'string', 'max:255'],
