@@ -90,12 +90,12 @@
     <table>
       <thead>
         <tr>
-          <th>Tracking ID</th>
+          <th style="width:50px;text-align:center;">SL</th>
           <th>Applicant</th>
           <th>Applied Post</th>
           <th>Contact</th>
           <th>District</th>
-          <th>Status</th>
+          <th>Attached CV</th>
           <th>Applied On</th>
           <th style="text-align:right;">Actions</th>
         </tr>
@@ -103,7 +103,9 @@
       <tbody>
         @forelse($applications as $app)
           <tr>
-            <td><strong style="color:#0f5132;">{{ $app->tracking_no }}</strong></td>
+            <td style="text-align:center;font-weight:700;color:#64748b;">
+              {{ $applications->firstItem() ? ($applications->firstItem() + $loop->index) : $loop->iteration }}
+            </td>
             <td>
               <div style="display:flex;align-items:center;gap:10px;">
                 @if($app->photo_path)
@@ -140,16 +142,25 @@
               <div>{{ $app->present_address['district'] ?? '—' }}</div>
             </td>
             <td>
-              @php
-                $stColor = match($app->status) {
-                  'shortlisted' => 'background:#e0f2fe;color:#0369a1;',
-                  'interview' => 'background:#ede9fe;color:#6d28d9;',
-                  'hired' => 'background:#dcfce7;color:#15803d;',
-                  'rejected' => 'background:#fee2e2;color:#991b1b;',
-                  default => 'background:#fef3c7;color:#92400e;',
-                };
-              @endphp
-              <span class="badge" style="{{ $stColor }}font-weight:600;">{{ ucfirst($app->status) }}</span>
+              @if($app->cv_path)
+                <div style="display:inline-flex;align-items:center;gap:6px;">
+                  <button type="button" 
+                          onclick="openCvModal('{{ storage_asset($app->cv_path) }}', '{{ e($app->applicant_name) }} — {{ e($app->post_name) }} (CV Preview)')" 
+                          style="background:#e0f2fe;color:#0369a1;border:1px solid #bae6fd;padding:4px 9px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;gap:4px;"
+                          title="পপআপে সিভি প্রিভিউ দেখুন (View CV)">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                    <span>View</span>
+                  </button>
+                  <a href="{{ storage_asset($app->cv_path) }}" 
+                     download 
+                     style="display:inline-flex;align-items:center;justify-content:center;width:28px;height:26px;background:#f1f5f9;color:#334155;border:1px solid #cbd5e1;border-radius:4px;text-decoration:none;" 
+                     title="সিভি ডাউনলোড করুন (Download CV)">
+                    <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                  </a>
+                </div>
+              @else
+                <span style="color:#94a3b8;font-size:12px;">— No CV</span>
+              @endif
             </td>
             <td style="white-space:nowrap;font-size:12px;color:#64748b;">
               {{ $app->created_at->format('d/m/Y') }}<br>
@@ -157,9 +168,6 @@
             </td>
             <td style="text-align:right;">
               <div class="actions" style="justify-content:flex-end;gap:8px;flex-wrap:wrap;">
-                @if($app->cv_path)
-                  <a href="{{ storage_asset($app->cv_path) }}" target="_blank" class="edit-link" style="color:#0f5132;background:#e8f5e9;padding:3px 7px;border-radius:4px;" title="Download Candidate CV">CV ⬇</a>
-                @endif
                 <a class="edit-link" href="{{ route('admin.job-applications.show', $app) }}">View Details</a>
                 <form method="post" action="{{ route('admin.job-applications.destroy', $app) }}" onsubmit="return confirm('Delete this job application?');">
                   @csrf
@@ -181,4 +189,61 @@
     <div class="pagination" style="padding:16px;">{{ $applications->links() }}</div>
   @endif
 </div>
+
+{{-- CV Document Popup Preview Modal --}}
+<div id="cvPreviewModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,0.75);backdrop-filter:blur(4px);z-index:999999;align-items:center;justify-content:center;padding:16px;" onclick="if(event.target===this) closeCvModal()">
+  <div style="background:#fff;border-radius:12px;width:100%;max-width:960px;height:88vh;display:flex;flex-direction:column;box-shadow:0 25px 50px -12px rgba(0,0,0,0.35);overflow:hidden;border:1px solid #cbd5e1;">
+    <div style="padding:12px 18px;background:#f8fafc;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+        <span style="font-size:20px;">📄</span>
+        <h3 id="cvModalTitle" style="margin:0;font-size:15px;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Candidate CV Preview</h3>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <a id="cvModalDownloadBtn" href="#" download class="btn" style="background:#0f5132;color:#fff;padding:6px 12px;font-size:12px;display:inline-flex;align-items:center;gap:5px;text-decoration:none;border-radius:6px;font-weight:600;">
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+          Download
+        </a>
+        <a id="cvModalNewTabBtn" href="#" target="_blank" class="btn light" style="padding:6px 10px;font-size:12px;text-decoration:none;border:1px solid #cbd5e1;border-radius:6px;color:#475569;" title="Open in New Tab">
+          New Tab ↗
+        </a>
+        <button type="button" onclick="closeCvModal()" style="background:#fee2e2;border:1px solid #fca5a5;color:#dc2626;width:28px;height:28px;border-radius:50%;font-size:16px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;" title="Close">&times;</button>
+      </div>
+    </div>
+    <div style="flex:1;background:#525659;position:relative;">
+      <iframe id="cvModalIframe" src="" style="width:100%;height:100%;border:none;"></iframe>
+    </div>
+  </div>
+</div>
+
+<script>
+function openCvModal(url, title) {
+  const modal = document.getElementById('cvPreviewModal');
+  const iframe = document.getElementById('cvModalIframe');
+  const titleEl = document.getElementById('cvModalTitle');
+  const dlBtn = document.getElementById('cvModalDownloadBtn');
+  const tabBtn = document.getElementById('cvModalNewTabBtn');
+  if (modal && iframe) {
+    if (titleEl) titleEl.textContent = title || 'Candidate CV Preview';
+    iframe.src = url;
+    if (dlBtn) dlBtn.href = url;
+    if (tabBtn) tabBtn.href = url;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeCvModal() {
+  const modal = document.getElementById('cvPreviewModal');
+  const iframe = document.getElementById('cvModalIframe');
+  if (modal) {
+    modal.style.display = 'none';
+    if (iframe) iframe.src = '';
+    document.body.style.overflow = '';
+  }
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeCvModal();
+});
+</script>
 @endsection

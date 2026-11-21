@@ -1370,23 +1370,26 @@ class WebsiteCmsTest extends TestCase
             'status' => 'shortlisted',
         ]);
 
-        // 1. Filter by Post
+        // 1. Filter by Post & verify SL and Attached CV column
         $postFilterResp = $this->actingAs($admin)->get(route('admin.job-applications.index', ['post' => 'Driving Instructor']));
         $postFilterResp->assertOk();
-        $postFilterResp->assertSee('JOB-2026-AAA111');
-        $postFilterResp->assertDontSee('JOB-2026-BBB222');
+        $postFilterResp->assertSee('SL');
+        $postFilterResp->assertSee('Attached CV');
+        $postFilterResp->assertSee('cvPreviewModal');
+        $postFilterResp->assertSee('MD RAHIM CHOWDHURY');
+        $postFilterResp->assertDontSee('MD HASAN MAHMUD');
 
         // 2. Filter by District
         $distFilterResp = $this->actingAs($admin)->get(route('admin.job-applications.index', ['district' => 'Kushtia']));
         $distFilterResp->assertOk();
-        $distFilterResp->assertSee('JOB-2026-BBB222');
-        $distFilterResp->assertDontSee('JOB-2026-AAA111');
+        $distFilterResp->assertSee('MD HASAN MAHMUD');
+        $distFilterResp->assertDontSee('MD RAHIM CHOWDHURY');
 
         // 3. Filter by Education
         $eduFilterResp = $this->actingAs($admin)->get(route('admin.job-applications.index', ['education' => 'graduation']));
         $eduFilterResp->assertOk();
-        $eduFilterResp->assertSee('JOB-2026-BBB222');
-        $eduFilterResp->assertDontSee('JOB-2026-AAA111');
+        $eduFilterResp->assertSee('MD HASAN MAHMUD');
+        $eduFilterResp->assertDontSee('MD RAHIM CHOWDHURY');
 
         // 4. Export to Excel (CSV)
         $exportResp = $this->actingAs($admin)->get(route('admin.job-applications.export', [
